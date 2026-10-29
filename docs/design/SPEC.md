@@ -81,3 +81,32 @@ Nova Studio (2026-06-20, 0, archived, yellow), Karim Haddad (2026-08-11, 68,500,
   sheet scaffold, toast, tab bar).
 - No hard-coded colours outside `lib/core/theme/`. Strings live in one place per feature so Arabic can be added later.
 - Never commit. The orchestrator reviews and commits.
+
+## Project management (files `P1`..`P18` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v5-projects.figcraft` (do not edit). Statuses: Planned, In Progress,
+Waiting Client, Completed, Delivered, Cancelled. "Active" = In Progress or Waiting Client. Status chip colours:
+Planned grey (seg/mute), In Progress orange on `#FFF0E4`, Waiting Client purple on `#EFEBFF`, Completed green on
+greenBg, Delivered ink fill + white text, Cancelled red on redBg. Progress/paid bars: orange while money is due,
+green when cleared.
+
+- P1 Projects list (tab "Projects" active): title, "N projects in your portfolio", "+" button, 3 summary tiles
+  (Portfolio value, Avg progress, Active), search (name/client/category), status pills (All, Planned, In Progress,
+  Completed, Delivered; In Progress includes Waiting Client; the row scrolls horizontally), count + "Filter" +
+  "Sort: <label>" row, project cards (client, name, status chip, category chip, "Due <date>", "Paid: x DZ",
+  "Due: y" or green "Cleared", paid bar). P2 no results ("No projects match your filters", [Clear filters]).
+- P3 Sort sheet: Newest first, Name (A-Z), Highest budget, Progress, Nearest deadline. P4 Filter sheet: Category,
+  Client and Status chips, Reset, [Apply filters], [Cancel].
+- P5 Detail Overview, P6 Tasks, P7 Payments (3-way segmented toggle). Overview: progress card, tiles Budget / Paid /
+  Remaining / Timeline, description, bottom bar [+ Add payment]. Tasks: checklist (toggle done, status chip),
+  bottom bar with "Add a new task..." field and "+". Payments: paid-so-far card with bar, payment rows, [+ Add payment].
+- P8 Actions sheet (Edit project, Change status, Add payment, Delete project red). P9 Change status sheet (radio
+  rows, Completed/Delivered force progress 100%, [Update status]). P10 Delete confirm (tasks removed, payments kept).
+  P11 list after delete with toast "Project deleted successfully".
+- P12-P16 Add project wizard: 4 steps (Details, Client & Cost, Tasks, Status) with step indicator, Back/Next,
+  last step [Save project]. P14 = "+ Quick add client" variant (name only, creates a client). P17 Edit project
+  (single scrolling form, [Save changes]). P18 Record payment sheet (amount, date, reference, remaining preview).
+- Money: thousands separators + " DZ". Mock data: Fintask Landing Page (Mohamed Bachir, Development, In Progress 65%,
+  450,000, paid 245,000, Jul 01 - Aug 30), Brand Identity (Sarah Benali, Design, Waiting Client 40%, 180,000, paid
+  60,000), Mobile App UI (Mohamed Bachir, Design, Completed, 320,000, paid 320,000), Logo Pack (Nova Studio,
+  Branding, Delivered, 40,000, paid 40,000), Dashboard Redesign (Sarah Benali, Design, Planned, 95,000, paid 0).
