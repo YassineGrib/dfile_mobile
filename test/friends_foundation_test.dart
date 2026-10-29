@@ -606,19 +606,23 @@ void main() {
       expect(find.text('45,000 DZ'), findsOneWidget);
     });
 
-    testWidgets('showSettleSheet displays modal bottom sheet with placeholder text', (
+    testWidgets('showSettleSheet displays modal bottom sheet with settlement form', (
       WidgetTester tester,
     ) async {
+      final FriendsRepository repo = FriendsRepository();
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (BuildContext context) {
-                return ElevatedButton(
-                  onPressed: () => showSettleSheet(context, transactionId: 'tx1'),
-                  child: const Text('Open Settle'),
-                );
-              },
+        FriendsScope(
+          repository: repo,
+          child: MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (BuildContext context) {
+                  return ElevatedButton(
+                    onPressed: () => showSettleSheet(context, transactionId: 'tx1'),
+                    child: const Text('Open Settle'),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -627,7 +631,7 @@ void main() {
       await tester.tap(find.text('Open Settle'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Settle sheet'), findsOneWidget);
+      expect(find.text('Record settlement'), findsOneWidget);
     });
   });
 
@@ -708,7 +712,7 @@ void main() {
       // 3. /friends/transactions/:id
       await pumpApp(tester, initialLocation: '/friends/transactions/tx1');
       expect(find.byType(TransactionDetailScreen), findsOneWidget);
-      expect(find.text('TransactionDetailScreen'), findsOneWidget);
+      expect(find.text('Cash via BaridiMob'), findsOneWidget);
 
       // 4. /friends/:id
       await pumpApp(tester, initialLocation: '/friends/fr1');
