@@ -363,13 +363,6 @@ void main() {
       await tester.pump(const Duration(seconds: 4));
       expect(find.text(MoreStrings.notAvailableInDemo), findsNothing);
 
-      // Tap Friends' debts row
-      await tester.tap(find.text(MoreStrings.friendsDebtsTitle));
-      await tester.pump();
-      expect(find.text(MoreStrings.notAvailableInDemo), findsOneWidget);
-      await tester.pump(const Duration(seconds: 4));
-      expect(find.text(MoreStrings.notAvailableInDemo), findsNothing);
-
       // Tap Settings row
       await tester.tap(find.text(MoreStrings.settingsTitle));
       await tester.pump();

@@ -14,6 +14,12 @@ import '../../features/clients/edit_client_screen.dart';
 import '../../features/expenses/expense_detail_screen.dart';
 import '../../features/expenses/expense_form_screen.dart';
 import '../../features/expenses/expenses_list_screen.dart';
+import '../../features/friends/add_friend_screen.dart';
+import '../../features/friends/data/friends_tab.dart';
+import '../../features/friends/friend_statement_screen.dart';
+import '../../features/friends/friends_screen.dart';
+import '../../features/friends/transaction_detail_screen.dart';
+import '../../features/friends/transaction_form_screen.dart';
 import '../../features/more/more_screen.dart';
 import '../../features/payments/payment_receipt_screen.dart';
 import '../../features/payments/payments_list_screen.dart';
@@ -89,6 +95,21 @@ abstract final class AppRoutes {
 
   static const String editExpenseName = 'edit-expense';
   static const String editExpensePath = '/expenses/:id/edit';
+
+  static const String friendsName = 'friends';
+  static const String friendsPath = '/friends';
+
+  static const String addFriendName = 'add-friend';
+  static const String addFriendPath = '/friends/new';
+
+  static const String newFriendTransactionName = 'new-friend-transaction';
+  static const String newFriendTransactionPath = '/friends/transactions/new';
+
+  static const String friendTransactionDetailName = 'friend-transaction-detail';
+  static const String friendTransactionDetailPath = '/friends/transactions/:id';
+
+  static const String friendStatementName = 'friend-statement';
+  static const String friendStatementPath = '/friends/:id';
 
   static const String moreName = 'more';
   static const String morePath = '/more';
@@ -241,6 +262,55 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         builder: (BuildContext context, GoRouterState state) =>
             ExpenseDetailScreen(
               expenseId: state.pathParameters['id'] ?? '',
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.friendsPath,
+        name: AppRoutes.friendsName,
+        builder: (BuildContext context, GoRouterState state) {
+          final Object? extra = state.extra;
+          final String? tabQuery = state.uri.queryParameters['tab'];
+          final FriendsTab initialTab = extra is FriendsTab
+              ? extra
+              : (tabQuery != null
+                  ? FriendsTab.fromString(tabQuery)
+                  : FriendsTab.friends);
+          final String? initialQuery =
+              state.uri.queryParameters['q'] ?? state.uri.queryParameters['query'];
+          return FriendsScreen(
+            initialTab: initialTab,
+            initialQuery: initialQuery,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.addFriendPath,
+        name: AppRoutes.addFriendName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const AddFriendScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.newFriendTransactionPath,
+        name: AppRoutes.newFriendTransactionName,
+        builder: (BuildContext context, GoRouterState state) =>
+            TransactionFormScreen(
+              friendId: state.uri.queryParameters['friendId'],
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.friendTransactionDetailPath,
+        name: AppRoutes.friendTransactionDetailName,
+        builder: (BuildContext context, GoRouterState state) =>
+            TransactionDetailScreen(
+              transactionId: state.pathParameters['id'] ?? '',
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.friendStatementPath,
+        name: AppRoutes.friendStatementName,
+        builder: (BuildContext context, GoRouterState state) =>
+            FriendStatementScreen(
+              friendId: state.pathParameters['id'] ?? '',
             ),
       ),
       GoRoute(

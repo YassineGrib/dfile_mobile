@@ -41,4 +41,8 @@ abstract final class AppColors {
   static const Color marketingBg = Color(0xFFFFE9E6);
   static const Color equipmentBg = greenBg;
   static const Color othersBg = seg;
+
+  /// Friends' debts chips & status background tokens per SPEC.md.
+  static const Color pendingBg = Color(0xFFFFF0E4);
+  static const Color partialBg = Color(0xFFEFEBFF);
 }
