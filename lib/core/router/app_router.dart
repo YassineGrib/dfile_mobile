@@ -11,6 +11,10 @@ import '../../features/clients/add_client_screen.dart';
 import '../../features/clients/client_detail_screen.dart';
 import '../../features/clients/clients_list_screen.dart';
 import '../../features/clients/edit_client_screen.dart';
+import '../../features/projects/add_project_screen.dart';
+import '../../features/projects/edit_project_screen.dart';
+import '../../features/projects/project_detail_screen.dart';
+import '../../features/projects/projects_list_screen.dart';
 
 /// Named route identifiers and paths for every screen in `docs/design/SPEC.md`.
 abstract final class AppRoutes {
@@ -43,6 +47,18 @@ abstract final class AppRoutes {
 
   static const String editClientName = 'edit-client';
   static const String editClientPath = '/clients/:id/edit';
+
+  static const String projectsName = 'projects';
+  static const String projectsPath = '/projects';
+
+  static const String addProjectName = 'add-project';
+  static const String addProjectPath = '/projects/new';
+
+  static const String projectDetailName = 'project-detail';
+  static const String projectDetailPath = '/projects/:id';
+
+  static const String editProjectName = 'edit-project';
+  static const String editProjectPath = '/projects/:id/edit';
 }
 
 /// Builds a fresh [GoRouter] configured with all application routes.
@@ -112,6 +128,34 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         builder: (BuildContext context, GoRouterState state) =>
             EditClientScreen(
               clientId: state.pathParameters['id'] ?? '',
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.projectsPath,
+        name: AppRoutes.projectsName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const ProjectsListScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addProjectPath,
+        name: AppRoutes.addProjectName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const AddProjectScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.projectDetailPath,
+        name: AppRoutes.projectDetailName,
+        builder: (BuildContext context, GoRouterState state) =>
+            ProjectDetailScreen(
+              projectId: state.pathParameters['id'] ?? '',
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.editProjectPath,
+        name: AppRoutes.editProjectName,
+        builder: (BuildContext context, GoRouterState state) =>
+            EditProjectScreen(
+              projectId: state.pathParameters['id'] ?? '',
             ),
       ),
     ],

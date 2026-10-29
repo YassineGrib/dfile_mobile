@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/theme.dart';
 
-/// Two-option stadium segmented control matching SPEC.md (`seg` track, white active pill).
+/// Multi-option stadium segmented control matching SPEC.md (`seg` track, white active pill).
 class SegmentedToggle extends StatelessWidget {
   const SegmentedToggle({
     super.key,
@@ -10,7 +10,10 @@ class SegmentedToggle extends StatelessWidget {
     required this.selectedIndex,
     required this.onChanged,
     this.height = 48,
-  }) : assert(options.length == 2, 'SegmentedToggle requires exactly 2 options.');
+  }) : assert(
+         options.length >= 2,
+         'SegmentedToggle requires at least 2 options.',
+       );
 
   final List<String> options;
   final int selectedIndex;

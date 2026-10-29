@@ -4,12 +4,14 @@ library;
 /// A client project record.
 class Project {
   const Project({
+    this.id,
     required this.name,
     required this.status,
     required this.price,
     required this.progress,
   });
 
+  final String? id;
   final String name;
   final String status;
   final double price;
@@ -19,12 +21,14 @@ class Project {
       status == 'In Progress' || status == 'Waiting Client';
 
   Project copyWith({
+    String? id,
     String? name,
     String? status,
     double? price,
     int? progress,
   }) {
     return Project(
+      id: id ?? this.id,
       name: name ?? this.name,
       status: status ?? this.status,
       price: price ?? this.price,
@@ -36,21 +40,29 @@ class Project {
 /// A client payment record.
 class Payment {
   const Payment({
+    this.id,
+    this.projectId,
     required this.date,
     required this.reference,
     required this.amount,
   });
 
+  final String? id;
+  final String? projectId;
   final String date;
   final String reference;
   final double amount;
 
   Payment copyWith({
+    String? id,
+    String? projectId,
     String? date,
     String? reference,
     double? amount,
   }) {
     return Payment(
+      id: id ?? this.id,
+      projectId: projectId ?? this.projectId,
       date: date ?? this.date,
       reference: reference ?? this.reference,
       amount: amount ?? this.amount,

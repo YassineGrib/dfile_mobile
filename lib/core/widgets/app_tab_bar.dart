@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../theme/theme.dart';
 
@@ -10,7 +11,10 @@ class AppTabBar extends StatelessWidget {
     this.onTap,
   });
 
+  static const int homeTabIndex = 0;
+  static const int projectsTabIndex = 1;
   static const int clientsTabIndex = 2;
+  static const int moreTabIndex = 3;
   static const List<String> labels = <String>[
     'Home',
     'Projects',
@@ -20,6 +24,21 @@ class AppTabBar extends StatelessWidget {
 
   final int currentIndex;
   final ValueChanged<int>? onTap;
+
+  void _handleTap(BuildContext context, int index) {
+    if (onTap != null) {
+      onTap!(index);
+      return;
+    }
+    if (index == currentIndex) {
+      return;
+    }
+    if (index == projectsTabIndex) {
+      GoRouter.maybeOf(context)?.go('/projects');
+    } else if (index == clientsTabIndex) {
+      GoRouter.maybeOf(context)?.go('/clients');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +56,13 @@ class AppTabBar extends StatelessWidget {
           child: Row(
             children: List<Widget>.generate(labels.length, (int index) {
               final bool isActive = index == currentIndex;
+              final bool isInteractive =
+                  onTap != null ||
+                  index == projectsTabIndex ||
+                  index == clientsTabIndex;
               return Expanded(
                 child: InkWell(
-                  onTap: onTap != null ? () => onTap!(index) : null,
+                  onTap: isInteractive ? () => _handleTap(context, index) : null,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

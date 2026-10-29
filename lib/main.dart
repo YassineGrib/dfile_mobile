@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/theme.dart';
 import 'features/clients/data/data.dart';
+import 'features/projects/data/data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,28 +15,76 @@ Future<void> main() async {
   runApp(const DfileApp());
 }
 
-class DfileApp extends StatelessWidget {
+class DfileApp extends StatefulWidget {
   const DfileApp({
     super.key,
     this.router,
     this.repository,
+    this.projectsRepository,
   });
 
   final GoRouter? router;
   final ClientsRepository? repository;
+  final ProjectsRepository? projectsRepository;
+
+  @override
+  State<DfileApp> createState() => _DfileAppState();
+}
+
+class _DfileAppState extends State<DfileApp> {
+  ProjectsRepository? _fallbackProjectsRepository;
+
+  @override
+  void initState() {
+    super.initState();
+    _ensureFallbackRepository();
+  }
+
+  @override
+  void didUpdateWidget(covariant DfileApp oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.repository != widget.repository ||
+        oldWidget.projectsRepository != widget.projectsRepository) {
+      _fallbackProjectsRepository = null;
+      _ensureFallbackRepository();
+    }
+  }
+
+  void _ensureFallbackRepository() {
+    if (widget.projectsRepository == null && widget.repository != null) {
+      _fallbackProjectsRepository = ProjectsRepository(
+        clientsRepository: widget.repository,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final ClientsRepository effectiveClientsRepo =
+        widget.repository ??
+        widget.projectsRepository?.clientsRepository ??
+        defaultClientsRepository;
+    final ProjectsRepository effectiveProjectsRepo =
+        widget.projectsRepository ??
+        _fallbackProjectsRepository ??
+        defaultProjectsRepository;
+
     return ClientsScope(
-      repository: repository ?? defaultClientsRepository,
-      child: MaterialApp.router(
-        title: 'Dfile',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light,
-        routerConfig: router ?? appRouter,
+      repository: effectiveClientsRepo,
+      child: ProjectsScope(
+        repository: effectiveProjectsRepo,
+        child: MaterialApp.router(
+          title: 'Dfile',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          routerConfig: widget.router ?? appRouter,
+        ),
       ),
     );
   }
 }
 
 final ClientsRepository defaultClientsRepository = ClientsRepository();
+final ProjectsRepository defaultProjectsRepository = ProjectsRepository(
+  clientsRepository: defaultClientsRepository,
+);
