@@ -19,6 +19,7 @@ class AppTextField extends StatefulWidget {
     this.suffixIcon,
     this.enabled = true,
     this.focusNode,
+    this.errorText,
   });
 
   final String? label;
@@ -34,6 +35,7 @@ class AppTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final bool enabled;
   final FocusNode? focusNode;
+  final String? errorText;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -66,6 +68,8 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     final bool isMultiline = widget.multiline && !widget.obscureText;
+    final bool hasError =
+        widget.errorText != null && widget.errorText!.isNotEmpty;
 
     Widget? trailing = widget.suffixIcon;
     if (widget.obscureText) {
@@ -83,6 +87,13 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
       );
     }
+
+    final OutlineInputBorder borderStyle = _border(
+      hasError ? AppColors.red : AppColors.line,
+    );
+    final OutlineInputBorder focusedBorderStyle = _border(
+      hasError ? AppColors.red : AppColors.ink,
+    );
 
     final Widget field = TextField(
       controller: widget.controller,
@@ -113,14 +124,14 @@ class _AppTextFieldState extends State<AppTextField> {
         constraints: isMultiline
             ? null
             : const BoxConstraints(minHeight: AppSpacing.inputHeight),
-        border: _border(AppColors.line),
-        enabledBorder: _border(AppColors.line),
+        border: borderStyle,
+        enabledBorder: borderStyle,
         disabledBorder: _border(AppColors.line),
-        focusedBorder: _border(AppColors.ink),
+        focusedBorder: focusedBorderStyle,
       ),
     );
 
-    if (widget.label == null) {
+    if (widget.label == null && !hasError) {
       return field;
     }
 
@@ -128,9 +139,21 @@ class _AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(widget.label!, style: AppText.label),
-        const SizedBox(height: AppSpacing.sm),
+        if (widget.label != null) ...[
+          Text(widget.label!, style: AppText.label),
+          const SizedBox(height: AppSpacing.sm),
+        ],
         field,
+        if (hasError) ...[
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            widget.errorText!,
+            style: AppText.captionSm.copyWith(
+              color: AppColors.red,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ],
     );
   }
