@@ -14,7 +14,9 @@ abstract final class AppColors {
   static const Color seg = Color(0xFFEFE9DD);
 
   static const Color orange = Color(0xFFF4955F);
+  static const Color orangeBg = Color(0xFFFDF0E8);
   static const Color purple = Color(0xFF8F81EE);
+  static const Color purpleBg = Color(0xFFF1EFFD);
   static const Color yellow = Color(0xFFFFD557);
   static const Color coral = Color(0xFFF0675A);
 
