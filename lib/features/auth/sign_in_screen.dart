@@ -1,0 +1,17 @@
+import 'package:flutter/material.dart';
+
+import '../../core/theme/theme.dart';
+import 'auth_strings.dart';
+
+class SignInScreen extends StatelessWidget {
+  const SignInScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(AuthStrings.signIn, style: AppText.sectionTitle),
+      ),
+    );
+  }
+}
