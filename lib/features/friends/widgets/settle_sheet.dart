@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_bottom_sheet.dart';
+import '../data/data.dart';
+import 'settle_sheet_content.dart';
 
 /// Displays the settlement modal bottom sheet per `docs/design/SPEC.md` (FD13).
 ///
-/// Placeholder implementation for TASK 7.0; Agent 7D replaces this body
-/// with the full interactive settlement form. Keep this signature stable.
+/// Signature is strictly preserved: `showSettleSheet(BuildContext context, {required String transactionId})`.
 Future<void> showSettleSheet(
   BuildContext context, {
   required String transactionId,
 }) {
+  final FriendsRepository repo = FriendsScope.of(context, listen: false);
+  final FriendTransaction? transaction = repo.transactionById(transactionId);
+  if (transaction == null) {
+    return Future<void>.value();
+  }
+
+  final Friend? friend = repo.friendById(transaction.friendId);
+  final String friendName = friend?.name ?? '';
+
   return showAppSheet<void>(
     context: context,
     builder: (BuildContext sheetContext) {
-      return Container(
-        height: 200,
-        alignment: Alignment.center,
-        child: Text(
-          'Settle sheet',
-          style: AppText.cardTitle.copyWith(color: AppColors.ink),
-        ),
+      return SettleSheet(
+        transaction: transaction,
+        friendName: friendName,
       );
     },
   );
