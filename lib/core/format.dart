@@ -87,3 +87,8 @@ String formatShortDate(DateTime date) {
   final String day = date.day.toString().padLeft(2, '0');
   return '$month $day';
 }
+
+/// Formats a [DateTime] into `Mon DD, YYYY` (e.g. `Jul 01, 2026`, `Aug 30, 2026`).
+String formatMediumDate(DateTime date) {
+  return '${formatShortDate(date)}, ${date.year}';
+}

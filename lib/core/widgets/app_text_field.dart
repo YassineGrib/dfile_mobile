@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../theme/theme.dart';
 
@@ -10,6 +11,8 @@ class AppTextField extends StatefulWidget {
     this.placeholder,
     this.controller,
     this.onChanged,
+    this.onSubmitted,
+    this.inputFormatters,
     this.obscureText = false,
     this.multiline = false,
     this.maxLines = 4,
@@ -26,6 +29,8 @@ class AppTextField extends StatefulWidget {
   final String? placeholder;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
   final bool obscureText;
   final bool multiline;
   final int maxLines;
@@ -99,6 +104,8 @@ class _AppTextFieldState extends State<AppTextField> {
       controller: widget.controller,
       focusNode: widget.focusNode,
       onChanged: widget.onChanged,
+      onSubmitted: widget.onSubmitted,
+      inputFormatters: widget.inputFormatters,
       enabled: widget.enabled,
       obscureText: widget.obscureText && _isObscured,
       keyboardType:

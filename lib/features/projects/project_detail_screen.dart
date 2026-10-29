@@ -9,6 +9,7 @@ import '../clients/data/data.dart';
 import 'data/data.dart';
 import 'project_strings.dart';
 import 'widgets/project_status_chip.dart';
+import 'widgets/record_payment_sheet.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   const ProjectDetailScreen({
@@ -60,50 +61,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     _newTaskController.clear();
   }
 
-  void _openPaymentPlaceholderSheet(ProjectItem project, String clientName) {
-    showAppSheet<void>(
+  void _openRecordPaymentSheet(ProjectItem project, String clientName) {
+    showRecordPaymentSheet(
       context: context,
-      builder: (BuildContext sheetContext) {
-        return SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                ProjectStrings.recordPaymentTitle,
-                style: AppText.sectionTitle,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '${project.name} • $clientName',
-                style: AppText.caption.copyWith(color: AppColors.mute),
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-                  border: Border.all(
-                    color: AppColors.line,
-                    width: AppSpacing.borderWidth,
-                  ),
-                ),
-                child: Text(
-                  ProjectStrings.paymentPlaceholderBody,
-                  style: AppText.body.copyWith(color: AppColors.mute),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              SecondaryButton(
-                label: ProjectStrings.cancel,
-                onPressed: () => Navigator.of(sheetContext).pop(),
-              ),
-            ],
-          ),
-        );
-      },
+      project: project,
+      clientName: clientName,
     );
   }
 
@@ -181,7 +143,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 textColor: AppColors.ink,
                 onTap: () {
                   Navigator.of(sheetContext).pop();
-                  _openPaymentPlaceholderSheet(project, clientName);
+                  _openRecordPaymentSheet(project, clientName);
                 },
               ),
               const SizedBox(height: AppSpacing.md),
@@ -1041,8 +1003,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 )
               : PrimaryButton(
                   label: ProjectStrings.addPaymentWithPlus,
-                  onPressed: () =>
-                      _openPaymentPlaceholderSheet(project, clientName),
+                  onPressed: () => _openRecordPaymentSheet(project, clientName),
                 ),
         ),
       ),

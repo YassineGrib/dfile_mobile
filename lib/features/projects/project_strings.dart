@@ -121,7 +121,92 @@ abstract final class ProjectStrings {
       'Payments already recorded stay in your ledger.';
   static const String confirmDelete = 'Confirm delete';
 
-  // Toasts (P11)
+  // Toasts (P11..P18)
   static const String projectDeletedToast = 'Project deleted successfully';
   static const String statusUpdatedToast = 'Status updated';
+  static const String projectAddedToast = 'Project added';
+  static const String changesSavedToast = 'Changes saved';
+  static const String paymentRecordedToast = 'Payment recorded';
+
+  // Categories
+  static const String categoryDevelopment = 'Development';
+  static const String categoryDesign = 'Design';
+  static const String categoryBranding = 'Branding';
+  static const String categoryMarketing = 'Marketing';
+  static const String categoryOther = 'Other';
+  static const List<String> projectCategories = <String>[
+    categoryDevelopment,
+    categoryDesign,
+    categoryBranding,
+    categoryMarketing,
+    categoryOther,
+  ];
+
+  // Add Project Wizard (P12..P16)
+  static const String wizardStep1Subtitle = 'Step 1 of 4 • Project details';
+  static const String wizardStep2Subtitle = 'Step 2 of 4 • Client and budget';
+  static const String wizardStep3Subtitle = 'Step 3 of 4 • Tasks (optional)';
+  static const String wizardStep4Subtitle = 'Step 4 of 4 • Status and timeline';
+
+  static const String stepDetails = 'Details';
+  static const String stepClientAndCost = 'Client & Cost';
+  static const String stepTasks = 'Tasks';
+  static const String stepStatus = 'Status';
+
+  static const String back = 'Back';
+  static const String next = 'Next';
+  static const String saveProject = 'Save project';
+  static const String saveChanges = 'Save changes';
+
+  // Form Labels, Placeholders & Hints
+  static const String projectNameLabel = 'Project name *';
+  static const String projectNamePlaceholder = 'e.g. DecaByte Design';
+  static const String categoryLabel = 'Category';
+  static const String selectCategoryTitle = 'Select category';
+  static const String descriptionPlaceholder = 'Enter project overview...';
+
+  static const String clientRequiredLabel = 'Client *';
+  static const String clientLabel = 'Client';
+  static const String selectClientPlaceholder = 'Select a client...';
+  static const String selectClientTitle = 'Select client';
+  static const String quickAddClientToggle = '+ Quick add client';
+  static const String selectClientToggle = 'Select client';
+  static const String quickAddClientPlaceholder = 'e.g. Nova Studio';
+  static const String addAction = 'Add';
+  static const String quickAddClientHint =
+      'Creates a client with only a name. Add details later from Clients.';
+
+  static const String projectBudgetRequiredLabel = 'Project budget (DZD) *';
+  static const String budgetShortLabel = 'Budget (DZD)';
+  static const String budgetPlaceholder = '50,000';
+  static const String budgetHint =
+      'The budget drives paid, remaining and net profit on the project and client screens.';
+
+  static const String addSubTasksLabel = 'Add sub-tasks';
+  static const String subTaskPlaceholder = 'Logo mockup sketches';
+  static String taskIndexLabel(int index) => '#${index + 1}';
+
+  static const String projectStatusLabel = 'Project status';
+  static const String selectStatusTitle = 'Select status';
+  static const String progressPercentageLabel = 'Progress percentage';
+  static const String startDateLabel = 'Start date';
+  static const String deadlineLabel = 'Deadline';
+  static const String statusAutoProgressHint =
+      'Completed or Delivered sets progress to 100% automatically.';
+  static const String deadlineBeforeStartError =
+      'Deadline cannot be before the start date.';
+
+  // Edit Project (P17)
+  static const String editProjectSubtitle = 'Update details, status and budget';
+
+  // Record Payment Sheet (P18)
+  static const String amountRequiredLabel = 'Amount (DZD) *';
+  static const String amountPlaceholder = '60,000';
+  static const String paymentDateLabel = 'Payment date';
+  static const String referenceOptionalLabel = 'Reference (optional)';
+  static const String referencePlaceholder = 'e.g. Bank transfer #A140';
+  static String remainingAfterPayment(String formattedMoney) =>
+      'Remaining after this payment: $formattedMoney';
+  static const String fullyPaidAfterPayment = 'Fully paid';
+  static const String savePayment = 'Save payment';
 }
