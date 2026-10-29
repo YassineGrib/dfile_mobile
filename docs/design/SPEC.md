@@ -110,3 +110,37 @@ green when cleared.
   450,000, paid 245,000, Jul 01 - Aug 30), Brand Identity (Sarah Benali, Design, Waiting Client 40%, 180,000, paid
   60,000), Mobile App UI (Mohamed Bachir, Design, Completed, 320,000, paid 320,000), Logo Pack (Nova Studio,
   Branding, Delivered, 40,000, paid 40,000), Dashboard Redesign (Sarah Benali, Design, Planned, 95,000, paid 0).
+
+## Payment management (files `PY1`..`PY12` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v6-payments.figcraft` (do not edit). Payments live under the "More" tab
+(tab bar index 3, More active on all payment screens).
+
+- Model: Payment = id, projectId, clientId, amount, type (advance / milestone / final / tip), method (baridimob / ccp /
+  bank / cash), reference (optional), notes (optional), date, createdAt. Labels: Advance, Milestone, Final, Tip;
+  BaridiMob, CCP, Bank wire, Cash. Method badge colours: BaridiMob purple on `#EFEBFF`, CCP ink on `#FFF3CC`, Bank
+  wire orange on `#FFF0E4`, Cash green on greenBg. Type pills are neutral (seg + ink).
+- Derived (PaymentsRepository): collected = sum of amounts; outstanding = sum over non-Cancelled projects of
+  max(0, price - paid); this month = payments dated in the current calendar month; collection rate =
+  min(100, round(collected / sum of all project prices * 100)), 100 when there are no projects.
+- PY1 More menu: workspace card, rows Payments ("N DZ collected"), Expenses, Invoices, Friends' debts, Settings
+  (only Payments is functional, the others show a "Not available in the demo" toast), red "Sign out" -> /sign-in.
+- PY2 list: back, "Payments", "N payments recorded", "+" -> record form, 4 KPI tiles, search (client / project /
+  reference / notes), method pills (All, BaridiMob, CCP, Bank, Cash; row may scroll), "N payments" + "Sort: <label>",
+  payment cards (avatar initial, client, project, +amount green, method badge, type pill, date, reference or dash).
+  PY3 empty ("No payments logged yet", [+ Record first payment]); with a search/filter and no match show "No payments
+  match your filters" + [Clear filters]. PY4 sort sheet: Newest first, Oldest first, Highest amount, Lowest amount.
+- PY5 receipt: amount, type pill, client, project, method badge, reference, date, project budget / paid to date /
+  remaining, notes, bottom [Share receipt] (toast "Not available in the demo"). PY6 actions sheet: Copy reference
+  (Clipboard + toast "Copied reference!"), Go to project -> /projects/:id, Share receipt, Delete payment (red).
+  PY7 delete confirm; PY8 list after delete with toast "Payment deleted successfully".
+- PY9 record payment form (route /payments/new, optional query `projectId` to preselect): client select (required),
+  project select filtered by client, showing "Due x DZ" (required), amount (required, > 0, shows error "Please enter a
+  valid amount greater than zero") with a "100% full" chip filling the remaining balance, method tiles (BaridiMob
+  default), type select, date (default today), reference, notes. PY10 error state. PY11 project picker sheet.
+  [Record payment] saves, pops to the list and shows toast "Payment recorded".
+- Mock data: 6 payments consistent with the project mock data: Sarah Benali / Brand Identity +60,000 BaridiMob Advance
+  2026-10-12 TXN-552104; Mohamed Bachir / Fintask Landing Page +60,000 CCP Milestone 2026-07-09 CCP-5521, +85,000
+  BaridiMob Milestone 2026-05-18 TXN-441872, +100,000 BaridiMob Advance 2026-04-02 TXN-928471 (notes "Received after the
+  first milestone delivery."); Mohamed Bachir / Mobile App UI +320,000 Bank wire Final 2026-06-12 WIRE-7783; Nova Studio /
+  Logo Pack +40,000 Cash Final 2026-05-20 (no reference).
