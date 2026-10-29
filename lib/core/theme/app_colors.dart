@@ -31,4 +31,7 @@ abstract final class AppColors {
   /// 50% ink scrim used behind modal bottom sheets.
   static const Color scrim = Color(0x801B1B1F);
   static const Color transparent = Color(0x00000000);
+
+  /// Background colour for the CCP payment method badge per SPEC.md (`#FFF3CC`).
+  static const Color ccpBg = Color(0xFFFFF3CC);
 }
