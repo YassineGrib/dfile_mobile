@@ -144,3 +144,42 @@ Source file: `docs/design/dfile-mobile-v6-payments.figcraft` (do not edit). Paym
   BaridiMob Milestone 2026-05-18 TXN-441872, +100,000 BaridiMob Advance 2026-04-02 TXN-928471 (notes "Received after the
   first milestone delivery."); Mohamed Bachir / Mobile App UI +320,000 Bank wire Final 2026-06-12 WIRE-7783; Nova Studio /
   Logo Pack +40,000 Cash Final 2026-05-20 (no reference).
+
+## Expense management (files `EX1`..`EX13` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v7-expenses.figcraft` (do not edit). Expenses live under the "More" tab
+(More active on all expense screens). Amounts are shown negative in red: "-4,500 DZ".
+
+- Model: Expense = id, description, category (Software/Tools, Hosting/Services, Marketing, Equipment, Others),
+  amount, projectId (nullable = general business cost), method (reuse PaymentMethod: baridimob / ccp / bank / cash),
+  reference (optional), notes (optional), date, createdAt. Category chips: Software purple on `#EFEBFF`, Hosting
+  orange on `#FFF0E4`, Marketing coral on `#FFE9E6`, Equipment green on greenBg, Others grey (seg + mute); the round
+  category icon shows the category initial in the same colours. Method badges as in payments.
+- Stats (ExpensesRepository): total = sum; projectLinked = sum and count of expenses with a project; thisMonth = sum of
+  the current calendar month; average = round(total / count), 0 when empty. Filters: category (All + 5), project link
+  (All / Project linked / General costs), search over description, category label, project name, reference, notes.
+  Sorts: Newest first, Oldest first, Highest amount, Lowest amount.
+- EX1 list: back, "Expenses", "N expenses logged", "+" -> record form, 4 KPI tiles (Total outlays red, Project-linked
+  orange, This month purple, Average outlay), search, category pills (All, Software, Hosting, Marketing, Equipment,
+  Others; row scrolls), "N expenses" + "Filter" + "Sort: <label>", expense cards (category icon, description, project
+  name or "General cost", -amount red, category chip, method badge, date, reference or dash). EX2 empty ("No expenses
+  logged yet", [+ Record first expense]); filters with no match -> "No expenses match your filters" + [Clear filters].
+  EX3 sort sheet; EX4 filter sheet (Category chips, Project link chips, [Apply filters], [Cancel], Reset).
+- EX5 detail: category icon, description, category label, big red amount, rows Category (chip), Project (or General
+  cost), Method (badge), Date, Reference, Notes (only when set), bottom [Edit expense]. EX6 actions sheet: Edit expense,
+  Copy reference (toast "Copied reference!", "No reference to copy" when empty), Go to project (only for linked
+  expenses, else hide the row), Delete expense (red). EX7 delete confirm; EX8 list after delete, toast "Expense deleted
+  successfully".
+- EX9 record form (/expenses/new, optional query `projectId` preselects the project), EX12 edit form (/expenses/:id/edit,
+  prefilled, [Save changes]): amount with DZD chip (required, > 0, error "Please enter a valid amount greater than zero"),
+  5 category tiles (required), description (required, error "Please describe the expense"), linked project select
+  (optional; EX11 sheet lists "General business cost" + every project, radio, [Confirm]), 4 method tiles (default
+  BaridiMob), date (default today) and reference halves, notes. EX10 shows the error state. Save -> list with toast
+  "Expense recorded" / edit -> detail with toast "Changes saved".
+- Mock data (7): Figma Pro plan, Software/Tools, general, 4,500, CCP, 2026-10-15, INV-802; Domain renewal,
+  Hosting/Services, general, 3,200, BaridiMob, 2026-10-03, RCPT-441; Instagram ads, Marketing, Brand Identity, 12,000,
+  BaridiMob, 2026-09-20, AD-2291 (notes "Campaign for the brand launch week."); Stock photos pack, Marketing, Fintask
+  Landing Page, 6,500, Cash, 2026-08-11, no ref; Monitor 27 inch, Equipment, general, 38,000, Bank wire, 2026-07-02,
+  INV-611; VPS hosting (yearly), Hosting/Services, Fintask Landing Page, 18,000, CCP, 2026-06-14, VPS-330; Coworking
+  pass, Others, general, 9,000, Cash, 2026-05-05, no ref. Totals: 91,200 / project-linked 36,500 (3) / this month
+  (Oct 2026) 7,700 / average 13,029.
