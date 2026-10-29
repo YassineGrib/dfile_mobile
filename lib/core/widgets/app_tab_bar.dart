@@ -37,6 +37,8 @@ class AppTabBar extends StatelessWidget {
       GoRouter.maybeOf(context)?.go('/projects');
     } else if (index == clientsTabIndex) {
       GoRouter.maybeOf(context)?.go('/clients');
+    } else if (index == moreTabIndex) {
+      GoRouter.maybeOf(context)?.go('/more');
     }
   }
 
@@ -59,7 +61,8 @@ class AppTabBar extends StatelessWidget {
               final bool isInteractive =
                   onTap != null ||
                   index == projectsTabIndex ||
-                  index == clientsTabIndex;
+                  index == clientsTabIndex ||
+                  index == moreTabIndex;
               return Expanded(
                 child: InkWell(
                   onTap: isInteractive ? () => _handleTap(context, index) : null,

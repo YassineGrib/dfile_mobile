@@ -25,6 +25,15 @@ class ProjectsRepository extends ChangeNotifier {
     for (final ProjectItem project in _projects) {
       _projectClientHistory[project.id] = project.clientId;
     }
+    for (int i = 0; i < _payments.length; i++) {
+      final ProjectPayment p = _payments[i];
+      if (p.clientId.isEmpty) {
+        final String? cId = _ownerClientForProjectId(p.projectId);
+        if (cId != null && cId.isNotEmpty) {
+          _payments[i] = p.copyWith(clientId: cId);
+        }
+      }
+    }
   }
 
   final ClientsRepository clientsRepository;
@@ -40,6 +49,37 @@ class ProjectsRepository extends ChangeNotifier {
 
   List<ProjectPayment> get payments =>
       List<ProjectPayment>.unmodifiable(_payments);
+
+  /// Returns all payments across all projects in the ledger.
+  List<ProjectPayment> get allPayments =>
+      List<ProjectPayment>.unmodifiable(_payments);
+
+  /// Finds a payment by [id], returning `null` if not found.
+  ProjectPayment? paymentById(String id) {
+    for (final ProjectPayment payment in _payments) {
+      if (payment.id == id) {
+        return payment;
+      }
+    }
+    return null;
+  }
+
+  /// Removes a payment by [id], re-syncs the affected client, and notifies listeners.
+  bool deletePayment(String id) {
+    final int index = _payments.indexWhere((ProjectPayment p) => p.id == id);
+    if (index == -1) {
+      return false;
+    }
+    final ProjectPayment removed = _payments.removeAt(index);
+    final String resolvedClientId = removed.clientId.isNotEmpty
+        ? removed.clientId
+        : (_ownerClientForProjectId(removed.projectId) ?? '');
+    if (resolvedClientId.isNotEmpty) {
+      _syncClient(resolvedClientId);
+    }
+    notifyListeners();
+    return true;
+  }
 
   /// Finds a project by [id], returning `null` if not found.
   ProjectItem? byId(String id) {
@@ -179,15 +219,30 @@ class ProjectsRepository extends ChangeNotifier {
   }
 
   /// Records a new [payment] and syncs the owning client's embedded payments list.
-  void addPayment(ProjectPayment payment) {
-    _payments.add(payment);
-    final ProjectItem? project = byId(payment.projectId);
-    final String? clientId =
-        project?.clientId ?? _projectClientHistory[payment.projectId];
-    if (clientId != null) {
-      _syncClient(clientId);
+  ProjectPayment addPayment(
+    ProjectPayment payment, {
+    String? clientId,
+    PaymentType? type,
+    PaymentMethod? method,
+    String? notes,
+  }) {
+    final String resolvedClientId = (clientId != null && clientId.isNotEmpty)
+        ? clientId
+        : (payment.clientId.isNotEmpty
+            ? payment.clientId
+            : (_ownerClientForProjectId(payment.projectId) ?? ''));
+    final ProjectPayment normalized = payment.copyWith(
+      clientId: resolvedClientId,
+      type: type ?? payment.type,
+      method: method ?? payment.method,
+      notes: notes ?? payment.notes,
+    );
+    _payments.add(normalized);
+    if (resolvedClientId.isNotEmpty) {
+      _syncClient(resolvedClientId);
     }
     notifyListeners();
+    return normalized;
   }
 
   /// Sum of recorded payments for [project].
@@ -233,6 +288,47 @@ class ProjectsRepository extends ChangeNotifier {
   /// Count of active projects (`In Progress` or `Waiting Client`).
   int get activeCount {
     return _projects.where((ProjectItem p) => p.status.isActive).length;
+  }
+
+  /// Computes summary statistics across all payments and projects per `docs/design/SPEC.md`.
+  PaymentStats paymentStats({DateTime? now}) {
+    final double collected = _payments.fold<double>(
+      0.0,
+      (double sum, ProjectPayment p) => sum + p.amount,
+    );
+
+    final double outstanding = _projects
+        .where((ProjectItem p) => p.status != ProjectStatus.cancelled)
+        .fold<double>(
+          0.0,
+          (double sum, ProjectItem p) => sum + math.max(0.0, p.price - paid(p)),
+        );
+
+    final DateTime effectiveNow = now ?? DateTime.now();
+    final double thisMonth = _payments
+        .where((ProjectPayment p) =>
+            p.date.year == effectiveNow.year &&
+            p.date.month == effectiveNow.month)
+        .fold<double>(0.0, (double sum, ProjectPayment p) => sum + p.amount);
+
+    final double totalPortfolioPrices = _projects.fold<double>(
+      0.0,
+      (double sum, ProjectItem p) => sum + p.price,
+    );
+
+    final int collectionRate = _projects.isEmpty || totalPortfolioPrices <= 0
+        ? 100
+        : math.max(
+            0,
+            math.min(100, (collected / totalPortfolioPrices * 100).round()),
+          );
+
+    return PaymentStats(
+      collected: collected,
+      outstanding: outstanding,
+      thisMonth: thisMonth,
+      collectionRate: collectionRate,
+    );
   }
 
   ProjectItem _normalizeStatusProgress(ProjectItem project) {
@@ -289,9 +385,9 @@ class ProjectsRepository extends ChangeNotifier {
       }
       final bool matchedInRepo = _payments.any(
         (ProjectPayment p) =>
-            formatDate(p.date) == existing.date &&
-            p.reference == existing.reference &&
-            p.amount == existing.amount,
+            p.reference == existing.reference ||
+            (formatDate(p.date) == existing.date &&
+                p.amount == existing.amount),
       );
       return !matchedInRepo;
     }).toList();
@@ -517,61 +613,73 @@ class ProjectsRepository extends ChangeNotifier {
 
   static List<ProjectPayment> _createInitialPayments() {
     return <ProjectPayment>[
-      // Fintask Landing Page — exact 3 payments from P7 (sum: 245,000 DZ)
+      // Fintask Landing Page — exact 3 payments from SPEC.md (sum: 245,000 DZ)
       ProjectPayment(
         id: 'pay1',
         projectId: 'p1',
+        clientId: 'c1',
         date: DateTime(2026, 4, 2),
-        reference: '#A102',
+        reference: 'TXN-928471',
         amount: 100000.0,
+        type: PaymentType.advance,
+        method: PaymentMethod.baridimob,
+        notes: 'Received after the first milestone delivery.',
       ),
       ProjectPayment(
         id: 'pay2',
         projectId: 'p1',
+        clientId: 'c1',
         date: DateTime(2026, 5, 18),
-        reference: '#A117',
+        reference: 'TXN-441872',
         amount: 85000.0,
+        type: PaymentType.milestone,
+        method: PaymentMethod.baridimob,
       ),
       ProjectPayment(
         id: 'pay3',
         projectId: 'p1',
+        clientId: 'c1',
         date: DateTime(2026, 7, 9),
-        reference: '#A131',
+        reference: 'CCP-5521',
         amount: 60000.0,
+        type: PaymentType.milestone,
+        method: PaymentMethod.ccp,
       ),
 
       // Brand Identity (paid: 60,000 DZ)
       ProjectPayment(
         id: 'pay4',
         projectId: 'p2',
-        date: DateTime(2026, 8, 5),
-        reference: '#A135',
+        clientId: 'c2',
+        date: DateTime(2026, 10, 12),
+        reference: 'TXN-552104',
         amount: 60000.0,
+        type: PaymentType.advance,
+        method: PaymentMethod.baridimob,
       ),
 
       // Mobile App UI (paid: 320,000 DZ)
       ProjectPayment(
         id: 'pay5',
         projectId: 'p3',
-        date: DateTime(2026, 4, 20),
-        reference: '#A105',
-        amount: 160000.0,
-      ),
-      ProjectPayment(
-        id: 'pay6',
-        projectId: 'p3',
+        clientId: 'c1',
         date: DateTime(2026, 6, 12),
-        reference: '#A122',
-        amount: 160000.0,
+        reference: 'WIRE-7783',
+        amount: 320000.0,
+        type: PaymentType.final_,
+        method: PaymentMethod.bank,
       ),
 
       // Logo Pack (paid: 40,000 DZ)
       ProjectPayment(
-        id: 'pay7',
+        id: 'pay6',
         projectId: 'p4',
+        clientId: 'c3',
         date: DateTime(2026, 5, 20),
-        reference: '#A118',
+        reference: '',
         amount: 40000.0,
+        type: PaymentType.final_,
+        method: PaymentMethod.cash,
       ),
     ];
   }

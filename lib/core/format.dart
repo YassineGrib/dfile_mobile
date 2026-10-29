@@ -66,6 +66,9 @@ String formatDate(DateTime date) {
   return '$y-$m-$d';
 }
 
+/// Formats a [DateTime] into `yyyy-MM-dd`.
+String formatDateYyyyMmDd(DateTime date) => formatDate(date);
+
 const List<String> _shortMonths = <String>[
   'Jan',
   'Feb',

@@ -38,6 +38,79 @@ enum TaskStatus {
   bool get isComplete => this == TaskStatus.complete;
 }
 
+/// Payment methods supported by Dfile per `docs/design/SPEC.md`.
+enum PaymentMethod {
+  baridimob('BaridiMob'),
+  ccp('CCP'),
+  bank('Bank wire'),
+  cash('Cash');
+
+  const PaymentMethod(this.label);
+
+  /// User-facing display label.
+  final String label;
+}
+
+/// Payment transaction types per `docs/design/SPEC.md`.
+enum PaymentType {
+  advance('Advance'),
+  milestone('Milestone'),
+  final_('Final'),
+  tip('Tip');
+
+  const PaymentType(this.label);
+
+  /// User-facing display label.
+  final String label;
+
+  /// Alias for [final_] to avoid Dart reserved keyword collision.
+  static const PaymentType finalPayment = final_;
+}
+
+/// Derived portfolio payment statistics per `docs/design/SPEC.md`.
+class PaymentStats {
+  const PaymentStats({
+    required this.collected,
+    required this.outstanding,
+    required this.thisMonth,
+    required this.collectionRate,
+  });
+
+  /// Total collected revenue across all recorded payments (sum of amounts).
+  final double collected;
+
+  /// Remaining balance due across non-cancelled projects.
+  final double outstanding;
+
+  /// Total amount collected in the target calendar month.
+  final double thisMonth;
+
+  /// Collection rate percentage (0..100).
+  final int collectionRate;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PaymentStats &&
+          runtimeType == other.runtimeType &&
+          collected == other.collected &&
+          outstanding == other.outstanding &&
+          thisMonth == other.thisMonth &&
+          collectionRate == other.collectionRate;
+
+  @override
+  int get hashCode => Object.hash(
+        collected,
+        outstanding,
+        thisMonth,
+        collectionRate,
+      );
+
+  @override
+  String toString() =>
+      'PaymentStats(collected: $collected, outstanding: $outstanding, thisMonth: $thisMonth, collectionRate: $collectionRate)';
+}
+
 /// A portfolio project entity.
 class ProjectItem {
   const ProjectItem({
@@ -135,30 +208,83 @@ class ProjectPayment {
   const ProjectPayment({
     required this.id,
     required this.projectId,
+    String? clientId,
     required this.date,
-    required this.reference,
+    this.reference = '',
     required this.amount,
-  });
+    this.type = PaymentType.milestone,
+    this.method = PaymentMethod.baridimob,
+    this.notes = '',
+    DateTime? createdAt,
+  })  : clientId = clientId ?? '',
+        createdAt = createdAt ?? date;
 
   final String id;
   final String projectId;
+  final String clientId;
   final DateTime date;
   final String reference;
   final double amount;
+  final PaymentType type;
+  final PaymentMethod method;
+  final String notes;
+  final DateTime createdAt;
 
   ProjectPayment copyWith({
     String? id,
     String? projectId,
+    String? clientId,
     DateTime? date,
     String? reference,
     double? amount,
+    PaymentType? type,
+    PaymentMethod? method,
+    String? notes,
+    DateTime? createdAt,
   }) {
     return ProjectPayment(
       id: id ?? this.id,
       projectId: projectId ?? this.projectId,
+      clientId: clientId ?? this.clientId,
       date: date ?? this.date,
       reference: reference ?? this.reference,
       amount: amount ?? this.amount,
+      type: type ?? this.type,
+      method: method ?? this.method,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProjectPayment &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          projectId == other.projectId &&
+          clientId == other.clientId &&
+          date == other.date &&
+          reference == other.reference &&
+          amount == other.amount &&
+          type == other.type &&
+          method == other.method &&
+          notes == other.notes;
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        projectId,
+        clientId,
+        date,
+        reference,
+        amount,
+        type,
+        method,
+        notes,
+      );
+
+  @override
+  String toString() =>
+      'ProjectPayment(id: $id, projectId: $projectId, clientId: $clientId, date: $date, reference: $reference, amount: $amount, type: $type, method: $method, notes: $notes)';
 }

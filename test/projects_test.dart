@@ -7,6 +7,7 @@ import 'package:dfile_mobile/core/router/app_router.dart';
 import 'package:dfile_mobile/core/widgets/widgets.dart';
 import 'package:dfile_mobile/features/clients/clients_list_screen.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
+import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/projects/add_project_screen.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
 import 'package:dfile_mobile/features/projects/edit_project_screen.dart';
@@ -68,7 +69,7 @@ void main() {
         expect(fintaskPayments.length, 3);
         expect(
           fintaskPayments.map((ProjectPayment p) => p.reference).toList(),
-          <String>['#A102', '#A117', '#A131'],
+          <String>['TXN-928471', 'TXN-441872', 'CCP-5521'],
         );
 
         // Paid amounts for remaining SPEC projects
@@ -618,7 +619,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(ProjectsListScreen), findsOneWidget);
 
-        // Tap Home and More -> stay on /projects
+        // Tap Home -> stays on /projects
         await tester.tap(
           find.descendant(
             of: find.byType(AppTabBar),
@@ -628,10 +629,21 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(ProjectsListScreen), findsOneWidget);
 
+        // Tap More -> navigates to /more (MoreScreen)
         await tester.tap(
           find.descendant(
             of: find.byType(AppTabBar),
             matching: find.text('More'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.byType(MoreScreen), findsOneWidget);
+
+        // Tap Projects tab -> returns to /projects
+        await tester.tap(
+          find.descendant(
+            of: find.byType(AppTabBar),
+            matching: find.text('Projects'),
           ),
         );
         await tester.pumpAndSettle();
