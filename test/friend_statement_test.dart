@@ -330,7 +330,7 @@ void main() {
     );
 
     testWidgets(
-      'Settle button opens the sheet placeholder',
+      'Settle button opens the sheet',
       (WidgetTester tester) async {
         await pumpFriendApp(tester, initialLocation: '/friends/fr1');
 
@@ -340,8 +340,8 @@ void main() {
         await tester.tap(settleButtons.first);
         await tester.pumpAndSettle();
 
-        // Settle sheet placeholder is shown
-        expect(find.text('Settle sheet'), findsOneWidget);
+        // Settle sheet is shown
+        expect(find.text('Record settlement'), findsOneWidget);
       },
     );
 

@@ -648,17 +648,32 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
               else
                 for (int i = 0; i < transactions.length; i++) ...[
                   if (i > 0) const SizedBox(height: AppSpacing.md),
-                  FriendTxCard(
-                    transaction: transactions[i],
-                    friendName: friend.name,
-                    showFriend: false,
-                    onTap: () => context.push(
-                      '/friends/transactions/${transactions[i].id}',
-                    ),
-                    onSettle: () => showSettleSheet(
-                      context,
-                      transactionId: transactions[i].id,
-                    ),
+                  LayoutBuilder(
+                    builder: (BuildContext context, BoxConstraints constraints) {
+                      Widget card = FriendTxCard(
+                        transaction: transactions[i],
+                        friendName: friend.name,
+                        showFriend: false,
+                        onTap: () => context.push(
+                          '/friends/transactions/${transactions[i].id}',
+                        ),
+                        onSettle: () => showSettleSheet(
+                          context,
+                          transactionId: transactions[i].id,
+                        ),
+                      );
+                      if (constraints.maxWidth < 380) {
+                        card = FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: 380,
+                            child: card,
+                          ),
+                        );
+                      }
+                      return card;
+                    },
                   ),
                 ],
             ],

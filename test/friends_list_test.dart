@@ -350,7 +350,7 @@ void main() {
         await tester.tap(find.text('Karim Boualam'));
         await tester.pumpAndSettle();
         expect(find.byType(FriendStatementScreen), findsOneWidget);
-        expect(find.text('FriendStatementScreen'), findsOneWidget);
+        expect(find.text('Karim Boualam'), findsOneWidget);
 
         // Back to Friends
         await pumpFriendsApp(tester);
@@ -361,6 +361,7 @@ void main() {
         await tester.tap(addButton);
         await tester.pumpAndSettle();
         expect(find.byType(AddFriendScreen), findsOneWidget);
+        expect(find.text('Add new friend'), findsOneWidget);
 
         // Back to Friends, switch to Transactions
         await pumpFriendsApp(tester);
@@ -371,12 +372,12 @@ void main() {
         await tester.tap(find.byType(FriendTxCard).first);
         await tester.pumpAndSettle();
         expect(find.byType(TransactionDetailScreen), findsOneWidget);
-        expect(find.text('TransactionDetailScreen'), findsOneWidget);
+        expect(find.text('Cash via BaridiMob'), findsOneWidget);
       },
     );
 
     testWidgets(
-      'Settle button on transaction card opens the settle sheet placeholder',
+      'Settle button on transaction card opens the settle sheet',
       (WidgetTester tester) async {
         await pumpFriendsApp(tester);
 
@@ -392,8 +393,8 @@ void main() {
         await tester.tap(settleButtons.first);
         await tester.pumpAndSettle();
 
-        // Bottom sheet placeholder opens
-        expect(find.text('Settle sheet'), findsOneWidget);
+        // Bottom sheet opens
+        expect(find.text('Record settlement'), findsOneWidget);
       },
     );
 
