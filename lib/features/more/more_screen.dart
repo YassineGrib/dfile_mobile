@@ -128,7 +128,7 @@ class MoreScreen extends StatelessWidget {
               title: MoreStrings.expensesTitle,
               subtitle: MoreStrings.expensesSubtitle,
               onTap: () {
-                showAppToast(context, MoreStrings.notAvailableInDemo);
+                GoRouter.maybeOf(context)?.go(AppRoutes.expensesPath);
               },
             ),
             const SizedBox(height: AppSpacing.sm),

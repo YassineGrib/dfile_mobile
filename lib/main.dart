@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/theme.dart';
 import 'features/clients/data/data.dart';
+import 'features/expenses/data/data.dart';
 import 'features/projects/data/data.dart';
 
 Future<void> main() async {
@@ -21,11 +22,13 @@ class DfileApp extends StatefulWidget {
     this.router,
     this.repository,
     this.projectsRepository,
+    this.expensesRepository,
   });
 
   final GoRouter? router;
   final ClientsRepository? repository;
   final ProjectsRepository? projectsRepository;
+  final ExpensesRepository? expensesRepository;
 
   @override
   State<DfileApp> createState() => _DfileAppState();
@@ -68,16 +71,21 @@ class _DfileAppState extends State<DfileApp> {
         widget.projectsRepository ??
         _fallbackProjectsRepository ??
         defaultProjectsRepository;
+    final ExpensesRepository effectiveExpensesRepo =
+        widget.expensesRepository ?? defaultExpensesRepository;
 
     return ClientsScope(
       repository: effectiveClientsRepo,
       child: ProjectsScope(
         repository: effectiveProjectsRepo,
-        child: MaterialApp.router(
-          title: 'Dfile',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.light,
-          routerConfig: widget.router ?? appRouter,
+        child: ExpensesScope(
+          repository: effectiveExpensesRepo,
+          child: MaterialApp.router(
+            title: 'Dfile',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            routerConfig: widget.router ?? appRouter,
+          ),
         ),
       ),
     );
@@ -88,3 +96,4 @@ final ClientsRepository defaultClientsRepository = ClientsRepository();
 final ProjectsRepository defaultProjectsRepository = ProjectsRepository(
   clientsRepository: defaultClientsRepository,
 );
+final ExpensesRepository defaultExpensesRepository = ExpensesRepository();

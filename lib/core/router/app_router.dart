@@ -11,14 +11,17 @@ import '../../features/clients/add_client_screen.dart';
 import '../../features/clients/client_detail_screen.dart';
 import '../../features/clients/clients_list_screen.dart';
 import '../../features/clients/edit_client_screen.dart';
-import '../../features/projects/add_project_screen.dart';
-import '../../features/projects/edit_project_screen.dart';
-import '../../features/projects/project_detail_screen.dart';
-import '../../features/projects/projects_list_screen.dart';
+import '../../features/expenses/expense_detail_screen.dart';
+import '../../features/expenses/expense_form_screen.dart';
+import '../../features/expenses/expenses_list_screen.dart';
 import '../../features/more/more_screen.dart';
 import '../../features/payments/payment_receipt_screen.dart';
 import '../../features/payments/payments_list_screen.dart';
 import '../../features/payments/record_payment_screen.dart';
+import '../../features/projects/add_project_screen.dart';
+import '../../features/projects/edit_project_screen.dart';
+import '../../features/projects/project_detail_screen.dart';
+import '../../features/projects/projects_list_screen.dart';
 
 /// Named route identifiers and paths for every screen in `docs/design/SPEC.md`.
 abstract final class AppRoutes {
@@ -72,6 +75,20 @@ abstract final class AppRoutes {
 
   static const String paymentReceiptName = 'payment-receipt';
   static const String paymentReceiptPath = '/payments/:id';
+
+  static const String expensesName = 'expenses';
+  static const String expensesPath = '/expenses';
+
+  static const String newExpenseName = 'new-expense';
+  static const String newExpensePath = '/expenses/new';
+  static const String recordExpenseName = 'record-expense';
+  static const String recordExpensePath = '/expenses/new';
+
+  static const String expenseDetailName = 'expense-detail';
+  static const String expenseDetailPath = '/expenses/:id';
+
+  static const String editExpenseName = 'edit-expense';
+  static const String editExpensePath = '/expenses/:id/edit';
 
   static const String moreName = 'more';
   static const String morePath = '/more';
@@ -194,6 +211,36 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         builder: (BuildContext context, GoRouterState state) =>
             PaymentReceiptScreen(
               paymentId: state.pathParameters['id'] ?? '',
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.expensesPath,
+        name: AppRoutes.expensesName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const ExpensesListScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.newExpensePath,
+        name: AppRoutes.newExpenseName,
+        builder: (BuildContext context, GoRouterState state) =>
+            ExpenseFormScreen(
+              projectId: state.uri.queryParameters['projectId'],
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.editExpensePath,
+        name: AppRoutes.editExpenseName,
+        builder: (BuildContext context, GoRouterState state) =>
+            ExpenseFormScreen(
+              expenseId: state.pathParameters['id'],
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.expenseDetailPath,
+        name: AppRoutes.expenseDetailName,
+        builder: (BuildContext context, GoRouterState state) =>
+            ExpenseDetailScreen(
+              expenseId: state.pathParameters['id'] ?? '',
             ),
       ),
       GoRoute(

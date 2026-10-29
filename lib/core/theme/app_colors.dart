@@ -34,4 +34,11 @@ abstract final class AppColors {
 
   /// Background colour for the CCP payment method badge per SPEC.md (`#FFF3CC`).
   static const Color ccpBg = Color(0xFFFFF3CC);
+
+  /// Expense category background tokens per SPEC.md.
+  static const Color softwareBg = Color(0xFFEFEBFF);
+  static const Color hostingBg = Color(0xFFFFF0E4);
+  static const Color marketingBg = Color(0xFFFFE9E6);
+  static const Color equipmentBg = greenBg;
+  static const Color othersBg = seg;
 }

@@ -356,13 +356,6 @@ void main() {
     ) async {
       await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
 
-      // Tap Expenses row
-      await tester.tap(find.text(MoreStrings.expensesTitle));
-      await tester.pump();
-      expect(find.text(MoreStrings.notAvailableInDemo), findsOneWidget);
-      await tester.pump(const Duration(seconds: 4));
-      expect(find.text(MoreStrings.notAvailableInDemo), findsNothing);
-
       // Tap Invoices row
       await tester.tap(find.text(MoreStrings.invoicesTitle));
       await tester.pump();
