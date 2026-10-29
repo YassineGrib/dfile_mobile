@@ -183,3 +183,50 @@ Source file: `docs/design/dfile-mobile-v7-expenses.figcraft` (do not edit). Expe
   INV-611; VPS hosting (yearly), Hosting/Services, Fintask Landing Page, 18,000, CCP, 2026-06-14, VPS-330; Coworking
   pass, Others, general, 9,000, Cash, 2026-05-05, no ref. Totals: 91,200 / project-linked 36,500 (3) / this month
   (Oct 2026) 7,700 / average 13,029.
+
+## Friends' debts (files `FD1`..`FD16` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v8-friends.figcraft` (do not edit). Lives under More (More tab active everywhere).
+
+- Model: Friend = id, name, phone, notes, createdAt, avatar colour index. FriendTransaction = id, friendId, type
+  (money = "Money loan", service = "Service", expense = "Shared cost"), direction (lent = "Owed to me", borrowed = "I owe"),
+  amount, paidAmount, description, dueDate (nullable), date, createdAt; status DERIVED: settled when paid >= amount,
+  partial when 0 < paid < amount, pending when paid == 0. FriendSettlement = id, transactionId, friendId, amount,
+  method (cash, baridimob, bank, serviceOffset), notes, date, createdAt. Remaining = amount - paid.
+- Derived: friend net = sum(lent remaining) - sum(borrowed remaining) (positive = owed to you, green; negative = you owe,
+  red; zero = Settled grey); overall net, owedToYou (sum of lent remaining), youOwe; per friend active count (non-settled
+  transactions) and settled count; last activity date. Settling adds a FriendSettlement and increases paidAmount (cannot exceed
+  remaining). Deleting a friend deletes their transactions and settlements; deleting a transaction deletes its settlements.
+- Chips: Lent green on greenBg, Borrowed red on redBg; status Pending orange on `#FFF0E4`, Partial purple on `#EFEBFF`, Settled
+  green on greenBg; method badges BaridiMob purple, Cash green, Offset orange, Bank grey. Net chip "Owed 45,000 DZ" / "You owe
+  12,000 DZ" / "Settled".
+- FD1 Friends / FD8 Transactions: ONE screen with back, "Friends' debts", "N friends" or "N transactions", "+" (add friend), overall
+  net card (net big, "Owed to you x", "You owe y"), two-way toggle Friends / Transactions, search, pills (friends: All, Owe me, I owe,
+  Settled; transactions: All, Owed to me, I owe, Settled) + for transactions the "N transactions" count and "Filter" (FD9: Direction,
+  Status, Nature chips, [Apply filters] [Cancel] Reset). Friend cards (avatar, name, phone, net chip, "N active - M settled", "Last:
+  date"); transaction cards (type icon, description, amount, "friend - type - date", direction + status chips, "Due mm-dd", [Settle]
+  button unless settled, paid bar, "Paid x DZ", "Remaining y DZ" or green "Settled"). FD2 empty ("No friends yet", [+ Add friend]); no
+  match states with [Clear filters].
+- FD3 statement (/friends/:id): back, "Statement", "..." , avatar, name, phone, net card with chip, 4 stat tiles (Owed to you, You
+  owe, Active, Settled), "Transaction history" + "+ Add" (record form with the friend preselected), transaction cards. FD4 actions
+  sheet: Add transaction, Copy phone number (Clipboard + toast "Copied phone!", "No phone number" when empty), Open transactions
+  (Transactions tab of the list, filtered by this friend's name in search), Delete friend (red) -> FD5 confirm -> list + toast "Friend
+  deleted successfully".
+- FD7 add friend (/friends/new): name (required, error "Please enter the friend name"), phone, notes; [Save friend] -> list + toast
+  "Friend added".
+- FD10 transaction detail (/friends/transactions/:id): icon, description, "friend - type", big amount, chips, paid bar, rows Paid,
+  Remaining, Date, Due date, "Settlements (N)" rows (date, method badge, +amount), bottom [Delete] (red) and [Settle payment]
+  (hidden/disabled when settled). FD15 delete confirm -> statement/list + toast "Transaction deleted successfully".
+- FD11/FD12 record transaction (/friends/transactions/new, optional query friendId): friend select (sheet; "+ New friend" ->
+  add friend), direction tiles (Owed to me / I owe), nature tiles (Money loan / Service / Shared cost), amount (> 0, error "Please
+  enter a valid amount greater than 0"), description (required, error "Please enter a description"), date (default today), due date
+  (optional). [Save transaction] -> statement of that friend + toast "Transaction recorded".
+- FD13 settle sheet (showSettleSheet(context, transactionId), reusable from statement, list and detail): summary (chip, Total / Paid /
+  Remaining), amount (> 0 and <= remaining, "100% full" chip), method tiles BaridiMob / Cash / Offset / Bank, notes (required when
+  method is Offset: "Offset service details"), date; [Confirm settlement] -> toast "Settlement recorded"; [Cancel].
+- Mock data: friends Karim Boualam (+213 550 12 34 56), Yacine Mebarki (+213 661 45 78 90), Amine Saidi (+213 770 33 21 08), Lina
+  Cherif (+213 555 98 76 54). Transactions: Karim lent money 50,000 "Cash via BaridiMob" 2026-09-02 due 2026-11-02 paid 20,000
+  (settlements 2026-09-20 +12,000 BaridiMob, 2026-10-01 +8,000 Cash); Karim lent service 15,000 "Frontend UI design" 2026-10-05
+  pending; Amine borrowed money 12,000 "Hosting bill split" 2026-10-10 due 2026-11-10 pending; Lina lent money 8,000 "Lunch and taxi"
+  2026-08-14 fully settled (one settlement 8,000 Cash 2026-08-20); Yacine lent shared cost 25,000 "Server hosting bill" 2026-10-20 due
+  2026-11-20 pending. Overall: net +58,000, owed to you 70,000, you owe 12,000; Karim net 45,000.
