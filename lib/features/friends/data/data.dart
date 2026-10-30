@@ -4,3 +4,4 @@ export 'friend_tx_type.dart';
 export 'friends_repository.dart';
 export 'friends_scope.dart';
 export 'friends_tab.dart';
+export 'friends_store.dart';

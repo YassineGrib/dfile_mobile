@@ -3,3 +3,4 @@ export 'calendar_repository.dart';
 export 'calendar_scope.dart';
 export 'calendar_tab.dart';
 export 'milestone.dart';
+export 'calendar_store.dart';

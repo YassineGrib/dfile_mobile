@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import 'friend.dart';
 import 'friend_transaction.dart';
 import 'friend_tx_type.dart';
+import 'friends_store.dart';
 
 /// Pure filtering function for friends per `docs/design/SPEC.md` (FD1).
 ///
@@ -181,6 +184,109 @@ class FriendsRepository extends ChangeNotifier {
   final List<Friend> _friends;
   final List<FriendTransaction> _transactions;
   final List<FriendSettlement> _settlements;
+  FriendsStore? _store;
+  StreamSubscription<List<Friend>>? _friendsSub;
+  StreamSubscription<List<FriendTransaction>>? _transactionsSub;
+  StreamSubscription<List<FriendSettlement>>? _settlementsSub;
+  bool _friendsLoaded = false;
+  bool _transactionsLoaded = false;
+  bool _settlementsLoaded = false;
+  Object? _syncError;
+
+  /// True until the first snapshots of an attached store arrive.
+  bool get isLoading =>
+      _store != null &&
+      !(_friendsLoaded && _transactionsLoaded && _settlementsLoaded);
+
+  /// Last store error (read or write), if any.
+  Object? get syncError => _syncError;
+
+  bool get isAttached => _store != null;
+
+  /// Switches to [store] as the source of truth: demo data is dropped and the
+  /// lists follow the snapshots.
+  void attachStore(FriendsStore store) {
+    _detach();
+    _store = store;
+    _friends.clear();
+    _transactions.clear();
+    _settlements.clear();
+    _syncError = null;
+    notifyListeners();
+    _friendsSub = store.watchFriends().listen((List<Friend> remote) {
+      _friends
+        ..clear()
+        ..addAll(remote);
+      _friendsLoaded = true;
+      notifyListeners();
+    }, onError: _onStoreError);
+    _transactionsSub = store.watchTransactions().listen((
+      List<FriendTransaction> remote,
+    ) {
+      _transactions
+        ..clear()
+        ..addAll(remote);
+      _transactionsLoaded = true;
+      notifyListeners();
+    }, onError: _onStoreError);
+    _settlementsSub = store.watchSettlements().listen((
+      List<FriendSettlement> remote,
+    ) {
+      _settlements
+        ..clear()
+        ..addAll(remote);
+      _settlementsLoaded = true;
+      notifyListeners();
+    }, onError: _onStoreError);
+  }
+
+  /// Stops following the store and empties the lists (sign-out).
+  void detachStore() {
+    _detach();
+    _friends.clear();
+    _transactions.clear();
+    _settlements.clear();
+    notifyListeners();
+  }
+
+  void _detach() {
+    _friendsSub?.cancel();
+    _transactionsSub?.cancel();
+    _settlementsSub?.cancel();
+    _friendsSub = null;
+    _transactionsSub = null;
+    _settlementsSub = null;
+    _store = null;
+    _friendsLoaded = false;
+    _transactionsLoaded = false;
+    _settlementsLoaded = false;
+  }
+
+  void _onStoreError(Object error) {
+    _syncError = error;
+    _friendsLoaded = true;
+    _transactionsLoaded = true;
+    _settlementsLoaded = true;
+    notifyListeners();
+  }
+
+  void _write(Future<void> Function(FriendsStore store) op) {
+    final FriendsStore? store = _store;
+    if (store == null) return;
+    op(store).catchError((Object error) {
+      _syncError = error;
+      notifyListeners();
+    });
+  }
+
+  /// Deletes this user's friends data from the store (before the account goes).
+  Future<void> deleteRemoteData() async => _store?.deleteAll();
+
+  @override
+  void dispose() {
+    _detach();
+    super.dispose();
+  }
 
   /// Unmodifiable view of all registered friends with attached balance statistics.
   List<Friend> get friends => List<Friend>.unmodifiable(
@@ -222,6 +328,7 @@ class FriendsRepository extends ChangeNotifier {
   void addFriend(Friend friend) {
     _friends.add(friend);
     notifyListeners();
+    _write((FriendsStore s) => s.saveFriend(friend));
   }
 
   /// Updates an existing friend record matching [friend.id] and notifies listeners.
@@ -230,6 +337,7 @@ class FriendsRepository extends ChangeNotifier {
     if (index != -1) {
       _friends[index] = friend;
       notifyListeners();
+      _write((FriendsStore s) => s.saveFriend(friend));
       return true;
     }
     return false;
@@ -252,12 +360,28 @@ class FriendsRepository extends ChangeNotifier {
     _transactions.removeWhere(
       (FriendTransaction tx) => tx.friendId == friendId,
     );
+    final List<String> settlementIdsToRemove = _settlements
+        .where(
+          (FriendSettlement s) =>
+              s.friendId == friendId || txIdsToRemove.contains(s.transactionId),
+        )
+        .map((FriendSettlement s) => s.id)
+        .toList();
     _settlements.removeWhere(
       (FriendSettlement s) =>
           s.friendId == friendId || txIdsToRemove.contains(s.transactionId),
     );
 
     notifyListeners();
+    _write((FriendsStore st) async {
+      await st.deleteFriend(friendId);
+      for (final String id in txIdsToRemove) {
+        await st.deleteTransaction(id);
+      }
+      for (final String id in settlementIdsToRemove) {
+        await st.deleteSettlement(id);
+      }
+    });
     return true;
   }
 
@@ -265,6 +389,7 @@ class FriendsRepository extends ChangeNotifier {
   void addTransaction(FriendTransaction transaction) {
     _transactions.add(transaction);
     notifyListeners();
+    _write((FriendsStore s) => s.saveTransaction(transaction));
   }
 
   /// Updates an existing transaction matching [transaction.id] and notifies listeners.
@@ -275,6 +400,7 @@ class FriendsRepository extends ChangeNotifier {
     if (index != -1) {
       _transactions[index] = transaction;
       notifyListeners();
+      _write((FriendsStore s) => s.saveTransaction(transaction));
       return true;
     }
     return false;
@@ -289,11 +415,21 @@ class FriendsRepository extends ChangeNotifier {
     if (index == -1) return false;
 
     _transactions.removeAt(index);
+    final List<String> removedSettlements = _settlements
+        .where((FriendSettlement s) => s.transactionId == transactionId)
+        .map((FriendSettlement s) => s.id)
+        .toList();
     _settlements.removeWhere(
       (FriendSettlement s) => s.transactionId == transactionId,
     );
 
     notifyListeners();
+    _write((FriendsStore st) async {
+      await st.deleteTransaction(transactionId);
+      for (final String id in removedSettlements) {
+        await st.deleteSettlement(id);
+      }
+    });
     return true;
   }
 
@@ -341,9 +477,16 @@ class FriendsRepository extends ChangeNotifier {
     );
 
     _settlements.add(settlement);
-    _transactions[txIndex] = tx.copyWith(paidAmount: tx.paidAmount + amount);
+    final FriendTransaction updatedTx = tx.copyWith(
+      paidAmount: tx.paidAmount + amount,
+    );
+    _transactions[txIndex] = updatedTx;
 
     notifyListeners();
+    _write((FriendsStore st) async {
+      await st.saveSettlement(settlement);
+      await st.saveTransaction(updatedTx);
+    });
     return settlement;
   }
 

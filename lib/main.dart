@@ -28,6 +28,8 @@ Future<void> main() async {
     clients: defaultClientsRepository,
     projects: defaultProjectsRepository,
     expenses: defaultExpensesRepository,
+    friends: defaultFriendsRepository,
+    calendar: defaultCalendarRepository,
   ).start();
   final GoRouter router = createAppRouter(
     initialLocation: auth.currentUser != null
