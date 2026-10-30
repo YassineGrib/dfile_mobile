@@ -29,7 +29,7 @@ class MoreScreen extends StatelessWidget {
             AppSpacing.pageGutter,
             AppSpacing.xl,
             AppSpacing.pageGutter,
-            AppSpacing.xxl,
+            AppSpacing.xxl + 80,
           ),
           children: [
             // Title & Subtitle
@@ -122,6 +122,17 @@ class MoreScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             _MoreMenuRow(
+              iconData: AppIcons.calendarDays,
+              iconBgColor: AppColors.orangeBg,
+              iconTextColor: AppColors.orange,
+              title: MoreStrings.calendarTitle,
+              subtitle: MoreStrings.calendarSubtitle,
+              onTap: () {
+                GoRouter.maybeOf(context)?.go(AppRoutes.calendarPath);
+              },
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            _MoreMenuRow(
               iconText: '−',
               iconBgColor: AppColors.seg,
               iconTextColor: AppColors.ink,
@@ -203,7 +214,8 @@ class MoreScreen extends StatelessWidget {
 
 class _MoreMenuRow extends StatelessWidget {
   const _MoreMenuRow({
-    required this.iconText,
+    this.iconText,
+    this.iconData,
     required this.iconBgColor,
     required this.iconTextColor,
     required this.title,
@@ -211,7 +223,8 @@ class _MoreMenuRow extends StatelessWidget {
     required this.onTap,
   });
 
-  final String iconText;
+  final String? iconText;
+  final IconData? iconData;
   final Color iconBgColor;
   final Color iconTextColor;
   final String title;
@@ -247,14 +260,20 @@ class _MoreMenuRow extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(
-                  iconText,
-                  style: TextStyle(
-                    color: iconTextColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                child: iconData != null
+                    ? Icon(
+                        iconData,
+                        size: 20,
+                        color: iconTextColor,
+                      )
+                    : Text(
+                        iconText ?? '',
+                        style: TextStyle(
+                          color: iconTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(width: AppSpacing.md),

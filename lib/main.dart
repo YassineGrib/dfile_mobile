@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'core/router/app_router.dart';
 import 'core/theme/theme.dart';
+import 'features/calendar/data/data.dart';
 import 'features/clients/data/data.dart';
 import 'features/dashboard/data/data.dart';
 import 'features/expenses/data/data.dart';
@@ -29,6 +30,7 @@ class DfileApp extends StatefulWidget {
     this.friendsRepository,
     this.settingsRepository,
     this.notificationsStore,
+    this.calendarRepository,
   });
 
   final GoRouter? router;
@@ -38,6 +40,7 @@ class DfileApp extends StatefulWidget {
   final FriendsRepository? friendsRepository;
   final SettingsRepository? settingsRepository;
   final NotificationsStore? notificationsStore;
+  final CalendarRepository? calendarRepository;
 
   @override
   State<DfileApp> createState() => _DfileAppState();
@@ -88,6 +91,8 @@ class _DfileAppState extends State<DfileApp> {
         widget.settingsRepository ?? defaultSettingsRepository;
     final NotificationsStore effectiveNotificationsStore =
         widget.notificationsStore ?? defaultNotificationsStore;
+    final CalendarRepository effectiveCalendarRepo =
+        widget.calendarRepository ?? defaultCalendarRepository;
 
     return ClientsScope(
       repository: effectiveClientsRepo,
@@ -99,13 +104,16 @@ class _DfileAppState extends State<DfileApp> {
             repository: effectiveFriendsRepo,
             child: SettingsScope(
               repository: effectiveSettingsRepo,
-              child: NotificationsScope(
-                store: effectiveNotificationsStore,
-                child: MaterialApp.router(
-                  title: 'Dfile',
-                  debugShowCheckedModeBanner: false,
-                  theme: AppTheme.light,
-                  routerConfig: widget.router ?? appRouter,
+              child: CalendarScope(
+                repository: effectiveCalendarRepo,
+                child: NotificationsScope(
+                  store: effectiveNotificationsStore,
+                  child: MaterialApp.router(
+                    title: 'Dfile',
+                    debugShowCheckedModeBanner: false,
+                    theme: AppTheme.light,
+                    routerConfig: widget.router ?? appRouter,
+                  ),
                 ),
               ),
             ),
@@ -124,3 +132,4 @@ final ExpensesRepository defaultExpensesRepository = ExpensesRepository();
 final FriendsRepository defaultFriendsRepository = FriendsRepository();
 final SettingsRepository defaultSettingsRepository = SettingsRepository();
 final NotificationsStore defaultNotificationsStore = NotificationsStore();
+final CalendarRepository defaultCalendarRepository = CalendarRepository();

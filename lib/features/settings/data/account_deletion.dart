@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../calendar/data/data.dart';
 import '../../clients/data/data.dart';
 import '../../expenses/data/data.dart';
 import '../../friends/data/data.dart';
@@ -14,6 +15,10 @@ void wipeAllUserData(BuildContext context) {
   final ExpensesRepository expensesRepo = ExpensesScope.of(context, listen: false);
   final FriendsRepository friendsRepo = FriendsScope.of(context, listen: false);
   final SettingsRepository settingsRepo = SettingsScope.of(context, listen: false);
+  CalendarRepository? calendarRepo;
+  try {
+    calendarRepo = CalendarScope.of(context, listen: false);
+  } catch (_) {}
 
   deleteAllUserDataFromRepositories(
     clientsRepo: clientsRepo,
@@ -21,6 +26,7 @@ void wipeAllUserData(BuildContext context) {
     expensesRepo: expensesRepo,
     friendsRepo: friendsRepo,
     settingsRepo: settingsRepo,
+    calendarRepo: calendarRepo,
   );
 }
 
@@ -30,17 +36,19 @@ Future<void> deleteAllUserData(BuildContext context) async {
   wipeAllUserData(context);
 }
 
-/// Pure helper executing the full wipe across the five repositories.
+/// Pure helper executing the full wipe across all repositories.
 void deleteAllUserDataFromRepositories({
   required ClientsRepository clientsRepo,
   required ProjectsRepository projectsRepo,
   required ExpensesRepository expensesRepo,
   required FriendsRepository friendsRepo,
   required SettingsRepository settingsRepo,
+  CalendarRepository? calendarRepo,
 }) {
   clientsRepo.clearAll();
   projectsRepo.clearAll();
   expensesRepo.clearAll();
   friendsRepo.clearAll();
   settingsRepo.clearAll();
+  calendarRepo?.clearAll();
 }

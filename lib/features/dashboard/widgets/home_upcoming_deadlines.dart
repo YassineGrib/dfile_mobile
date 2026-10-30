@@ -147,7 +147,7 @@ class HomeUpcomingDeadlines extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => context.go('/projects'),
+              onTap: () => context.go('/calendar?tab=agenda'),
               behavior: HitTestBehavior.opaque,
               child: Row(
                 mainAxisSize: MainAxisSize.min,

@@ -368,7 +368,7 @@ void main() {
       // Tap "See all" -> /projects
       await tester.tap(find.text(DashboardHomeStrings.seeAll));
       await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.projectsPath);
+      expect(router.state.uri.toString(), '${AppRoutes.calendarPath}?tab=agenda');
 
       // Tap deadline card -> /projects/:id
       router.go(AppRoutes.homePath);

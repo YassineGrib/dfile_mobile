@@ -313,7 +313,9 @@ void main() {
       expect(find.text(MoreStrings.paymentsTitle), findsOneWidget);
       expect(find.text('665,000 DZ collected'), findsOneWidget);
 
-      // Other 4 menu rows
+      // Other menu rows
+      expect(find.text(MoreStrings.calendarTitle), findsOneWidget);
+      expect(find.text(MoreStrings.calendarSubtitle), findsOneWidget);
       expect(find.text(MoreStrings.expensesTitle), findsOneWidget);
       expect(find.text(MoreStrings.expensesSubtitle), findsOneWidget);
       expect(find.text(MoreStrings.invoicesTitle), findsOneWidget);
@@ -367,7 +369,10 @@ void main() {
     testWidgets('Tapping Sign out navigates to /sign-in', (WidgetTester tester) async {
       await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
 
-      await tester.tap(find.text(MoreStrings.signOut));
+      final Finder signOutFinder = find.text(MoreStrings.signOut);
+      await tester.ensureVisible(signOutFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(signOutFinder);
       await tester.pumpAndSettle();
 
       expect(find.byType(SignInScreen), findsOneWidget);

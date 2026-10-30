@@ -30,4 +30,15 @@ abstract final class AppIcons {
   static const IconData arrowRightLeft = LucideIcons.arrowRightLeft;
   static const IconData sparkles = LucideIcons.sparkles;
   static const IconData messageSquare = LucideIcons.messageSquare;
+  static const IconData chevronLeft = LucideIcons.chevronLeft;
+  static const IconData chevronDown = LucideIcons.chevronDown;
+  static const IconData calendarDays = LucideIcons.calendarDays;
+  static const IconData calendarCheck = LucideIcons.calendarCheck;
+  static const IconData play = LucideIcons.play;
+  static const IconData milestone = LucideIcons.milestone;
+  static const IconData trash2 = LucideIcons.trash2;
+  static const IconData refreshCw = LucideIcons.refreshCw;
+  static const IconData gauge = LucideIcons.gauge;
+  static const IconData check = LucideIcons.check;
+  static const IconData x = LucideIcons.x;
 }

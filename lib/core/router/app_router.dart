@@ -7,6 +7,10 @@ import '../../features/auth/sign_in_screen.dart';
 import '../../features/auth/sign_up_screen.dart';
 import '../../features/auth/verify_code_screen.dart';
 import '../../features/auth/welcome_screen.dart';
+import '../../features/calendar/calendar_screen.dart';
+import '../../features/calendar/calendar_sync_screen.dart';
+import '../../features/calendar/capacity_screen.dart';
+import '../../features/calendar/milestone_form_screen.dart';
 import '../../features/clients/add_client_screen.dart';
 import '../../features/clients/client_detail_screen.dart';
 import '../../features/clients/clients_list_screen.dart';
@@ -238,6 +242,22 @@ abstract final class AppRoutes {
 
   static const String accountDeletedName = 'account-deleted';
   static const String accountDeletedPath = '/account-deleted';
+
+  static const String calendarName = 'calendar';
+  static const String calendarPath = '/calendar';
+
+  static const String calendarNewName = 'calendar-new';
+  static const String calendarNewPath = '/calendar/new';
+  static const String newMilestoneName = 'new-milestone';
+  static const String newMilestonePath = '/calendar/new';
+
+  static const String calendarCapacityName = 'calendar-capacity';
+  static const String calendarCapacityPath = '/calendar/capacity';
+  static const String capacityName = 'capacity';
+  static const String capacityPath = '/calendar/capacity';
+
+  static const String calendarSyncName = 'calendar-sync';
+  static const String calendarSyncPath = '/calendar/sync';
 }
 
 /// Builds a fresh [GoRouter] configured with all application routes.
@@ -461,6 +481,36 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
             FriendStatementScreen(
               friendId: state.pathParameters['id'] ?? '',
             ),
+      ),
+      GoRoute(
+        path: AppRoutes.calendarPath,
+        name: AppRoutes.calendarName,
+        builder: (BuildContext context, GoRouterState state) =>
+            CalendarScreen(
+              tab: state.uri.queryParameters['tab'],
+              date: state.uri.queryParameters['date'],
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.calendarNewPath,
+        name: AppRoutes.calendarNewName,
+        builder: (BuildContext context, GoRouterState state) =>
+            MilestoneFormScreen(
+              projectId: state.uri.queryParameters['projectId'],
+              date: state.uri.queryParameters['date'],
+            ),
+      ),
+      GoRoute(
+        path: AppRoutes.calendarCapacityPath,
+        name: AppRoutes.calendarCapacityName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const CapacityScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.calendarSyncPath,
+        name: AppRoutes.calendarSyncName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const CalendarSyncScreen(),
       ),
       GoRoute(
         path: AppRoutes.morePath,

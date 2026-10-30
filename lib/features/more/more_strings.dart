@@ -12,6 +12,9 @@ abstract final class MoreStrings {
   static String paymentsSubtitle(String formattedAmount) =>
       '$formattedAmount collected';
 
+  static const String calendarTitle = 'Calendar';
+  static const String calendarSubtitle = 'Deadlines and milestones';
+
   static const String expensesTitle = 'Expenses';
   static const String expensesSubtitle = 'Track what you spend';
 

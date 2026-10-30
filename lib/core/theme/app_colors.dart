@@ -59,4 +59,7 @@ abstract final class AppColors {
   static const Color chartCoralMuted = Color(0xFFF2A8A0);
   static const Color statusCompleted = Color(0xFF7DBE98);
   static const Color statusPlanned = Color(0xFFC9C3B6);
+
+  /// Calendar event dot color for completed events per SPEC.md (`#B8B2A5`).
+  static const Color calendarDotDone = Color(0xFFB8B2A5);
 }
