@@ -230,3 +230,43 @@ Source file: `docs/design/dfile-mobile-v8-friends.figcraft` (do not edit). Lives
   pending; Amine borrowed money 12,000 "Hosting bill split" 2026-10-10 due 2026-11-10 pending; Lina lent money 8,000 "Lunch and taxi"
   2026-08-14 fully settled (one settlement 8,000 Cash 2026-08-20); Yacine lent shared cost 25,000 "Server hosting bill" 2026-10-20 due
   2026-11-20 pending. Overall: net +58,000, owed to you 70,000, you owe 12,000; Karim net 45,000.
+
+## Settings (files `ST1`..`ST16` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v9-settings.figcraft` (do not edit). Settings live under More (the More menu "Settings" row ->
+/settings). State is IN MEMORY only (SettingsRepository, no new packages, resets on restart). Honest limits: there is no dark theme and no
+Arabic UI yet, so choosing Dark / System / Arabic keeps the current selection and shows the toast "Dark theme is coming soon" / "Arabic is
+coming soon"; fingerprint unlock is not available (toast "Not available in the demo", switch stays off).
+
+- Model (SettingsRepository, ChangeNotifier + SettingsScope): profile (name "Yassine G.", designation "Independent designer", email
+  yassine@decabyte.dz verified, phone "+213 550 12 34 56", address "12 Rue Didouche Mourad, Algiers"), language (en), themeMode (light),
+  categories (Development, Design, Branding, Marketing, Consulting), legalClauses (the 3-clause text of ST7), pinEnabled + pin (nullable
+  4 digits), biometricsEnabled (false), sessions (This phone "Samsung S24" active now, Office laptop "Chrome, Windows" 2 days ago),
+  googleConnected (false), notifications (push true, deadlines true, payments true, tasks false), supportTickets (list), password (mock
+  "demo123", used only to validate "current password").
+- ST1 hub (/settings): back, "Settings", profile card (avatar initial, name, designation, email) -> profile, grouped rows Account,
+  Preferences, Security, Integrations and cloud, Notifications, About and support, footer "Dfile  -  Version 1.0.0". Reads a toast from route
+  extra ({'toast': ...}) like the other screens. ST16 = hub with toast "Profile updated successfully".
+- ST2 profile (/settings/profile): name and designation required, email read-only with a "Verified" pill, phone, address; [Save details] ->
+  go('/settings', extra {'toast': 'Profile updated successfully'}); "Change password" row -> /settings/password. ST3/ST4 password
+  (/settings/password): current (non-empty and equal to the mock password, else error "Current password is incorrect"), new (>= 6 chars, error
+  "Password must be at least 6 characters"), confirm (error "New passwords do not match"), "Show" toggles; [Update password] -> back with toast
+  "Password updated successfully".
+- ST5 preferences (/settings/preferences): Language segmented (English / Arabic), Appearance tiles (Light / Dark / System), rows Font style
+  (value "Modern Studio Pro", toast "Not available in the demo"), Project categories "N categories" -> /settings/categories, Legal clauses
+  template -> /settings/legal. ST6 categories: chips with remove, bottom field + "+" (duplicate error toast "Category already exists!", added toast
+  "Category added", removed toast "Category removed."). The project add/edit forms must use this list as their category choices. ST7 legal
+  (/settings/legal): multiline editor with character count, [Save clauses template] -> toast "Legal clauses updated".
+- ST8 security (/settings/security): PIN switch (turning on opens the ST9 sheet, off clears the PIN with toast "PIN lock disabled"), "Change PIN"
+  row (visible when on) -> ST9 sheet (4 dots + keypad 0-9 and backspace; [Save PIN] enabled at 4 digits; toast "PIN saved"), fingerprint switch,
+  sessions card with [Terminate other sessions] (removes non-current sessions, toast "Logged out other sessions."). ST11 notifications
+  (/settings/notifications): push master switch (off disables and dims the three below) and deadlines / payments / tasks switches; saved instantly,
+  toast "Notification preferences saved".
+- ST10 integrations (/settings/integrations): Cloud sync card (static "Connected", "Last synced 2 minutes ago"), Google Calendar [Connect account]
+  / [Disconnect] (toggles googleConnected, toasts "Google account linked" / "Google Account unlinked."), Export and backup [Download workspace
+  backup (JSON)] -> builds a JSON of clients, projects, payments, expenses, friends and settings categories, copies it to the clipboard, toast "Backup
+  copied to clipboard".
+- ST12 about (/settings/about): app card (version 1.0.0, build 42), rows Submit support ticket -> /settings/support, Privacy policy -> /settings/privacy,
+  Terms and conditions -> /settings/terms, red "Sign out" -> ST14 confirm sheet ([Sign out] -> context.go('/welcome'), [Cancel]). ST13 support
+  (/settings/support): subject and message required (errors "Please enter a subject" / "Please enter a message"), [Submit ticket] -> back with toast
+  "Support ticket sent". ST15 policy page for privacy and terms (static text sections).
