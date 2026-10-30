@@ -657,7 +657,7 @@ void main() {
   });
 
   group('Route Placeholders and More Screen Navigation on 390x844 Surface', () {
-    testWidgets('All 4 calendar routes render their placeholders with back button', (
+    testWidgets('All 4 calendar routes render with back button', (
       WidgetTester tester,
     ) async {
       setTestSurface(tester);
@@ -669,7 +669,10 @@ void main() {
       router.go(AppRoutes.calendarPath);
       await pumpBounded(tester);
       expect(find.byType(CalendarScreen), findsOneWidget);
-      expect(find.text('CalendarScreen'), findsWidgets);
+      expect(find.text(CalendarStrings.calendar), findsWidgets);
+      expect(find.text(CalendarStrings.tabMonth), findsOneWidget);
+      expect(find.text(CalendarStrings.tabAgenda), findsOneWidget);
+      expect(find.text(CalendarStrings.tabTimeline), findsOneWidget);
 
       // Back button pops or goes to /more
       await tester.tap(find.byIcon(AppIcons.arrowLeft));
@@ -680,31 +683,31 @@ void main() {
       router.go(AppRoutes.calendarNewPath);
       await pumpBounded(tester);
       expect(find.byType(MilestoneFormScreen), findsOneWidget);
-      expect(find.text('MilestoneFormScreen'), findsWidgets);
+      expect(find.text(CalendarFormsStrings.newMilestoneTitle), findsOneWidget);
 
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
+      await tester.tap(find.byIcon(AppIcons.x));
       await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.morePath);
+      expect(router.state.uri.toString(), AppRoutes.calendarPath);
 
       // 3. /calendar/capacity
       router.go(AppRoutes.calendarCapacityPath);
       await pumpBounded(tester);
       expect(find.byType(CapacityScreen), findsOneWidget);
-      expect(find.text('CapacityScreen'), findsWidgets);
+      expect(find.text(CalendarFormsStrings.capacityTitle), findsWidgets);
 
       await tester.tap(find.byIcon(AppIcons.arrowLeft));
       await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.morePath);
+      expect(router.state.uri.toString(), AppRoutes.calendarPath);
 
       // 4. /calendar/sync
       router.go(AppRoutes.calendarSyncPath);
       await pumpBounded(tester);
       expect(find.byType(CalendarSyncScreen), findsOneWidget);
-      expect(find.text('CalendarSyncScreen'), findsWidgets);
+      expect(find.text(CalendarFormsStrings.calendarSyncTitle), findsWidgets);
 
       await tester.tap(find.byIcon(AppIcons.arrowLeft));
       await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.morePath);
+      expect(router.state.uri.toString(), AppRoutes.calendarPath);
     });
 
     testWidgets('Tapping Calendar row in MoreScreen navigates to /calendar', (
