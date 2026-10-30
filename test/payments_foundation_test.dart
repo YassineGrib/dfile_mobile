@@ -362,13 +362,6 @@ void main() {
       expect(find.text(MoreStrings.notAvailableInDemo), findsOneWidget);
       await tester.pump(const Duration(seconds: 4));
       expect(find.text(MoreStrings.notAvailableInDemo), findsNothing);
-
-      // Tap Settings row
-      await tester.tap(find.text(MoreStrings.settingsTitle));
-      await tester.pump();
-      expect(find.text(MoreStrings.notAvailableInDemo), findsOneWidget);
-      await tester.pump(const Duration(seconds: 4));
-      expect(find.text(MoreStrings.notAvailableInDemo), findsNothing);
     });
 
     testWidgets('Tapping Sign out navigates to /sign-in', (WidgetTester tester) async {

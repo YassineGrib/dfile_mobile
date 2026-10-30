@@ -28,6 +28,19 @@ import '../../features/projects/add_project_screen.dart';
 import '../../features/projects/edit_project_screen.dart';
 import '../../features/projects/project_detail_screen.dart';
 import '../../features/projects/projects_list_screen.dart';
+import '../../features/settings/about_screen.dart';
+import '../../features/settings/categories_screen.dart';
+import '../../features/settings/change_password_screen.dart';
+import '../../features/settings/data/policy_kind.dart';
+import '../../features/settings/edit_profile_screen.dart';
+import '../../features/settings/integrations_screen.dart';
+import '../../features/settings/legal_clauses_screen.dart';
+import '../../features/settings/notifications_screen.dart';
+import '../../features/settings/policy_screen.dart';
+import '../../features/settings/preferences_screen.dart';
+import '../../features/settings/security_screen.dart';
+import '../../features/settings/settings_screen.dart';
+import '../../features/settings/support_ticket_screen.dart';
 
 /// Named route identifiers and paths for every screen in `docs/design/SPEC.md`.
 abstract final class AppRoutes {
@@ -113,6 +126,69 @@ abstract final class AppRoutes {
 
   static const String moreName = 'more';
   static const String morePath = '/more';
+
+  static const String settingsName = 'settings';
+  static const String settingsPath = '/settings';
+
+  static const String settingsProfileName = 'settings-profile';
+  static const String settingsProfilePath = '/settings/profile';
+  static const String editProfileName = 'edit-profile';
+  static const String editProfilePath = '/settings/profile';
+
+  static const String settingsPasswordName = 'settings-password';
+  static const String settingsPasswordPath = '/settings/password';
+  static const String changePasswordName = 'change-password';
+  static const String changePasswordPath = '/settings/password';
+
+  static const String settingsPreferencesName = 'settings-preferences';
+  static const String settingsPreferencesPath = '/settings/preferences';
+  static const String preferencesName = 'preferences';
+  static const String preferencesPath = '/settings/preferences';
+
+  static const String settingsCategoriesName = 'settings-categories';
+  static const String settingsCategoriesPath = '/settings/categories';
+  static const String categoriesName = 'categories';
+  static const String categoriesPath = '/settings/categories';
+
+  static const String settingsLegalName = 'settings-legal';
+  static const String settingsLegalPath = '/settings/legal';
+  static const String legalClausesName = 'legal-clauses';
+  static const String legalClausesPath = '/settings/legal';
+
+  static const String settingsSecurityName = 'settings-security';
+  static const String settingsSecurityPath = '/settings/security';
+  static const String securityName = 'security';
+  static const String securityPath = '/settings/security';
+
+  static const String settingsIntegrationsName = 'settings-integrations';
+  static const String settingsIntegrationsPath = '/settings/integrations';
+  static const String integrationsName = 'integrations';
+  static const String integrationsPath = '/settings/integrations';
+
+  static const String settingsNotificationsName = 'settings-notifications';
+  static const String settingsNotificationsPath = '/settings/notifications';
+  static const String notificationsName = 'notifications';
+  static const String notificationsPath = '/settings/notifications';
+
+  static const String settingsAboutName = 'settings-about';
+  static const String settingsAboutPath = '/settings/about';
+  static const String aboutName = 'about';
+  static const String aboutPath = '/settings/about';
+
+  static const String settingsSupportName = 'settings-support';
+  static const String settingsSupportPath = '/settings/support';
+  static const String supportTicketName = 'support-ticket';
+  static const String supportTicketPath = '/settings/support';
+
+  static const String settingsPrivacyName = 'settings-privacy';
+  static const String settingsPrivacyPath = '/settings/privacy';
+  static const String privacyName = 'privacy';
+  static const String privacyPath = '/settings/privacy';
+
+  static const String settingsTermsName = 'settings-terms';
+  static const String settingsTermsPath = '/settings/terms';
+  static const String termsName = 'terms';
+  static const String termsPath = '/settings/terms';
 }
 
 /// Builds a fresh [GoRouter] configured with all application routes.
@@ -318,6 +394,84 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         name: AppRoutes.moreName,
         builder: (BuildContext context, GoRouterState state) =>
             const MoreScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPath,
+        name: AppRoutes.settingsName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const SettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsProfilePath,
+        name: AppRoutes.settingsProfileName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPasswordPath,
+        name: AppRoutes.settingsPasswordName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPreferencesPath,
+        name: AppRoutes.settingsPreferencesName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const PreferencesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsCategoriesPath,
+        name: AppRoutes.settingsCategoriesName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const CategoriesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsLegalPath,
+        name: AppRoutes.settingsLegalName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const LegalClausesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsSecurityPath,
+        name: AppRoutes.settingsSecurityName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const SecurityScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsIntegrationsPath,
+        name: AppRoutes.settingsIntegrationsName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const IntegrationsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsNotificationsPath,
+        name: AppRoutes.settingsNotificationsName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsAboutPath,
+        name: AppRoutes.settingsAboutName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const AboutScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsSupportPath,
+        name: AppRoutes.settingsSupportName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const SupportTicketScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPrivacyPath,
+        name: AppRoutes.settingsPrivacyName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const PolicyScreen(kind: PolicyKind.privacy),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsTermsPath,
+        name: AppRoutes.settingsTermsName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const PolicyScreen(kind: PolicyKind.terms),
       ),
     ],
   );

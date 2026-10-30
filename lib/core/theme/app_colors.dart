@@ -45,4 +45,10 @@ abstract final class AppColors {
   /// Friends' debts chips & status background tokens per SPEC.md.
   static const Color pendingBg = Color(0xFFFFF0E4);
   static const Color partialBg = Color(0xFFEFEBFF);
+
+  /// Google brand colours for integrations (ST10).
+  static const Color googleBlue = Color(0xFF4285F4);
+  static const Color googleRed = Color(0xFFEA4335);
+  static const Color googleYellow = Color(0xFFFBBC05);
+  static const Color googleGreen = Color(0xFF34A853);
 }

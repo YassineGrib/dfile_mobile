@@ -8,6 +8,7 @@ import 'features/clients/data/data.dart';
 import 'features/expenses/data/data.dart';
 import 'features/friends/data/data.dart';
 import 'features/projects/data/data.dart';
+import 'features/settings/data/data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class DfileApp extends StatefulWidget {
     this.projectsRepository,
     this.expensesRepository,
     this.friendsRepository,
+    this.settingsRepository,
   });
 
   final GoRouter? router;
@@ -32,6 +34,7 @@ class DfileApp extends StatefulWidget {
   final ProjectsRepository? projectsRepository;
   final ExpensesRepository? expensesRepository;
   final FriendsRepository? friendsRepository;
+  final SettingsRepository? settingsRepository;
 
   @override
   State<DfileApp> createState() => _DfileAppState();
@@ -78,6 +81,8 @@ class _DfileAppState extends State<DfileApp> {
         widget.expensesRepository ?? defaultExpensesRepository;
     final FriendsRepository effectiveFriendsRepo =
         widget.friendsRepository ?? defaultFriendsRepository;
+    final SettingsRepository effectiveSettingsRepo =
+        widget.settingsRepository ?? defaultSettingsRepository;
 
     return ClientsScope(
       repository: effectiveClientsRepo,
@@ -87,11 +92,14 @@ class _DfileAppState extends State<DfileApp> {
           repository: effectiveExpensesRepo,
           child: FriendsScope(
             repository: effectiveFriendsRepo,
-            child: MaterialApp.router(
-              title: 'Dfile',
-              debugShowCheckedModeBanner: false,
-              theme: AppTheme.light,
-              routerConfig: widget.router ?? appRouter,
+            child: SettingsScope(
+              repository: effectiveSettingsRepo,
+              child: MaterialApp.router(
+                title: 'Dfile',
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.light,
+                routerConfig: widget.router ?? appRouter,
+              ),
             ),
           ),
         ),
@@ -106,3 +114,4 @@ final ProjectsRepository defaultProjectsRepository = ProjectsRepository(
 );
 final ExpensesRepository defaultExpensesRepository = ExpensesRepository();
 final FriendsRepository defaultFriendsRepository = FriendsRepository();
+final SettingsRepository defaultSettingsRepository = SettingsRepository();
