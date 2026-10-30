@@ -344,3 +344,52 @@ so tests are deterministic (lib/features/dashboard/data/dashboard_stats.dart).
   "TOP EARNING PROJECTS" (top 3 projects by amount paid, bar relative to the best) and "WHERE THE MONEY GOES" (top 3 expense categories by amount, bar relative to the largest).
 - UX rules: numbers use the money formatter; every card is tappable only where noted; lists handle empty data with a friendly line instead of an empty card; the home must not
   overflow on 360x800; chart bars may animate in once (300 ms) but tests must never hang (no infinite animations).
+
+## Calendar (files `CL1`..`CL15` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v12-calendar.figcraft` (do not edit). The calendar lives under More (More tab active everywhere): a new "Calendar" row (Lucide calendar-days,
+subtitle "Deadlines and milestones") in the More menu between Payments and Expenses -> /calendar. Icons: Lucide through lib/core/widgets/app_icons.dart (AppIcons; add the missing names:
+chevronLeft, chevronDown, calendarDays, calendarClock, calendarCheck, play, milestone, trash2, refreshCw, gauge, check, x), NEVER emojis or letter glyphs.
+
+Data: a NEW Milestone model (id, projectId, title, date, completed, createdAt) in a CalendarRepository (ChangeNotifier + CalendarScope, in memory, optional injection like the other
+scopes) with seeds: Moodboard sign-off (Brand Identity, 2026-10-15, done), Client review (Brand Identity, 2026-10-28, done), Send invoice draft (Fintask Landing Page, 2026-10-30,
+pending), Beta handoff (Fintask Landing Page, 2026-11-02, pending), Final delivery review (Dashboard Redesign, 2026-11-12, pending); actions addMilestone, toggleMilestone(id),
+deleteMilestone(id), deleting a project removes its milestones (ProjectsRepository delete: handle it in the calendar by filtering milestones whose project no longer exists), plus the
+sync prefs (googleConnected is read from SettingsRepository; lastSynced DateTime?, syncDeadlines true, syncMilestones true, syncDebts false). Everything is computed by PURE functions taking
+`now` (lib/features/calendar/data/calendar_events.dart): `List<CalendarEvent> eventsFor(...)` where CalendarEvent = kind, title, subtitle, date, route (+ milestone id when relevant):
+- deadline: every project that is not Cancelled with an end date; kind `over` (red, triangle-alert, "Nd overdue" pill) when end < today and the project is not Completed / Delivered, `due`
+  (orange, calendar-clock, "Today" / "Nd left" pill) otherwise, `done` (grey, circle-check) when Completed / Delivered; title = project name, subtitle "Deadline <date>" or the client name;
+- start: project start dates (purple, play) title "<project> starts";
+- milestone: pending = green milestone icon with "Due today" / "Nd left" / "Nd overdue" pill, completed = `done` grey with "Done";
+- debt: unsettled friend transactions with a due date: lent -> "<friend> owes you", borrowed -> "You owe <friend>" (coral, hand-coins), subtitle "<amount> DZ due".
+Dot colours in the grid: over red, due orange, start purple, milestone green, done light grey (#B8B2A5), debt coral; max 3 dots per day.
+
+- CL1-CL3 Calendar (/calendar): back, title "Calendar", [Today] pill (only when the shown month is not the current month), gauge button -> /calendar/capacity, "+" ink button ->
+  /calendar/new; segmented Month / Agenda / Timeline (state kept while switching; /calendar?tab=agenda|timeline opens that tab). Month: prev / next month buttons, centred "October 2026" with a
+  chevron-down (tap -> jump sheet CL15), weekday row S M T W T F S, 5 or 6 week rows (6 only when needed), today = ink circle, selected day = 2 px ink ring, previous / next month days in
+  light grey, legend (Deadline, Start, Milestone, Debt due), then the selected day: "Friday, Oct 30" (+ an ink "Today" pill when today) and an "N events" chip, followed by its event cards;
+  empty day -> card "Nothing planned" with [Add milestone] (-> /calendar/new?date=...). Tapping a day selects it; swiping horizontally on the grid changes month (optional).
+  Event cards: tap a deadline/start card -> CL6 sheet, a milestone card -> CL7 sheet, a debt card -> /friends/transactions/:id.
+- CL6 deadline sheet: red/orange icon bubble, project name, "Project deadline", status pill ("Overdue 5d" / "Nd left" / "Today"), rows Client, Due date, Status, Budget, [Open project]
+  (context.push /projects/:id) and [Close]. CL7 milestone sheet: milestone icon, title, "Milestone", pill, rows Project, Date, Status (Pending / Done), [Mark as done] (or [Mark as pending] when
+  done) -> toggleMilestone + toast "Milestone marked as done" / "Milestone marked as pending", and red outlined [Delete milestone] -> CL13 confirm sheet ([Confirm delete] -> deleteMilestone + toast
+  "Milestone deleted", [Cancel]). CL15 jump sheet: year with prev / next year buttons, 12 month tiles (current shown month in ink, a small dot under months that have events), [Go to today].
+- CL4 Agenda: groups OVERDUE - N (red label), TODAY, THIS WEEK (next 7 days after today), LATER (everything after, up to 90 days), each a list of event cards with the date in the subtitle for
+  non-today groups; friendly empty line "Nothing coming up" when there are no events. CL5 Timeline (Gantt): pills Ongoing (projects that are not Completed / Delivered / Cancelled) /
+  All (N); a card with month header (a window of about 4 months starting 2 months before today's month), one row per project (name 12 bold + client 11) with a rounded bar from start to end
+  (orange In progress, purple Waiting client, grey Planned, green Completed / Delivered; clipped to the window with a chevron-left when it starts before the window), green ring dots for its
+  milestones, a red vertical "Today" line with a small red "Today" flag; legend; a card "Capacity and availability" (-> /calendar/capacity) with the workload label.
+- CL8/CL9 New milestone (/calendar/new, optional query projectId and date yyyy-MM-dd): X, "New milestone", project select (sheet CL10 with every non-cancelled project: name + "client - status",
+  radio, [Confirm]), title, due date (showDatePicker, calendar-days icon), errors "Please select a project" / "Please enter a title" / "Please pick a due date" in red with red borders on a Save
+  attempt, [Cancel] [Register milestone] -> addMilestone, then go to /calendar showing the month of the new milestone with that day selected and the toast "Milestone registered".
+- CL11 Capacity (/calendar/capacity): back, "Capacity"; Workload card: pill (Light green 0-1 active contracts, Moderate orange 2-3, Heavy red 4+), "N active projects" (active = Planned,
+  In Progress, Waiting Client), a 3-segment gauge with a knob and the sentence ("Open: ready for new projects." / "Selective: you can take one more project." / "Near full capacity."); Next
+  available slot card: the earliest FUTURE end date among active projects ("Nov 12, 2026") or "Available now" when none, and "Earliest contract to free up: <project>" when a date exists;
+  "Active projects progress" card with a bar per active project (colour by status) and "Average N%"; a "Calendar sync" row -> /calendar/sync.
+- CL12 Calendar sync (/calendar/sync): back, "Calendar sync"; Google Calendar card: when SettingsRepository.googleConnected is true show the profile email, the green "Connected" pill, an ink
+  [Sync now] button with a refresh-cw icon (sets lastSynced = now, toast "Calendar synced") and "Last synced today at 14:32" (or "Never synced"); when not connected show a grey "Not connected"
+  pill and a [Connect in Settings] button -> /settings/integrations; three switches (Project deadlines, Milestones, Friends' debt due dates) stored in CalendarRepository, and the one-way note.
+- Other changes: the More menu row, the Home screen "Upcoming deadlines" section header action "See all" now opens /calendar?tab=agenda; milestones count as upcoming events only inside the
+  calendar (the Home keeps using project deadlines).
+- UX rules: no overflow on 360x800 (the month grid scales with the width); the calendar never hangs tests (no endless animations, bounded pumps); all dates use the injected clock
+  (`DateTime Function()? clock`, default DateTime.now) so tests are deterministic with now = 2026-10-30.
