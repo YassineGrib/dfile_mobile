@@ -7,6 +7,7 @@ import 'core/router/app_router.dart';
 import 'core/theme/theme.dart';
 import 'features/auth/data/auth_service.dart';
 import 'features/auth/data/firebase_auth_service.dart';
+import 'features/auth/data/user_data_sync.dart';
 import 'features/calendar/data/data.dart';
 import 'features/clients/data/data.dart';
 import 'features/dashboard/data/data.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
   ]);
   await Firebase.initializeApp();
   final AuthService auth = FirebaseAuthService();
+  UserDataSync(auth: auth, clients: defaultClientsRepository).start();
   final GoRouter router = createAppRouter(
     initialLocation: auth.currentUser != null
         ? AppRoutes.homePath

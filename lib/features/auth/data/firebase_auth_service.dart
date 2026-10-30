@@ -147,7 +147,10 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<AuthResult> deleteAccount({String? password}) async {
+  Future<AuthResult> deleteAccount({
+    String? password,
+    Future<void> Function()? beforeDelete,
+  }) async {
     final fb.User? user = _auth.currentUser;
     if (user == null) return const AuthResult.failure('You are signed out.');
     try {
@@ -157,6 +160,7 @@ class FirebaseAuthService implements AuthService {
           fb.EmailAuthProvider.credential(email: email, password: password),
         );
       }
+      await beforeDelete?.call();
       await user.delete();
       return const AuthResult.ok();
     } on fb.FirebaseAuthException catch (e) {

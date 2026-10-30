@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import 'client.dart';
+import 'clients_store.dart';
 
 /// In-memory repository managing clients, projects, payments, and derived statistics.
 class ClientsRepository extends ChangeNotifier {
@@ -8,6 +11,89 @@ class ClientsRepository extends ChangeNotifier {
     : _clients = initialClients ?? _createInitialClients();
 
   final List<Client> _clients;
+  ClientsStore? _store;
+  StreamSubscription<List<Client>>? _subscription;
+  bool _loading = false;
+  Object? _syncError;
+
+  /// True until the first snapshot of an attached store arrives.
+  bool get isLoading => _loading;
+
+  /// Last store error (read or write), if any.
+  Object? get syncError => _syncError;
+
+  bool get isAttached => _store != null;
+
+  /// Switches to [store] as the source of truth: the demo data is dropped and
+  /// the list follows the snapshots of the store. Local projects and payments
+  /// of a client are kept until those modules sync too.
+  void attachStore(ClientsStore store) {
+    _subscription?.cancel();
+    _store = store;
+    _clients.clear();
+    _loading = true;
+    _syncError = null;
+    notifyListeners();
+    _subscription = store.watch().listen(
+      (List<Client> remote) {
+        final Map<String, Client> local = <String, Client>{
+          for (final Client c in _clients) c.id: c,
+        };
+        _clients
+          ..clear()
+          ..addAll(
+            remote.map((Client c) {
+              final Client? old = local[c.id];
+              return old == null
+                  ? c
+                  : c.copyWith(
+                      projects: old.projects,
+                      payments: old.payments,
+                      budget: old.budget,
+                      mockExpenses: old.mockExpenses,
+                    );
+            }),
+          );
+        _loading = false;
+        _syncError = null;
+        notifyListeners();
+      },
+      onError: (Object error) {
+        _loading = false;
+        _syncError = error;
+        notifyListeners();
+      },
+    );
+  }
+
+  /// Stops following the store and empties the list (sign-out).
+  void detachStore() {
+    _subscription?.cancel();
+    _subscription = null;
+    _store = null;
+    _loading = false;
+    _syncError = null;
+    _clients.clear();
+    notifyListeners();
+  }
+
+  /// Deletes this user's clients from the store (before the account goes).
+  Future<void> deleteRemoteData() async => _store?.deleteAll();
+
+  void _write(Future<void> Function(ClientsStore store) op) {
+    final ClientsStore? store = _store;
+    if (store == null) return;
+    op(store).catchError((Object error) {
+      _syncError = error;
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 
   List<Client> get clients => List<Client>.unmodifiable(_clients);
 
@@ -24,6 +110,7 @@ class ClientsRepository extends ChangeNotifier {
   void add(Client client) {
     _clients.add(client);
     notifyListeners();
+    _write((ClientsStore s) => s.save(client));
   }
 
   /// Updates an existing client in the repository.
@@ -32,6 +119,7 @@ class ClientsRepository extends ChangeNotifier {
     if (index != -1) {
       _clients[index] = client;
       notifyListeners();
+      _write((ClientsStore s) => s.save(client));
     }
   }
 
@@ -41,6 +129,7 @@ class ClientsRepository extends ChangeNotifier {
     if (index != -1) {
       _clients.removeAt(index);
       notifyListeners();
+      _write((ClientsStore s) => s.delete(id));
     }
   }
 

@@ -46,7 +46,10 @@ abstract class AuthService {
   Future<AuthResult> updateDisplayName(String name);
 
   /// Re-authenticates with [password] when given, then deletes the account.
-  Future<AuthResult> deleteAccount({String? password});
+  Future<AuthResult> deleteAccount({
+    String? password,
+    Future<void> Function()? beforeDelete,
+  });
 
   Future<void> signOut();
 }
@@ -122,10 +125,14 @@ class FakeAuthService implements AuthService {
       const AuthResult.ok();
 
   @override
-  Future<AuthResult> deleteAccount({String? password}) async {
+  Future<AuthResult> deleteAccount({
+    String? password,
+    Future<void> Function()? beforeDelete,
+  }) async {
     if (password != this.password) {
       return const AuthResult.failure('Invalid credentials.');
     }
+    await beforeDelete?.call();
     _set(null);
     return const AuthResult.ok();
   }
