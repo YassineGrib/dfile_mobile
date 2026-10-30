@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../clients/data/data.dart';
+import '../../settings/data/data.dart';
 import '../data/project.dart';
 import '../project_strings.dart';
 import 'project_status_chip.dart';
@@ -332,8 +333,19 @@ Widget _buildRadioIndicator(bool isSelected) {
 Future<String?> showCategoryPickerSheet({
   required BuildContext context,
   required String selectedCategory,
+  List<String>? categories,
 }) {
-  final List<String> options = List<String>.of(ProjectStrings.projectCategories);
+  List<String>? scopeCategories = categories;
+  if (scopeCategories == null) {
+    try {
+      scopeCategories = SettingsScope.of(context, listen: false).categories;
+    } catch (_) {
+      // Fallback if SettingsScope is not available.
+    }
+  }
+  final List<String> options = List<String>.of(
+    scopeCategories ?? ProjectStrings.projectCategories,
+  );
   if (selectedCategory.trim().isNotEmpty &&
       !options.contains(selectedCategory)) {
     options.insert(0, selectedCategory);
