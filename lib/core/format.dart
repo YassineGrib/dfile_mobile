@@ -95,3 +95,54 @@ String formatShortDate(DateTime date) {
 String formatMediumDate(DateTime date) {
   return '${formatShortDate(date)}, ${date.year}';
 }
+
+
+const List<String> _fullMonths = <String>[
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+const List<String> _fullWeekdays = <String>[
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+
+const List<String> _shortWeekdays = <String>[
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat',
+  'Sun',
+];
+
+/// Formats a [DateTime] into `Month YYYY` (e.g. `October 2026`).
+String formatMonthYear(DateTime date) {
+  return '${_fullMonths[date.month - 1]} ${date.year}';
+}
+
+/// Formats a [DateTime] into `Weekday, Mon D` (e.g. `Friday, Oct 30`, `Wednesday, Nov 4`).
+String formatWeekdayDate(DateTime date) {
+  return '${_fullWeekdays[date.weekday - 1]}, ${_shortMonths[date.month - 1]} ${date.day}';
+}
+
+/// Formats a [DateTime] into `Www, Mon D` (e.g. `Fri, Oct 30`, `Sun, Oct 25`).
+String formatShortWeekdayDate(DateTime date) {
+  return '${_shortWeekdays[date.weekday - 1]}, ${_shortMonths[date.month - 1]} ${date.day}';
+}
