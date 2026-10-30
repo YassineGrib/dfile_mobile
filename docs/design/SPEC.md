@@ -270,3 +270,28 @@ coming soon"; fingerprint unlock is not available (toast "Not available in the d
   Terms and conditions -> /settings/terms, red "Sign out" -> ST14 confirm sheet ([Sign out] -> context.go('/welcome'), [Cancel]). ST13 support
   (/settings/support): subject and message required (errors "Please enter a subject" / "Please enter a message"), [Submit ticket] -> back with toast
   "Support ticket sent". ST15 policy page for privacy and terms (static text sections).
+
+## Play Store compliance (files `PS1`..`PS10` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v10-compliance.figcraft` (do not edit). Google Play requires: an in-app way to delete the account and its data
+(plus a web URL for deletion), a privacy policy link, consent to the terms at sign-up, and a clear data-use explanation.
+
+- Settings hub gets a new row "Privacy and data" (subtitle "Export or delete your data") between Notifications and About and support -> /settings/privacy-data (PS1, PS2).
+- PS2 Privacy and data (/settings/privacy-data): intro card "Your data belongs to you", rows Privacy policy -> /settings/privacy, Terms and conditions -> /settings/terms, How we use
+  your data -> /settings/data-usage, Export my data (same JSON backup copied to the clipboard as Integrations, toast "Backup copied to clipboard"), then a red DANGER ZONE card "Delete account" ->
+  /settings/delete-account. PS10 data usage page (/settings/data-usage): static cards (Profile, Clients and projects, Payments and expenses, App settings: what and "Used for: ..."), chips Never sold / No ads /
+  Encrypted / Deletable, a card "Delete your data any time" with the in-app path and the web URL text "decabyte.dz/delete-account".
+- Delete account flow (re-authenticated, two steps, no dark patterns):
+  PS3 (/settings/delete-account): red warning card "This is permanent", list "What will be deleted" (profile and sign-in, clients and their contact details, projects tasks and payments, expenses,
+  friends and their debts, app settings), "We keep no copy of your data after deletion."; bottom bar [Export first] (copies the JSON backup, toast "Backup copied to clipboard", stays) and [Continue]
+  (red) -> /settings/delete-account/confirm.
+  PS4/PS5 (/settings/delete-account/confirm): optional Reason select (bottom sheet: Not using the app, Privacy concerns, Found an alternative, Too complicated, Other), field "Type DELETE to confirm"
+  (exact, case-sensitive; error "Type DELETE exactly to confirm"), "Your password" with Show toggle (must satisfy SettingsRepository.checkPassword; error "Password is incorrect"), checkbox "I understand my
+  account and data will be permanently deleted." (button dimmed and ignored until ticked), [Cancel] pops, [Delete my account] (red). On valid submit -> /settings/delete-account/progress.
+  PS6 (/settings/delete-account/progress): spinner and five staged rows (Clients removed, Projects and tasks removed, Payments and expenses removed, Friends and debts removed, Profile and sign-in
+  removed) that tick one by one over about 2.5 seconds while every repository is cleared (clients, projects with payments, expenses, friends, settings reset to defaults, PIN off, sessions cleared), back
+  navigation disabled (PopScope). Then -> /account-deleted. PS7 (/account-deleted): yellow panel with a green check, "Your account was deleted", sentence, [Back to welcome] -> context.go('/welcome').
+  After deletion the signed-in state is gone: reopening /clients shows an empty list.
+- Sign-up consent (PS8/PS9, lib/features/auth/sign_up_screen.dart): checkbox row "I agree to the Terms and Privacy Policy" between the password field and [Create account]; "Terms" and "Privacy Policy" are
+  tappable links (push /settings/terms and /settings/privacy). [Create account] AND [Continue with Google] require it: otherwise the checkbox gets a red border and the red text "Please accept the Terms and
+  Privacy Policy to continue" appears and nothing navigates. Existing sign-up tests must be adapted (tick the box), the sign-in screen is unchanged.
