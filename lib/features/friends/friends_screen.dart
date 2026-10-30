@@ -680,7 +680,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     AppSpacing.xxl,
                   ),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate((
+                    delegate: entranceDelegate((
                       BuildContext context,
                       int index,
                     ) {
@@ -869,7 +869,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     AppSpacing.xxl,
                   ),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate((
+                    delegate: entranceDelegate((
                       BuildContext context,
                       int index,
                     ) {

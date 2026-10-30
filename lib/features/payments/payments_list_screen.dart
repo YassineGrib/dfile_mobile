@@ -620,10 +620,7 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((
-                    BuildContext context,
-                    int index,
-                  ) {
+                  delegate: entranceDelegate((BuildContext context, int index) {
                     final ProjectPayment payment = displayedPayments[index];
                     final Client? client = clientsRepo.byId(payment.clientId);
                     final ProjectItem? project = repo.byId(payment.projectId);

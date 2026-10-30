@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
+import '../motion.dart';
+
 import '../../features/auth/forgot_password_screen.dart';
 import '../../features/auth/onboarding_screen.dart';
 import '../../features/auth/sign_in_screen.dart';
@@ -274,8 +276,11 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
       GoRoute(
         path: AppRoutes.homePath,
         name: AppRoutes.homeName,
-        builder: (BuildContext context, GoRouterState state) =>
-            const HomeScreen(),
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            AppPageTransitions.fadeThrough(
+              key: state.pageKey,
+              child: const HomeScreen(),
+            ),
       ),
       GoRoute(
         path: AppRoutes.cashflowPath,
@@ -334,8 +339,11 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
       GoRoute(
         path: AppRoutes.clientsPath,
         name: AppRoutes.clientsName,
-        builder: (BuildContext context, GoRouterState state) =>
-            const ClientsListScreen(),
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            AppPageTransitions.fadeThrough(
+              key: state.pageKey,
+              child: const ClientsListScreen(),
+            ),
       ),
       GoRoute(
         path: AppRoutes.addClientPath,
@@ -358,8 +366,11 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
       GoRoute(
         path: AppRoutes.projectsPath,
         name: AppRoutes.projectsName,
-        builder: (BuildContext context, GoRouterState state) =>
-            const ProjectsListScreen(),
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            AppPageTransitions.fadeThrough(
+              key: state.pageKey,
+              child: const ProjectsListScreen(),
+            ),
       ),
       GoRoute(
         path: AppRoutes.addProjectPath,
@@ -382,8 +393,11 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
       GoRoute(
         path: AppRoutes.paymentsPath,
         name: AppRoutes.paymentsName,
-        builder: (BuildContext context, GoRouterState state) =>
-            const PaymentsListScreen(),
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            AppPageTransitions.fadeThrough(
+              key: state.pageKey,
+              child: const PaymentsListScreen(),
+            ),
       ),
       GoRoute(
         path: AppRoutes.recordPaymentPath,
@@ -402,8 +416,11 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
       GoRoute(
         path: AppRoutes.expensesPath,
         name: AppRoutes.expensesName,
-        builder: (BuildContext context, GoRouterState state) =>
-            const ExpensesListScreen(),
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            AppPageTransitions.fadeThrough(
+              key: state.pageKey,
+              child: const ExpensesListScreen(),
+            ),
       ),
       GoRoute(
         path: AppRoutes.newExpensePath,

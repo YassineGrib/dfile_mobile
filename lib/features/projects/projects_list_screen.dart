@@ -979,10 +979,7 @@ class _ProjectsListScreenState extends State<ProjectsListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((
-                    BuildContext context,
-                    int index,
-                  ) {
+                  delegate: entranceDelegate((BuildContext context, int index) {
                     return _buildProjectCard(
                       context,
                       repo,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/theme.dart';
+import 'motion_widgets.dart';
 
 /// Full-rounded white secondary button with 1.5px line border (height 56, radius 28).
 class SecondaryButton extends StatelessWidget {
@@ -43,24 +44,26 @@ class SecondaryButton extends StatelessWidget {
       ],
     );
 
-    return SizedBox(
-      width: expand ? double.infinity : null,
-      height: AppSpacing.buttonHeight,
-      child: Material(
-        color: AppColors.card,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.button),
-          side: const BorderSide(
-            color: AppColors.line,
-            width: AppSpacing.borderWidth,
+    return PressScale(
+      child: SizedBox(
+        width: expand ? double.infinity : null,
+        height: AppSpacing.buttonHeight,
+        child: Material(
+          color: AppColors.card,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            side: const BorderSide(
+              color: AppColors.line,
+              width: AppSpacing.borderWidth,
+            ),
           ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
-            child: content,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onPressed,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+              child: content,
+            ),
           ),
         ),
       ),

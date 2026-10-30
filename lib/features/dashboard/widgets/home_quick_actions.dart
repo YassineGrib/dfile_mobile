@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_icons.dart';
+import '../../../core/widgets/motion_widgets.dart';
 import '../dashboard_home_strings.dart';
 
 /// One quick action: where it goes and how its card looks.
@@ -130,50 +131,56 @@ class _QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: HomeQuickActions.cardWidth,
-      height: HomeQuickActions.cardHeight,
-      child: Material(
-        color: AppColors.card,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(
-            color: AppColors.line,
-            width: AppSpacing.borderWidth,
+    return PressScale(
+      child: SizedBox(
+        width: HomeQuickActions.cardWidth,
+        height: HomeQuickActions.cardHeight,
+        child: Material(
+          color: AppColors.card,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(
+              color: AppColors.line,
+              width: AppSpacing.borderWidth,
+            ),
           ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => context.push(action.route),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 14, 10, 10),
-            child: Column(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: action.background,
-                    borderRadius: BorderRadius.circular(14),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => context.push(action.route),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 14, 10, 10),
+              child: Column(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: action.background,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(
+                      action.icon,
+                      size: 22,
+                      color: action.foreground,
+                    ),
                   ),
-                  alignment: Alignment.center,
-                  child: Icon(action.icon, size: 22, color: action.foreground),
-                ),
-                const Spacer(),
-                Text(
-                  action.label,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppText.captionSm.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.ink,
-                    fontSize: 12,
-                    height: 1.2,
+                  const Spacer(),
+                  Text(
+                    action.label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.captionSm.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.ink,
+                      fontSize: 12,
+                      height: 1.2,
+                    ),
                   ),
-                ),
-                const Spacer(),
-              ],
+                  const Spacer(),
+                ],
+              ),
             ),
           ),
         ),

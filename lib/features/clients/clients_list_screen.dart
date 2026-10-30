@@ -467,10 +467,7 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((
-                    BuildContext context,
-                    int index,
-                  ) {
+                  delegate: entranceDelegate((BuildContext context, int index) {
                     final Client client = displayedClients[index];
                     final double revenue = repo.totalRevenue(client);
                     final int activeProjs = repo.activeProjectsCount(client);

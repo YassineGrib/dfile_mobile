@@ -234,41 +234,50 @@ class HomeScreen extends StatelessWidget {
               HomeEmptyView(setup: setup),
             ] else ...[
               // Normal Home (HM1, HM2, HM3)
-              HomeHeroProfitCard(
-                netProfitValue: profit,
-                thisMonthNetValue: thisMonth,
-                last6MonthFlows: last6Months,
+              FadeSlideIn(
+                index: 0,
+                child: HomeHeroProfitCard(
+                  netProfitValue: profit,
+                  thisMonthNetValue: thisMonth,
+                  last6MonthFlows: last6Months,
+                ),
               ),
               const SizedBox(height: AppSpacing.xl),
 
-              HomeKpiRow(
-                activeProjectsCount: activeCount,
-                monthlyExpensesAmount: monthlyExpenses,
-                pendingInvoicesAmount: pendingInvoices,
-                friendsNetBalance: friendsNet,
+              FadeSlideIn(
+                index: 1,
+                child: HomeKpiRow(
+                  activeProjectsCount: activeCount,
+                  monthlyExpensesAmount: monthlyExpenses,
+                  pendingInvoicesAmount: pendingInvoices,
+                  friendsNetBalance: friendsNet,
+                ),
               ),
               const SizedBox(height: AppSpacing.xxl),
 
-              const HomeQuickActions(),
+              FadeSlideIn(index: 2, child: const HomeQuickActions()),
               const SizedBox(height: AppSpacing.xxl),
 
-              HomeUpcomingDeadlines(
-                deadlines: deadlines,
-                clientNameLookup: (String id) =>
-                    clientsRepo.byId(id)?.name ?? '',
+              FadeSlideIn(
+                index: 3,
+                child: HomeUpcomingDeadlines(
+                  deadlines: deadlines,
+                  clientNameLookup: (String id) =>
+                      clientsRepo.byId(id)?.name ?? '',
+                ),
               ),
               const SizedBox(height: AppSpacing.xxl),
 
-              const CashflowCard(),
+              FadeSlideIn(index: 4, child: const CashflowCard()),
               const SizedBox(height: AppSpacing.lg),
 
-              const StatusDonutCard(),
+              FadeSlideIn(index: 5, child: const StatusDonutCard()),
               const SizedBox(height: AppSpacing.lg),
 
-              const ActivityCard(),
+              FadeSlideIn(index: 6, child: const ActivityCard()),
               const SizedBox(height: AppSpacing.lg),
 
-              const FriendsSnapshotCard(),
+              FadeSlideIn(index: 7, child: const FriendsSnapshotCard()),
             ],
             const SizedBox(height: AppSpacing.xxl),
           ],

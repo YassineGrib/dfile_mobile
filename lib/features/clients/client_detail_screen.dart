@@ -692,15 +692,9 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
                     color: AppColors.seg,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: (project.progress / 100.0).clamp(0.0, 1.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: progressColor,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
+                  child: AnimatedFill(
+                    value: project.progress / 100.0,
+                    color: progressColor,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.sm),

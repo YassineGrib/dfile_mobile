@@ -14,3 +14,4 @@ export 'status_pill.dart';
 export 'blobatar.dart';
 export 'user_avatar.dart';
 export 'sync_banner.dart';
+export 'motion_widgets.dart';

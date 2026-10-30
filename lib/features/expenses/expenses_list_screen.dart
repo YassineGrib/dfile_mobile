@@ -617,10 +617,7 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((
-                    BuildContext context,
-                    int index,
-                  ) {
+                  delegate: entranceDelegate((BuildContext context, int index) {
                     final Expense expense = displayedExpenses[index];
                     final String? projectName = expense.isProjectLinked
                         ? projectsRepo.byId(expense.projectId!)?.name

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/format.dart';
+import '../../../core/motion.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_icons.dart';
 import '../data/dashboard_stats.dart';
@@ -102,16 +103,25 @@ class HomeHeroProfitCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: Text(
-                      formatMoney(netProfitValue),
-                      style: AppText.title.copyWith(
-                        color: AppColors.white,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
-                        height: 1.1,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0, end: netProfitValue),
+                      duration: AppMotion.reduced(context)
+                          ? Duration.zero
+                          : AppMotion.page,
+                      curve: AppMotion.enterCurve,
+                      builder: (BuildContext context, double value, Widget? _) {
+                        return Text(
+                          formatMoney(value),
+                          style: AppText.title.copyWith(
+                            color: AppColors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
+                            height: 1.1,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),

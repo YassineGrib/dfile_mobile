@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/theme.dart';
+import 'motion_widgets.dart';
 
 /// Full-rounded ink primary action button (height 56, radius 28).
 class PrimaryButton extends StatelessWidget {
@@ -39,20 +40,24 @@ class PrimaryButton extends StatelessWidget {
       ],
     );
 
-    return SizedBox(
-      width: expand ? double.infinity : null,
-      height: AppSpacing.buttonHeight,
-      child: Material(
-        color: enabled ? AppColors.ink : AppColors.ink.withValues(alpha: 0.45),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.button),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onPressed,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
-            child: content,
+    return PressScale(
+      child: SizedBox(
+        width: expand ? double.infinity : null,
+        height: AppSpacing.buttonHeight,
+        child: Material(
+          color: enabled
+              ? AppColors.ink
+              : AppColors.ink.withValues(alpha: 0.45),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onPressed,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+              child: content,
+            ),
           ),
         ),
       ),

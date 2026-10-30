@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../motion.dart';
 import '../theme/theme.dart';
 import 'app_icons.dart';
+import 'motion_widgets.dart';
 
 /// Five-tab bottom bar (Home, Projects, Clients, Payments, Expenses) with
 /// real Lucide icons. Other sections live in the Home quick actions.
@@ -72,36 +74,48 @@ class AppTabBar extends StatelessWidget {
             children: List<Widget>.generate(labels.length, (int index) {
               final bool isActive = index == currentIndex;
               return Expanded(
-                child: InkWell(
-                  onTap: () => _handleTap(context, index),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 52,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: isActive ? AppColors.seg : Colors.transparent,
-                          borderRadius: BorderRadius.circular(16),
+                child: PressScale(
+                  scale: 0.92,
+                  child: InkWell(
+                    onTap: () => _handleTap(context, index),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedContainer(
+                          duration: AppMotion.standard,
+                          curve: AppMotion.standardCurve,
+                          width: 52,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: isActive
+                                ? AppColors.seg
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          alignment: Alignment.center,
+                          child: AnimatedScale(
+                            scale: isActive ? 1.1 : 1,
+                            duration: AppMotion.standard,
+                            curve: AppMotion.standardCurve,
+                            child: Icon(
+                              tabIcons[index],
+                              size: 22,
+                              color: isActive ? AppColors.ink : AppColors.mute,
+                            ),
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          tabIcons[index],
-                          size: 22,
-                          color: isActive ? AppColors.ink : AppColors.mute,
+                        const SizedBox(height: 4),
+                        Text(
+                          labels[index],
+                          style: AppText.captionSm.copyWith(
+                            color: isActive ? AppColors.ink : AppColors.mute,
+                            fontWeight: isActive
+                                ? FontWeight.w700
+                                : FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        labels[index],
-                        style: AppText.captionSm.copyWith(
-                          color: isActive ? AppColors.ink : AppColors.mute,
-                          fontWeight: isActive
-                              ? FontWeight.w700
-                              : FontWeight.w400,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
