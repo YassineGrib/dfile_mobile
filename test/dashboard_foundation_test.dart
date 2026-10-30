@@ -5,6 +5,9 @@ import 'package:dfile_mobile/features/auth/auth_strings.dart';
 import 'package:dfile_mobile/features/auth/sign_in_screen.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
 import 'package:dfile_mobile/features/dashboard/cashflow_screen.dart';
+import 'package:dfile_mobile/features/dashboard/dashboard_activity_strings.dart';
+import 'package:dfile_mobile/features/dashboard/dashboard_charts_strings.dart';
+import 'package:dfile_mobile/features/dashboard/dashboard_home_strings.dart';
 import 'package:dfile_mobile/features/dashboard/data/data.dart';
 import 'package:dfile_mobile/features/dashboard/home_screen.dart';
 import 'package:dfile_mobile/features/dashboard/notifications_screen.dart' as dashboard;
@@ -567,7 +570,7 @@ void main() {
       expect(find.byType(HomeScreen), findsOneWidget);
     });
 
-    testWidgets('All 4 dashboard routes resolve to their placeholder screens with working back buttons', (
+    testWidgets('All 4 dashboard routes resolve to their screens with working back buttons', (
       WidgetTester tester,
     ) async {
       setTestSurface(tester);
@@ -577,13 +580,13 @@ void main() {
 
       // /home
       expect(find.byType(HomeScreen), findsOneWidget);
-      expect(find.text('HomeScreen'), findsOneWidget);
+      expect(find.text(DashboardHomeStrings.quickActions), findsOneWidget);
 
       // /home/cashflow
       router.go(AppRoutes.cashflowPath);
       await tester.pumpAndSettle();
       expect(find.byType(CashflowScreen), findsOneWidget);
-      expect(find.text('CashflowScreen'), findsOneWidget);
+      expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
 
       // Back button navigates back to /home
       await tester.tap(find.byIcon(AppIcons.arrowLeft));
@@ -594,7 +597,7 @@ void main() {
       router.go(AppRoutes.profitPath);
       await tester.pumpAndSettle();
       expect(find.byType(ProfitScreen), findsOneWidget);
-      expect(find.text('ProfitScreen'), findsOneWidget);
+      expect(find.text(DashboardActivityStrings.profit), findsOneWidget);
 
       await tester.tap(find.byIcon(AppIcons.arrowLeft));
       await tester.pumpAndSettle();
@@ -604,33 +607,61 @@ void main() {
       router.go(AppRoutes.homeNotificationsPath);
       await tester.pumpAndSettle();
       expect(find.byType(dashboard.NotificationsScreen), findsOneWidget);
-      expect(find.text('NotificationsScreen'), findsOneWidget);
+      expect(find.text(DashboardActivityStrings.notifications), findsOneWidget);
 
       await tester.tap(find.byIcon(AppIcons.arrowLeft));
       await tester.pumpAndSettle();
       expect(router.state.uri.toString(), AppRoutes.homePath);
     });
 
-    testWidgets('Placeholder card widgets render', (WidgetTester tester) async {
+    testWidgets('Card widgets render real content', (WidgetTester tester) async {
+      setTestSurface(tester);
+      final ClientsRepository clientsRepo = ClientsRepository();
+      final ProjectsRepository projectsRepo =
+          ProjectsRepository(clientsRepository: clientsRepo);
+      final ExpensesRepository expensesRepo = ExpensesRepository();
+      final FriendsRepository friendsRepo = FriendsRepository();
+
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
+          theme: AppTheme.light,
           home: Scaffold(
-            body: Column(
-              children: [
-                CashflowCard(),
-                StatusDonutCard(),
-                ActivityCard(),
-                FriendsSnapshotCard(),
-              ],
+            body: SingleChildScrollView(
+              child: ClientsScope(
+                repository: clientsRepo,
+                child: ProjectsScope(
+                  repository: projectsRepo,
+                  child: ExpensesScope(
+                    repository: expensesRepo,
+                    child: FriendsScope(
+                      repository: friendsRepo,
+                      child: const Column(
+                        children: [
+                          CashflowCard(),
+                          StatusDonutCard(),
+                          ActivityCard(),
+                          FriendsSnapshotCard(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
       );
+      await tester.pumpAndSettle();
 
-      expect(find.text('CashflowCard'), findsOneWidget);
-      expect(find.text('StatusDonutCard'), findsOneWidget);
-      expect(find.text('ActivityCard'), findsOneWidget);
-      expect(find.text('FriendsSnapshotCard'), findsOneWidget);
+      expect(find.byType(CashflowCard), findsOneWidget);
+      expect(find.byType(StatusDonutCard), findsOneWidget);
+      expect(find.byType(ActivityCard), findsOneWidget);
+      expect(find.byType(FriendsSnapshotCard), findsOneWidget);
+
+      expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
+      expect(find.text(DashboardChartsStrings.projectsByStatus), findsOneWidget);
+      expect(find.text(DashboardActivityStrings.recentActivity), findsOneWidget);
+      expect(find.text(DashboardActivityStrings.friendsDebts), findsOneWidget);
     });
   });
 }
