@@ -108,6 +108,7 @@ void main() {
       auth: auth,
       clients: repo,
       projects: ProjectsRepository(clientsRepository: repo),
+      projectsStore: (String uid) => FakeProjectsStore(),
       clientsStore: (String uid) {
         uids.add(uid);
         return FakeClientsStore(<Client>[sample('mine')]);
