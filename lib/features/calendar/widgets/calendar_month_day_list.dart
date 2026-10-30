@@ -27,7 +27,8 @@ class CalendarMonthDayList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isToday = selectedDay.year == today.year &&
+    final bool isToday =
+        selectedDay.year == today.year &&
         selectedDay.month == today.month &&
         selectedDay.day == today.day;
 
@@ -100,10 +101,8 @@ class CalendarMonthDayList extends StatelessWidget {
         // Event cards or Empty State
         if (events.isNotEmpty)
           ...events.map(
-            (CalendarEvent event) => CalendarEventCard(
-              event: event,
-              onTap: () => onEventTap(event),
-            ),
+            (CalendarEvent event) =>
+                CalendarEventCard(event: event, onTap: () => onEventTap(event)),
           )
         else
           Material(

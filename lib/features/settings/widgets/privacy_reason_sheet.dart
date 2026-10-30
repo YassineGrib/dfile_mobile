@@ -44,7 +44,9 @@ Future<String?> showPrivacyReasonSheet({
                       child: Text(
                         reason,
                         style: AppText.bodyMedium.copyWith(
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          fontWeight: isSelected
+                              ? FontWeight.w700
+                              : FontWeight.w500,
                           color: AppColors.ink,
                         ),
                       ),

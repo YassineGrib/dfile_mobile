@@ -17,11 +17,7 @@ import 'widgets/expense_form_select_field.dart';
 
 /// Screen for recording or editing an expense per `docs/design/SPEC.md` (EX9..EX13).
 class ExpenseFormScreen extends StatefulWidget {
-  const ExpenseFormScreen({
-    super.key,
-    this.expenseId,
-    this.projectId,
-  });
+  const ExpenseFormScreen({super.key, this.expenseId, this.projectId});
 
   final String? expenseId;
   final String? projectId;
@@ -66,8 +62,10 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     super.didChangeDependencies();
     if (!_initialized) {
       if (_isEditMode) {
-        final ExpensesRepository expensesRepo =
-            ExpensesScope.of(context, listen: false);
+        final ExpensesRepository expensesRepo = ExpensesScope.of(
+          context,
+          listen: false,
+        );
         final Expense? expense = expensesRepo.byId(widget.expenseId!);
         if (expense != null) {
           _amountController.text = formatAmount(expense.amount);
@@ -154,8 +152,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   bool get _showAmountError =>
       (_saveAttempted || _amountTouched) && !_isAmountValid;
 
-  bool get _isDescriptionValid =>
-      _descriptionController.text.trim().isNotEmpty;
+  bool get _isDescriptionValid => _descriptionController.text.trim().isNotEmpty;
 
   bool get _showDescriptionError =>
       (_saveAttempted || _descriptionTouched) && !_isDescriptionValid;
@@ -232,9 +229,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       expensesRepo.update(updated);
       context.go(
         '/expenses/${widget.expenseId}',
-        extra: <String, Object?>{
-          'toast': ExpenseFormStrings.changesSavedToast,
-        },
+        extra: <String, Object?>{'toast': ExpenseFormStrings.changesSavedToast},
       );
     } else {
       final String id = 'exp_${DateTime.now().microsecondsSinceEpoch}';
@@ -294,16 +289,14 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             style: TextStyle(fontSize: 0, color: AppColors.transparent),
           ),
         ),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _close,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _close),
       ],
     );
   }
 
   ({Color bg, Color border, Color text}) _categoryColors(
-      ExpenseCategory category) {
+    ExpenseCategory category,
+  ) {
     switch (category) {
       case ExpenseCategory.softwareTools:
         return (
@@ -340,8 +333,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
   Widget _buildCategoryTile(ExpenseCategory category) {
     final bool isSelected = _selectedCategory == category;
-    final ({Color bg, Color border, Color text}) colors =
-        _categoryColors(category);
+    final ({Color bg, Color border, Color text}) colors = _categoryColors(
+      category,
+    );
 
     return Material(
       color: isSelected ? colors.bg : AppColors.card,
@@ -542,16 +536,14 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                     ),
                   ),
                 ),
-                errorText:
-                    _showAmountError ? ExpenseFormStrings.amountError : null,
+                errorText: _showAmountError
+                    ? ExpenseFormStrings.amountError
+                    : null,
               ),
               const SizedBox(height: AppSpacing.lg),
 
               // 2. Category 3 + 2 grid
-              Text(
-                ExpenseFormStrings.categoryLabel,
-                style: AppText.label,
-              ),
+              Text(ExpenseFormStrings.categoryLabel, style: AppText.label),
               const SizedBox(height: AppSpacing.sm),
               Row(
                 children: [
@@ -575,9 +567,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                     child: _buildCategoryTile(ExpenseCategory.equipment),
                   ),
                   const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: _buildCategoryTile(ExpenseCategory.others),
-                  ),
+                  Expanded(child: _buildCategoryTile(ExpenseCategory.others)),
                   const SizedBox(width: AppSpacing.sm),
                   const Expanded(child: SizedBox()),
                 ],
@@ -605,10 +595,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               const SizedBox(height: AppSpacing.lg),
 
               // 5. Payment method tiles (4 across)
-              Text(
-                ExpenseFormStrings.paymentMethodLabel,
-                style: AppText.label,
-              ),
+              Text(ExpenseFormStrings.paymentMethodLabel, style: AppText.label),
               const SizedBox(height: AppSpacing.sm),
               Row(
                 children: [

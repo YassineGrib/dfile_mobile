@@ -11,7 +11,8 @@ abstract final class ClientStrings {
   static const String addNewClientSubtitle = 'Add a new client ledger entry';
   static const String editClient = 'Edit client';
   static const String editClientTitle = 'Edit client profile';
-  static const String editClientSubtitle = 'Update contact data and social links';
+  static const String editClientSubtitle =
+      'Update contact data and social links';
   static const String clientNotFound = 'Client not found';
   static const String backToClients = 'Back to clients';
 
@@ -114,8 +115,7 @@ abstract final class ClientStrings {
   static const String githubPlaceholder = 'GitHub';
   static const String websitePlaceholder = 'Website';
   static const String notesLabel = 'Notes';
-  static const String notesPlaceholder =
-      'Payment terms, special conditions...';
+  static const String notesPlaceholder = 'Payment terms, special conditions...';
   static const String quickModeHint =
       'Only a name is required. Switch to Advanced mode to add contact details, social links and notes.';
   static const String saveChanges = 'Save changes';

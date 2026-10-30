@@ -24,16 +24,26 @@ class IntegrationsScreen extends StatelessWidget {
   const IntegrationsScreen({super.key});
 
   void _handleBackup(BuildContext context) {
-    final ClientsRepository clientsRepo =
-        ClientsScope.of(context, listen: false);
-    final ProjectsRepository projectsRepo =
-        ProjectsScope.of(context, listen: false);
-    final ExpensesRepository expensesRepo =
-        ExpensesScope.of(context, listen: false);
-    final FriendsRepository friendsRepo =
-        FriendsScope.of(context, listen: false);
-    final SettingsRepository settingsRepo =
-        SettingsScope.of(context, listen: false);
+    final ClientsRepository clientsRepo = ClientsScope.of(
+      context,
+      listen: false,
+    );
+    final ProjectsRepository projectsRepo = ProjectsScope.of(
+      context,
+      listen: false,
+    );
+    final ExpensesRepository expensesRepo = ExpensesScope.of(
+      context,
+      listen: false,
+    );
+    final FriendsRepository friendsRepo = FriendsScope.of(
+      context,
+      listen: false,
+    );
+    final SettingsRepository settingsRepo = SettingsScope.of(
+      context,
+      listen: false,
+    );
 
     final String backupJson = buildWorkspaceBackupJson(
       clientsRepository: clientsRepo,

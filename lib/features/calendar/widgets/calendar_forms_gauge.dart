@@ -23,10 +23,11 @@ class CalendarFormsGauge extends StatelessWidget {
     final Color seg1Color = AppColors.green;
     final Color seg2Color =
         (level == CapacityLevel.moderate || level == CapacityLevel.heavy)
-            ? AppColors.orange
-            : AppColors.seg;
-    final Color seg3Color =
-        level == CapacityLevel.heavy ? AppColors.red : AppColors.seg;
+        ? AppColors.orange
+        : AppColors.seg;
+    final Color seg3Color = level == CapacityLevel.heavy
+        ? AppColors.red
+        : AppColors.seg;
 
     final int activeIndex = switch (level) {
       CapacityLevel.light => 0,
@@ -95,10 +96,7 @@ class CalendarFormsGauge extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.white,
-                    border: Border.all(
-                      color: AppColors.ink,
-                      width: 3.0,
-                    ),
+                    border: Border.all(color: AppColors.ink, width: 3.0),
                   ),
                 ),
               ),

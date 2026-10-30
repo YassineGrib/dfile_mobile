@@ -11,10 +11,7 @@ import 'data/data.dart';
 
 /// Calendar synchronization preferences and action screen per `docs/design/SPEC.md` (CL12).
 class CalendarSyncScreen extends StatelessWidget {
-  const CalendarSyncScreen({
-    super.key,
-    this.clock,
-  });
+  const CalendarSyncScreen({super.key, this.clock});
 
   final DateTime Function()? clock;
 
@@ -154,10 +151,7 @@ class CalendarSyncScreen extends StatelessWidget {
                         color: AppColors.white,
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        CalendarFormsStrings.syncNow,
-                        style: AppText.button,
-                      ),
+                      Text(CalendarFormsStrings.syncNow, style: AppText.button),
                     ],
                   ),
                 ),

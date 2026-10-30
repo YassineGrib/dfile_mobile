@@ -24,10 +24,7 @@ class PrefsAppearanceTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.cardSmall),
         side: isSelected
-            ? const BorderSide(
-                color: AppColors.ink,
-                width: 2.0,
-              )
+            ? const BorderSide(color: AppColors.ink, width: 2.0)
             : const BorderSide(
                 color: AppColors.line,
                 width: AppSpacing.borderWidth,

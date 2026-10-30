@@ -20,16 +20,9 @@ class DashIconBubble extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: background,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: background, shape: BoxShape.circle),
       alignment: Alignment.center,
-      child: Icon(
-        icon,
-        color: foreground,
-        size: size * 0.5,
-      ),
+      child: Icon(icon, color: foreground, size: size * 0.5),
     );
   }
 }

@@ -31,7 +31,8 @@ class MonthFlow {
   }
 
   @override
-  int get hashCode => Object.hash(month.year, month.month, inflow, outflow, net);
+  int get hashCode =>
+      Object.hash(month.year, month.month, inflow, outflow, net);
 
   @override
   String toString() =>
@@ -39,11 +40,7 @@ class MonthFlow {
 }
 
 /// Urgency state of an upcoming or overdue project deadline.
-enum DeadlineState {
-  overdue,
-  soon,
-  later,
-}
+enum DeadlineState { overdue, soon, later }
 
 /// Project deadline with calculated days remaining and status per SPEC.md.
 class DeadlineItem {
@@ -74,10 +71,7 @@ class DeadlineItem {
 
 /// Top earning project summary item.
 class TopProjectItem {
-  const TopProjectItem({
-    required this.project,
-    required this.paid,
-  });
+  const TopProjectItem({required this.project, required this.paid});
 
   final ProjectItem project;
   final double paid;
@@ -85,22 +79,14 @@ class TopProjectItem {
 
 /// Top expense category summary item.
 class TopExpenseCategoryItem {
-  const TopExpenseCategoryItem({
-    required this.category,
-    required this.total,
-  });
+  const TopExpenseCategoryItem({required this.category, required this.total});
 
   final ExpenseCategory category;
   final double total;
 }
 
 /// Category kind for dashboard recent activity items.
-enum ActivityKind {
-  payment,
-  expense,
-  settlement,
-  projectStarted,
-}
+enum ActivityKind { payment, expense, settlement, projectStarted }
 
 /// An entry in the dashboard recent activity feed.
 class ActivityItem {
@@ -194,7 +180,9 @@ List<MonthFlow> monthFlows(
     }
 
     final double inflow = payments
-        .where((ProjectPayment p) => p.date.year == year && p.date.month == month)
+        .where(
+          (ProjectPayment p) => p.date.year == year && p.date.month == month,
+        )
         .fold<double>(0.0, (double sum, ProjectPayment p) => sum + p.amount);
 
     final double outflow = expenses
@@ -224,7 +212,9 @@ List<MonthFlow> yearFlows(
 
   for (int m = 1; m <= 12; m++) {
     final double inflow = payments
-        .where((ProjectPayment p) => p.date.year == now.year && p.date.month == m)
+        .where(
+          (ProjectPayment p) => p.date.year == now.year && p.date.month == m,
+        )
         .fold<double>(0.0, (double sum, ProjectPayment p) => sum + p.amount);
 
     final double outflow = expenses
@@ -251,13 +241,16 @@ double thisMonthNet(
   List<Expense> expenses = const <Expense>[],
 }) {
   final double inflow = payments
-      .where((ProjectPayment p) =>
-          p.date.year == now.year && p.date.month == now.month)
+      .where(
+        (ProjectPayment p) =>
+            p.date.year == now.year && p.date.month == now.month,
+      )
       .fold<double>(0.0, (double sum, ProjectPayment p) => sum + p.amount);
 
   final double outflow = expenses
-      .where((Expense e) =>
-          e.date.year == now.year && e.date.month == now.month)
+      .where(
+        (Expense e) => e.date.year == now.year && e.date.month == now.month,
+      )
       .fold<double>(0.0, (double sum, Expense e) => sum + e.amount);
 
   return inflow - outflow;
@@ -286,8 +279,9 @@ List<DeadlineItem> upcomingDeadlines(
     return a.endDate!.compareTo(b.endDate!);
   });
 
-  final Iterable<ProjectItem> limited =
-      limit != null ? validProjects.take(limit) : validProjects;
+  final Iterable<ProjectItem> limited = limit != null
+      ? validProjects.take(limit)
+      : validProjects;
 
   return limited.map((ProjectItem p) {
     final int daysLeft = _dateOnly(p.endDate!).difference(today).inDays;
@@ -299,11 +293,7 @@ List<DeadlineItem> upcomingDeadlines(
     } else {
       state = DeadlineState.later;
     }
-    return DeadlineItem(
-      project: p,
-      daysLeft: daysLeft,
-      state: state,
-    );
+    return DeadlineItem(project: p, daysLeft: daysLeft, state: state);
   }).toList();
 }
 
@@ -356,21 +346,22 @@ List<TopExpenseCategoryItem> topExpenseCategories(
   }
 
   final List<TopExpenseCategoryItem> items = totals.entries
-      .map((MapEntry<ExpenseCategory, double> entry) =>
-          TopExpenseCategoryItem(category: entry.key, total: entry.value))
+      .map(
+        (MapEntry<ExpenseCategory, double> entry) =>
+            TopExpenseCategoryItem(category: entry.key, total: entry.value),
+      )
       .toList();
 
-  items.sort((TopExpenseCategoryItem a, TopExpenseCategoryItem b) =>
-      b.total.compareTo(a.total));
+  items.sort(
+    (TopExpenseCategoryItem a, TopExpenseCategoryItem b) =>
+        b.total.compareTo(a.total),
+  );
 
   return items.take(limit).toList();
 }
 
 /// Profit margin percentage (net profit / total revenue * 100), or 0.0 when revenue <= 0.
-double profitMargin(
-  List<ProjectPayment> payments,
-  List<Expense> expenses,
-) {
+double profitMargin(List<ProjectPayment> payments, List<Expense> expenses) {
   final double revenue = payments.fold<double>(
     0.0,
     (double sum, ProjectPayment p) => sum + p.amount,
@@ -398,7 +389,10 @@ List<ActivityItem> recentActivity({
   for (final ProjectPayment p in payments) {
     final String client = clientNameLookup?.call(p.clientId) ?? '';
     final String project = projectNameLookup?.call(p.projectId) ?? '';
-    final String subtitle = [client, project].where((s) => s.isNotEmpty).join(' - ');
+    final String subtitle = [
+      client,
+      project,
+    ].where((s) => s.isNotEmpty).join(' - ');
 
     items.add(
       ActivityItem(
@@ -435,7 +429,8 @@ List<ActivityItem> recentActivity({
         break;
       }
     }
-    final bool isLent = matchedTx == null || matchedTx.direction == FriendTxDirection.lent;
+    final bool isLent =
+        matchedTx == null || matchedTx.direction == FriendTxDirection.lent;
     final String friendName = friendNameLookup?.call(s.friendId) ?? 'Friend';
 
     items.add(
@@ -489,7 +484,8 @@ NewAccountSetup newAccountSetup({
   final int completedCount =
       (hasClient ? 1 : 0) + (hasProject ? 1 : 0) + (hasPayment ? 1 : 0);
 
-  final bool isNewAccount = clients.isEmpty &&
+  final bool isNewAccount =
+      clients.isEmpty &&
       projects.isEmpty &&
       payments.isEmpty &&
       expenses.isEmpty &&

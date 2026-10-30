@@ -7,10 +7,7 @@ import '../expenses_list_strings.dart';
 
 /// 4 KPI tiles displayed at the top of the expenses list matching screen EX1.
 class ExpensesListKpis extends StatelessWidget {
-  const ExpensesListKpis({
-    super.key,
-    required this.stats,
-  });
+  const ExpensesListKpis({super.key, required this.stats});
 
   final ExpenseStats stats;
 
@@ -29,10 +26,7 @@ class ExpensesListKpis extends StatelessWidget {
   }) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 12,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: AppColors.card,
           borderRadius: BorderRadius.circular(AppRadius.cardSmall),

@@ -16,13 +16,13 @@ class ClientsScope extends InheritedNotifier<ClientsRepository> {
   /// the repository notifies listeners.
   static ClientsRepository of(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final ClientsScope? scope =
-          context.dependOnInheritedWidgetOfExactType<ClientsScope>();
+      final ClientsScope? scope = context
+          .dependOnInheritedWidgetOfExactType<ClientsScope>();
       assert(scope != null, 'No ClientsScope found in context.');
       return scope!.notifier!;
     } else {
-      final ClientsScope? scope =
-          context.getInheritedWidgetOfExactType<ClientsScope>();
+      final ClientsScope? scope = context
+          .getInheritedWidgetOfExactType<ClientsScope>();
       assert(scope != null, 'No ClientsScope found in context.');
       return scope!.notifier!;
     }

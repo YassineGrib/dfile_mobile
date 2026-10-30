@@ -93,10 +93,7 @@ class _CalendarFormsProjectSheetContentState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: AppText.bodyBold,
-                    ),
+                    Text(title, style: AppText.bodyBold),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,

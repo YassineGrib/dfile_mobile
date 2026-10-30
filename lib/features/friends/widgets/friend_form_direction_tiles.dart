@@ -76,10 +76,7 @@ class FriendFormDirectionTiles extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          FriendFormsStrings.directionLabel,
-          style: AppText.label,
-        ),
+        Text(FriendFormsStrings.directionLabel, style: AppText.label),
         const SizedBox(height: AppSpacing.sm),
         Row(
           children: [

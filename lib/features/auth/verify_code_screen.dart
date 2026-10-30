@@ -37,10 +37,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(
-      _codeLength,
-      (_) => TextEditingController(),
-    );
+    _controllers = List.generate(_codeLength, (_) => TextEditingController());
     _focusNodes = List.generate(
       _codeLength,
       (int index) => FocusNode(debugLabel: 'OTP-$index'),
@@ -161,7 +158,8 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String targetEmail = widget.email ??
+    final String targetEmail =
+        widget.email ??
         (GoRouterState.of(context).extra as String?) ??
         AuthStrings.emailPlaceholder;
 
@@ -187,15 +185,9 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                           onPressed: _onBack,
                         ),
                         const SizedBox(height: AppSpacing.lg),
-                        const MascotPanel(
-                          color: AppColors.purple,
-                          height: 210,
-                        ),
+                        const MascotPanel(color: AppColors.purple, height: 210),
                         const SizedBox(height: AppSpacing.xxl),
-                        Text(
-                          AuthStrings.checkYourEmail,
-                          style: AppText.title,
-                        ),
+                        Text(AuthStrings.checkYourEmail, style: AppText.title),
                         const SizedBox(height: AppSpacing.sm),
                         Text(
                           '${AuthStrings.verifySubtitlePrefix}$targetEmail${AuthStrings.verifySubtitleSuffix}',
@@ -263,8 +255,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                                 )
                               : Wrap(
                                   alignment: WrapAlignment.center,
-                                  crossAxisAlignment:
-                                      WrapCrossAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
                                     Text(
                                       '${AuthStrings.didNotGetIt} ',

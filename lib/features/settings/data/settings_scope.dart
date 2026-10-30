@@ -16,13 +16,13 @@ class SettingsScope extends InheritedNotifier<SettingsRepository> {
   /// the repository notifies listeners.
   static SettingsRepository of(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final SettingsScope? scope =
-          context.dependOnInheritedWidgetOfExactType<SettingsScope>();
+      final SettingsScope? scope = context
+          .dependOnInheritedWidgetOfExactType<SettingsScope>();
       assert(scope != null, 'No SettingsScope found in context.');
       return scope!.notifier!;
     } else {
-      final SettingsScope? scope =
-          context.getInheritedWidgetOfExactType<SettingsScope>();
+      final SettingsScope? scope = context
+          .getInheritedWidgetOfExactType<SettingsScope>();
       assert(scope != null, 'No SettingsScope found in context.');
       return scope!.notifier!;
     }

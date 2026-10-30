@@ -17,10 +17,7 @@ import 'dash_icon_bubble.dart';
 ///   Each has a ring or green check icon indicating completion
 /// - "Your numbers" strip: Net profit 0 DZ, Pending 0 DZ
 class HomeEmptyView extends StatelessWidget {
-  const HomeEmptyView({
-    super.key,
-    required this.setup,
-  });
+  const HomeEmptyView({super.key, required this.setup});
 
   final NewAccountSetup setup;
 
@@ -67,15 +64,9 @@ class HomeEmptyView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        title,
-                        style: AppText.bodyBold,
-                      ),
+                      Text(title, style: AppText.bodyBold),
                       const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        style: AppText.caption,
-                      ),
+                      Text(subtitle, style: AppText.caption),
                     ],
                   ),
                 ),
@@ -142,9 +133,7 @@ class HomeEmptyView extends StatelessWidget {
                   const Spacer(),
                   Text(
                     '$completed of 3',
-                    style: AppText.bodyBold.copyWith(
-                      color: AppColors.ink,
-                    ),
+                    style: AppText.bodyBold.copyWith(color: AppColors.ink),
                   ),
                 ],
               ),
@@ -222,10 +211,7 @@ class HomeEmptyView extends StatelessWidget {
         ),
 
         const SizedBox(height: AppSpacing.md),
-        Text(
-          DashboardHomeStrings.yourNumbers,
-          style: AppText.cardTitle,
-        ),
+        Text(DashboardHomeStrings.yourNumbers, style: AppText.cardTitle),
         const SizedBox(height: AppSpacing.md),
 
         // "Your numbers" strip: Net profit 0 DZ, Pending 0 DZ

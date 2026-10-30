@@ -24,7 +24,7 @@ void main() {
   });
 
   Future<(SettingsRepository, GoRouter, ClientsRepository, ProjectsRepository)>
-      pumpPrefsApp(
+  pumpPrefsApp(
     WidgetTester tester, {
     String initialLocation = AppRoutes.settingsPreferencesPath,
     Size surfaceSize = const Size(390, 844),
@@ -39,8 +39,9 @@ void main() {
     });
 
     final ClientsRepository clientsRepo = ClientsRepository();
-    final ProjectsRepository projectsRepo =
-        ProjectsRepository(clientsRepository: clientsRepo);
+    final ProjectsRepository projectsRepo = ProjectsRepository(
+      clientsRepository: clientsRepo,
+    );
     final ExpensesRepository expensesRepo = ExpensesRepository();
     final FriendsRepository friendsRepo = FriendsRepository();
     final SettingsRepository settingsRepo =
@@ -139,10 +140,13 @@ void main() {
         );
 
         // Categories row
-        final String catSubtitle =
-            SettingsPrefsStrings.categoriesCount(repo.categories.length);
+        final String catSubtitle = SettingsPrefsStrings.categoriesCount(
+          repo.categories.length,
+        );
         expect(find.text(catSubtitle), findsOneWidget);
-        await tester.tap(find.text(SettingsPrefsStrings.projectCategoriesTitle));
+        await tester.tap(
+          find.text(SettingsPrefsStrings.projectCategoriesTitle),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byType(CategoriesScreen), findsOneWidget);
@@ -190,7 +194,10 @@ void main() {
         await tester.tap(find.byIcon(Icons.add_rounded));
         await tester.pumpAndSettle();
         expect(repo.categories.length, initialCount);
-        expect(find.text(SettingsPrefsStrings.categoryAddedToast), findsNothing);
+        expect(
+          find.text(SettingsPrefsStrings.categoryAddedToast),
+          findsNothing,
+        );
         expect(
           find.text(SettingsPrefsStrings.categoryExistsToast),
           findsNothing,
@@ -204,7 +211,10 @@ void main() {
         expect(repo.categories.length, initialCount + 1);
         expect(repo.categories.contains('DevOps'), isTrue);
         expect(find.text('DevOps'), findsOneWidget);
-        expect(find.text(SettingsPrefsStrings.categoryAddedToast), findsOneWidget);
+        expect(
+          find.text(SettingsPrefsStrings.categoryAddedToast),
+          findsOneWidget,
+        );
 
         // Field cleared
         final TextField inputWidget = tester.widget<TextField>(textField);
@@ -262,7 +272,9 @@ void main() {
 
         final String initialClauses = repo.legalClauses;
         expect(
-          find.text(SettingsPrefsStrings.charactersCount(initialClauses.length)),
+          find.text(
+            SettingsPrefsStrings.charactersCount(initialClauses.length),
+          ),
           findsOneWidget,
         );
 
@@ -312,7 +324,10 @@ void main() {
         await tester.tap(find.byIcon(Icons.add_rounded));
         await tester.pumpAndSettle();
 
-        expect(sharedSettingsRepo.categories.contains('CloudArchitecture'), isTrue);
+        expect(
+          sharedSettingsRepo.categories.contains('CloudArchitecture'),
+          isTrue,
+        );
 
         // Remove Branding
         final Finder brandingClose = find.descendant(
@@ -359,8 +374,12 @@ void main() {
         sharedSettingsRepo.removeCategory('Branding');
         expect(sharedSettingsRepo.categories.contains('Branding'), isFalse);
 
-        final (_, GoRouter router, _, ProjectsRepository projectsRepo) =
-            await pumpPrefsApp(
+        final (
+          _,
+          GoRouter router,
+          _,
+          ProjectsRepository projectsRepo,
+        ) = await pumpPrefsApp(
           tester,
           initialLocation: AppRoutes.projectsPath,
           customSettingsRepo: sharedSettingsRepo,

@@ -440,7 +440,11 @@ Future<void> showCalendarDeleteMilestoneConfirmSheet({
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
-                  child: Icon(AppIcons.trash2, size: 22, color: AppColors.white),
+                  child: Icon(
+                    AppIcons.trash2,
+                    size: 22,
+                    color: AppColors.white,
+                  ),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
@@ -653,7 +657,8 @@ class _JumpSheetContentState extends State<_JumpSheetContent> {
           itemCount: 12,
           itemBuilder: (BuildContext context, int index) {
             final int month = index + 1;
-            final bool isShown = _selectedYear == widget.currentShownMonth.year &&
+            final bool isShown =
+                _selectedYear == widget.currentShownMonth.year &&
                 month == widget.currentShownMonth.month;
 
             final bool hasEvents = widget.events.any(
@@ -672,9 +677,8 @@ class _JumpSheetContentState extends State<_JumpSheetContent> {
               ),
               clipBehavior: Clip.antiAlias,
               child: InkWell(
-                onTap: () => widget.onMonthSelected(
-                  DateTime(_selectedYear, month, 1),
-                ),
+                onTap: () =>
+                    widget.onMonthSelected(DateTime(_selectedYear, month, 1)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

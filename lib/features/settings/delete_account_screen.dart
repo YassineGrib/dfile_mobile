@@ -183,10 +183,7 @@ class DeleteAccountScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: AppColors.bg,
                 border: Border(
-                  top: BorderSide(
-                    color: AppColors.line,
-                    width: 1,
-                  ),
+                  top: BorderSide(color: AppColors.line, width: 1),
                 ),
               ),
               child: Row(
@@ -210,7 +207,9 @@ class DeleteAccountScreen extends StatelessWidget {
                     child: PrivacyDangerButton(
                       label: SettingsPrivacyStrings.continueButton,
                       onPressed: () {
-                        context.push(AppRoutes.settingsDeleteAccountConfirmPath);
+                        context.push(
+                          AppRoutes.settingsDeleteAccountConfirmPath,
+                        );
                       },
                     ),
                   ),

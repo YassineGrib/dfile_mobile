@@ -25,10 +25,7 @@ import 'dash_icon_bubble.dart';
 /// friend settlements, project started events).
 /// If there is no activity, displays a friendly empty state line.
 class ActivityCard extends StatelessWidget {
-  const ActivityCard({
-    super.key,
-    this.clock,
-  });
+  const ActivityCard({super.key, this.clock});
 
   /// Optional clock provider for deterministic testing.
   final DateTime Function()? clock;
@@ -141,25 +138,25 @@ class _ActivityRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final (IconData icon, Color fg, Color bg) = switch (item.kind) {
       ActivityKind.payment => (
-          AppIcons.circleCheck,
-          AppColors.green,
-          AppColors.greenBg,
-        ),
+        AppIcons.circleCheck,
+        AppColors.green,
+        AppColors.greenBg,
+      ),
       ActivityKind.expense => (
-          AppIcons.receipt,
-          AppColors.coral,
-          AppColors.coralBg,
-        ),
+        AppIcons.receipt,
+        AppColors.coral,
+        AppColors.coralBg,
+      ),
       ActivityKind.settlement => (
-          AppIcons.arrowRightLeft,
-          AppColors.purple,
-          AppColors.purpleBg,
-        ),
+        AppIcons.arrowRightLeft,
+        AppColors.purple,
+        AppColors.purpleBg,
+      ),
       ActivityKind.projectStarted => (
-          AppIcons.folderKanban,
-          AppColors.orange,
-          AppColors.orangeBg,
-        ),
+        AppIcons.folderKanban,
+        AppColors.orange,
+        AppColors.orangeBg,
+      ),
     };
 
     return InkWell(
@@ -222,7 +219,9 @@ class _ActivityRow extends StatelessWidget {
                               : '-${formatAmount(item.amount!.abs())}',
                           style: AppText.bodyMedium.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: item.amount! >= 0 ? AppColors.green : AppColors.red,
+                            color: item.amount! >= 0
+                                ? AppColors.green
+                                : AppColors.red,
                             fontSize: 14,
                           ),
                         ),

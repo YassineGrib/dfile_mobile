@@ -24,11 +24,7 @@ enum ExpenseCategory {
     fullLabel: 'Equipment',
     shortLabel: 'Equipment',
   ),
-  others(
-    storageName: 'Others',
-    fullLabel: 'Others',
-    shortLabel: 'Others',
-  );
+  others(storageName: 'Others', fullLabel: 'Others', shortLabel: 'Others');
 
   const ExpenseCategory({
     required this.storageName,
@@ -135,13 +131,8 @@ class ExpenseStats {
   }
 
   @override
-  int get hashCode => Object.hash(
-        total,
-        projectLinked,
-        projectLinkedCount,
-        thisMonth,
-        average,
-      );
+  int get hashCode =>
+      Object.hash(total, projectLinked, projectLinkedCount, thisMonth, average);
 
   @override
   String toString() =>
@@ -243,17 +234,17 @@ class Expense {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        description,
-        category,
-        amount,
-        projectId,
-        method,
-        reference,
-        notes,
-        date,
-        createdAt,
-      );
+    id,
+    description,
+    category,
+    amount,
+    projectId,
+    method,
+    reference,
+    notes,
+    date,
+    createdAt,
+  );
 
   @override
   String toString() =>

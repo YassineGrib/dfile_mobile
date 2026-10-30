@@ -54,52 +54,53 @@ void main() {
       return (clientsRepo, projectsRepo, router);
     }
 
-    testWidgets(
-      'KPI tiles, header, and count match repository paymentStats',
-      (WidgetTester tester) async {
-        final (_, repo, _) = await pumpPaymentsApp(tester);
-        final PaymentStats stats = repo.paymentStats();
+    testWidgets('KPI tiles, header, and count match repository paymentStats', (
+      WidgetTester tester,
+    ) async {
+      final (_, repo, _) = await pumpPaymentsApp(tester);
+      final PaymentStats stats = repo.paymentStats();
 
-        // Header
-        expect(find.text(PaymentsListStrings.title), findsOneWidget);
-        expect(
-          find.text(PaymentsListStrings.paymentsRecorded(repo.allPayments.length)),
-          findsOneWidget,
-        );
+      // Header
+      expect(find.text(PaymentsListStrings.title), findsOneWidget);
+      expect(
+        find.text(
+          PaymentsListStrings.paymentsRecorded(repo.allPayments.length),
+        ),
+        findsOneWidget,
+      );
 
-        // 4 KPI tiles
-        expect(find.byType(PaymentsListKpis), findsOneWidget);
-        expect(find.text(PaymentsListStrings.collected), findsOneWidget);
-        expect(find.text('665,000 DZ'), findsOneWidget);
-        expect(find.text(PaymentsListStrings.outstanding), findsOneWidget);
-        expect(find.text('420,000 DZ'), findsOneWidget);
-        expect(find.text(PaymentsListStrings.thisMonth), findsOneWidget);
-        expect(find.text('60,000 DZ'), findsOneWidget);
-        expect(find.text(PaymentsListStrings.collectionRate), findsOneWidget);
-        expect(find.text('${stats.collectionRate}%'), findsOneWidget);
+      // 4 KPI tiles
+      expect(find.byType(PaymentsListKpis), findsOneWidget);
+      expect(find.text(PaymentsListStrings.collected), findsOneWidget);
+      expect(find.text('665,000 DZ'), findsOneWidget);
+      expect(find.text(PaymentsListStrings.outstanding), findsOneWidget);
+      expect(find.text('420,000 DZ'), findsOneWidget);
+      expect(find.text(PaymentsListStrings.thisMonth), findsOneWidget);
+      expect(find.text('60,000 DZ'), findsOneWidget);
+      expect(find.text(PaymentsListStrings.collectionRate), findsOneWidget);
+      expect(find.text('${stats.collectionRate}%'), findsOneWidget);
 
-        // Count row
-        expect(
-          find.text(PaymentsListStrings.paymentsCount(repo.allPayments.length)),
-          findsOneWidget,
-        );
-        expect(find.text('Sort: Newest ▾'), findsOneWidget);
+      // Count row
+      expect(
+        find.text(PaymentsListStrings.paymentsCount(repo.allPayments.length)),
+        findsOneWidget,
+      );
+      expect(find.text('Sort: Newest ▾'), findsOneWidget);
 
-        // Payments rendered
-        expect(find.byType(PaymentsListCard), findsWidgets);
-        expect(find.text('Sarah Benali'), findsOneWidget);
-        expect(find.text('Brand Identity'), findsOneWidget);
+      // Payments rendered
+      expect(find.byType(PaymentsListCard), findsWidgets);
+      expect(find.text('Sarah Benali'), findsOneWidget);
+      expect(find.text('Brand Identity'), findsOneWidget);
 
-        // Scroll to bottom to verify subsequent payments rendered
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
-        await tester.pumpAndSettle();
-        expect(find.text('Logo Pack'), findsOneWidget);
+      // Scroll to bottom to verify subsequent payments rendered
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -600));
+      await tester.pumpAndSettle();
+      expect(find.text('Logo Pack'), findsOneWidget);
 
-        // Bottom tab bar has More active
-        final AppTabBar tabBar = tester.widget<AppTabBar>(find.byType(AppTabBar));
-        expect(tabBar.currentIndex, AppTabBar.moreTabIndex);
-      },
-    );
+      // Bottom tab bar has More active
+      final AppTabBar tabBar = tester.widget<AppTabBar>(find.byType(AppTabBar));
+      expect(tabBar.currentIndex, AppTabBar.moreTabIndex);
+    });
 
     testWidgets(
       'Search filters payments by client name, project name, reference, and notes (case-insensitive)',
@@ -149,17 +150,23 @@ void main() {
       (WidgetTester tester) async {
         await pumpPaymentsApp(tester);
 
-        final Finder pillsScrollView = find.byKey(const Key('payment-method-pills'));
+        final Finder pillsScrollView = find.byKey(
+          const Key('payment-method-pills'),
+        );
         expect(pillsScrollView, findsOneWidget);
 
         // BaridiMob filter (Advance 60k, Milestone 85k, Advance 100k) -> 3 payments
-        await tester.tap(find.widgetWithText(AppPill, PaymentsListStrings.filterBaridimob));
+        await tester.tap(
+          find.widgetWithText(AppPill, PaymentsListStrings.filterBaridimob),
+        );
         await tester.pumpAndSettle();
         expect(find.text('3 payments'), findsOneWidget);
         expect(find.text('Brand Identity'), findsOneWidget);
 
         // CCP filter (Milestone 60k) -> 1 payment
-        await tester.tap(find.widgetWithText(AppPill, PaymentsListStrings.filterCcp));
+        await tester.tap(
+          find.widgetWithText(AppPill, PaymentsListStrings.filterCcp),
+        );
         await tester.pumpAndSettle();
         expect(find.text('1 payment'), findsOneWidget);
         expect(find.text('CCP-5521'), findsOneWidget);
@@ -169,14 +176,18 @@ void main() {
         await tester.pumpAndSettle();
 
         // Bank wire filter (Final 320k) -> 1 payment
-        await tester.tap(find.widgetWithText(AppPill, PaymentsListStrings.filterBank));
+        await tester.tap(
+          find.widgetWithText(AppPill, PaymentsListStrings.filterBank),
+        );
         await tester.pumpAndSettle();
         expect(find.text('1 payment'), findsOneWidget);
         expect(find.text('WIRE-7783'), findsOneWidget);
         expect(find.text('+320,000 DZ'), findsOneWidget);
 
         // Cash filter (Final 40k) -> 1 payment
-        await tester.tap(find.widgetWithText(AppPill, PaymentsListStrings.filterCash));
+        await tester.tap(
+          find.widgetWithText(AppPill, PaymentsListStrings.filterCash),
+        );
         await tester.pumpAndSettle();
         expect(find.text('1 payment'), findsOneWidget);
         expect(find.text('Logo Pack'), findsOneWidget);
@@ -185,7 +196,9 @@ void main() {
         // Scroll back to All and select it
         await tester.drag(pillsScrollView, const Offset(200, 0));
         await tester.pumpAndSettle();
-        await tester.tap(find.widgetWithText(AppPill, PaymentsListStrings.filterAll));
+        await tester.tap(
+          find.widgetWithText(AppPill, PaymentsListStrings.filterAll),
+        );
         await tester.pumpAndSettle();
         expect(find.text('6 payments'), findsOneWidget);
         expect(find.text('Sarah Benali'), findsOneWidget);
@@ -259,7 +272,10 @@ void main() {
         final PaymentStats stats = repo.paymentStats();
 
         // Header shows 0 payments recorded
-        expect(find.text(PaymentsListStrings.paymentsRecorded(0)), findsOneWidget);
+        expect(
+          find.text(PaymentsListStrings.paymentsRecorded(0)),
+          findsOneWidget,
+        );
 
         // KPIs match repo stats (Collected and This month are 0 DZ)
         expect(find.text('0 DZ'), findsNWidgets(2));
@@ -272,7 +288,10 @@ void main() {
         // Empty card & button per PY3
         expect(find.text(PaymentsListStrings.emptyTitle), findsOneWidget);
         expect(find.text(PaymentsListStrings.emptySubtitle), findsOneWidget);
-        expect(find.text(PaymentsListStrings.recordFirstPayment), findsOneWidget);
+        expect(
+          find.text(PaymentsListStrings.recordFirstPayment),
+          findsOneWidget,
+        );
         expect(find.byType(PaymentsListCard), findsNothing);
 
         // Scroll down to tap [+ Record first payment]
@@ -297,7 +316,10 @@ void main() {
 
         // Empty filter state
         expect(find.text(PaymentsListStrings.emptyFilterTitle), findsOneWidget);
-        expect(find.text(PaymentsListStrings.emptyFilterSubtitle), findsOneWidget);
+        expect(
+          find.text(PaymentsListStrings.emptyFilterSubtitle),
+          findsOneWidget,
+        );
         expect(find.text(PaymentsListStrings.clearFilters), findsOneWidget);
         expect(find.byType(PaymentsListCard), findsNothing);
 
@@ -333,7 +355,10 @@ void main() {
         await pumpPaymentsApp(tester);
 
         // The "+" round icon button is in the header
-        final Finder addButton = find.widgetWithIcon(RoundIconButton, Icons.add);
+        final Finder addButton = find.widgetWithIcon(
+          RoundIconButton,
+          Icons.add,
+        );
         expect(addButton, findsOneWidget);
 
         await tester.tap(addButton);
@@ -350,7 +375,10 @@ void main() {
         await pumpPaymentsApp(tester);
 
         // Back button is the arrow_back RoundIconButton
-        final Finder backButton = find.widgetWithIcon(RoundIconButton, Icons.arrow_back);
+        final Finder backButton = find.widgetWithIcon(
+          RoundIconButton,
+          Icons.arrow_back,
+        );
         expect(backButton, findsOneWidget);
 
         await tester.tap(backButton);
@@ -368,15 +396,23 @@ void main() {
         // Navigating with Map payload: {'toast': 'Payment deleted successfully'}
         router.go(
           AppRoutes.paymentsPath,
-          extra: <String, Object?>{'toast': PaymentsListStrings.paymentDeletedToast},
+          extra: <String, Object?>{
+            'toast': PaymentsListStrings.paymentDeletedToast,
+          },
         );
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 50));
-        expect(find.text(PaymentsListStrings.paymentDeletedToast), findsOneWidget);
+        expect(
+          find.text(PaymentsListStrings.paymentDeletedToast),
+          findsOneWidget,
+        );
 
         // Wait for toast duration to auto-dismiss
         await tester.pump(const Duration(seconds: 4));
-        expect(find.text(PaymentsListStrings.paymentDeletedToast), findsNothing);
+        expect(
+          find.text(PaymentsListStrings.paymentDeletedToast),
+          findsNothing,
+        );
 
         // Navigating with plain String payload: 'Payment recorded'
         router.go(
@@ -385,39 +421,41 @@ void main() {
         );
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 50));
-        expect(find.text(PaymentsListStrings.paymentRecordedToast), findsOneWidget);
+        expect(
+          find.text(PaymentsListStrings.paymentRecordedToast),
+          findsOneWidget,
+        );
 
         await tester.pump(const Duration(seconds: 4));
-        expect(find.text(PaymentsListStrings.paymentRecordedToast), findsNothing);
+        expect(
+          find.text(PaymentsListStrings.paymentRecordedToast),
+          findsNothing,
+        );
       },
     );
 
-    testWidgets(
-      'Renders on 360x800 surface without any layout overflow',
-      (WidgetTester tester) async {
-        // Populated list on 360x800
-        await pumpPaymentsApp(
-          tester,
-          surfaceSize: const Size(360, 800),
-        );
+    testWidgets('Renders on 360x800 surface without any layout overflow', (
+      WidgetTester tester,
+    ) async {
+      // Populated list on 360x800
+      await pumpPaymentsApp(tester, surfaceSize: const Size(360, 800));
 
-        expect(find.byType(PaymentsListScreen), findsOneWidget);
-        expect(tester.takeException(), isNull);
+      expect(find.byType(PaymentsListScreen), findsOneWidget);
+      expect(tester.takeException(), isNull);
 
-        // Scroll down to ensure all cards render without overflow
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
+      // Scroll down to ensure all cards render without overflow
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
 
-        // Also test empty state on 360x800
-        await pumpPaymentsApp(
-          tester,
-          surfaceSize: const Size(360, 800),
-          initialPayments: <ProjectPayment>[],
-        );
-        expect(find.text(PaymentsListStrings.emptyTitle), findsOneWidget);
-        expect(tester.takeException(), isNull);
-      },
-    );
+      // Also test empty state on 360x800
+      await pumpPaymentsApp(
+        tester,
+        surfaceSize: const Size(360, 800),
+        initialPayments: <ProjectPayment>[],
+      );
+      expect(find.text(PaymentsListStrings.emptyTitle), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
   });
 }

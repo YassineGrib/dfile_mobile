@@ -16,13 +16,13 @@ class ExpensesScope extends InheritedNotifier<ExpensesRepository> {
   /// the repository notifies listeners.
   static ExpensesRepository of(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final ExpensesScope? scope =
-          context.dependOnInheritedWidgetOfExactType<ExpensesScope>();
+      final ExpensesScope? scope = context
+          .dependOnInheritedWidgetOfExactType<ExpensesScope>();
       assert(scope != null, 'No ExpensesScope found in context.');
       return scope!.notifier!;
     } else {
-      final ExpensesScope? scope =
-          context.getInheritedWidgetOfExactType<ExpensesScope>();
+      final ExpensesScope? scope = context
+          .getInheritedWidgetOfExactType<ExpensesScope>();
       assert(scope != null, 'No ExpensesScope found in context.');
       return scope!.notifier!;
     }

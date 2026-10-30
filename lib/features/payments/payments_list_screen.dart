@@ -11,12 +11,7 @@ import 'widgets/payments_list_card.dart';
 import 'widgets/payments_list_kpis.dart';
 
 /// Sort options for the payments list matching PY4.
-enum PaymentSort {
-  newestFirst,
-  oldestFirst,
-  highestAmount,
-  lowestAmount,
-}
+enum PaymentSort { newestFirst, oldestFirst, highestAmount, lowestAmount }
 
 /// Screen displaying the list of all recorded payments (PY2..PY4).
 ///
@@ -116,11 +111,11 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
       }
       if (query.isNotEmpty) {
         final Client? client = clientsRepo.byId(payment.clientId);
-        final String clientName = (client?.name ??
-                repo.clientNameById(payment.clientId))
+        final String clientName =
+            (client?.name ?? repo.clientNameById(payment.clientId))
+                .toLowerCase();
+        final String projectName = (repo.byId(payment.projectId)?.name ?? '')
             .toLowerCase();
-        final String projectName =
-            (repo.byId(payment.projectId)?.name ?? '').toLowerCase();
         final String ref = payment.reference.toLowerCase();
         final String notes = payment.notes.toLowerCase();
 
@@ -275,12 +270,12 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
 
     const List<(String, PaymentMethod?)> methodPills =
         <(String, PaymentMethod?)>[
-      (PaymentsListStrings.filterAll, null),
-      (PaymentsListStrings.filterBaridimob, PaymentMethod.baridimob),
-      (PaymentsListStrings.filterCcp, PaymentMethod.ccp),
-      (PaymentsListStrings.filterBank, PaymentMethod.bank),
-      (PaymentsListStrings.filterCash, PaymentMethod.cash),
-    ];
+          (PaymentsListStrings.filterAll, null),
+          (PaymentsListStrings.filterBaridimob, PaymentMethod.baridimob),
+          (PaymentsListStrings.filterCcp, PaymentMethod.ccp),
+          (PaymentsListStrings.filterBank, PaymentMethod.bank),
+          (PaymentsListStrings.filterCash, PaymentMethod.cash),
+        ];
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -411,9 +406,8 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
                       AppPill(
                         label: methodPills[i].$1,
                         selected: _methodFilter == methodPills[i].$2,
-                        onTap: () => setState(
-                          () => _methodFilter = methodPills[i].$2,
-                        ),
+                        onTap: () =>
+                            setState(() => _methodFilter = methodPills[i].$2),
                       ),
                     ],
                   ],
@@ -626,20 +620,19 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final ProjectPayment payment = displayedPayments[index];
-                      final Client? client =
-                          clientsRepo.byId(payment.clientId);
-                      final ProjectItem? project = repo.byId(payment.projectId);
-                      return PaymentsListCard(
-                        payment: payment,
-                        client: client,
-                        project: project,
-                      );
-                    },
-                    childCount: displayedPayments.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((
+                    BuildContext context,
+                    int index,
+                  ) {
+                    final ProjectPayment payment = displayedPayments[index];
+                    final Client? client = clientsRepo.byId(payment.clientId);
+                    final ProjectItem? project = repo.byId(payment.projectId);
+                    return PaymentsListCard(
+                      payment: payment,
+                      client: client,
+                      project: project,
+                    );
+                  }, childCount: displayedPayments.length),
                 ),
               ),
           ],

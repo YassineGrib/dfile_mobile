@@ -23,25 +23,25 @@ class SettingsRepository extends ChangeNotifier {
     NotificationPrefs? initialNotifications,
     List<SupportTicket>? initialSupportTickets,
     String initialPassword = 'demo123',
-  })  : _profile = initialProfile ?? defaultProfile,
-        _language = initialLanguage,
-        _themeMode = initialThemeMode,
-        _categories = initialCategories != null
-            ? List<String>.from(initialCategories)
-            : List<String>.from(defaultCategories),
-        _legalClauses = initialLegalClauses ?? defaultLegalClauses,
-        _pinEnabled = initialPinEnabled,
-        _pin = initialPin,
-        _biometricsEnabled = initialBiometricsEnabled,
-        _sessions = initialSessions != null
-            ? List<DeviceSession>.from(initialSessions)
-            : List<DeviceSession>.from(defaultSessions),
-        _googleConnected = initialGoogleConnected,
-        _notifications = initialNotifications ?? defaultNotificationPrefs,
-        _supportTickets = initialSupportTickets != null
-            ? List<SupportTicket>.from(initialSupportTickets)
-            : <SupportTicket>[],
-        _password = initialPassword;
+  }) : _profile = initialProfile ?? defaultProfile,
+       _language = initialLanguage,
+       _themeMode = initialThemeMode,
+       _categories = initialCategories != null
+           ? List<String>.from(initialCategories)
+           : List<String>.from(defaultCategories),
+       _legalClauses = initialLegalClauses ?? defaultLegalClauses,
+       _pinEnabled = initialPinEnabled,
+       _pin = initialPin,
+       _biometricsEnabled = initialBiometricsEnabled,
+       _sessions = initialSessions != null
+           ? List<DeviceSession>.from(initialSessions)
+           : List<DeviceSession>.from(defaultSessions),
+       _googleConnected = initialGoogleConnected,
+       _notifications = initialNotifications ?? defaultNotificationPrefs,
+       _supportTickets = initialSupportTickets != null
+           ? List<SupportTicket>.from(initialSupportTickets)
+           : <SupportTicket>[],
+       _password = initialPassword;
 
   static const UserProfile defaultProfile = UserProfile(
     name: 'Yassine G.',
@@ -110,7 +110,8 @@ class SettingsRepository extends ChangeNotifier {
   bool get pinEnabled => _pinEnabled;
   String? get pin => _pin;
   bool get biometricsEnabled => _biometricsEnabled;
-  List<DeviceSession> get sessions => List<DeviceSession>.unmodifiable(_sessions);
+  List<DeviceSession> get sessions =>
+      List<DeviceSession>.unmodifiable(_sessions);
   bool get googleConnected => _googleConnected;
   NotificationPrefs get notifications => _notifications;
   List<SupportTicket> get supportTickets =>

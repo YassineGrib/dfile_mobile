@@ -283,10 +283,7 @@ void main() {
         expect(nextBtn.onPressed, isNull);
 
         // Type quick client name and tap Add -> creates client in ClientsRepository and selects it
-        await tester.enterText(
-          find.byType(TextField).first,
-          'Atlas Logistics',
-        );
+        await tester.enterText(find.byType(TextField).first, 'Atlas Logistics');
         await tester.pump();
         await tester.tap(find.text(ProjectStrings.addAction));
         await tester.pumpAndSettle();
@@ -431,10 +428,10 @@ void main() {
 
         final List<ProjectTask> savedTasks = projectsRepo.tasksOf(created.id);
         expect(savedTasks.length, 2);
-        expect(
-          savedTasks.map((ProjectTask t) => t.name).toList(),
-          <String>['Database schema', 'Auth endpoints'],
-        );
+        expect(savedTasks.map((ProjectTask t) => t.name).toList(), <String>[
+          'Database schema',
+          'Auth endpoints',
+        ]);
       },
     );
 
@@ -729,10 +726,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(ClientDetailScreen), findsOneWidget);
         // p1 (450,000 paid) + p3 Mobile App UI (320,000 paid) = 770,000 DZ
-        expect(
-          clientsRepo.totalRevenue(clientsRepo.byId('c1')!),
-          770000.0,
-        );
+        expect(clientsRepo.totalRevenue(clientsRepo.byId('c1')!), 770000.0);
 
         // Tap "Payments cleared" tile on client detail to open client Payments tab
         await tester.tap(find.text(ClientStrings.financeCleared));
@@ -784,10 +778,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
 
-        await tester.enterText(
-          find.byType(TextField).first,
-          'Narrow Phone Co',
-        );
+        await tester.enterText(find.byType(TextField).first, 'Narrow Phone Co');
         await tester.pump();
         await tester.tap(find.text(ProjectStrings.addAction));
         await tester.pumpAndSettle();

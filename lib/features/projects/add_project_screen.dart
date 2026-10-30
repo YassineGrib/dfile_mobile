@@ -65,8 +65,10 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     if (!_categoryInitialized) {
       _categoryInitialized = true;
       try {
-        final List<String> categories =
-            SettingsScope.of(context, listen: false).categories;
+        final List<String> categories = SettingsScope.of(
+          context,
+          listen: false,
+        ).categories;
         if (categories.isNotEmpty) {
           _category = categories.first;
         }
@@ -314,10 +316,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                ProjectStrings.addNewProjectTitle,
-                style: AppText.title,
-              ),
+              Text(ProjectStrings.addNewProjectTitle, style: AppText.title),
               const SizedBox(height: 4),
               Text(
                 _stepSubtitle,
@@ -327,10 +326,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _close,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _close),
       ],
     );
   }
@@ -345,10 +341,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       ),
       child: Text(
         message,
-        style: AppText.bodyMedium.copyWith(
-          color: AppColors.mute,
-          height: 1.4,
-        ),
+        style: AppText.bodyMedium.copyWith(color: AppColors.mute, height: 1.4),
       ),
     );
   }
@@ -539,11 +532,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                 child: InkWell(
                   onTap: _addDraftTask,
                   child: const Center(
-                    child: Icon(
-                      Icons.add,
-                      size: 26,
-                      color: AppColors.white,
-                    ),
+                    child: Icon(Icons.add, size: 26, color: AppColors.white),
                   ),
                 ),
               ),

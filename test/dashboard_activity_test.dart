@@ -45,7 +45,8 @@ void main() {
     NotificationsStore? notificationsStore,
   }) {
     final effectiveClients = clientsRepo ?? ClientsRepository();
-    final effectiveProjects = projectsRepo ?? ProjectsRepository(clientsRepository: effectiveClients);
+    final effectiveProjects =
+        projectsRepo ?? ProjectsRepository(clientsRepository: effectiveClients);
     final effectiveExpenses = expensesRepo ?? ExpensesRepository();
     final effectiveFriends = friendsRepo ?? FriendsRepository();
     final effectiveSettings = settingsRepo ?? SettingsRepository();
@@ -86,13 +87,15 @@ void main() {
     GoRouter? customRouter,
   }) {
     final effectiveClients = clientsRepo ?? ClientsRepository();
-    final effectiveProjects = projectsRepo ?? ProjectsRepository(clientsRepository: effectiveClients);
+    final effectiveProjects =
+        projectsRepo ?? ProjectsRepository(clientsRepository: effectiveClients);
     final effectiveExpenses = expensesRepo ?? ExpensesRepository();
     final effectiveFriends = friendsRepo ?? FriendsRepository();
     final effectiveSettings = settingsRepo ?? SettingsRepository();
     final effectiveNotifications = notificationsStore ?? NotificationsStore();
 
-    final router = customRouter ?? createAppRouter(initialLocation: initialLocation);
+    final router =
+        customRouter ?? createAppRouter(initialLocation: initialLocation);
 
     return ClientsScope(
       repository: effectiveClients,
@@ -119,57 +122,61 @@ void main() {
   }
 
   group('ActivityCard (HM3)', () {
-    testWidgets('renders recentActivity for seeds in correct order with amounts and dates', (
-      WidgetTester tester,
-    ) async {
-      setSurface(tester);
-      final projectsRepo = ProjectsRepository();
-      final expensesRepo = ExpensesRepository();
-      final friendsRepo = FriendsRepository();
-      final clientsRepo = ClientsRepository();
+    testWidgets(
+      'renders recentActivity for seeds in correct order with amounts and dates',
+      (WidgetTester tester) async {
+        setSurface(tester);
+        final projectsRepo = ProjectsRepository();
+        final expensesRepo = ExpensesRepository();
+        final friendsRepo = FriendsRepository();
+        final clientsRepo = ClientsRepository();
 
-      await tester.pumpWidget(
-        createTestApp(
-          clientsRepo: clientsRepo,
-          projectsRepo: projectsRepo,
-          expensesRepo: expensesRepo,
-          friendsRepo: friendsRepo,
-          child: SingleChildScrollView(
-            child: ActivityCard(clock: () => seedClock),
+        await tester.pumpWidget(
+          createTestApp(
+            clientsRepo: clientsRepo,
+            projectsRepo: projectsRepo,
+            expensesRepo: expensesRepo,
+            friendsRepo: friendsRepo,
+            child: SingleChildScrollView(
+              child: ActivityCard(clock: () => seedClock),
+            ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      // Section header
-      expect(find.text(DashboardActivityStrings.recentActivity), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.seeAll), findsOneWidget);
+        // Section header
+        expect(
+          find.text(DashboardActivityStrings.recentActivity),
+          findsOneWidget,
+        );
+        expect(find.text(DashboardActivityStrings.seeAll), findsOneWidget);
 
-      // Verify seed recent activity items
-      // Top 4 recent items from mock data:
-      // 1. Server hosting bill (Yacine shared cost 2026-10-20)
-      // 2. Figma Pro plan (Expense 4,500 on 2026-10-15)
-      // 3. Hosting bill split (Amine debt 2026-10-10)
-      // 4. Frontend UI design (Karim service 2026-10-05)
-      // or payments / settlements / expenses
-      final items = recentActivity(
-        payments: projectsRepo.payments,
-        expenses: expensesRepo.expenses,
-        settlements: friendsRepo.settlements,
-        friendTransactions: friendsRepo.transactions,
-        projects: projectsRepo.projects,
-        clientNameLookup: (id) => clientsRepo.byId(id)?.name ?? '',
-        projectNameLookup: (id) => projectsRepo.byId(id)?.name ?? '',
-        friendNameLookup: (id) => friendsRepo.friendById(id)?.name ?? '',
-        limit: 4,
-      );
+        // Verify seed recent activity items
+        // Top 4 recent items from mock data:
+        // 1. Server hosting bill (Yacine shared cost 2026-10-20)
+        // 2. Figma Pro plan (Expense 4,500 on 2026-10-15)
+        // 3. Hosting bill split (Amine debt 2026-10-10)
+        // 4. Frontend UI design (Karim service 2026-10-05)
+        // or payments / settlements / expenses
+        final items = recentActivity(
+          payments: projectsRepo.payments,
+          expenses: expensesRepo.expenses,
+          settlements: friendsRepo.settlements,
+          friendTransactions: friendsRepo.transactions,
+          projects: projectsRepo.projects,
+          clientNameLookup: (id) => clientsRepo.byId(id)?.name ?? '',
+          projectNameLookup: (id) => projectsRepo.byId(id)?.name ?? '',
+          friendNameLookup: (id) => friendsRepo.friendById(id)?.name ?? '',
+          limit: 4,
+        );
 
-      expect(items.length, 4);
-      for (final item in items) {
-        expect(find.text(item.title), findsAtLeastNWidgets(1));
-        expect(find.text(item.subtitle), findsAtLeastNWidgets(1));
-      }
-    });
+        expect(items.length, 4);
+        for (final item in items) {
+          expect(find.text(item.title), findsAtLeastNWidgets(1));
+          expect(find.text(item.subtitle), findsAtLeastNWidgets(1));
+        }
+      },
+    );
 
     testWidgets('empty state displays friendly line when no activity exists', (
       WidgetTester tester,
@@ -195,7 +202,10 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text(DashboardActivityStrings.noRecentActivity), findsOneWidget);
+      expect(
+        find.text(DashboardActivityStrings.noRecentActivity),
+        findsOneWidget,
+      );
     });
 
     testWidgets('tapping See all navigates to /home/notifications', (
@@ -259,18 +269,14 @@ void main() {
           ),
           GoRoute(
             path: '/home/notifications',
-            builder: (context, state) => const Scaffold(
-              body: Text('NotificationsScreenTarget'),
-            ),
+            builder: (context, state) =>
+                const Scaffold(body: Text('NotificationsScreenTarget')),
           ),
         ],
       );
 
       await tester.pumpWidget(
-        createRouterApp(
-          initialLocation: '/test',
-          customRouter: router,
-        ),
+        createRouterApp(initialLocation: '/test', customRouter: router),
       );
       await tester.pumpAndSettle();
 
@@ -298,9 +304,7 @@ void main() {
         createTestApp(
           child: const Padding(
             padding: EdgeInsets.symmetric(horizontal: AppSpacing.pageGutter),
-            child: SingleChildScrollView(
-              child: ActivityCard(),
-            ),
+            child: SingleChildScrollView(child: ActivityCard()),
           ),
         ),
       );
@@ -310,31 +314,45 @@ void main() {
   });
 
   group("FriendsSnapshotCard (HM3)", () {
-    testWidgets('renders numbers from repository overallBalance with chips and colors', (
-      WidgetTester tester,
-    ) async {
-      setSurface(tester);
-      final friendsRepo = FriendsRepository();
-      final overall = friendsRepo.overallBalance(); // net +58,000, owed 70,000, owe 12,000
+    testWidgets(
+      'renders numbers from repository overallBalance with chips and colors',
+      (WidgetTester tester) async {
+        setSurface(tester);
+        final friendsRepo = FriendsRepository();
+        final overall = friendsRepo
+            .overallBalance(); // net +58,000, owed 70,000, owe 12,000
 
-      await tester.pumpWidget(
-        createTestApp(
-          friendsRepo: friendsRepo,
-          child: const FriendsSnapshotCard(),
-        ),
-      );
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          createTestApp(
+            friendsRepo: friendsRepo,
+            child: const FriendsSnapshotCard(),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text(DashboardActivityStrings.friendsDebts), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.netBalanceAcrossFriends), findsOneWidget);
-      expect(find.text('+${formatMoney(overall.net)}'), findsOneWidget);
+        expect(
+          find.text(DashboardActivityStrings.friendsDebts),
+          findsOneWidget,
+        );
+        expect(
+          find.text(DashboardActivityStrings.netBalanceAcrossFriends),
+          findsOneWidget,
+        );
+        expect(find.text('+${formatMoney(overall.net)}'), findsOneWidget);
 
-      expect(find.textContaining(formatMoney(overall.owedToYou)), findsOneWidget);
-      expect(find.textContaining(formatMoney(overall.youOwe)), findsOneWidget);
+        expect(
+          find.textContaining(formatMoney(overall.owedToYou)),
+          findsOneWidget,
+        );
+        expect(
+          find.textContaining(formatMoney(overall.youOwe)),
+          findsOneWidget,
+        );
 
-      expect(find.byIcon(AppIcons.arrowDownRight), findsOneWidget);
-      expect(find.byIcon(AppIcons.arrowUpRight), findsOneWidget);
-    });
+        expect(find.byIcon(AppIcons.arrowDownRight), findsOneWidget);
+        expect(find.byIcon(AppIcons.arrowUpRight), findsOneWidget);
+      },
+    );
 
     testWidgets('empty friends state shows friendly subtitle and 0 DZ chips', (
       WidgetTester tester,
@@ -354,37 +372,37 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text(DashboardActivityStrings.trackMoneyLendBorrow), findsOneWidget);
+      expect(
+        find.text(DashboardActivityStrings.trackMoneyLendBorrow),
+        findsOneWidget,
+      );
       expect(find.text(formatMoney(0)), findsOneWidget); // net
       expect(find.textContaining('Owed 0 DZ'), findsOneWidget);
       expect(find.textContaining('You owe 0 DZ'), findsOneWidget);
     });
 
-    testWidgets('tapping card navigates to /friends', (WidgetTester tester) async {
+    testWidgets('tapping card navigates to /friends', (
+      WidgetTester tester,
+    ) async {
       setSurface(tester);
       final router = GoRouter(
         initialLocation: '/test',
         routes: [
           GoRoute(
             path: '/test',
-            builder: (context, state) => const Scaffold(
-              body: FriendsSnapshotCard(),
-            ),
+            builder: (context, state) =>
+                const Scaffold(body: FriendsSnapshotCard()),
           ),
           GoRoute(
             path: '/friends',
-            builder: (context, state) => const Scaffold(
-              body: Text('FriendsScreenTarget'),
-            ),
+            builder: (context, state) =>
+                const Scaffold(body: Text('FriendsScreenTarget')),
           ),
         ],
       );
 
       await tester.pumpWidget(
-        createRouterApp(
-          initialLocation: '/test',
-          customRouter: router,
-        ),
+        createRouterApp(initialLocation: '/test', customRouter: router),
       );
       await tester.pumpAndSettle();
 
@@ -398,9 +416,7 @@ void main() {
       setSurface(tester, size: const Size(360, 800));
       await tester.pumpWidget(
         createTestApp(
-          child: const SingleChildScrollView(
-            child: FriendsSnapshotCard(),
-          ),
+          child: const SingleChildScrollView(child: FriendsSnapshotCard()),
         ),
       );
       await tester.pumpAndSettle();
@@ -416,9 +432,7 @@ void main() {
       final fixedClock = DateTime(2026, 10, 30, 10, 30);
 
       await tester.pumpWidget(
-        createTestApp(
-          child: NotificationsScreen(clock: () => fixedClock),
-        ),
+        createTestApp(child: NotificationsScreen(clock: () => fixedClock)),
       );
       await tester.pumpAndSettle();
 
@@ -430,91 +444,94 @@ void main() {
       expect(find.text(DashboardActivityStrings.earlier), findsOneWidget);
     });
 
-    testWidgets('shows unread coral dots and markAllRead updates store and UI', (
-      WidgetTester tester,
-    ) async {
-      setSurface(tester);
-      final store = NotificationsStore();
-      final fixedClock = DateTime(2026, 10, 30, 10, 30);
+    testWidgets(
+      'shows unread coral dots and markAllRead updates store and UI',
+      (WidgetTester tester) async {
+        setSurface(tester);
+        final store = NotificationsStore();
+        final fixedClock = DateTime(2026, 10, 30, 10, 30);
 
-      await tester.pumpWidget(
-        createTestApp(
-          notificationsStore: store,
-          child: NotificationsScreen(clock: () => fixedClock),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      // Find coral dot containers (width 8, height 8)
-      final dotFinder = find.byWidgetPredicate(
-        (widget) =>
-            widget is Container &&
-            widget.constraints?.maxWidth == 8 &&
-            widget.constraints?.maxHeight == 8,
-      );
-      expect(dotFinder, findsWidgets);
-
-      // Tap Mark all read
-      await tester.tap(find.text(DashboardActivityStrings.markAllRead));
-      await tester.pumpAndSettle();
-
-      // Coral dots should be gone
-      expect(dotFinder, findsNothing);
-    });
-
-    testWidgets('tapping notification marks it read and navigates to its route', (
-      WidgetTester tester,
-    ) async {
-      setSurface(tester);
-      final store = NotificationsStore();
-      final fixedClock = DateTime(2026, 10, 30, 10, 30);
-
-      final router = GoRouter(
-        initialLocation: '/home/notifications',
-        routes: [
-          GoRoute(
-            path: '/home/notifications',
-            builder: (context, state) => NotificationsScreen(clock: () => fixedClock),
+        await tester.pumpWidget(
+          createTestApp(
+            notificationsStore: store,
+            child: NotificationsScreen(clock: () => fixedClock),
           ),
-          GoRoute(
-            path: '/projects/:id',
-            builder: (context, state) => Scaffold(
-              body: Text('ProjectPage:${state.pathParameters['id']}'),
-            ),
-          ),
-          GoRoute(
-            path: '/payments/:id',
-            builder: (context, state) => Scaffold(
-              body: Text('PaymentPage:${state.pathParameters['id']}'),
-            ),
-          ),
-          GoRoute(
-            path: '/friends/:id',
-            builder: (context, state) => Scaffold(
-              body: Text('FriendPage:${state.pathParameters['id']}'),
-            ),
-          ),
-        ],
-      );
+        );
+        await tester.pumpAndSettle();
 
-      await tester.pumpWidget(
-        createRouterApp(
+        // Find coral dot containers (width 8, height 8)
+        final dotFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.constraints?.maxWidth == 8 &&
+              widget.constraints?.maxHeight == 8,
+        );
+        expect(dotFinder, findsWidgets);
+
+        // Tap Mark all read
+        await tester.tap(find.text(DashboardActivityStrings.markAllRead));
+        await tester.pumpAndSettle();
+
+        // Coral dots should be gone
+        expect(dotFinder, findsNothing);
+      },
+    );
+
+    testWidgets(
+      'tapping notification marks it read and navigates to its route',
+      (WidgetTester tester) async {
+        setSurface(tester);
+        final store = NotificationsStore();
+        final fixedClock = DateTime(2026, 10, 30, 10, 30);
+
+        final router = GoRouter(
           initialLocation: '/home/notifications',
-          notificationsStore: store,
-          customRouter: router,
-        ),
-      );
-      await tester.pumpAndSettle();
+          routes: [
+            GoRoute(
+              path: '/home/notifications',
+              builder: (context, state) =>
+                  NotificationsScreen(clock: () => fixedClock),
+            ),
+            GoRoute(
+              path: '/projects/:id',
+              builder: (context, state) => Scaffold(
+                body: Text('ProjectPage:${state.pathParameters['id']}'),
+              ),
+            ),
+            GoRoute(
+              path: '/payments/:id',
+              builder: (context, state) => Scaffold(
+                body: Text('PaymentPage:${state.pathParameters['id']}'),
+              ),
+            ),
+            GoRoute(
+              path: '/friends/:id',
+              builder: (context, state) => Scaffold(
+                body: Text('FriendPage:${state.pathParameters['id']}'),
+              ),
+            ),
+          ],
+        );
 
-      // Find first notification card and tap it
-      final firstNotif = find.byType(DashCard).first;
-      await tester.tap(firstNotif);
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          createRouterApp(
+            initialLocation: '/home/notifications',
+            notificationsStore: store,
+            customRouter: router,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      // Navigated away from notifications screen
-      expect(find.byType(NotificationsScreen), findsNothing);
-      expect(store.readIds.isNotEmpty, true);
-    });
+        // Find first notification card and tap it
+        final firstNotif = find.byType(DashCard).first;
+        await tester.tap(firstNotif);
+        await tester.pumpAndSettle();
+
+        // Navigated away from notifications screen
+        expect(find.byType(NotificationsScreen), findsNothing);
+        expect(store.readIds.isNotEmpty, true);
+      },
+    );
 
     testWidgets('settings notification switch toggles dynamic filtering', (
       WidgetTester tester,
@@ -554,9 +571,7 @@ void main() {
     testWidgets('no overflow on 360x800 surface', (WidgetTester tester) async {
       setSurface(tester, size: const Size(360, 800));
       await tester.pumpWidget(
-        createTestApp(
-          child: NotificationsScreen(clock: () => seedClock),
-        ),
+        createTestApp(child: NotificationsScreen(clock: () => seedClock)),
       );
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
@@ -571,8 +586,14 @@ void main() {
       final projectsRepo = ProjectsRepository();
       final expensesRepo = ExpensesRepository();
 
-      final profit = netProfit(projectsRepo.payments, expensesRepo.expenses); // 573,800 DZ
-      final margin = profitMargin(projectsRepo.payments, expensesRepo.expenses); // ~86%
+      final profit = netProfit(
+        projectsRepo.payments,
+        expensesRepo.expenses,
+      ); // 573,800 DZ
+      final margin = profitMargin(
+        projectsRepo.payments,
+        expensesRepo.expenses,
+      ); // ~86%
 
       await tester.pumpWidget(
         createTestApp(
@@ -584,7 +605,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text(DashboardActivityStrings.profit), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.netProfitAllTime), findsOneWidget);
+      expect(
+        find.text(DashboardActivityStrings.netProfitAllTime),
+        findsOneWidget,
+      );
       expect(find.text(formatMoney(profit)), findsOneWidget);
       expect(find.textContaining('${margin.round()}%'), findsOneWidget);
 
@@ -593,11 +617,21 @@ void main() {
       expect(find.text(DashboardActivityStrings.expenses), findsOneWidget);
 
       // Check top sections
-      expect(find.text(DashboardActivityStrings.topEarningProjects), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.whereTheMoneyGoes), findsOneWidget);
+      expect(
+        find.text(DashboardActivityStrings.topEarningProjects),
+        findsOneWidget,
+      );
+      expect(
+        find.text(DashboardActivityStrings.whereTheMoneyGoes),
+        findsOneWidget,
+      );
 
       // Check top 3 projects by paid
-      final topProj = topProjectsByPaid(projectsRepo.projects, projectsRepo.payments, limit: 3);
+      final topProj = topProjectsByPaid(
+        projectsRepo.projects,
+        projectsRepo.payments,
+        limit: 3,
+      );
       for (final p in topProj) {
         expect(find.text(p.project.name), findsOneWidget);
         expect(find.text(formatMoney(p.paid)), findsOneWidget);
@@ -611,27 +645,34 @@ void main() {
       }
     });
 
-    testWidgets('empty state displays friendly lines and 0% margin when empty', (
-      WidgetTester tester,
-    ) async {
-      setSurface(tester);
-      final projectsRepo = ProjectsRepository()..clearAll();
-      final expensesRepo = ExpensesRepository()..clearAll();
+    testWidgets(
+      'empty state displays friendly lines and 0% margin when empty',
+      (WidgetTester tester) async {
+        setSurface(tester);
+        final projectsRepo = ProjectsRepository()..clearAll();
+        final expensesRepo = ExpensesRepository()..clearAll();
 
-      await tester.pumpWidget(
-        createTestApp(
-          projectsRepo: projectsRepo,
-          expensesRepo: expensesRepo,
-          child: const ProfitScreen(),
-        ),
-      );
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          createTestApp(
+            projectsRepo: projectsRepo,
+            expensesRepo: expensesRepo,
+            child: const ProfitScreen(),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text(formatMoney(0)), findsWidgets);
-      expect(find.textContaining('0%'), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.noProjectsYet), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.noExpensesYet), findsOneWidget);
-    });
+        expect(find.text(formatMoney(0)), findsWidgets);
+        expect(find.textContaining('0%'), findsOneWidget);
+        expect(
+          find.text(DashboardActivityStrings.noProjectsYet),
+          findsOneWidget,
+        );
+        expect(
+          find.text(DashboardActivityStrings.noExpensesYet),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets('back button navigates back', (WidgetTester tester) async {
       setSurface(tester);
@@ -640,7 +681,8 @@ void main() {
         routes: [
           GoRoute(
             path: '/home',
-            builder: (context, state) => const Scaffold(body: Text('HomeScreenTarget')),
+            builder: (context, state) =>
+                const Scaffold(body: Text('HomeScreenTarget')),
           ),
           GoRoute(
             path: '/profit',
@@ -650,10 +692,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createRouterApp(
-          initialLocation: '/home',
-          customRouter: router,
-        ),
+        createRouterApp(initialLocation: '/home', customRouter: router),
       );
       await tester.pumpAndSettle();
 
@@ -669,9 +708,7 @@ void main() {
     testWidgets('no overflow on 360x800 surface', (WidgetTester tester) async {
       setSurface(tester, size: const Size(360, 800));
       await tester.pumpWidget(
-        createTestApp(
-          child: ProfitScreen(clock: () => seedClock),
-        ),
+        createTestApp(child: ProfitScreen(clock: () => seedClock)),
       );
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);

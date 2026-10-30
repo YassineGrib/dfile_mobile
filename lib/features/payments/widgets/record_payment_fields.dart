@@ -146,9 +146,7 @@ class RecordPaymentBottomBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.card,
-        border: Border(
-          top: BorderSide(color: AppColors.line, width: 1),
-        ),
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
       ),
       padding: EdgeInsets.only(bottom: bottomInset),
       child: SafeArea(
@@ -161,10 +159,7 @@ class RecordPaymentBottomBar extends StatelessWidget {
             AppSpacing.lg,
           ),
           child: secondaryLabel == null
-              ? PrimaryButton(
-                  label: primaryLabel,
-                  onPressed: onPrimaryPressed,
-                )
+              ? PrimaryButton(label: primaryLabel, onPressed: onPrimaryPressed)
               : Row(
                   children: [
                     Expanded(

@@ -74,38 +74,41 @@ void main() {
       expect(m5.completed, false);
     });
 
-    test('addMilestone, toggleMilestone, and deleteMilestone notify listeners', () {
-      final CalendarRepository repo = CalendarRepository();
-      int notifyCount = 0;
-      repo.addListener(() => notifyCount++);
+    test(
+      'addMilestone, toggleMilestone, and deleteMilestone notify listeners',
+      () {
+        final CalendarRepository repo = CalendarRepository();
+        int notifyCount = 0;
+        repo.addListener(() => notifyCount++);
 
-      // addMilestone
-      final Milestone added = repo.addMilestone(
-        Milestone(
-          id: '',
-          projectId: 'p1',
-          title: 'QA Sign-off',
-          date: DateTime(2026, 11, 5),
-          completed: false,
-          createdAt: DateTime(2026, 10, 30),
-        ),
-      );
-      expect(added.id.isNotEmpty, true);
-      expect(repo.milestones.length, 6);
-      expect(notifyCount, 1);
+        // addMilestone
+        final Milestone added = repo.addMilestone(
+          Milestone(
+            id: '',
+            projectId: 'p1',
+            title: 'QA Sign-off',
+            date: DateTime(2026, 11, 5),
+            completed: false,
+            createdAt: DateTime(2026, 10, 30),
+          ),
+        );
+        expect(added.id.isNotEmpty, true);
+        expect(repo.milestones.length, 6);
+        expect(notifyCount, 1);
 
-      // toggleMilestone
-      final bool toggled = repo.toggleMilestone(added.id);
-      expect(toggled, true);
-      expect(repo.milestoneById(added.id)!.completed, true);
-      expect(notifyCount, 2);
+        // toggleMilestone
+        final bool toggled = repo.toggleMilestone(added.id);
+        expect(toggled, true);
+        expect(repo.milestoneById(added.id)!.completed, true);
+        expect(notifyCount, 2);
 
-      // deleteMilestone
-      final bool deleted = repo.deleteMilestone(added.id);
-      expect(deleted, true);
-      expect(repo.milestones.length, 5);
-      expect(notifyCount, 3);
-    });
+        // deleteMilestone
+        final bool deleted = repo.deleteMilestone(added.id);
+        expect(deleted, true);
+        expect(repo.milestones.length, 5);
+        expect(notifyCount, 3);
+      },
+    );
 
     test('milestonesOf returns filtered unmodifiable milestones', () {
       final CalendarRepository repo = CalendarRepository();
@@ -118,33 +121,36 @@ void main() {
       expect(p1Milestones.every((Milestone m) => m.projectId == 'p1'), true);
     });
 
-    test('sync preferences and markSynced work and clearAll resets everything', () {
-      final CalendarRepository repo = CalendarRepository();
-      int notifyCount = 0;
-      repo.addListener(() => notifyCount++);
+    test(
+      'sync preferences and markSynced work and clearAll resets everything',
+      () {
+        final CalendarRepository repo = CalendarRepository();
+        int notifyCount = 0;
+        repo.addListener(() => notifyCount++);
 
-      expect(repo.syncDeadlines, true);
-      expect(repo.syncMilestones, true);
-      expect(repo.syncDebts, false);
-      expect(repo.lastSynced, null);
+        expect(repo.syncDeadlines, true);
+        expect(repo.syncMilestones, true);
+        expect(repo.syncDebts, false);
+        expect(repo.lastSynced, null);
 
-      final DateTime syncTime = DateTime(2026, 10, 30, 14, 30);
-      repo.markSynced(syncTime);
-      expect(repo.lastSynced, syncTime);
-      expect(notifyCount, 1);
+        final DateTime syncTime = DateTime(2026, 10, 30, 14, 30);
+        repo.markSynced(syncTime);
+        expect(repo.lastSynced, syncTime);
+        expect(notifyCount, 1);
 
-      repo.syncDebts = true;
-      expect(repo.syncDebts, true);
-      expect(notifyCount, 2);
+        repo.syncDebts = true;
+        expect(repo.syncDebts, true);
+        expect(notifyCount, 2);
 
-      repo.clearAll();
-      expect(repo.milestones.isEmpty, true);
-      expect(repo.lastSynced, null);
-      expect(repo.syncDeadlines, true);
-      expect(repo.syncMilestones, true);
-      expect(repo.syncDebts, false);
-      expect(notifyCount, 3);
-    });
+        repo.clearAll();
+        expect(repo.milestones.isEmpty, true);
+        expect(repo.lastSynced, null);
+        expect(repo.syncDeadlines, true);
+        expect(repo.syncMilestones, true);
+        expect(repo.syncDebts, false);
+        expect(notifyCount, 3);
+      },
+    );
   });
 
   group('calendarEvents pure function with seeds (now = 2026-10-30)', () {
@@ -170,7 +176,8 @@ void main() {
       // Fintask Landing Page: 2026-08-30 -> 61d overdue
       final CalendarEvent fintaskDeadline = events.firstWhere(
         (CalendarEvent e) =>
-            e.kind == CalendarEventKind.over && e.title == 'Fintask Landing Page',
+            e.kind == CalendarEventKind.over &&
+            e.title == 'Fintask Landing Page',
       );
       expect(fintaskDeadline.pillText, '61d overdue');
       expect(fintaskDeadline.date, DateTime(2026, 8, 30));
@@ -186,8 +193,7 @@ void main() {
       // Dashboard Redesign: 2026-10-25 -> 5d overdue
       final CalendarEvent dashboardDeadline = events.firstWhere(
         (CalendarEvent e) =>
-            e.kind == CalendarEventKind.over &&
-            e.title == 'Dashboard Redesign',
+            e.kind == CalendarEventKind.over && e.title == 'Dashboard Redesign',
       );
       expect(dashboardDeadline.pillText, '5d overdue');
       expect(dashboardDeadline.date, DateTime(2026, 10, 25));
@@ -278,7 +284,9 @@ void main() {
           .toList();
       expect(starts.length, 5);
       expect(
-        starts.any((CalendarEvent e) => e.title == 'Fintask Landing Page starts'),
+        starts.any(
+          (CalendarEvent e) => e.title == 'Fintask Landing Page starts',
+        ),
         true,
       );
     });
@@ -297,7 +305,9 @@ void main() {
       );
 
       expect(
-        eventsWithoutDebts.any((CalendarEvent e) => e.kind == CalendarEventKind.debt),
+        eventsWithoutDebts.any(
+          (CalendarEvent e) => e.kind == CalendarEventKind.debt,
+        ),
         false,
       );
     });
@@ -325,8 +335,11 @@ void main() {
     });
 
     test('dotsForMonth for October 2026', () {
-      final Map<int, List<CalendarEventKind>> octDots =
-          dotsForMonth(events, 2026, 10);
+      final Map<int, List<CalendarEventKind>> octDots = dotsForMonth(
+        events,
+        2026,
+        10,
+      );
 
       // October 15: Moodboard sign-off (done)
       expect(octDots[15], contains(CalendarEventKind.done));
@@ -347,8 +360,11 @@ void main() {
     });
 
     test('dotsForMonth for November 2026', () {
-      final Map<int, List<CalendarEventKind>> novDots =
-          dotsForMonth(events, 2026, 11);
+      final Map<int, List<CalendarEventKind>> novDots = dotsForMonth(
+        events,
+        2026,
+        11,
+      );
 
       // November 2: Beta handoff (milestone) + Karim debt (debt)
       expect(novDots[2], contains(CalendarEventKind.milestone));
@@ -365,13 +381,17 @@ void main() {
     });
 
     test('eventsOnDay returns events occurring on specified day', () {
-      final List<CalendarEvent> oct30Events =
-          eventsOnDay(events, DateTime(2026, 10, 30));
+      final List<CalendarEvent> oct30Events = eventsOnDay(
+        events,
+        DateTime(2026, 10, 30),
+      );
       expect(oct30Events.length, 1);
       expect(oct30Events.first.title, 'Send invoice draft');
 
-      final List<CalendarEvent> nov2Events =
-          eventsOnDay(events, DateTime(2026, 11, 2));
+      final List<CalendarEvent> nov2Events = eventsOnDay(
+        events,
+        DateTime(2026, 11, 2),
+      );
       expect(nov2Events.length, 2);
       expect(
         nov2Events.map((CalendarEvent e) => e.kind),
@@ -457,42 +477,45 @@ void main() {
       );
     });
 
-    test('agendaGroups groups correctly into overdue, today, thisWeek, later', () {
-      final AgendaGroups groups = agendaGroups(events, now);
+    test(
+      'agendaGroups groups correctly into overdue, today, thisWeek, later',
+      () {
+        final AgendaGroups groups = agendaGroups(events, now);
 
-      // Overdue: Fintask, Brand Identity, Dashboard Redesign deadlines
-      expect(groups.overdue.length, 3);
-      expect(
-        groups.overdue.map((CalendarEvent e) => e.title),
-        containsAll([
-          'Fintask Landing Page',
-          'Brand Identity',
-          'Dashboard Redesign',
-        ]),
-      );
+        // Overdue: Fintask, Brand Identity, Dashboard Redesign deadlines
+        expect(groups.overdue.length, 3);
+        expect(
+          groups.overdue.map((CalendarEvent e) => e.title),
+          containsAll([
+            'Fintask Landing Page',
+            'Brand Identity',
+            'Dashboard Redesign',
+          ]),
+        );
 
-      // Today: Send invoice draft milestone
-      expect(groups.today.length, 1);
-      expect(groups.today.first.title, 'Send invoice draft');
+        // Today: Send invoice draft milestone
+        expect(groups.today.length, 1);
+        expect(groups.today.first.title, 'Send invoice draft');
 
-      // This week (next 7 days, up to Nov 6): Beta handoff (Nov 2) & Karim debt (Nov 2)
-      expect(groups.thisWeek.length, 2);
-      expect(
-        groups.thisWeek.map((CalendarEvent e) => e.title),
-        containsAll(['Beta handoff', 'Karim Boualam owes you']),
-      );
+        // This week (next 7 days, up to Nov 6): Beta handoff (Nov 2) & Karim debt (Nov 2)
+        expect(groups.thisWeek.length, 2);
+        expect(
+          groups.thisWeek.map((CalendarEvent e) => e.title),
+          containsAll(['Beta handoff', 'Karim Boualam owes you']),
+        );
 
-      // Later (up to 90 days): Amine debt (Nov 10), Final delivery review (Nov 12), Yacine debt (Nov 20)
-      expect(groups.later.length, 3);
-      expect(
-        groups.later.map((CalendarEvent e) => e.title),
-        containsAll([
-          'You owe Amine Saidi',
-          'Final delivery review',
-          'Yacine Mebarki owes you',
-        ]),
-      );
-    });
+        // Later (up to 90 days): Amine debt (Nov 10), Final delivery review (Nov 12), Yacine debt (Nov 20)
+        expect(groups.later.length, 3);
+        expect(
+          groups.later.map((CalendarEvent e) => e.title),
+          containsAll([
+            'You owe Amine Saidi',
+            'Final delivery review',
+            'Yacine Mebarki owes you',
+          ]),
+        );
+      },
+    );
 
     test('timelineWindow spans 4 months starting 2 months before now', () {
       final TimelineWindow window = timelineWindow(now);
@@ -508,8 +531,10 @@ void main() {
       expect(dayOffsetFraction(window, DateTime(2026, 8, 1)), 0.0);
       expect(dayOffsetFraction(window, DateTime(2026, 12, 1)), 1.0);
 
-      final double oct30Fraction =
-          dayOffsetFraction(window, DateTime(2026, 10, 30));
+      final double oct30Fraction = dayOffsetFraction(
+        window,
+        DateTime(2026, 10, 30),
+      );
       expect(oct30Fraction > 0.5 && oct30Fraction < 1.0, true);
     });
 
@@ -527,133 +552,136 @@ void main() {
       expect(info.nextSlotLabel, 'Available now');
     });
 
-    test('capacityInfo with future project end dates detects next available slot', () {
-      final ProjectsRepository projectsRepo = ProjectsRepository(
-        initialProjects: [
-          ProjectItem(
-            id: 'p10',
-            name: 'New Platform',
-            category: 'Development',
-            clientId: 'c1',
-            price: 200000,
-            status: ProjectStatus.inProgress,
-            progress: 50,
-            startDate: DateTime(2026, 10, 1),
-            endDate: DateTime(2026, 11, 15),
-            createdAt: DateTime(2026, 10, 1),
-          ),
-        ],
-      );
+    test(
+      'capacityInfo with future project end dates detects next available slot',
+      () {
+        final ProjectsRepository projectsRepo = ProjectsRepository(
+          initialProjects: [
+            ProjectItem(
+              id: 'p10',
+              name: 'New Platform',
+              category: 'Development',
+              clientId: 'c1',
+              price: 200000,
+              status: ProjectStatus.inProgress,
+              progress: 50,
+              startDate: DateTime(2026, 10, 1),
+              endDate: DateTime(2026, 11, 15),
+              createdAt: DateTime(2026, 10, 1),
+            ),
+          ],
+        );
 
-      final CapacityInfo info = capacityInfo(projectsRepo.projects, now);
-      expect(info.activeCount, 1);
-      expect(info.level, CapacityLevel.light);
-      expect(info.nextAvailableDate, DateTime(2026, 11, 15));
-      expect(info.nextProject?.name, 'New Platform');
-      expect(info.nextSlotLabel, 'Nov 15, 2026');
-    });
+        final CapacityInfo info = capacityInfo(projectsRepo.projects, now);
+        expect(info.activeCount, 1);
+        expect(info.level, CapacityLevel.light);
+        expect(info.nextAvailableDate, DateTime(2026, 11, 15));
+        expect(info.nextProject?.name, 'New Platform');
+        expect(info.nextSlotLabel, 'Nov 15, 2026');
+      },
+    );
   });
 
   group('Shared Calendar Widgets Tests', () {
-    testWidgets('CalendarEventCard renders all fields, greys done title, and handles tap', (
-      WidgetTester tester,
-    ) async {
-      bool tapped = false;
-      final CalendarEvent activeEvent = CalendarEvent(
-        kind: CalendarEventKind.due,
-        title: 'Send invoice draft',
-        subtitle: 'Fintask Landing Page',
-        date: DateTime(2026, 10, 30),
-        pillText: 'Today',
-      );
+    testWidgets(
+      'CalendarEventCard renders all fields, greys done title, and handles tap',
+      (WidgetTester tester) async {
+        bool tapped = false;
+        final CalendarEvent activeEvent = CalendarEvent(
+          kind: CalendarEventKind.due,
+          title: 'Send invoice draft',
+          subtitle: 'Fintask Landing Page',
+          date: DateTime(2026, 10, 30),
+          pillText: 'Today',
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: CalendarEventCard(
-              event: activeEvent,
-              onTap: () => tapped = true,
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: CalendarEventCard(
+                event: activeEvent,
+                onTap: () => tapped = true,
+              ),
             ),
           ),
-        ),
-      );
-      await pumpBounded(tester);
+        );
+        await pumpBounded(tester);
 
-      expect(find.text('Send invoice draft'), findsOneWidget);
-      expect(find.text('Fintask Landing Page'), findsOneWidget);
-      expect(find.text('Today'), findsOneWidget);
-      expect(find.byIcon(AppIcons.calendarClock), findsOneWidget);
+        expect(find.text('Send invoice draft'), findsOneWidget);
+        expect(find.text('Fintask Landing Page'), findsOneWidget);
+        expect(find.text('Today'), findsOneWidget);
+        expect(find.byIcon(AppIcons.calendarClock), findsOneWidget);
 
-      await tester.tap(find.byType(CalendarEventCard));
-      await pumpBounded(tester);
-      expect(tapped, true);
+        await tester.tap(find.byType(CalendarEventCard));
+        await pumpBounded(tester);
+        expect(tapped, true);
 
-      // Verify done event greys title
-      final CalendarEvent doneEvent = CalendarEvent(
-        kind: CalendarEventKind.done,
-        title: 'Moodboard sign-off',
-        subtitle: 'Brand Identity',
-        date: DateTime(2026, 10, 15),
-        pillText: 'Done',
-      );
+        // Verify done event greys title
+        final CalendarEvent doneEvent = CalendarEvent(
+          kind: CalendarEventKind.done,
+          title: 'Moodboard sign-off',
+          subtitle: 'Brand Identity',
+          date: DateTime(2026, 10, 15),
+          pillText: 'Done',
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: CalendarEventCard(
-              event: doneEvent,
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(body: CalendarEventCard(event: doneEvent)),
+          ),
+        );
+        await pumpBounded(tester);
+
+        final Text titleText = tester.widget<Text>(
+          find.text('Moodboard sign-off'),
+        );
+        expect(titleText.style?.color, AppColors.mute);
+      },
+    );
+
+    testWidgets(
+      'CalendarSegmented renders 3 equal segments and fires onChanged',
+      (WidgetTester tester) async {
+        CalendarTab selected = CalendarTab.month;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return CalendarSegmented(
+                    selectedTab: selected,
+                    onChanged: (CalendarTab tab) {
+                      setState(() {
+                        selected = tab;
+                      });
+                    },
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      );
-      await pumpBounded(tester);
+        );
+        await pumpBounded(tester);
 
-      final Text titleText = tester.widget<Text>(find.text('Moodboard sign-off'));
-      expect(titleText.style?.color, AppColors.mute);
-    });
+        expect(find.text('Month'), findsOneWidget);
+        expect(find.text('Agenda'), findsOneWidget);
+        expect(find.text('Timeline'), findsOneWidget);
 
-    testWidgets('CalendarSegmented renders 3 equal segments and fires onChanged', (
-      WidgetTester tester,
-    ) async {
-      CalendarTab selected = CalendarTab.month;
+        // Tap Agenda
+        await tester.tap(find.text('Agenda'));
+        await pumpBounded(tester);
+        expect(selected, CalendarTab.agenda);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return CalendarSegmented(
-                  selectedTab: selected,
-                  onChanged: (CalendarTab tab) {
-                    setState(() {
-                      selected = tab;
-                    });
-                  },
-                );
-              },
-            ),
-          ),
-        ),
-      );
-      await pumpBounded(tester);
-
-      expect(find.text('Month'), findsOneWidget);
-      expect(find.text('Agenda'), findsOneWidget);
-      expect(find.text('Timeline'), findsOneWidget);
-
-      // Tap Agenda
-      await tester.tap(find.text('Agenda'));
-      await pumpBounded(tester);
-      expect(selected, CalendarTab.agenda);
-
-      // Tap Timeline
-      await tester.tap(find.text('Timeline'));
-      await pumpBounded(tester);
-      expect(selected, CalendarTab.timeline);
-    });
+        // Tap Timeline
+        await tester.tap(find.text('Timeline'));
+        await pumpBounded(tester);
+        expect(selected, CalendarTab.timeline);
+      },
+    );
   });
 
   group('Route Placeholders and More Screen Navigation on 390x844 Surface', () {
@@ -661,7 +689,9 @@ void main() {
       WidgetTester tester,
     ) async {
       setTestSurface(tester);
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.morePath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.morePath,
+      );
       await tester.pumpWidget(DfileApp(router: router));
       await pumpBounded(tester);
 
@@ -714,7 +744,9 @@ void main() {
       WidgetTester tester,
     ) async {
       setTestSurface(tester);
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.morePath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.morePath,
+      );
       await tester.pumpWidget(DfileApp(router: router));
       await pumpBounded(tester);
 
@@ -731,11 +763,14 @@ void main() {
   });
 
   group('String classes presence check', () {
-    test('all 4 strings classes exist and can be instantiated or referenced', () {
-      expect(CalendarStrings.calendar, 'Calendar');
-      expect(CalendarMonthStrings, isNotNull);
-      expect(CalendarViewsStrings, isNotNull);
-      expect(CalendarFormsStrings, isNotNull);
-    });
+    test(
+      'all 4 strings classes exist and can be instantiated or referenced',
+      () {
+        expect(CalendarStrings.calendar, 'Calendar');
+        expect(CalendarMonthStrings, isNotNull);
+        expect(CalendarViewsStrings, isNotNull);
+        expect(CalendarFormsStrings, isNotNull);
+      },
+    );
   });
 }

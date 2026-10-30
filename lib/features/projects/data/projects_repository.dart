@@ -229,8 +229,8 @@ class ProjectsRepository extends ChangeNotifier {
     final String resolvedClientId = (clientId != null && clientId.isNotEmpty)
         ? clientId
         : (payment.clientId.isNotEmpty
-            ? payment.clientId
-            : (_ownerClientForProjectId(payment.projectId) ?? ''));
+              ? payment.clientId
+              : (_ownerClientForProjectId(payment.projectId) ?? ''));
     final ProjectPayment normalized = payment.copyWith(
       clientId: resolvedClientId,
       type: type ?? payment.type,
@@ -306,9 +306,11 @@ class ProjectsRepository extends ChangeNotifier {
 
     final DateTime effectiveNow = now ?? DateTime.now();
     final double thisMonth = _payments
-        .where((ProjectPayment p) =>
-            p.date.year == effectiveNow.year &&
-            p.date.month == effectiveNow.month)
+        .where(
+          (ProjectPayment p) =>
+              p.date.year == effectiveNow.year &&
+              p.date.month == effectiveNow.month,
+        )
         .fold<double>(0.0, (double sum, ProjectPayment p) => sum + p.amount);
 
     final double totalPortfolioPrices = _projects.fold<double>(

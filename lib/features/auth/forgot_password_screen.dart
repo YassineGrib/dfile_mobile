@@ -5,6 +5,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import 'auth_strings.dart';
+import 'data/auth_service.dart';
 
 /// Screen 7: Forgot password screen.
 ///
@@ -20,6 +21,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   String? _emailError;
+  bool _busy = false;
+  bool _sent = false;
 
   @override
   void dispose() {
@@ -27,7 +30,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  void _onSendCode() {
+  Future<void> _onSendCode() async {
     final String email = _emailController.text.trim();
 
     bool isValid = true;
@@ -43,9 +46,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     setState(() {});
 
-    if (isValid) {
-      context.push(AppRoutes.verifyCodePath, extra: email);
-    }
+    if (!isValid || _busy) return;
+    setState(() => _busy = true);
+    final AuthResult result = await AuthScope.of(context)
+        .sendPasswordReset(email);
+    if (!mounted) return;
+    setState(() {
+      _busy = false;
+      _sent = result.isOk;
+    });
+    if (!result.isOk) showAppToast(context, result.error!);
   }
 
   void _onBack() {
@@ -80,10 +90,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           onPressed: _onBack,
                         ),
                         const SizedBox(height: AppSpacing.lg),
-                        const MascotPanel(
-                          color: AppColors.orange,
-                          height: 210,
-                        ),
+                        const MascotPanel(color: AppColors.orange, height: 210),
                         const SizedBox(height: AppSpacing.xxl),
                         Text(
                           AuthStrings.forgotPasswordTitle,
@@ -108,9 +115,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           },
                         ),
                         const SizedBox(height: AppSpacing.xxl),
+                        if (_sent) ...[
+                          Text(
+                            AuthStrings.resetLinkSent(
+                              _emailController.text.trim(),
+                            ),
+                            style: AppText.body.copyWith(color: AppColors.mute),
+                          ),
+                          const SizedBox(height: AppSpacing.lg),
+                        ],
                         PrimaryButton(
-                          label: AuthStrings.sendCode,
-                          onPressed: _onSendCode,
+                          label: _sent
+                              ? AuthStrings.backToSignIn
+                              : AuthStrings.sendResetLink,
+                          onPressed: _busy
+                              ? null
+                              : (_sent ? _onBack : _onSendCode),
                         ),
                         const Spacer(),
                         const SizedBox(height: AppSpacing.xxl),

@@ -13,10 +13,7 @@ import 'widgets/expense_detail_widgets.dart';
 
 /// Screen displaying expense details and actions per `docs/design/SPEC.md` (EX5..EX8).
 class ExpenseDetailScreen extends StatelessWidget {
-  const ExpenseDetailScreen({
-    super.key,
-    required this.expenseId,
-  });
+  const ExpenseDetailScreen({super.key, required this.expenseId});
 
   final String expenseId;
 
@@ -178,9 +175,7 @@ class ExpenseDetailScreen extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           ExpenseDetailStrings.deleteExpenseSubtitle,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.red,
-                          ),
+                          style: AppText.caption.copyWith(color: AppColors.red),
                         ),
                       ],
                     ),
@@ -327,17 +322,11 @@ class ExpenseDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow({
-    required String label,
-    required Widget value,
-  }) {
+  Widget _buildDetailRow({required String label, required Widget value}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          label,
-          style: AppText.bodyMedium.copyWith(color: AppColors.mute),
-        ),
+        Text(label, style: AppText.bodyMedium.copyWith(color: AppColors.mute)),
         const Spacer(),
         Flexible(child: value),
       ],
@@ -370,10 +359,7 @@ class ExpenseDetailScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.card,
         border: Border(
-          top: BorderSide(
-            color: AppColors.line,
-            width: AppSpacing.borderWidth,
-          ),
+          top: BorderSide(color: AppColors.line, width: AppSpacing.borderWidth),
         ),
       ),
       padding: EdgeInsets.only(bottom: bottomInset),
@@ -416,10 +402,7 @@ class ExpenseDetailScreen extends StatelessWidget {
           // Header: Category icon, description, category label
           Row(
             children: [
-              ExpenseDetailCategoryIcon(
-                category: expense.category,
-                size: 44,
-              ),
+              ExpenseDetailCategoryIcon(category: expense.category, size: 44),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
@@ -432,10 +415,7 @@ class ExpenseDetailScreen extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      expense.category.fullLabel,
-                      style: AppText.caption,
-                    ),
+                    Text(expense.category.fullLabel, style: AppText.caption),
                   ],
                 ),
               ),
@@ -559,7 +539,8 @@ class ExpenseDetailScreen extends StatelessWidget {
     final String projectName;
     if (expense.isProjectLinked) {
       final ProjectItem? project = projectsRepo.byId(expense.projectId!);
-      projectName = project?.name ??
+      projectName =
+          project?.name ??
           expense.projectId ??
           ExpenseDetailStrings.unknownProject;
     } else {
@@ -596,10 +577,7 @@ class ExpenseDetailScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppSpacing.xl),
-              _buildDetailCard(
-                expense: expense,
-                projectName: projectName,
-              ),
+              _buildDetailCard(expense: expense, projectName: projectName),
             ],
           ),
         ),

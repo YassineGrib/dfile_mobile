@@ -33,8 +33,7 @@ class _LegalClausesScreenState extends State<LegalClausesScreen> {
     super.didChangeDependencies();
     if (!_initialized) {
       _initialized = true;
-      final SettingsRepository repo =
-          SettingsScope.of(context, listen: false);
+      final SettingsRepository repo = SettingsScope.of(context, listen: false);
       _controller.text = repo.legalClauses;
       _characterCount = _controller.text.length;
     }
@@ -58,10 +57,7 @@ class _LegalClausesScreenState extends State<LegalClausesScreen> {
 
   void _handleSave(BuildContext context, SettingsRepository repo) {
     repo.setLegalClauses(_controller.text);
-    showAppToast(
-      context,
-      SettingsPrefsStrings.legalClausesUpdatedToast,
-    );
+    showAppToast(context, SettingsPrefsStrings.legalClausesUpdatedToast);
     if (context.canPop()) {
       context.pop();
     } else {
@@ -162,10 +158,7 @@ class _LegalClausesScreenState extends State<LegalClausesScreen> {
               decoration: const BoxDecoration(
                 color: AppColors.card,
                 border: Border(
-                  top: BorderSide(
-                    color: AppColors.line,
-                    width: 1,
-                  ),
+                  top: BorderSide(color: AppColors.line, width: 1),
                 ),
               ),
               child: SafeArea(

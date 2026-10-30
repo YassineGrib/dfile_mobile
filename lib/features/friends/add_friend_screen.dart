@@ -63,8 +63,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
 
   bool get _isNameValid => _nameController.text.trim().isNotEmpty;
 
-  bool get _showNameError =>
-      (_saveAttempted || _nameTouched) && !_isNameValid;
+  bool get _showNameError => (_saveAttempted || _nameTouched) && !_isNameValid;
 
   void _close() {
     if (context.canPop()) {
@@ -103,9 +102,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
     showAppToast(context, FriendFormsStrings.friendAddedToast);
     context.go(
       AppRoutes.friendsPath,
-      extra: <String, Object?>{
-        'toast': FriendFormsStrings.friendAddedToast,
-      },
+      extra: <String, Object?>{'toast': FriendFormsStrings.friendAddedToast},
     );
   }
 
@@ -117,10 +114,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                FriendFormsStrings.addFriendTitle,
-                style: AppText.title,
-              ),
+              Text(FriendFormsStrings.addFriendTitle, style: AppText.title),
               const SizedBox(height: 4),
               Text(
                 FriendFormsStrings.addFriendSubtitle,
@@ -159,10 +153,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
             },
           ),
         ),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _close,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _close),
       ],
     );
   }
@@ -200,8 +191,9 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
                 placeholder: FriendFormsStrings.friendNamePlaceholder,
                 controller: _nameController,
                 focusNode: _nameFocusNode,
-                errorText:
-                    _showNameError ? FriendFormsStrings.friendNameError : null,
+                errorText: _showNameError
+                    ? FriendFormsStrings.friendNameError
+                    : null,
               ),
               const SizedBox(height: AppSpacing.lg),
 

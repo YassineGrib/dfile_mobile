@@ -117,13 +117,17 @@ void main() {
       // Fintask Landing Page (p1, c1) -> 3 payments: 100k, 85k, 60k = 245,000 DZ
       final p1Payments = repo.paymentsOf('p1');
       expect(p1Payments.length, 3);
-      expect(
-        p1Payments.map((p) => p.reference).toList(),
-        <String>['TXN-928471', 'TXN-441872', 'CCP-5521'],
-      );
+      expect(p1Payments.map((p) => p.reference).toList(), <String>[
+        'TXN-928471',
+        'TXN-441872',
+        'CCP-5521',
+      ]);
       expect(p1Payments[0].type, PaymentType.advance);
       expect(p1Payments[0].method, PaymentMethod.baridimob);
-      expect(p1Payments[0].notes, 'Received after the first milestone delivery.');
+      expect(
+        p1Payments[0].notes,
+        'Received after the first milestone delivery.',
+      );
       expect(p1Payments[1].type, PaymentType.milestone);
       expect(p1Payments[1].method, PaymentMethod.baridimob);
       expect(p1Payments[2].type, PaymentType.milestone);
@@ -157,30 +161,33 @@ void main() {
       expect(repo.paymentsOf('p5'), isEmpty);
     });
 
-    test('paymentStats computes collected, outstanding, thisMonth, collectionRate', () {
-      final fixedNow = DateTime(2026, 10, 15);
-      final stats = repo.paymentStats(now: fixedNow);
+    test(
+      'paymentStats computes collected, outstanding, thisMonth, collectionRate',
+      () {
+        final fixedNow = DateTime(2026, 10, 15);
+        final stats = repo.paymentStats(now: fixedNow);
 
-      // Total collected = 665,000 DZ
-      expect(stats.collected, 665000.0);
+        // Total collected = 665,000 DZ
+        expect(stats.collected, 665000.0);
 
-      // Outstanding = non-cancelled (p1: 205k + p2: 120k + p3: 0 + p4: 0 + p5: 95k) = 420,000 DZ
-      expect(stats.outstanding, 420000.0);
+        // Outstanding = non-cancelled (p1: 205k + p2: 120k + p3: 0 + p4: 0 + p5: 95k) = 420,000 DZ
+        expect(stats.outstanding, 420000.0);
 
-      // Oct 2026: only pay4 (2026-10-12, 60,000 DZ)
-      expect(stats.thisMonth, 60000.0);
+        // Oct 2026: only pay4 (2026-10-12, 60,000 DZ)
+        expect(stats.thisMonth, 60000.0);
 
-      // Collection rate = min(100, round(665,000 / 1,085,000 * 100)) = 61%
-      expect(stats.collectionRate, 61);
+        // Collection rate = min(100, round(665,000 / 1,085,000 * 100)) = 61%
+        expect(stats.collectionRate, 61);
 
-      // May 2026 check: pay2 (May 18, 85k) + pay6 (May 20, 40k) = 125,000 DZ
-      final mayStats = repo.paymentStats(now: DateTime(2026, 5, 20));
-      expect(mayStats.thisMonth, 125000.0);
+        // May 2026 check: pay2 (May 18, 85k) + pay6 (May 20, 40k) = 125,000 DZ
+        final mayStats = repo.paymentStats(now: DateTime(2026, 5, 20));
+        expect(mayStats.thisMonth, 125000.0);
 
-      // Month with no payments: Jan 2026 -> 0
-      final janStats = repo.paymentStats(now: DateTime(2026, 1, 10));
-      expect(janStats.thisMonth, 0.0);
-    });
+        // Month with no payments: Jan 2026 -> 0
+        final janStats = repo.paymentStats(now: DateTime(2026, 1, 10));
+        expect(janStats.thisMonth, 0.0);
+      },
+    );
 
     test('paymentStats excludes cancelled projects from outstanding', () {
       final initialStats = repo.paymentStats(now: DateTime(2026, 10, 15));
@@ -296,62 +303,64 @@ void main() {
       return (clientsRepo, projectsRepo, router);
     }
 
-    testWidgets('MoreScreen renders PY1 title, subtitle, workspace card, 5 rows, and sign out', (
-      WidgetTester tester,
-    ) async {
-      await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
+    testWidgets(
+      'MoreScreen renders PY1 title, subtitle, workspace card, 5 rows, and sign out',
+      (WidgetTester tester) async {
+        await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
 
-      // Title & Subtitle
-      expect(find.text(MoreStrings.title), findsWidgets);
-      expect(find.text(MoreStrings.subtitle), findsOneWidget);
+        // Title & Subtitle
+        expect(find.text(MoreStrings.title), findsWidgets);
+        expect(find.text(MoreStrings.subtitle), findsOneWidget);
 
-      // Workspace card
-      expect(find.text(MoreStrings.workspaceTitle), findsOneWidget);
-      expect(find.text(MoreStrings.workspaceSubtitle), findsOneWidget);
+        // Workspace card
+        expect(find.text(MoreStrings.workspaceTitle), findsOneWidget);
+        expect(find.text(MoreStrings.workspaceSubtitle), findsOneWidget);
 
-      // Payments row shows exact "<collected> DZ collected"
-      expect(find.text(MoreStrings.paymentsTitle), findsOneWidget);
-      expect(find.text('665,000 DZ collected'), findsOneWidget);
+        // Payments row shows exact "<collected> DZ collected"
+        expect(find.text(MoreStrings.paymentsTitle), findsOneWidget);
+        expect(find.text('665,000 DZ collected'), findsOneWidget);
 
-      // Other menu rows
-      expect(find.text(MoreStrings.calendarTitle), findsOneWidget);
-      expect(find.text(MoreStrings.calendarSubtitle), findsOneWidget);
-      expect(find.text(MoreStrings.expensesTitle), findsOneWidget);
-      expect(find.text(MoreStrings.expensesSubtitle), findsOneWidget);
-      expect(find.text(MoreStrings.invoicesTitle), findsOneWidget);
-      expect(find.text(MoreStrings.invoicesSubtitle), findsOneWidget);
-      expect(find.text(MoreStrings.friendsDebtsTitle), findsOneWidget);
-      expect(find.text(MoreStrings.friendsDebtsSubtitle), findsOneWidget);
-      expect(find.text(MoreStrings.settingsTitle), findsOneWidget);
-      expect(find.text(MoreStrings.settingsSubtitle), findsOneWidget);
+        // Other menu rows
+        expect(find.text(MoreStrings.calendarTitle), findsOneWidget);
+        expect(find.text(MoreStrings.calendarSubtitle), findsOneWidget);
+        expect(find.text(MoreStrings.expensesTitle), findsOneWidget);
+        expect(find.text(MoreStrings.expensesSubtitle), findsOneWidget);
+        expect(find.text(MoreStrings.invoicesTitle), findsOneWidget);
+        expect(find.text(MoreStrings.invoicesSubtitle), findsOneWidget);
+        expect(find.text(MoreStrings.friendsDebtsTitle), findsOneWidget);
+        expect(find.text(MoreStrings.friendsDebtsSubtitle), findsOneWidget);
+        expect(find.text(MoreStrings.settingsTitle), findsOneWidget);
+        expect(find.text(MoreStrings.settingsSubtitle), findsOneWidget);
 
-      // Sign out button
-      expect(find.text(MoreStrings.signOut), findsOneWidget);
+        // Sign out button
+        expect(find.text(MoreStrings.signOut), findsOneWidget);
 
-      // AppTabBar is visible with More active
-      expect(find.byType(AppTabBar), findsOneWidget);
-    });
+        // AppTabBar is visible with More active
+        expect(find.byType(AppTabBar), findsOneWidget);
+      },
+    );
 
-    testWidgets('Tapping Payments row navigates to /payments placeholder and back', (
-      WidgetTester tester,
-    ) async {
-      await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
+    testWidgets(
+      'Tapping Payments row navigates to /payments placeholder and back',
+      (WidgetTester tester) async {
+        await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
 
-      // Tap Payments row
-      await tester.tap(find.text(MoreStrings.paymentsTitle));
-      await tester.pumpAndSettle();
+        // Tap Payments row
+        await tester.tap(find.text(MoreStrings.paymentsTitle));
+        await tester.pumpAndSettle();
 
-      // Placeholder screen is displayed
-      expect(find.byType(PaymentsListScreen), findsOneWidget);
-      expect(find.text('PaymentsListScreen'), findsOneWidget);
+        // Placeholder screen is displayed
+        expect(find.byType(PaymentsListScreen), findsOneWidget);
+        expect(find.text('PaymentsListScreen'), findsOneWidget);
 
-      // Tap back button
-      await tester.tap(find.byType(BackButton));
-      await tester.pumpAndSettle();
+        // Tap back button
+        await tester.tap(find.byType(BackButton));
+        await tester.pumpAndSettle();
 
-      // Back on MoreScreen
-      expect(find.byType(MoreScreen), findsOneWidget);
-    });
+        // Back on MoreScreen
+        expect(find.byType(MoreScreen), findsOneWidget);
+      },
+    );
 
     testWidgets('Tapping demo menu rows triggers Not available in demo toast', (
       WidgetTester tester,
@@ -366,7 +375,9 @@ void main() {
       expect(find.text(MoreStrings.notAvailableInDemo), findsNothing);
     });
 
-    testWidgets('Tapping Sign out navigates to /sign-in', (WidgetTester tester) async {
+    testWidgets('Tapping Sign out navigates to /sign-in', (
+      WidgetTester tester,
+    ) async {
       await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
 
       final Finder signOutFinder = find.text(MoreStrings.signOut);
@@ -378,54 +389,56 @@ void main() {
       expect(find.byType(SignInScreen), findsOneWidget);
     });
 
-    testWidgets('AppTabBar More tab navigates to /more from clients and projects screens', (
-      WidgetTester tester,
-    ) async {
-      await pumpPaymentsApp(tester, initialLocation: AppRoutes.clientsPath);
+    testWidgets(
+      'AppTabBar More tab navigates to /more from clients and projects screens',
+      (WidgetTester tester) async {
+        await pumpPaymentsApp(tester, initialLocation: AppRoutes.clientsPath);
 
-      expect(find.byType(ClientsListScreen), findsOneWidget);
+        expect(find.byType(ClientsListScreen), findsOneWidget);
 
-      // Tap More in AppTabBar
-      await tester.tap(
-        find.descendant(
-          of: find.byType(AppTabBar),
-          matching: find.text('More'),
-        ),
-      );
-      await tester.pumpAndSettle();
+        // Tap More in AppTabBar
+        await tester.tap(
+          find.descendant(
+            of: find.byType(AppTabBar),
+            matching: find.text('More'),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(MoreScreen), findsOneWidget);
+        expect(find.byType(MoreScreen), findsOneWidget);
 
-      // Switch to Clients tab
-      await tester.tap(
-        find.descendant(
-          of: find.byType(AppTabBar),
-          matching: find.text('Clients'),
-        ),
-      );
-      await tester.pumpAndSettle();
+        // Switch to Clients tab
+        await tester.tap(
+          find.descendant(
+            of: find.byType(AppTabBar),
+            matching: find.text('Clients'),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(ClientsListScreen), findsOneWidget);
-    });
+        expect(find.byType(ClientsListScreen), findsOneWidget);
+      },
+    );
 
-    testWidgets('Routes /payments/new and /payments/:id render their placeholder screens', (
-      WidgetTester tester,
-    ) async {
-      final (_, _, GoRouter router) = await pumpPaymentsApp(
-        tester,
-        initialLocation: '${AppRoutes.recordPaymentPath}?projectId=p1',
-      );
+    testWidgets(
+      'Routes /payments/new and /payments/:id render their placeholder screens',
+      (WidgetTester tester) async {
+        final (_, _, GoRouter router) = await pumpPaymentsApp(
+          tester,
+          initialLocation: '${AppRoutes.recordPaymentPath}?projectId=p1',
+        );
 
-      // Record payment placeholder
-      expect(find.byType(RecordPaymentScreen), findsOneWidget);
-      expect(find.text('RecordPaymentScreen'), findsOneWidget);
+        // Record payment placeholder
+        expect(find.byType(RecordPaymentScreen), findsOneWidget);
+        expect(find.text('RecordPaymentScreen'), findsOneWidget);
 
-      // Payment receipt placeholder
-      router.go('/payments/pay1');
-      await tester.pumpAndSettle();
+        // Payment receipt placeholder
+        router.go('/payments/pay1');
+        await tester.pumpAndSettle();
 
-      expect(find.byType(PaymentReceiptScreen), findsOneWidget);
-      expect(find.text('PaymentReceiptScreen'), findsOneWidget);
-    });
+        expect(find.byType(PaymentReceiptScreen), findsOneWidget);
+        expect(find.text('PaymentReceiptScreen'), findsOneWidget);
+      },
+    );
   });
 }

@@ -25,12 +25,7 @@ import 'widgets/calendar_timeline_view.dart';
 
 /// Main calendar screen per `docs/design/SPEC.md` (CL1-CL5).
 class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({
-    super.key,
-    this.tab,
-    this.date,
-    this.clock,
-  });
+  const CalendarScreen({super.key, this.tab, this.date, this.clock});
 
   final String? tab;
   final String? date;

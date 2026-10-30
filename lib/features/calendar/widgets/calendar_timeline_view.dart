@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,10 +27,7 @@ class CalendarMilestoneDot extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.white,
-        border: Border.all(
-          color: AppColors.green,
-          width: 3,
-        ),
+        border: Border.all(color: AppColors.green, width: 3),
       ),
     );
   }
@@ -251,8 +249,10 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           final double cardWidth = constraints.maxWidth;
-          final double barAreaWidth =
-              math.max(80.0, cardWidth - labelColumnWidth - 1.0);
+          final double barAreaWidth = math.max(
+            80.0,
+            cardWidth - labelColumnWidth - 1.0,
+          );
           final double todayFrac = dayOffsetFraction(window, effectiveNow);
           final double todayX = todayFrac * barAreaWidth;
 
@@ -273,98 +273,102 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
                           clipBehavior: Clip.none,
                           children: [
                             // Thin vertical month dividers
-                          for (int i = 1; i < window.months.length; i++) ...[
-                            Positioned(
-                              left: dayOffsetFraction(window, window.months[i]) *
-                                  barAreaWidth,
-                              top: 0,
-                              bottom: 0,
-                              width: 1,
-                              child: Container(color: AppColors.line),
-                            ),
-                          ],
-                          // Month Labels
-                          for (int i = 0; i < window.months.length; i++) ...[
-                            Builder(
-                              builder: (BuildContext context) {
-                                final double mStart = dayOffsetFraction(
+                            for (int i = 1; i < window.months.length; i++) ...[
+                              Positioned(
+                                left:
+                                    dayOffsetFraction(
                                       window,
                                       window.months[i],
                                     ) *
-                                    barAreaWidth;
-                                final double mEnd = i < window.months.length - 1
-                                    ? dayOffsetFraction(
-                                          window,
-                                          window.months[i + 1],
-                                        ) *
-                                        barAreaWidth
-                                    : barAreaWidth;
-                                final double mWidth = mEnd - mStart;
-                                return Positioned(
-                                  left: mStart,
-                                  width: mWidth,
-                                  top: 0,
-                                  bottom: 0,
-                                  child: Center(
-                                    child: Text(
-                                      _shortMonth(window.months[i]),
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.mute,
+                                    barAreaWidth,
+                                top: 0,
+                                bottom: 0,
+                                width: 1,
+                                child: Container(color: AppColors.line),
+                              ),
+                            ],
+                            // Month Labels
+                            for (int i = 0; i < window.months.length; i++) ...[
+                              Builder(
+                                builder: (BuildContext context) {
+                                  final double mStart =
+                                      dayOffsetFraction(
+                                        window,
+                                        window.months[i],
+                                      ) *
+                                      barAreaWidth;
+                                  final double mEnd =
+                                      i < window.months.length - 1
+                                      ? dayOffsetFraction(
+                                              window,
+                                              window.months[i + 1],
+                                            ) *
+                                            barAreaWidth
+                                      : barAreaWidth;
+                                  final double mWidth = mEnd - mStart;
+                                  return Positioned(
+                                    left: mStart,
+                                    width: mWidth,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: Center(
+                                      child: Text(
+                                        _shortMonth(window.months[i]),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.mute,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
+                            ],
+                            // Today line in header
+                            Positioned(
+                              left: todayX - 1,
+                              top: 20,
+                              bottom: 0,
+                              width: 2,
+                              child: const CalendarTodayLine(),
                             ),
-                          ],
-                          // Today line in header
-                          Positioned(
-                            left: todayX - 1,
-                            top: 20,
-                            bottom: 0,
-                            width: 2,
-                            child: const CalendarTodayLine(),
-                          ),
-                          // Small red Today flag
-                          Positioned(
-                            left: (todayX - 19).clamp(0.0, barAreaWidth - 38),
-                            top: 4,
-                            child: Container(
-                              key: const ValueKey('timeline_today_flag'),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.red,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text(
-                                CalendarViewsStrings.todayFlag,
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
+                            // Small red Today flag
+                            Positioned(
+                              left: (todayX - 19).clamp(0.0, barAreaWidth - 38),
+                              top: 4,
+                              child: Container(
+                                key: const ValueKey('timeline_today_flag'),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.red,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Text(
+                                  CalendarViewsStrings.todayFlag,
+                                  style: TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
               Container(height: 1, color: AppColors.line),
 
               // 2. Project Rows
-              for (int pIdx = 0;
-                  pIdx < displayedProjects.length;
-                  pIdx++) ...[
+              for (int pIdx = 0; pIdx < displayedProjects.length; pIdx++) ...[
                 Builder(
                   builder: (BuildContext context) {
                     final ProjectItem project = displayedProjects[pIdx];
@@ -390,24 +394,27 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
 
                     final bool liesOutside =
                         normalizedEnd.isBefore(window.startDate) ||
-                            startDay.isAfter(window.endDate);
-                    final bool startsBefore =
-                        startDay.isBefore(window.startDate);
+                        startDay.isAfter(window.endDate);
+                    final bool startsBefore = startDay.isBefore(
+                      window.startDate,
+                    );
 
-                    final DateTime clipStart =
-                        startsBefore ? window.startDate : startDay;
+                    final DateTime clipStart = startsBefore
+                        ? window.startDate
+                        : startDay;
                     final DateTime clipEnd =
                         normalizedEnd.isAfter(window.endDate)
-                            ? window.endDate
-                            : normalizedEnd;
+                        ? window.endDate
+                        : normalizedEnd;
 
-                    final double startFrac =
-                        dayOffsetFraction(window, clipStart);
+                    final double startFrac = dayOffsetFraction(
+                      window,
+                      clipStart,
+                    );
                     final double endFrac = dayOffsetFraction(window, clipEnd);
                     final double barLeft = startFrac * barAreaWidth;
                     final double barRight = endFrac * barAreaWidth;
-                    final double barWidth =
-                        math.max(16.0, barRight - barLeft);
+                    final double barWidth = math.max(16.0, barRight - barLeft);
 
                     // Milestones for this project inside the window
                     final List<Milestone> pMilestones = allMilestones
@@ -433,8 +440,7 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
@@ -470,77 +476,88 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
                                   child: Stack(
                                     clipBehavior: Clip.none,
                                     children: [
-                                    // Vertical month dividers
-                                    for (int i = 1;
+                                      // Vertical month dividers
+                                      for (
+                                        int i = 1;
                                         i < window.months.length;
-                                        i++) ...[
+                                        i++
+                                      ) ...[
+                                        Positioned(
+                                          left:
+                                              dayOffsetFraction(
+                                                window,
+                                                window.months[i],
+                                              ) *
+                                              barAreaWidth,
+                                          top: 0,
+                                          bottom: 0,
+                                          width: 1,
+                                          child: Container(
+                                            color: AppColors.line,
+                                          ),
+                                        ),
+                                      ],
+                                      // Project bar
+                                      if (!liesOutside) ...[
+                                        Positioned(
+                                          left: barLeft,
+                                          width: barWidth,
+                                          top: (rowHeight - 26) / 2,
+                                          height: 26,
+                                          child: CalendarProjectBar(
+                                            project: project,
+                                            startsBeforeWindow: startsBefore,
+                                          ),
+                                        ),
+                                      ],
+                                      // Milestone dots
+                                      for (final Milestone m
+                                          in pMilestones) ...[
+                                        Builder(
+                                          builder: (BuildContext context) {
+                                            final DateTime mDay = DateTime(
+                                              m.date.year,
+                                              m.date.month,
+                                              m.date.day,
+                                            );
+                                            if (mDay.isBefore(
+                                                  window.startDate,
+                                                ) ||
+                                                mDay.isAfter(window.endDate)) {
+                                              return const SizedBox.shrink();
+                                            }
+                                            final double mX =
+                                                dayOffsetFraction(
+                                                  window,
+                                                  mDay,
+                                                ) *
+                                                barAreaWidth;
+                                            return Positioned(
+                                              left: mX - 6,
+                                              top: (rowHeight - 12) / 2,
+                                              child: CalendarMilestoneDot(
+                                                milestoneId: m.id,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                      // Red Today line
                                       Positioned(
-                                        left: dayOffsetFraction(
-                                              window,
-                                              window.months[i],
-                                            ) *
-                                            barAreaWidth,
+                                        left: todayX - 1,
                                         top: 0,
                                         bottom: 0,
-                                        width: 1,
-                                        child: Container(color: AppColors.line),
+                                        width: 2,
+                                        child: const CalendarTodayLine(),
                                       ),
                                     ],
-                                    // Project bar
-                                    if (!liesOutside) ...[
-                                      Positioned(
-                                        left: barLeft,
-                                        width: barWidth,
-                                        top: (rowHeight - 26) / 2,
-                                        height: 26,
-                                        child: CalendarProjectBar(
-                                          project: project,
-                                          startsBeforeWindow: startsBefore,
-                                        ),
-                                      ),
-                                    ],
-                                    // Milestone dots
-                                    for (final Milestone m in pMilestones) ...[
-                                      Builder(
-                                        builder: (BuildContext context) {
-                                          final DateTime mDay = DateTime(
-                                            m.date.year,
-                                            m.date.month,
-                                            m.date.day,
-                                          );
-                                          if (mDay.isBefore(window.startDate) ||
-                                              mDay.isAfter(window.endDate)) {
-                                            return const SizedBox.shrink();
-                                          }
-                                          final double mX =
-                                              dayOffsetFraction(window, mDay) *
-                                                  barAreaWidth;
-                                          return Positioned(
-                                            left: mX - 6,
-                                            top: (rowHeight - 12) / 2,
-                                            child: CalendarMilestoneDot(
-                                              milestoneId: m.id,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                    // Red Today line
-                                    Positioned(
-                                      left: todayX - 1,
-                                      top: 0,
-                                      bottom: 0,
-                                      width: 2,
-                                      child: const CalendarTodayLine(),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     );
                   },
                 ),
@@ -588,19 +605,13 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.white,
-                  border: Border.all(
-                    color: AppColors.green,
-                    width: 2.5,
-                  ),
+                  border: Border.all(color: AppColors.green, width: 2.5),
                 ),
               ),
               const SizedBox(width: 6),
               const Text(
                 CalendarViewsStrings.legendMilestone,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.mute,
-                ),
+                style: TextStyle(fontSize: 12, color: AppColors.mute),
               ),
             ],
           ),
@@ -609,28 +620,19 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
     );
   }
 
-  Widget _buildLegendDot({
-    required Color color,
-    required String label,
-  }) {
+  Widget _buildLegendDot({required Color color, required String label}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppColors.mute,
-          ),
+          style: const TextStyle(fontSize: 12, color: AppColors.mute),
         ),
       ],
     );
@@ -715,20 +717,22 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
     final DateTime effectiveNow = widget.clock?.call() ?? widget.now;
 
     // Resolve repositories/scopes
-    final ProjectsScope? projectsScope =
-        context.dependOnInheritedWidgetOfExactType<ProjectsScope>();
-    final List<ProjectItem> allProjects = widget.projects ??
+    final ProjectsScope? projectsScope = context
+        .dependOnInheritedWidgetOfExactType<ProjectsScope>();
+    final List<ProjectItem> allProjects =
+        widget.projects ??
         projectsScope?.notifier?.projects ??
         const <ProjectItem>[];
 
-    final CalendarScope? calendarScope =
-        context.dependOnInheritedWidgetOfExactType<CalendarScope>();
-    final List<Milestone> allMilestones = widget.milestones ??
+    final CalendarScope? calendarScope = context
+        .dependOnInheritedWidgetOfExactType<CalendarScope>();
+    final List<Milestone> allMilestones =
+        widget.milestones ??
         calendarScope?.notifier?.milestones ??
         const <Milestone>[];
 
-    final ClientsScope? clientsScope =
-        context.dependOnInheritedWidgetOfExactType<ClientsScope>();
+    final ClientsScope? clientsScope = context
+        .dependOnInheritedWidgetOfExactType<ClientsScope>();
     final List<Client> clientsList =
         clientsScope?.notifier?.clients ?? const <Client>[];
     final Map<String, String> clientNames = <String, String>{
@@ -740,7 +744,9 @@ class _CalendarTimelineViewState extends State<CalendarTimelineView> {
 
     final List<ProjectItem> displayedProjects = _showOngoingOnly
         ? allProjects.where(_isOngoing).toList()
-        : allProjects.where((p) => p.status != ProjectStatus.cancelled).toList();
+        : allProjects
+              .where((p) => p.status != ProjectStatus.cancelled)
+              .toList();
 
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),

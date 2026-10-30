@@ -18,7 +18,11 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
   });
 
-  void setTestSurface(WidgetTester tester, {double width = 390, double height = 844}) {
+  void setTestSurface(
+    WidgetTester tester, {
+    double width = 390,
+    double height = 844,
+  }) {
     tester.view.physicalSize = Size(width, height);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
@@ -75,9 +79,8 @@ void main() {
           ),
           GoRoute(
             path: '/friends/transactions/:id',
-            builder: (context, state) => Scaffold(
-              body: Text('FriendTx:${state.pathParameters['id']}'),
-            ),
+            builder: (context, state) =>
+                Scaffold(body: Text('FriendTx:${state.pathParameters['id']}')),
           ),
         ],
       );
@@ -117,7 +120,10 @@ void main() {
         expect(find.text('Fintask Landing Page'), findsWidgets);
 
         // Subtitles for this week (non-today group)
-        expect(find.text('Mon, Nov 2  -  Fintask Landing Page'), findsOneWidget);
+        expect(
+          find.text('Mon, Nov 2  -  Fintask Landing Page'),
+          findsOneWidget,
+        );
         expect(find.text('Mon, Nov 2  -  30,000 DZ due'), findsOneWidget);
 
         // Subtitles for later (non-today group)
@@ -133,18 +139,11 @@ void main() {
       setTestSurface(tester);
 
       final GoRouter router = createAgendaTestRouter(
-        CalendarAgendaView(
-          events: events,
-          now: testNow,
-          clock: () => testNow,
-        ),
+        CalendarAgendaView(events: events, now: testNow, clock: () => testNow),
       );
 
       await tester.pumpWidget(
-        MaterialApp.router(
-          theme: AppTheme.light,
-          routerConfig: router,
-        ),
+        MaterialApp.router(theme: AppTheme.light, routerConfig: router),
       );
       await pumpBounded(tester);
 
@@ -162,18 +161,11 @@ void main() {
       setTestSurface(tester);
 
       final GoRouter router = createAgendaTestRouter(
-        CalendarAgendaView(
-          events: events,
-          now: testNow,
-          clock: () => testNow,
-        ),
+        CalendarAgendaView(events: events, now: testNow, clock: () => testNow),
       );
 
       await tester.pumpWidget(
-        MaterialApp.router(
-          theme: AppTheme.light,
-          routerConfig: router,
-        ),
+        MaterialApp.router(theme: AppTheme.light, routerConfig: router),
       );
       await pumpBounded(tester);
 
@@ -251,9 +243,8 @@ void main() {
           ),
           GoRoute(
             path: '/calendar/capacity',
-            builder: (context, state) => const Scaffold(
-              body: Text('CapacityPage'),
-            ),
+            builder: (context, state) =>
+                const Scaffold(body: Text('CapacityPage')),
           ),
           GoRoute(
             path: '/projects/:id',
@@ -293,10 +284,7 @@ void main() {
           theme: AppTheme.light,
           home: Scaffold(
             body: wrapWithScopes(
-              child: CalendarTimelineView(
-                now: testNow,
-                clock: () => testNow,
-              ),
+              child: CalendarTimelineView(now: testNow, clock: () => testNow),
             ),
           ),
         ),
@@ -331,39 +319,40 @@ void main() {
       expect(find.text('Logo Pack'), findsNothing);
     });
 
-    testWidgets('bar presence per project and chevron-left for early-starting project', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
+    testWidgets(
+      'bar presence per project and chevron-left for early-starting project',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: wrapWithScopes(
-              child: CalendarTimelineView(
-                now: testNow,
-                clock: () => testNow,
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: wrapWithScopes(
+                child: CalendarTimelineView(now: testNow, clock: () => testNow),
               ),
             ),
           ),
-        ),
-      );
-      await pumpBounded(tester);
+        );
+        await pumpBounded(tester);
 
-      // 3 bars present for the 3 ongoing projects
-      expect(find.byType(CalendarProjectBar), findsNWidgets(3));
-      expect(find.byKey(const ValueKey('project_bar_p1')), findsOneWidget);
-      expect(find.byKey(const ValueKey('project_bar_p2')), findsOneWidget);
-      expect(find.byKey(const ValueKey('project_bar_p5')), findsOneWidget);
+        // 3 bars present for the 3 ongoing projects
+        expect(find.byType(CalendarProjectBar), findsNWidgets(3));
+        expect(find.byKey(const ValueKey('project_bar_p1')), findsOneWidget);
+        expect(find.byKey(const ValueKey('project_bar_p2')), findsOneWidget);
+        expect(find.byKey(const ValueKey('project_bar_p5')), findsOneWidget);
 
-      // Fintask (p1) started on July 1 (before window Aug 1), so it carries chevron-left inside
-      final Finder p1Bar = find.byKey(const ValueKey('project_bar_p1'));
-      expect(
-        find.descendant(of: p1Bar, matching: find.byIcon(AppIcons.chevronLeft)),
-        findsOneWidget,
-      );
-    });
+        // Fintask (p1) started on July 1 (before window Aug 1), so it carries chevron-left inside
+        final Finder p1Bar = find.byKey(const ValueKey('project_bar_p1'));
+        expect(
+          find.descendant(
+            of: p1Bar,
+            matching: find.byIcon(AppIcons.chevronLeft),
+          ),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets('today line and today flag are present', (
       WidgetTester tester,
@@ -375,10 +364,7 @@ void main() {
           theme: AppTheme.light,
           home: Scaffold(
             body: wrapWithScopes(
-              child: CalendarTimelineView(
-                now: testNow,
-                clock: () => testNow,
-              ),
+              child: CalendarTimelineView(now: testNow, clock: () => testNow),
             ),
           ),
         ),
@@ -402,10 +388,7 @@ void main() {
           theme: AppTheme.light,
           home: Scaffold(
             body: wrapWithScopes(
-              child: CalendarTimelineView(
-                now: testNow,
-                clock: () => testNow,
-              ),
+              child: CalendarTimelineView(now: testNow, clock: () => testNow),
             ),
           ),
         ),
@@ -425,39 +408,34 @@ void main() {
       expect(find.byKey(const ValueKey('milestone_dot_m5')), findsOneWidget);
     });
 
-    testWidgets('capacity card displays Moderate workload and navigates on tap', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
+    testWidgets(
+      'capacity card displays Moderate workload and navigates on tap',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
 
-      final GoRouter router = createTimelineTestRouter(
-        wrapWithScopes(
-          child: CalendarTimelineView(
-            now: testNow,
-            clock: () => testNow,
+        final GoRouter router = createTimelineTestRouter(
+          wrapWithScopes(
+            child: CalendarTimelineView(now: testNow, clock: () => testNow),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpWidget(
-        MaterialApp.router(
-          theme: AppTheme.light,
-          routerConfig: router,
-        ),
-      );
-      await pumpBounded(tester);
+        await tester.pumpWidget(
+          MaterialApp.router(theme: AppTheme.light, routerConfig: router),
+        );
+        await pumpBounded(tester);
 
-      expect(find.text(CalendarViewsStrings.capacityTitle), findsOneWidget);
-      expect(find.text('Moderate workload'), findsOneWidget);
-      expect(find.byIcon(AppIcons.gauge), findsOneWidget);
+        expect(find.text(CalendarViewsStrings.capacityTitle), findsOneWidget);
+        expect(find.text('Moderate workload'), findsOneWidget);
+        expect(find.byIcon(AppIcons.gauge), findsOneWidget);
 
-      // Tap capacity card
-      await tester.tap(find.byKey(const ValueKey('timeline_capacity_card')));
-      await pumpBounded(tester);
+        // Tap capacity card
+        await tester.tap(find.byKey(const ValueKey('timeline_capacity_card')));
+        await pumpBounded(tester);
 
-      expect(router.state.uri.toString(), '/calendar/capacity');
-      expect(find.text('CapacityPage'), findsOneWidget);
-    });
+        expect(router.state.uri.toString(), '/calendar/capacity');
+        expect(find.text('CapacityPage'), findsOneWidget);
+      },
+    );
 
     testWidgets('row tap navigates to /projects/:id', (
       WidgetTester tester,
@@ -466,18 +444,12 @@ void main() {
 
       final GoRouter router = createTimelineTestRouter(
         wrapWithScopes(
-          child: CalendarTimelineView(
-            now: testNow,
-            clock: () => testNow,
-          ),
+          child: CalendarTimelineView(now: testNow, clock: () => testNow),
         ),
       );
 
       await tester.pumpWidget(
-        MaterialApp.router(
-          theme: AppTheme.light,
-          routerConfig: router,
-        ),
+        MaterialApp.router(theme: AppTheme.light, routerConfig: router),
       );
       await pumpBounded(tester);
 
@@ -489,34 +461,36 @@ void main() {
       expect(find.text('ProjectPage:p1'), findsOneWidget);
     });
 
-    testWidgets('empty state displays friendly message when projects repository is empty', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
+    testWidgets(
+      'empty state displays friendly message when projects repository is empty',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
 
-      final ProjectsRepository emptyProjects = ProjectsRepository(initialProjects: []);
-      final CalendarRepository emptyCalendar = CalendarRepository(initialMilestones: []);
+        final ProjectsRepository emptyProjects = ProjectsRepository(
+          initialProjects: [],
+        );
+        final CalendarRepository emptyCalendar = CalendarRepository(
+          initialMilestones: [],
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: wrapWithScopes(
-              projects: emptyProjects,
-              calendar: emptyCalendar,
-              child: CalendarTimelineView(
-                now: testNow,
-                clock: () => testNow,
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: wrapWithScopes(
+                projects: emptyProjects,
+                calendar: emptyCalendar,
+                child: CalendarTimelineView(now: testNow, clock: () => testNow),
               ),
             ),
           ),
-        ),
-      );
-      await pumpBounded(tester);
+        );
+        await pumpBounded(tester);
 
-      expect(find.text(CalendarViewsStrings.emptyTimeline), findsOneWidget);
-      expect(find.text('All (0)'), findsOneWidget);
-    });
+        expect(find.text(CalendarViewsStrings.emptyTimeline), findsOneWidget);
+        expect(find.text('All (0)'), findsOneWidget);
+      },
+    );
 
     testWidgets('360x800 no-overflow for CalendarTimelineView', (
       WidgetTester tester,
@@ -528,10 +502,7 @@ void main() {
           theme: AppTheme.light,
           home: Scaffold(
             body: wrapWithScopes(
-              child: CalendarTimelineView(
-                now: testNow,
-                clock: () => testNow,
-              ),
+              child: CalendarTimelineView(now: testNow, clock: () => testNow),
             ),
           ),
         ),

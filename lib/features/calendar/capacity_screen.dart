@@ -11,10 +11,7 @@ import 'widgets/calendar_forms_gauge.dart';
 
 /// Workload capacity and availability screen per `docs/design/SPEC.md` (CL11).
 class CapacityScreen extends StatelessWidget {
-  const CapacityScreen({
-    super.key,
-    this.clock,
-  });
+  const CapacityScreen({super.key, this.clock});
 
   final DateTime Function()? clock;
 
@@ -39,20 +36,20 @@ class CapacityScreen extends StatelessWidget {
   Widget _buildWorkloadCard(CapacityInfo info) {
     final (String pillLabel, Color pillBg, Color pillFg) = switch (info.level) {
       CapacityLevel.light => (
-          CalendarFormsStrings.lightLevel,
-          AppColors.greenBg,
-          AppColors.green,
-        ),
+        CalendarFormsStrings.lightLevel,
+        AppColors.greenBg,
+        AppColors.green,
+      ),
       CapacityLevel.moderate => (
-          CalendarFormsStrings.moderateLevel,
-          AppColors.orangeBg,
-          AppColors.orange,
-        ),
+        CalendarFormsStrings.moderateLevel,
+        AppColors.orangeBg,
+        AppColors.orange,
+      ),
       CapacityLevel.heavy => (
-          CalendarFormsStrings.heavyLevel,
-          AppColors.redBg,
-          AppColors.red,
-        ),
+        CalendarFormsStrings.heavyLevel,
+        AppColors.redBg,
+        AppColors.red,
+      ),
     };
 
     final String countText = info.activeCount == 0

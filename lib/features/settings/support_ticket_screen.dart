@@ -58,10 +58,12 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
     final String message = _messageController.text.trim();
 
     setState(() {
-      _subjectError =
-          subject.isEmpty ? SettingsAboutStrings.subjectRequiredError : null;
-      _messageError =
-          message.isEmpty ? SettingsAboutStrings.messageRequiredError : null;
+      _subjectError = subject.isEmpty
+          ? SettingsAboutStrings.subjectRequiredError
+          : null;
+      _messageError = message.isEmpty
+          ? SettingsAboutStrings.messageRequiredError
+          : null;
     });
 
     if (subject.isEmpty || message.isEmpty) {

@@ -117,17 +117,17 @@ class FriendTransaction {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        friendId,
-        type,
-        direction,
-        amount,
-        paidAmount,
-        description,
-        dueDate,
-        date,
-        createdAt,
-      );
+    id,
+    friendId,
+    type,
+    direction,
+    amount,
+    paidAmount,
+    description,
+    dueDate,
+    date,
+    createdAt,
+  );
 
   @override
   String toString() =>
@@ -211,15 +211,15 @@ class FriendSettlement {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        transactionId,
-        friendId,
-        amount,
-        method,
-        notes,
-        date,
-        createdAt,
-      );
+    id,
+    transactionId,
+    friendId,
+    amount,
+    method,
+    notes,
+    date,
+    createdAt,
+  );
 
   @override
   String toString() =>

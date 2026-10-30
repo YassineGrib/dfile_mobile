@@ -18,8 +18,7 @@ abstract final class SettingsAboutStrings {
   static const String exportBackupTitle = 'Export and backup';
   static const String exportBackupSubtitle =
       'Clients, projects, billing and costs';
-  static const String downloadBackupButton =
-      'Download workspace backup (JSON)';
+  static const String downloadBackupButton = 'Download workspace backup (JSON)';
   static const String backupCopiedToast = 'Backup copied to clipboard';
 
   // About and support (ST12)

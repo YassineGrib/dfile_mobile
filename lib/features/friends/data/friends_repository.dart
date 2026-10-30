@@ -20,12 +20,15 @@ List<Friend> filterFriends(
   return friends.where((Friend friend) {
     // 1. Text Search Filter
     if (normalizedQuery.isNotEmpty) {
-      final bool matchesName =
-          friend.name.toLowerCase().contains(normalizedQuery);
-      final bool matchesPhone =
-          friend.phone.toLowerCase().contains(normalizedQuery);
-      final bool matchesNotes =
-          friend.notes.toLowerCase().contains(normalizedQuery);
+      final bool matchesName = friend.name.toLowerCase().contains(
+        normalizedQuery,
+      );
+      final bool matchesPhone = friend.phone.toLowerCase().contains(
+        normalizedQuery,
+      );
+      final bool matchesNotes = friend.notes.toLowerCase().contains(
+        normalizedQuery,
+      );
       if (!matchesName && !matchesPhone && !matchesNotes) {
         return false;
       }
@@ -33,7 +36,8 @@ List<Friend> filterFriends(
 
     // 2. Net Filter
     if (filter != FriendNetFilter.all) {
-      final FriendBalance? balance = balanceLookup?.call(friend.id) ??
+      final FriendBalance? balance =
+          balanceLookup?.call(friend.id) ??
           balances?[friend.id] ??
           friend.balance;
       final double net = balance?.net ?? 0.0;
@@ -77,11 +81,13 @@ List<FriendTransaction> filterTransactions(
   return transactions.where((FriendTransaction tx) {
     // 1. Text Search Filter
     if (normalizedQuery.isNotEmpty) {
-      final bool matchesDesc =
-          tx.description.toLowerCase().contains(normalizedQuery);
+      final bool matchesDesc = tx.description.toLowerCase().contains(
+        normalizedQuery,
+      );
       final String friendName = nameOf?.call(tx.friendId) ?? '';
-      final bool matchesFriend =
-          friendName.toLowerCase().contains(normalizedQuery);
+      final bool matchesFriend = friendName.toLowerCase().contains(
+        normalizedQuery,
+      );
       if (!matchesDesc && !matchesFriend) {
         return false;
       }
@@ -164,15 +170,13 @@ class FriendsRepository extends ChangeNotifier {
     List<Friend>? initialFriends,
     List<FriendTransaction>? initialTransactions,
     List<FriendSettlement>? initialSettlements,
-  })  : _friends = List<Friend>.of(
-          initialFriends ?? _createInitialFriends(),
-        ),
-        _transactions = List<FriendTransaction>.of(
-          initialTransactions ?? _createInitialTransactions(),
-        ),
-        _settlements = List<FriendSettlement>.of(
-          initialSettlements ?? _createInitialSettlements(),
-        );
+  }) : _friends = List<Friend>.of(initialFriends ?? _createInitialFriends()),
+       _transactions = List<FriendTransaction>.of(
+         initialTransactions ?? _createInitialTransactions(),
+       ),
+       _settlements = List<FriendSettlement>.of(
+         initialSettlements ?? _createInitialSettlements(),
+       );
 
   final List<Friend> _friends;
   final List<FriendTransaction> _transactions;
@@ -180,8 +184,8 @@ class FriendsRepository extends ChangeNotifier {
 
   /// Unmodifiable view of all registered friends with attached balance statistics.
   List<Friend> get friends => List<Friend>.unmodifiable(
-        _friends.map((Friend f) => f.copyWith(balance: friendBalance(f.id))),
-      );
+    _friends.map((Friend f) => f.copyWith(balance: friendBalance(f.id))),
+  );
 
   /// Unmodifiable view of raw registered friends without computed balance metadata.
   List<Friend> get rawFriends => List<Friend>.unmodifiable(_friends);
@@ -245,9 +249,13 @@ class FriendsRepository extends ChangeNotifier {
         .map((FriendTransaction tx) => tx.id)
         .toList();
 
-    _transactions.removeWhere((FriendTransaction tx) => tx.friendId == friendId);
-    _settlements.removeWhere((FriendSettlement s) =>
-        s.friendId == friendId || txIdsToRemove.contains(s.transactionId));
+    _transactions.removeWhere(
+      (FriendTransaction tx) => tx.friendId == friendId,
+    );
+    _settlements.removeWhere(
+      (FriendSettlement s) =>
+          s.friendId == friendId || txIdsToRemove.contains(s.transactionId),
+    );
 
     notifyListeners();
     return true;
@@ -261,8 +269,9 @@ class FriendsRepository extends ChangeNotifier {
 
   /// Updates an existing transaction matching [transaction.id] and notifies listeners.
   bool updateTransaction(FriendTransaction transaction) {
-    final int index =
-        _transactions.indexWhere((FriendTransaction t) => t.id == transaction.id);
+    final int index = _transactions.indexWhere(
+      (FriendTransaction t) => t.id == transaction.id,
+    );
     if (index != -1) {
       _transactions[index] = transaction;
       notifyListeners();
@@ -274,12 +283,15 @@ class FriendsRepository extends ChangeNotifier {
   /// Deletes [transactionId] and cascades deletion to all associated settlements,
   /// then notifies listeners.
   bool deleteTransaction(String transactionId) {
-    final int index =
-        _transactions.indexWhere((FriendTransaction t) => t.id == transactionId);
+    final int index = _transactions.indexWhere(
+      (FriendTransaction t) => t.id == transactionId,
+    );
     if (index == -1) return false;
 
     _transactions.removeAt(index);
-    _settlements.removeWhere((FriendSettlement s) => s.transactionId == transactionId);
+    _settlements.removeWhere(
+      (FriendSettlement s) => s.transactionId == transactionId,
+    );
 
     notifyListeners();
     return true;
@@ -299,17 +311,16 @@ class FriendsRepository extends ChangeNotifier {
     String notes = '',
     DateTime? date,
   ]) {
-    final int txIndex =
-        _transactions.indexWhere((FriendTransaction t) => t.id == transactionId);
+    final int txIndex = _transactions.indexWhere(
+      (FriendTransaction t) => t.id == transactionId,
+    );
     if (txIndex == -1) {
       throw ArgumentError('Transaction not found: $transactionId');
     }
 
     final FriendTransaction tx = _transactions[txIndex];
     if (amount <= 0.0) {
-      throw ArgumentError(
-        'Settlement amount must be greater than 0: $amount',
-      );
+      throw ArgumentError('Settlement amount must be greater than 0: $amount');
     }
     if (amount > tx.remaining) {
       throw ArgumentError(
@@ -330,9 +341,7 @@ class FriendsRepository extends ChangeNotifier {
     );
 
     _settlements.add(settlement);
-    _transactions[txIndex] = tx.copyWith(
-      paidAmount: tx.paidAmount + amount,
-    );
+    _transactions[txIndex] = tx.copyWith(paidAmount: tx.paidAmount + amount);
 
     notifyListeners();
     return settlement;
@@ -341,7 +350,9 @@ class FriendsRepository extends ChangeNotifier {
   /// Returns unmodifiable list of settlements belonging to [transactionId].
   List<FriendSettlement> settlementsOf(String transactionId) {
     return List<FriendSettlement>.unmodifiable(
-      _settlements.where((FriendSettlement s) => s.transactionId == transactionId),
+      _settlements.where(
+        (FriendSettlement s) => s.transactionId == transactionId,
+      ),
     );
   }
 

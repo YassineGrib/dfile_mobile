@@ -236,18 +236,23 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
     final ProjectsRepository projectsRepo = ProjectsScope.of(context);
     final ExpenseStats stats = repo.expenseStats();
     final List<Expense> allExpenses = repo.expenses;
-    final List<Expense> displayedExpenses =
-        _getFilteredAndSortedExpenses(repo, projectsRepo);
+    final List<Expense> displayedExpenses = _getFilteredAndSortedExpenses(
+      repo,
+      projectsRepo,
+    );
 
     const List<(String, ExpenseCategory?)> categoryPills =
         <(String, ExpenseCategory?)>[
-      (ExpensesListStrings.categoryAll, null),
-      (ExpensesListStrings.categorySoftware, ExpenseCategory.softwareTools),
-      (ExpensesListStrings.categoryHosting, ExpenseCategory.hostingServices),
-      (ExpensesListStrings.categoryMarketing, ExpenseCategory.marketing),
-      (ExpensesListStrings.categoryEquipment, ExpenseCategory.equipment),
-      (ExpensesListStrings.categoryOthers, ExpenseCategory.others),
-    ];
+          (ExpensesListStrings.categoryAll, null),
+          (ExpensesListStrings.categorySoftware, ExpenseCategory.softwareTools),
+          (
+            ExpensesListStrings.categoryHosting,
+            ExpenseCategory.hostingServices,
+          ),
+          (ExpensesListStrings.categoryMarketing, ExpenseCategory.marketing),
+          (ExpensesListStrings.categoryEquipment, ExpenseCategory.equipment),
+          (ExpensesListStrings.categoryOthers, ExpenseCategory.others),
+        ];
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -527,8 +532,7 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
                       const SizedBox(height: AppSpacing.lg),
                       PrimaryButton(
                         label: ExpensesListStrings.recordFirstExpense,
-                        onPressed: () =>
-                            context.push(AppRoutes.newExpensePath),
+                        onPressed: () => context.push(AppRoutes.newExpensePath),
                       ),
                     ],
                   ),
@@ -613,19 +617,19 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final Expense expense = displayedExpenses[index];
-                      final String? projectName = expense.isProjectLinked
-                          ? projectsRepo.byId(expense.projectId!)?.name
-                          : null;
-                      return ExpensesListCard(
-                        expense: expense,
-                        projectName: projectName,
-                      );
-                    },
-                    childCount: displayedExpenses.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((
+                    BuildContext context,
+                    int index,
+                  ) {
+                    final Expense expense = displayedExpenses[index];
+                    final String? projectName = expense.isProjectLinked
+                        ? projectsRepo.byId(expense.projectId!)?.name
+                        : null;
+                    return ExpensesListCard(
+                      expense: expense,
+                      projectName: projectName,
+                    );
+                  }, childCount: displayedExpenses.length),
                 ),
               ),
           ],

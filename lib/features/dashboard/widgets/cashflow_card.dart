@@ -17,10 +17,7 @@ import 'dash_card.dart';
 
 /// Dashboard cashflow overview card per HM2 in SPEC.md.
 class CashflowCard extends StatefulWidget {
-  const CashflowCard({
-    super.key,
-    this.clock,
-  });
+  const CashflowCard({super.key, this.clock});
 
   final DateTime Function()? clock;
 
@@ -44,8 +41,7 @@ class _CashflowCardState extends State<CashflowCard> {
 
     final List<ProjectPayment> payments =
         projectsRepo?.payments ?? const <ProjectPayment>[];
-    final List<Expense> expenses =
-        expensesRepo?.expenses ?? const <Expense>[];
+    final List<Expense> expenses = expensesRepo?.expenses ?? const <Expense>[];
 
     final List<MonthFlow> flows = _rangeIndex == 0
         ? monthFlows(now, months: 6, payments: payments, expenses: expenses)
@@ -73,10 +69,7 @@ class _CashflowCardState extends State<CashflowCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                DashboardChartsStrings.cashflow,
-                style: AppText.cardTitle,
-              ),
+              Text(DashboardChartsStrings.cashflow, style: AppText.cardTitle),
               _buildRangeToggle(),
             ],
           ),
@@ -217,10 +210,7 @@ class _CashflowCardState extends State<CashflowCard> {
           value,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppText.bodyBold.copyWith(
-            fontSize: 14,
-            color: AppColors.ink,
-          ),
+          style: AppText.bodyBold.copyWith(fontSize: 14, color: AppColors.ink),
         ),
       ],
     );

@@ -51,10 +51,7 @@ class FriendStatementBalanceCard extends FriendBalanceCard {
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
-              FriendNetChip(
-                net: netVal,
-                label: chipLabel,
-              ),
+              FriendNetChip(net: netVal, label: chipLabel),
             ],
           ),
           const SizedBox(height: 6),

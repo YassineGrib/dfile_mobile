@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "401380699771",
+    "project_id": "fintask-app",
+    "storage_bucket": "fintask-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401380699771:android:9897fdc70a456bea123cde",
+        "android_client_info": {
+          "package_name": "com.dfile.dfile_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401380699771-uq8d0i9q89c0p9192ighsq69t44kgo9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dfile.dfile_mobile",
+            "certificate_hash": "23499ba350d3d95212b4a880ce43218d0eb37d66"
+          }
+        },
+        {
+          "client_id": "401380699771-nv16m7b9p3obra84qudiu2pf6v96u12e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1dv2pjAl7SFC6iaczZoinWOP7qKec77U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401380699771-nv16m7b9p3obra84qudiu2pf6v96u12e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

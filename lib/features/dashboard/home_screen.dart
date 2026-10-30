@@ -26,10 +26,7 @@ import 'widgets/status_donut_card.dart';
 /// Supports an optional [clock] parameter to inject a deterministic time
 /// for greeting and stats calculation in tests.
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({
-    super.key,
-    this.clock,
-  });
+  const HomeScreen({super.key, this.clock});
 
   final DateTime Function()? clock;
 
@@ -73,7 +70,8 @@ class HomeScreen extends StatelessWidget {
     // shows the empty home HM7: 'Welcome'..."
     // "TASK 9A: when newAccountSetup says isNewAccount (or fewer than 3 steps done AND nothing else exists)
     // show 'Welcome', the yellow 'Set up your ledger' card... once the three steps are done show normal home."
-    final bool isEmptyHome = setup.isNewAccount ||
+    final bool isEmptyHome =
+        setup.isNewAccount ||
         (setup.completedCount < 3 && expenses.isEmpty && friends.isEmpty);
 
     // Top greeting string
@@ -110,7 +108,11 @@ class HomeScreen extends StatelessWidget {
 
     // Stats calculations
     final double profit = netProfit(payments, expenses);
-    final double thisMonth = thisMonthNet(now, payments: payments, expenses: expenses);
+    final double thisMonth = thisMonthNet(
+      now,
+      payments: payments,
+      expenses: expenses,
+    );
     final List<MonthFlow> last6Months = monthFlows(
       now,
       months: 6,
@@ -127,7 +129,9 @@ class HomeScreen extends StatelessWidget {
 
     // 2. Monthly expenses (outflow this month)
     final double monthlyExpenses = expenses
-        .where((Expense e) => e.date.year == now.year && e.date.month == now.month)
+        .where(
+          (Expense e) => e.date.year == now.year && e.date.month == now.month,
+        )
         .fold<double>(0.0, (double sum, Expense e) => sum + e.amount);
 
     // 3. Pending invoices (paymentStats outstanding)
@@ -137,7 +141,11 @@ class HomeScreen extends StatelessWidget {
     final double friendsNet = friendsRepo.overallBalance().net;
 
     // Deadlines
-    final List<DeadlineItem> deadlines = upcomingDeadlines(projects, now, limit: 3);
+    final List<DeadlineItem> deadlines = upcomingDeadlines(
+      projects,
+      now,
+      limit: 3,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.bg,

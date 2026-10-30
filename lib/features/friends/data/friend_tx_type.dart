@@ -4,23 +4,11 @@ library;
 
 /// Transaction type/nature for friends' debts per `docs/design/SPEC.md`.
 enum FriendTxType {
-  money(
-    label: 'Money loan',
-    code: r'$',
-  ),
-  service(
-    label: 'Service',
-    code: 'S',
-  ),
-  expense(
-    label: 'Shared cost',
-    code: 'C',
-  );
+  money(label: 'Money loan', code: r'$'),
+  service(label: 'Service', code: 'S'),
+  expense(label: 'Shared cost', code: 'C');
 
-  const FriendTxType({
-    required this.label,
-    required this.code,
-  });
+  const FriendTxType({required this.label, required this.code});
 
   /// User-facing display label (e.g. "Money loan", "Service", "Shared cost").
   final String label;
@@ -44,19 +32,10 @@ enum FriendTxType {
 
 /// Transaction direction for friends' debts per `docs/design/SPEC.md`.
 enum FriendTxDirection {
-  lent(
-    label: 'Owed to me',
-    chipLabel: 'Lent',
-  ),
-  borrowed(
-    label: 'I owe',
-    chipLabel: 'Borrowed',
-  );
+  lent(label: 'Owed to me', chipLabel: 'Lent'),
+  borrowed(label: 'I owe', chipLabel: 'Borrowed');
 
-  const FriendTxDirection({
-    required this.label,
-    required this.chipLabel,
-  });
+  const FriendTxDirection({required this.label, required this.chipLabel});
 
   /// User-facing descriptive label (lent = "Owed to me", borrowed = "I owe").
   final String label;

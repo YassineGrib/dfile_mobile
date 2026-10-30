@@ -32,7 +32,8 @@ abstract final class TransactionDetailStrings {
 
   // FD15 Delete Transaction Confirm Sheet
   static const String deleteTransactionTitle = 'Delete transaction';
-  static const String deleteTransactionSubtitle = 'This action cannot be undone';
+  static const String deleteTransactionSubtitle =
+      'This action cannot be undone';
   static const String confirmDelete = 'Confirm delete';
 
   /// Primary warning text naming description, amount, and friend.
@@ -44,7 +45,10 @@ abstract final class TransactionDetailStrings {
       'You are about to delete "$description" of ${formatMoney(amount)} with $friendName.';
 
   /// Sentence about settlements being removed and balance recalculation.
-  static String deleteWarningSettlements(int settlementCount, [String pronoun = 'his']) {
+  static String deleteWarningSettlements(
+    int settlementCount, [
+    String pronoun = 'his',
+  ]) {
     if (settlementCount == 1) {
       return 'Its 1 settlement will be removed and $pronoun balance recalculated.';
     }
@@ -88,7 +92,8 @@ abstract final class TransactionDetailStrings {
   static const String notesOptionalLabel = 'Settlement notes (optional)';
   static const String notesOffsetRequiredLabel = 'Offset service details *';
   static const String notesPlaceholder = 'e.g. Transferred via BaridiMob';
-  static const String notesOffsetPlaceholder = 'e.g. Web design consultation service';
+  static const String notesOffsetPlaceholder =
+      'e.g. Web design consultation service';
   static const String errorDescribeServiceOffset =
       'Please describe the service offset';
 

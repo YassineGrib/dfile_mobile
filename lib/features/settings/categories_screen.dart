@@ -30,16 +30,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     }
     final bool added = repo.addCategory(text);
     if (!added) {
-      showAppToast(
-        context,
-        SettingsPrefsStrings.categoryExistsToast,
-      );
+      showAppToast(context, SettingsPrefsStrings.categoryExistsToast);
     } else {
       _textController.clear();
-      showAppToast(
-        context,
-        SettingsPrefsStrings.categoryAddedToast,
-      );
+      showAppToast(context, SettingsPrefsStrings.categoryAddedToast);
     }
   }
 
@@ -74,18 +68,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             behavior: HitTestBehavior.opaque,
             onTap: () {
               repo.removeCategory(category);
-              showAppToast(
-                context,
-                SettingsPrefsStrings.categoryRemovedToast,
-              );
+              showAppToast(context, SettingsPrefsStrings.categoryRemovedToast);
             },
             child: const Padding(
               padding: EdgeInsets.all(2),
-              child: Icon(
-                Icons.close_rounded,
-                size: 16,
-                color: AppColors.ink,
-              ),
+              child: Icon(Icons.close_rounded, size: 16, color: AppColors.ink),
             ),
           ),
         ],
@@ -114,9 +101,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SettingsHeader(
-                      title: SettingsPrefsStrings.categoriesTitle,
-                    ),
+                    SettingsHeader(title: SettingsPrefsStrings.categoriesTitle),
                     const SizedBox(height: AppSpacing.lg),
 
                     // Subtitle
@@ -191,10 +176,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               decoration: const BoxDecoration(
                 color: AppColors.card,
                 border: Border(
-                  top: BorderSide(
-                    color: AppColors.line,
-                    width: 1,
-                  ),
+                  top: BorderSide(color: AppColors.line, width: 1),
                 ),
               ),
               child: SafeArea(

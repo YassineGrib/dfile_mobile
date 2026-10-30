@@ -99,12 +99,8 @@ class PaymentStats {
           collectionRate == other.collectionRate;
 
   @override
-  int get hashCode => Object.hash(
-        collected,
-        outstanding,
-        thisMonth,
-        collectionRate,
-      );
+  int get hashCode =>
+      Object.hash(collected, outstanding, thisMonth, collectionRate);
 
   @override
   String toString() =>
@@ -216,8 +212,8 @@ class ProjectPayment {
     this.method = PaymentMethod.baridimob,
     this.notes = '',
     DateTime? createdAt,
-  })  : clientId = clientId ?? '',
-        createdAt = createdAt ?? date;
+  }) : clientId = clientId ?? '',
+       createdAt = createdAt ?? date;
 
   final String id;
   final String projectId;
@@ -273,16 +269,16 @@ class ProjectPayment {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        projectId,
-        clientId,
-        date,
-        reference,
-        amount,
-        type,
-        method,
-        notes,
-      );
+    id,
+    projectId,
+    clientId,
+    date,
+    reference,
+    amount,
+    type,
+    method,
+    notes,
+  );
 
   @override
   String toString() =>

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -139,11 +140,26 @@ abstract final class PrivacyDataExporter {
 
   /// Copies the generated JSON export to the system clipboard from [context].
   static Future<String> copyToClipboard(BuildContext context) async {
-    final ClientsRepository clientsRepo = ClientsScope.of(context, listen: false);
-    final ProjectsRepository projectsRepo = ProjectsScope.of(context, listen: false);
-    final ExpensesRepository expensesRepo = ExpensesScope.of(context, listen: false);
-    final FriendsRepository friendsRepo = FriendsScope.of(context, listen: false);
-    final SettingsRepository settingsRepo = SettingsScope.of(context, listen: false);
+    final ClientsRepository clientsRepo = ClientsScope.of(
+      context,
+      listen: false,
+    );
+    final ProjectsRepository projectsRepo = ProjectsScope.of(
+      context,
+      listen: false,
+    );
+    final ExpensesRepository expensesRepo = ExpensesScope.of(
+      context,
+      listen: false,
+    );
+    final FriendsRepository friendsRepo = FriendsScope.of(
+      context,
+      listen: false,
+    );
+    final SettingsRepository settingsRepo = SettingsScope.of(
+      context,
+      listen: false,
+    );
 
     final String jsonString = buildExportJson(
       clientsRepo: clientsRepo,

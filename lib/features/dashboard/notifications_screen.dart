@@ -32,10 +32,7 @@ import 'widgets/dash_icon_bubble.dart';
 /// - Empty state: friendly bell card "You are all caught up"
 /// - Dynamic reactivity via [NotificationsScope] + [deriveNotifications] observing repositories and settings switches.
 class NotificationsScreen extends StatelessWidget {
-  const NotificationsScreen({
-    super.key,
-    this.clock,
-  });
+  const NotificationsScreen({super.key, this.clock});
 
   /// Optional clock provider for deterministic testing.
   final DateTime Function()? clock;
@@ -80,7 +77,11 @@ class NotificationsScreen extends StatelessWidget {
     final List<AppNotification> earlierItems = <AppNotification>[];
 
     for (final AppNotification item in items) {
-      final DateTime itemDate = DateTime(item.date.year, item.date.month, item.date.day);
+      final DateTime itemDate = DateTime(
+        item.date.year,
+        item.date.month,
+        item.date.day,
+      );
       if (itemDate.isAtSameMomentAs(todayStart) ||
           item.isOverdue ||
           itemDate.isAfter(todayStart)) {
@@ -124,7 +125,9 @@ class NotificationsScreen extends StatelessWidget {
                       style: AppText.captionSm.copyWith(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: canMarkAllRead ? AppColors.purple : AppColors.placeholder,
+                        color: canMarkAllRead
+                            ? AppColors.purple
+                            : AppColors.placeholder,
                       ),
                     ),
                   ),
@@ -239,8 +242,18 @@ class _NotificationCard extends StatelessWidget {
       return '${diff.inDays}d ago';
     }
     const List<String> months = <String>[
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[date.month - 1]} ${date.day}';
   }
@@ -248,19 +261,20 @@ class _NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (IconData icon, Color fg, Color bg) = switch (notification.kind) {
-      AppNotificationKind.deadline => notification.isOverdue
-          ? (AppIcons.triangleAlert, AppColors.red, AppColors.redBg)
-          : (AppIcons.calendarClock, AppColors.orange, AppColors.orangeBg),
+      AppNotificationKind.deadline =>
+        notification.isOverdue
+            ? (AppIcons.triangleAlert, AppColors.red, AppColors.redBg)
+            : (AppIcons.calendarClock, AppColors.orange, AppColors.orangeBg),
       AppNotificationKind.overdueDebt => (
-          AppIcons.wallet,
-          AppColors.red,
-          AppColors.redBg,
-        ),
+        AppIcons.wallet,
+        AppColors.red,
+        AppColors.redBg,
+      ),
       AppNotificationKind.payment => (
-          AppIcons.circleCheck,
-          AppColors.green,
-          AppColors.greenBg,
-        ),
+        AppIcons.circleCheck,
+        AppColors.green,
+        AppColors.greenBg,
+      ),
     };
 
     return DashCard(
@@ -270,12 +284,7 @@ class _NotificationCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DashIconBubble(
-            icon: icon,
-            foreground: fg,
-            background: bg,
-            size: 40,
-          ),
+          DashIconBubble(icon: icon, foreground: fg, background: bg, size: 40),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -289,7 +298,9 @@ class _NotificationCard extends StatelessWidget {
                       child: Text(
                         notification.title,
                         style: AppText.bodyMedium.copyWith(
-                          fontWeight: isRead ? FontWeight.w600 : FontWeight.w700,
+                          fontWeight: isRead
+                              ? FontWeight.w600
+                              : FontWeight.w700,
                           color: AppColors.ink,
                           fontSize: 15,
                         ),

@@ -140,10 +140,7 @@ class ProjectProgressSlider extends StatelessWidget {
               ),
             ),
             const SizedBox(width: AppSpacing.sm),
-            Text(
-              '$clamped%',
-              style: AppText.cardTitle,
-            ),
+            Text('$clamped%', style: AppText.cardTitle),
           ],
         ),
         const SizedBox(height: AppSpacing.xs),
@@ -262,9 +259,7 @@ class ProjectFormBottomBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.card,
-        border: Border(
-          top: BorderSide(color: AppColors.line, width: 1),
-        ),
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
       ),
       padding: EdgeInsets.only(bottom: bottomInset),
       child: SafeArea(
@@ -277,10 +272,7 @@ class ProjectFormBottomBar extends StatelessWidget {
             AppSpacing.lg,
           ),
           child: secondaryLabel == null
-              ? PrimaryButton(
-                  label: primaryLabel,
-                  onPressed: onPrimaryPressed,
-                )
+              ? PrimaryButton(label: primaryLabel, onPressed: onPrimaryPressed)
               : Row(
                   children: [
                     Expanded(
@@ -320,11 +312,7 @@ Widget _buildRadioIndicator(bool isSelected) {
     ),
     alignment: Alignment.center,
     child: isSelected
-        ? const Icon(
-            Icons.check_rounded,
-            size: 14,
-            color: AppColors.white,
-          )
+        ? const Icon(Icons.check_rounded, size: 14, color: AppColors.white)
         : null,
   );
 }
@@ -398,10 +386,7 @@ Future<String?> showClientPickerSheet({
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              ProjectStrings.selectClientTitle,
-              style: AppText.sectionTitle,
-            ),
+            Text(ProjectStrings.selectClientTitle, style: AppText.sectionTitle),
             const SizedBox(height: AppSpacing.lg),
             for (int i = 0; i < clients.length; i++) ...[
               if (i > 0) const SizedBox(height: 10),
@@ -450,10 +435,7 @@ Future<ProjectStatus?> showStatusPickerSheet({
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              ProjectStrings.selectStatusTitle,
-              style: AppText.sectionTitle,
-            ),
+            Text(ProjectStrings.selectStatusTitle, style: AppText.sectionTitle),
             const SizedBox(height: AppSpacing.lg),
             for (int i = 0; i < ProjectStatus.values.length; i++) ...[
               if (i > 0) const SizedBox(height: 10),

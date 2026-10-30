@@ -101,10 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: AppSpacing.lg),
 
             // Title
-            Text(
-              SettingsStrings.title,
-              style: AppText.title,
-            ),
+            Text(SettingsStrings.title, style: AppText.title),
             const SizedBox(height: AppSpacing.xl),
 
             // Profile Card (ST1)

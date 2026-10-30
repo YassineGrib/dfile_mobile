@@ -38,11 +38,7 @@ class HomePill extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (icon != null) ...[
-            Icon(
-              icon,
-              size: 14,
-              color: iconColor ?? textColor,
-            ),
+            Icon(icon, size: 14, color: iconColor ?? textColor),
             const SizedBox(width: 4),
           ],
           Text(

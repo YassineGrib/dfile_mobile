@@ -127,12 +127,7 @@ void main() {
       });
 
       final GoRouter router = createAppRouter(initialLocation: initialLocation);
-      await tester.pumpWidget(
-        DfileApp(
-          router: router,
-          repository: repository,
-        ),
-      );
+      await tester.pumpWidget(DfileApp(router: router, repository: repository));
       await tester.pumpAndSettle();
     }
 
@@ -143,16 +138,16 @@ void main() {
       await pumpApp(tester, repository: repo);
 
       // Verify initial header and clients
-      expect(find.text(ClientStrings.clientsTitle), findsNWidgets(2)); // Title header and AppTabBar label
+      expect(
+        find.text(ClientStrings.clientsTitle),
+        findsNWidgets(2),
+      ); // Title header and AppTabBar label
       expect(find.text(ClientStrings.clientsCount(4)), findsOneWidget);
       expect(find.text('Karim Haddad'), findsOneWidget);
       expect(find.text('Mohamed Bachir'), findsOneWidget);
 
       // 1. Live Search filtering by name
-      await tester.enterText(
-        find.byType(TextField).first,
-        'Mohamed',
-      );
+      await tester.enterText(find.byType(TextField).first, 'Mohamed');
       await tester.pumpAndSettle();
 
       expect(find.text('Mohamed Bachir'), findsOneWidget);
@@ -171,7 +166,9 @@ void main() {
       expect(find.text('Mohamed Bachir'), findsOneWidget);
 
       // 2. Filter pills: Active
-      await tester.tap(find.widgetWithText(AppPill, ClientStrings.filterActive));
+      await tester.tap(
+        find.widgetWithText(AppPill, ClientStrings.filterActive),
+      );
       await tester.pumpAndSettle();
       // Active has 2 clients: Mohamed Bachir & Sarah Benali
       expect(find.text('Mohamed Bachir'), findsOneWidget);
@@ -180,7 +177,9 @@ void main() {
       expect(find.text('Karim Haddad'), findsNothing);
 
       // Filter pills: Inactive
-      await tester.tap(find.widgetWithText(AppPill, ClientStrings.filterInactive));
+      await tester.tap(
+        find.widgetWithText(AppPill, ClientStrings.filterInactive),
+      );
       await tester.pumpAndSettle();
       expect(find.text('Mohamed Bachir'), findsNothing);
       expect(find.text('Sarah Benali'), findsNothing);
@@ -207,41 +206,49 @@ void main() {
       expect(cardTitles, findsOneWidget);
     });
 
-    testWidgets('Empty state when search yields no matches with [+ Add client]', (
-      WidgetTester tester,
-    ) async {
-      final ClientsRepository repo = ClientsRepository();
-      await pumpApp(tester, repository: repo);
+    testWidgets(
+      'Empty state when search yields no matches with [+ Add client]',
+      (WidgetTester tester) async {
+        final ClientsRepository repo = ClientsRepository();
+        await pumpApp(tester, repository: repo);
 
-      await tester.enterText(
-        find.byType(TextField).first,
-        'xyz_no_match_query',
+        await tester.enterText(
+          find.byType(TextField).first,
+          'xyz_no_match_query',
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text(ClientStrings.clientsFound(0)), findsOneWidget);
+        expect(find.text(ClientStrings.emptyTitle), findsOneWidget);
+        expect(find.text(ClientStrings.emptySubtitle), findsOneWidget);
+        expect(find.text(ClientStrings.addClientWithPlus), findsOneWidget);
+
+        // Tapping [+ Add client] navigates to /clients/new
+        await tester.tap(find.text(ClientStrings.addClientWithPlus));
+        await tester.pumpAndSettle();
+
+        expect(find.text(ClientStrings.addNewClientTitle), findsOneWidget);
+      },
+    );
+
+    testWidgets('Add client flow in Quick mode', (WidgetTester tester) async {
+      final ClientsRepository repo = ClientsRepository();
+      await pumpApp(
+        tester,
+        repository: repo,
+        initialLocation: AppRoutes.addClientPath,
       );
-      await tester.pumpAndSettle();
-
-      expect(find.text(ClientStrings.clientsFound(0)), findsOneWidget);
-      expect(find.text(ClientStrings.emptyTitle), findsOneWidget);
-      expect(find.text(ClientStrings.emptySubtitle), findsOneWidget);
-      expect(find.text(ClientStrings.addClientWithPlus), findsOneWidget);
-
-      // Tapping [+ Add client] navigates to /clients/new
-      await tester.tap(find.text(ClientStrings.addClientWithPlus));
-      await tester.pumpAndSettle();
-
-      expect(find.text(ClientStrings.addNewClientTitle), findsOneWidget);
-    });
-
-    testWidgets('Add client flow in Quick mode', (
-      WidgetTester tester,
-    ) async {
-      final ClientsRepository repo = ClientsRepository();
-      await pumpApp(tester, repository: repo, initialLocation: AppRoutes.addClientPath);
 
       expect(find.text(ClientStrings.addNewClientTitle), findsOneWidget);
 
       // In Quick mode, button should be disabled when name is empty
-      final Finder addButtonFinder = find.widgetWithText(PrimaryButton, ClientStrings.addClient);
-      final PrimaryButton buttonBefore = tester.widget<PrimaryButton>(addButtonFinder);
+      final Finder addButtonFinder = find.widgetWithText(
+        PrimaryButton,
+        ClientStrings.addClient,
+      );
+      final PrimaryButton buttonBefore = tester.widget<PrimaryButton>(
+        addButtonFinder,
+      );
       expect(buttonBefore.onPressed, isNull);
 
       // Enter name
@@ -251,7 +258,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final PrimaryButton buttonAfter = tester.widget<PrimaryButton>(addButtonFinder);
+      final PrimaryButton buttonAfter = tester.widget<PrimaryButton>(
+        addButtonFinder,
+      );
       expect(buttonAfter.onPressed, isNotNull);
 
       // Tap Add client
@@ -269,13 +278,20 @@ void main() {
       WidgetTester tester,
     ) async {
       final ClientsRepository repo = ClientsRepository();
-      await pumpApp(tester, repository: repo, initialLocation: AppRoutes.addClientPath);
+      await pumpApp(
+        tester,
+        repository: repo,
+        initialLocation: AppRoutes.addClientPath,
+      );
 
       // Switch to Advanced mode
       await tester.tap(find.text(ClientStrings.advancedMode));
       await tester.pumpAndSettle();
 
-      final Finder addButtonFinder = find.widgetWithText(PrimaryButton, ClientStrings.addClient);
+      final Finder addButtonFinder = find.widgetWithText(
+        PrimaryButton,
+        ClientStrings.addClient,
+      );
 
       // Enter name
       await tester.enterText(
@@ -330,107 +346,113 @@ void main() {
       expect(find.text('Yasmine Kaci'), findsOneWidget);
     });
 
-    testWidgets('Client detail screen: Overview, Quick actions, Contact copy, Finance tiles, Tabs switch', (
-      WidgetTester tester,
-    ) async {
-      final ClientsRepository repo = ClientsRepository();
-      await pumpApp(tester, repository: repo, initialLocation: '/clients/c1');
+    testWidgets(
+      'Client detail screen: Overview, Quick actions, Contact copy, Finance tiles, Tabs switch',
+      (WidgetTester tester) async {
+        final ClientsRepository repo = ClientsRepository();
+        await pumpApp(tester, repository: repo, initialLocation: '/clients/c1');
 
-      expect(find.byType(ClientDetailScreen), findsOneWidget);
-      expect(find.text('Mohamed Bachir'), findsOneWidget);
-      expect(find.text(ClientStrings.financeBudget), findsOneWidget);
-      expect(find.text('450,000 DZ'), findsOneWidget);
-      expect(find.text('245,000 DZ'), findsOneWidget);
+        expect(find.byType(ClientDetailScreen), findsOneWidget);
+        expect(find.text('Mohamed Bachir'), findsOneWidget);
+        expect(find.text(ClientStrings.financeBudget), findsOneWidget);
+        expect(find.text('450,000 DZ'), findsOneWidget);
+        expect(find.text('245,000 DZ'), findsOneWidget);
 
-      // Copy phone quick action via round button
-      await tester.tap(find.byIcon(Icons.copy_rounded));
-      await tester.pump();
-      expect(find.text(ClientStrings.copiedPhoneToast), findsOneWidget);
-      await tester.pumpAndSettle();
+        // Copy phone quick action via round button
+        await tester.tap(find.byIcon(Icons.copy_rounded));
+        await tester.pump();
+        expect(find.text(ClientStrings.copiedPhoneToast), findsOneWidget);
+        await tester.pumpAndSettle();
 
-      // Contact row copy email (first copy link inside contact card)
-      final Finder copyLinks = find.text(ClientStrings.copyAction);
-      expect(copyLinks, findsWidgets);
-      await tester.tap(copyLinks.at(1));
-      await tester.pump();
-      expect(find.text(ClientStrings.copiedEmailToast), findsOneWidget);
-      await tester.pumpAndSettle();
+        // Contact row copy email (first copy link inside contact card)
+        final Finder copyLinks = find.text(ClientStrings.copyAction);
+        expect(copyLinks, findsWidgets);
+        await tester.tap(copyLinks.at(1));
+        await tester.pump();
+        expect(find.text(ClientStrings.copiedEmailToast), findsOneWidget);
+        await tester.pumpAndSettle();
 
-      // Tap "Total contract budget" tile to switch to Projects tab
-      await tester.tap(find.text(ClientStrings.financeBudget));
-      await tester.pumpAndSettle();
+        // Tap "Total contract budget" tile to switch to Projects tab
+        await tester.tap(find.text(ClientStrings.financeBudget));
+        await tester.pumpAndSettle();
 
-      // Projects tab content visible
-      expect(find.text('Fintask Landing Page'), findsOneWidget);
-      expect(find.text('Brand Identity'), findsOneWidget);
-      expect(find.text('Mobile App UI'), findsOneWidget);
-      expect(find.text('65% complete'), findsOneWidget);
+        // Projects tab content visible
+        expect(find.text('Fintask Landing Page'), findsOneWidget);
+        expect(find.text('Brand Identity'), findsOneWidget);
+        expect(find.text('Mobile App UI'), findsOneWidget);
+        expect(find.text('65% complete'), findsOneWidget);
 
-      // Switch to Payments tab via SegmentedToggle
-      await tester.tap(find.text(ClientStrings.tabPayments));
-      await tester.pumpAndSettle();
+        // Switch to Payments tab via SegmentedToggle
+        await tester.tap(find.text(ClientStrings.tabPayments));
+        await tester.pumpAndSettle();
 
-      expect(find.text(ClientStrings.totalCleared), findsOneWidget);
-      expect(find.text('+100,000 DZ'), findsOneWidget);
-      expect(find.text('+85,000 DZ'), findsOneWidget);
-      expect(find.text('+60,000 DZ'), findsOneWidget);
+        expect(find.text(ClientStrings.totalCleared), findsOneWidget);
+        expect(find.text('+100,000 DZ'), findsOneWidget);
+        expect(find.text('+85,000 DZ'), findsOneWidget);
+        expect(find.text('+60,000 DZ'), findsOneWidget);
 
-      // Back button from Payments returns to Overview
-      await tester.tap(find.byIcon(Icons.arrow_back));
-      await tester.pumpAndSettle();
+        // Back button from Payments returns to Overview
+        await tester.tap(find.byIcon(Icons.arrow_back));
+        await tester.pumpAndSettle();
 
-      expect(find.text(ClientStrings.clientDetailTitle), findsOneWidget);
-      expect(find.text(ClientStrings.financeBudget), findsOneWidget);
-    });
+        expect(find.text(ClientStrings.clientDetailTitle), findsOneWidget);
+        expect(find.text(ClientStrings.financeBudget), findsOneWidget);
+      },
+    );
 
-    testWidgets('Actions sheet (⋯) -> Delete client confirm -> Deletes and returns to list with toast', (
-      WidgetTester tester,
-    ) async {
-      final ClientsRepository repo = ClientsRepository();
-      await pumpApp(tester, repository: repo, initialLocation: '/clients/c1');
+    testWidgets(
+      'Actions sheet (⋯) -> Delete client confirm -> Deletes and returns to list with toast',
+      (WidgetTester tester) async {
+        final ClientsRepository repo = ClientsRepository();
+        await pumpApp(tester, repository: repo, initialLocation: '/clients/c1');
 
-      // Tap "⋯" more button
-      await tester.tap(find.byIcon(Icons.more_horiz));
-      await tester.pumpAndSettle();
+        // Tap "⋯" more button
+        await tester.tap(find.byIcon(Icons.more_horiz));
+        await tester.pumpAndSettle();
 
-      // Actions sheet (C4) options
-      expect(find.text(ClientStrings.actionsViewProfile), findsOneWidget);
-      expect(
-        find.descendant(
-          of: find.byType(AppBottomSheet),
-          matching: find.text(ClientStrings.actionsEditClient),
-        ),
-        findsOneWidget,
-      );
-      expect(find.text(ClientStrings.actionsCopyEmail), findsOneWidget);
-      expect(find.text(ClientStrings.actionsDeleteClient), findsOneWidget);
+        // Actions sheet (C4) options
+        expect(find.text(ClientStrings.actionsViewProfile), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byType(AppBottomSheet),
+            matching: find.text(ClientStrings.actionsEditClient),
+          ),
+          findsOneWidget,
+        );
+        expect(find.text(ClientStrings.actionsCopyEmail), findsOneWidget);
+        expect(find.text(ClientStrings.actionsDeleteClient), findsOneWidget);
 
-      // Tap Delete client
-      await tester.tap(find.text(ClientStrings.actionsDeleteClient));
-      await tester.pumpAndSettle();
+        // Tap Delete client
+        await tester.tap(find.text(ClientStrings.actionsDeleteClient));
+        await tester.pumpAndSettle();
 
-      // Delete confirm sheet (C5)
-      expect(find.text(ClientStrings.deleteConfirmTitle), findsOneWidget);
-      expect(find.text(ClientStrings.deleteConfirmSubtitle), findsOneWidget);
-      expect(find.text(ClientStrings.confirmDelete), findsOneWidget);
-      expect(find.text(ClientStrings.cancel), findsOneWidget);
+        // Delete confirm sheet (C5)
+        expect(find.text(ClientStrings.deleteConfirmTitle), findsOneWidget);
+        expect(find.text(ClientStrings.deleteConfirmSubtitle), findsOneWidget);
+        expect(find.text(ClientStrings.confirmDelete), findsOneWidget);
+        expect(find.text(ClientStrings.cancel), findsOneWidget);
 
-      // Tap Confirm delete
-      await tester.tap(find.text(ClientStrings.confirmDelete));
-      await tester.pumpAndSettle();
+        // Tap Confirm delete
+        await tester.tap(find.text(ClientStrings.confirmDelete));
+        await tester.pumpAndSettle();
 
-      // Ends on clients list (C6) with toast
-      expect(find.byType(ClientsListScreen), findsOneWidget);
-      expect(find.text(ClientStrings.clientDeletedToast), findsOneWidget);
-      expect(repo.byId('c1'), isNull);
-      expect(find.text('Mohamed Bachir'), findsNothing);
-    });
+        // Ends on clients list (C6) with toast
+        expect(find.byType(ClientsListScreen), findsOneWidget);
+        expect(find.text(ClientStrings.clientDeletedToast), findsOneWidget);
+        expect(repo.byId('c1'), isNull);
+        expect(find.text('Mohamed Bachir'), findsNothing);
+      },
+    );
 
     testWidgets('Edit client flow updates data and shows toast', (
       WidgetTester tester,
     ) async {
       final ClientsRepository repo = ClientsRepository();
-      await pumpApp(tester, repository: repo, initialLocation: '/clients/c1/edit');
+      await pumpApp(
+        tester,
+        repository: repo,
+        initialLocation: '/clients/c1/edit',
+      );
 
       expect(find.text(ClientStrings.editClientTitle), findsOneWidget);
       expect(find.text('Mohamed Bachir'), findsOneWidget);
@@ -444,27 +466,34 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap Save changes
-      await tester.tap(find.widgetWithText(PrimaryButton, ClientStrings.saveChanges));
+      await tester.tap(
+        find.widgetWithText(PrimaryButton, ClientStrings.saveChanges),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(ClientStrings.changesSavedToast), findsOneWidget);
       expect(repo.byId('c1')?.name, 'Mohamed B. Bachir');
     });
 
-    testWidgets('Edit non-existent client shows friendly Client not found screen', (
-      WidgetTester tester,
-    ) async {
-      final ClientsRepository repo = ClientsRepository();
-      await pumpApp(tester, repository: repo, initialLocation: '/clients/unknown_id/edit');
+    testWidgets(
+      'Edit non-existent client shows friendly Client not found screen',
+      (WidgetTester tester) async {
+        final ClientsRepository repo = ClientsRepository();
+        await pumpApp(
+          tester,
+          repository: repo,
+          initialLocation: '/clients/unknown_id/edit',
+        );
 
-      expect(find.text(ClientStrings.clientNotFound), findsOneWidget);
-      expect(find.text(ClientStrings.backToClients), findsOneWidget);
+        expect(find.text(ClientStrings.clientNotFound), findsOneWidget);
+        expect(find.text(ClientStrings.backToClients), findsOneWidget);
 
-      await tester.tap(find.text(ClientStrings.backToClients));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text(ClientStrings.backToClients));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(ClientsListScreen), findsOneWidget);
-    });
+        expect(find.byType(ClientsListScreen), findsOneWidget);
+      },
+    );
 
     testWidgets(
       'Filter pills and Sort fit on one row at 360x800 without overflow and Inactive pill is hit-testable',
@@ -483,12 +512,7 @@ void main() {
         final GoRouter router = createAppRouter(
           initialLocation: AppRoutes.clientsPath,
         );
-        await tester.pumpWidget(
-          DfileApp(
-            router: router,
-            repository: repo,
-          ),
-        );
+        await tester.pumpWidget(DfileApp(router: router, repository: repo));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
 

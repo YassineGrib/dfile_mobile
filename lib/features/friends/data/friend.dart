@@ -47,14 +47,8 @@ class FriendBalance {
   }
 
   @override
-  int get hashCode => Object.hash(
-        net,
-        owedToYou,
-        youOwe,
-        active,
-        settled,
-        lastActivity,
-      );
+  int get hashCode =>
+      Object.hash(net, owedToYou, youOwe, active, settled, lastActivity);
 
   @override
   String toString() =>
@@ -166,15 +160,8 @@ class Friend {
   }
 
   @override
-  int get hashCode => Object.hash(
-        id,
-        name,
-        phone,
-        notes,
-        createdAt,
-        avatarColorIndex,
-        balance,
-      );
+  int get hashCode =>
+      Object.hash(id, name, phone, notes, createdAt, avatarColorIndex, balance);
 
   @override
   String toString() =>

@@ -28,10 +28,7 @@ import 'widgets/dash_card.dart';
 /// - Friendly empty lines when no projects/expenses exist
 /// - Responsive & scrollable without overflow on 360x800 screen
 class ProfitScreen extends StatelessWidget {
-  const ProfitScreen({
-    super.key,
-    this.clock,
-  });
+  const ProfitScreen({super.key, this.clock});
 
   /// Optional clock provider for deterministic testing.
   final DateTime Function()? clock;
@@ -210,20 +207,14 @@ class _ProfitHeroCard extends StatelessWidget {
                   ),
                   FractionallySizedBox(
                     widthFactor: clampedFraction,
-                    child: Container(
-                      color: AppColors.green,
-                    ),
+                    child: Container(color: AppColors.green),
                   ),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 20),
-          const Divider(
-            height: 1,
-            thickness: 1,
-            color: Color(0xFF2C2C33),
-          ),
+          const Divider(height: 1, thickness: 1, color: Color(0xFF2C2C33)),
           const SizedBox(height: 16),
 
           // Revenue & Expenses Row
@@ -305,7 +296,9 @@ class _TopProjectsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double maxPaid = topProjects.isNotEmpty ? topProjects.first.paid : 0.0;
+    final double maxPaid = topProjects.isNotEmpty
+        ? topProjects.first.paid
+        : 0.0;
 
     return DashCard(
       padding: const EdgeInsets.all(20),
@@ -340,7 +333,9 @@ class _TopProjectsCard extends StatelessWidget {
               _RankedBarRow(
                 name: topProjects[i].project.name,
                 amount: topProjects[i].paid,
-                ratio: maxPaid > 0 ? (topProjects[i].paid / maxPaid).clamp(0.0, 1.0) : 0.0,
+                ratio: maxPaid > 0
+                    ? (topProjects[i].paid / maxPaid).clamp(0.0, 1.0)
+                    : 0.0,
                 color: _barColors[i % _barColors.length],
               ),
               if (i < topProjects.length - 1) const SizedBox(height: 16),
@@ -364,7 +359,9 @@ class _TopExpensesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double maxTotal = topExpenses.isNotEmpty ? topExpenses.first.total : 0.0;
+    final double maxTotal = topExpenses.isNotEmpty
+        ? topExpenses.first.total
+        : 0.0;
 
     return DashCard(
       padding: const EdgeInsets.all(20),
@@ -399,7 +396,9 @@ class _TopExpensesCard extends StatelessWidget {
               _RankedBarRow(
                 name: topExpenses[i].category.label,
                 amount: topExpenses[i].total,
-                ratio: maxTotal > 0 ? (topExpenses[i].total / maxTotal).clamp(0.0, 1.0) : 0.0,
+                ratio: maxTotal > 0
+                    ? (topExpenses[i].total / maxTotal).clamp(0.0, 1.0)
+                    : 0.0,
                 color: _barColors[i % _barColors.length],
               ),
               if (i < topExpenses.length - 1) const SizedBox(height: 16),
@@ -469,15 +468,10 @@ class _RankedBarRow extends StatelessWidget {
             height: 8,
             child: Stack(
               children: [
-                Container(
-                  width: double.infinity,
-                  color: AppColors.seg,
-                ),
+                Container(width: double.infinity, color: AppColors.seg),
                 FractionallySizedBox(
                   widthFactor: ratio,
-                  child: Container(
-                    color: color,
-                  ),
+                  child: Container(color: color),
                 ),
               ],
             ),

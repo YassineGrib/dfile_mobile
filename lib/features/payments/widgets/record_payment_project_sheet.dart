@@ -92,10 +92,7 @@ class _RecordPaymentProjectSheetContentState
           const SizedBox(height: 4),
           Text(
             RecordPaymentStrings.projectsOfClient(widget.client.name),
-            style: AppText.body.copyWith(
-              color: AppColors.mute,
-              fontSize: 14,
-            ),
+            style: AppText.body.copyWith(color: AppColors.mute, fontSize: 14),
           ),
           const SizedBox(height: AppSpacing.lg),
 

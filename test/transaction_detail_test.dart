@@ -55,7 +55,10 @@ void main() {
     testWidgets(
       'detail values and settlements list for the Karim 50,000 transaction (tx1)',
       (WidgetTester tester) async {
-        await pumpDetailApp(tester, initialLocation: '/friends/transactions/tx1');
+        await pumpDetailApp(
+          tester,
+          initialLocation: '/friends/transactions/tx1',
+        );
 
         // Top bar
         expect(find.text(TransactionDetailStrings.title), findsOneWidget);
@@ -102,7 +105,10 @@ void main() {
 
         // Bottom bar buttons
         expect(find.text(TransactionDetailStrings.delete), findsOneWidget);
-        expect(find.text(TransactionDetailStrings.settlePayment), findsOneWidget);
+        expect(
+          find.text(TransactionDetailStrings.settlePayment),
+          findsOneWidget,
+        );
       },
     );
 
@@ -110,7 +116,10 @@ void main() {
       'settled transaction hides the settle button and displays green Settled',
       (WidgetTester tester) async {
         // tx4 is Lina Cherif's 8,000 DZ transaction which is fully settled
-        await pumpDetailApp(tester, initialLocation: '/friends/transactions/tx4');
+        await pumpDetailApp(
+          tester,
+          initialLocation: '/friends/transactions/tx4',
+        );
 
         expect(find.text('Lunch and taxi'), findsOneWidget);
         expect(find.text('Lina Cherif • Money loan'), findsOneWidget);
@@ -145,10 +154,19 @@ void main() {
         await tester.pumpAndSettle();
 
         // Confirm sheet is open
-        expect(find.text(TransactionDetailStrings.deleteTransactionTitle), findsOneWidget);
-        expect(find.text(TransactionDetailStrings.deleteTransactionSubtitle), findsOneWidget);
         expect(
-          find.descendant(of: find.byType(TransactionDetailDeleteConfirmSheet), matching: find.textContaining('Cash via BaridiMob')),
+          find.text(TransactionDetailStrings.deleteTransactionTitle),
+          findsOneWidget,
+        );
+        expect(
+          find.text(TransactionDetailStrings.deleteTransactionSubtitle),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: find.byType(TransactionDetailDeleteConfirmSheet),
+            matching: find.textContaining('Cash via BaridiMob'),
+          ),
           findsOneWidget,
         );
         expect(
@@ -185,8 +203,14 @@ void main() {
           initialLocation: '/friends/transactions/unknown_tx_999',
         );
 
-        expect(find.text(TransactionDetailStrings.transactionNotFound), findsOneWidget);
-        expect(find.text(TransactionDetailStrings.backToFriends), findsOneWidget);
+        expect(
+          find.text(TransactionDetailStrings.transactionNotFound),
+          findsOneWidget,
+        );
+        expect(
+          find.text(TransactionDetailStrings.backToFriends),
+          findsOneWidget,
+        );
 
         // Tap back to friends
         await tester.tap(find.text(TransactionDetailStrings.backToFriends));
@@ -199,20 +223,17 @@ void main() {
       },
     );
 
-    testWidgets(
-      'no overflow on 360x800 surface',
-      (WidgetTester tester) async {
-        await pumpDetailApp(
-          tester,
-          initialLocation: '/friends/transactions/tx1',
-          surfaceSize: const Size(360, 800),
-        );
+    testWidgets('no overflow on 360x800 surface', (WidgetTester tester) async {
+      await pumpDetailApp(
+        tester,
+        initialLocation: '/friends/transactions/tx1',
+        surfaceSize: const Size(360, 800),
+      );
 
-        expect(tester.takeException(), isNull);
-        expect(find.byType(TransactionDetailScreen), findsOneWidget);
-        expect(find.text('Cash via BaridiMob'), findsOneWidget);
-        expect(find.text(TransactionDetailStrings.settlePayment), findsOneWidget);
-      },
-    );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TransactionDetailScreen), findsOneWidget);
+      expect(find.text('Cash via BaridiMob'), findsOneWidget);
+      expect(find.text(TransactionDetailStrings.settlePayment), findsOneWidget);
+    });
   });
 }

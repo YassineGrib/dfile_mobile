@@ -38,8 +38,9 @@ void main() {
     });
 
     final ClientsRepository clientsRepo = ClientsRepository();
-    final ProjectsRepository projectsRepo =
-        ProjectsRepository(clientsRepository: clientsRepo);
+    final ProjectsRepository projectsRepo = ProjectsRepository(
+      clientsRepository: clientsRepo,
+    );
     final ExpensesRepository expensesRepo = ExpensesRepository();
     final FriendsRepository friendsRepo = FriendsRepository();
     final SettingsRepository settingsRepo =
@@ -140,83 +141,81 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Closing the PIN sheet without saving keeps it off',
-      (WidgetTester tester) async {
-        final (SettingsRepository repo, _) = await pumpSecurityApp(
-          tester,
-          initialLocation: AppRoutes.settingsSecurityPath,
-        );
+    testWidgets('Closing the PIN sheet without saving keeps it off', (
+      WidgetTester tester,
+    ) async {
+      final (SettingsRepository repo, _) = await pumpSecurityApp(
+        tester,
+        initialLocation: AppRoutes.settingsSecurityPath,
+      );
 
-        final Finder pinRow = find.widgetWithText(
-          SettingsToggleRow,
-          SettingsSecurityStrings.numericPinLock,
-        );
-        final Finder pinSwitch = find.descendant(
-          of: pinRow,
-          matching: find.byType(SettingsSwitch),
-        );
-        await tester.tap(pinSwitch);
-        await tester.pumpAndSettle();
+      final Finder pinRow = find.widgetWithText(
+        SettingsToggleRow,
+        SettingsSecurityStrings.numericPinLock,
+      );
+      final Finder pinSwitch = find.descendant(
+        of: pinRow,
+        matching: find.byType(SettingsSwitch),
+      );
+      await tester.tap(pinSwitch);
+      await tester.pumpAndSettle();
 
-        expect(find.byType(SecurityPinSheet), findsOneWidget);
+      expect(find.byType(SecurityPinSheet), findsOneWidget);
 
-        // Enter some digits without saving
-        await tester.tap(find.text('5'));
-        await tester.pump();
-        await tester.tap(find.text('6'));
-        await tester.pump();
+      // Enter some digits without saving
+      await tester.tap(find.text('5'));
+      await tester.pump();
+      await tester.tap(find.text('6'));
+      await tester.pump();
 
-        // Dismiss the sheet via navigator pop (simulating swipe or barrier tap)
-        Navigator.of(tester.element(find.byType(SecurityPinSheet))).pop();
-        await tester.pumpAndSettle();
+      // Dismiss the sheet via navigator pop (simulating swipe or barrier tap)
+      Navigator.of(tester.element(find.byType(SecurityPinSheet))).pop();
+      await tester.pumpAndSettle();
 
-        expect(find.byType(SecurityPinSheet), findsNothing);
-        expect(repo.pinEnabled, isFalse);
-        expect(repo.pin, isNull);
-        expect(find.text(SettingsSecurityStrings.changePin), findsNothing);
-      },
-    );
+      expect(find.byType(SecurityPinSheet), findsNothing);
+      expect(repo.pinEnabled, isFalse);
+      expect(repo.pin, isNull);
+      expect(find.text(SettingsSecurityStrings.changePin), findsNothing);
+    });
 
-    testWidgets(
-      'Disable clears PIN and shows toast',
-      (WidgetTester tester) async {
-        final (SettingsRepository repo, _) = await pumpSecurityApp(
-          tester,
-          initialLocation: AppRoutes.settingsSecurityPath,
-          settingsRepository: SettingsRepository(
-            initialPinEnabled: true,
-            initialPin: '9876',
-          ),
-        );
+    testWidgets('Disable clears PIN and shows toast', (
+      WidgetTester tester,
+    ) async {
+      final (SettingsRepository repo, _) = await pumpSecurityApp(
+        tester,
+        initialLocation: AppRoutes.settingsSecurityPath,
+        settingsRepository: SettingsRepository(
+          initialPinEnabled: true,
+          initialPin: '9876',
+        ),
+      );
 
-        expect(repo.pinEnabled, isTrue);
-        expect(find.text(SettingsSecurityStrings.changePin), findsOneWidget);
+      expect(repo.pinEnabled, isTrue);
+      expect(find.text(SettingsSecurityStrings.changePin), findsOneWidget);
 
-        // Tap switch to turn OFF
-        final Finder pinRow = find.widgetWithText(
-          SettingsToggleRow,
-          SettingsSecurityStrings.numericPinLock,
-        );
-        final Finder pinSwitch = find.descendant(
-          of: pinRow,
-          matching: find.byType(SettingsSwitch),
-        );
-        await tester.tap(pinSwitch);
-        await tester.pump();
+      // Tap switch to turn OFF
+      final Finder pinRow = find.widgetWithText(
+        SettingsToggleRow,
+        SettingsSecurityStrings.numericPinLock,
+      );
+      final Finder pinSwitch = find.descendant(
+        of: pinRow,
+        matching: find.byType(SettingsSwitch),
+      );
+      await tester.tap(pinSwitch);
+      await tester.pump();
 
-        // Toast "PIN lock disabled"
-        expect(
-          find.text(SettingsSecurityStrings.pinLockDisabledToast),
-          findsOneWidget,
-        );
-        await tester.pumpAndSettle();
+      // Toast "PIN lock disabled"
+      expect(
+        find.text(SettingsSecurityStrings.pinLockDisabledToast),
+        findsOneWidget,
+      );
+      await tester.pumpAndSettle();
 
-        expect(repo.pinEnabled, isFalse);
-        expect(repo.pin, isNull);
-        expect(find.text(SettingsSecurityStrings.changePin), findsNothing);
-      },
-    );
+      expect(repo.pinEnabled, isFalse);
+      expect(repo.pin, isNull);
+      expect(find.text(SettingsSecurityStrings.changePin), findsNothing);
+    });
 
     testWidgets(
       'Change PIN row opens sheet with "Change PIN" title and updates PIN',
@@ -266,146 +265,143 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Physical keyboard enters digits and backspace in PIN sheet',
-      (WidgetTester tester) async {
-        final (SettingsRepository repo, _) = await pumpSecurityApp(
-          tester,
-          initialLocation: AppRoutes.settingsSecurityPath,
-        );
+    testWidgets('Physical keyboard enters digits and backspace in PIN sheet', (
+      WidgetTester tester,
+    ) async {
+      final (SettingsRepository repo, _) = await pumpSecurityApp(
+        tester,
+        initialLocation: AppRoutes.settingsSecurityPath,
+      );
 
-        final Finder pinRow = find.widgetWithText(
-          SettingsToggleRow,
-          SettingsSecurityStrings.numericPinLock,
-        );
-        final Finder pinSwitch = find.descendant(
-          of: pinRow,
-          matching: find.byType(SettingsSwitch),
-        );
-        await tester.tap(pinSwitch);
-        await tester.pumpAndSettle();
+      final Finder pinRow = find.widgetWithText(
+        SettingsToggleRow,
+        SettingsSecurityStrings.numericPinLock,
+      );
+      final Finder pinSwitch = find.descendant(
+        of: pinRow,
+        matching: find.byType(SettingsSwitch),
+      );
+      await tester.tap(pinSwitch);
+      await tester.pumpAndSettle();
 
-        final Finder saveBtn = find.widgetWithText(
-          PrimaryButton,
-          SettingsSecurityStrings.savePin,
-        );
+      final Finder saveBtn = find.widgetWithText(
+        PrimaryButton,
+        SettingsSecurityStrings.savePin,
+      );
 
-        // Send physical key digits 7, 8, 9, 0
-        await tester.sendKeyEvent(LogicalKeyboardKey.digit7);
-        await tester.pump();
-        await tester.sendKeyEvent(LogicalKeyboardKey.digit8);
-        await tester.pump();
-        await tester.sendKeyEvent(LogicalKeyboardKey.digit9);
-        await tester.pump();
-        await tester.sendKeyEvent(LogicalKeyboardKey.digit0);
-        await tester.pump();
+      // Send physical key digits 7, 8, 9, 0
+      await tester.sendKeyEvent(LogicalKeyboardKey.digit7);
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.digit8);
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.digit9);
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.digit0);
+      await tester.pump();
 
-        expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
+      expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
 
-        // Send backspace
-        await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-        await tester.pump();
-        expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNull);
+      // Send backspace
+      await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+      await tester.pump();
+      expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNull);
 
-        // Re-enter 3
-        await tester.sendKeyEvent(LogicalKeyboardKey.digit3);
-        await tester.pump();
-        expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
+      // Re-enter 3
+      await tester.sendKeyEvent(LogicalKeyboardKey.digit3);
+      await tester.pump();
+      expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
 
-        // Save
-        await tester.tap(saveBtn);
-        await tester.pump();
-        await tester.pumpAndSettle();
+      // Save
+      await tester.tap(saveBtn);
+      await tester.pump();
+      await tester.pumpAndSettle();
 
-        expect(repo.pin, '7893');
-        expect(repo.pinEnabled, isTrue);
-      },
-    );
+      expect(repo.pin, '7893');
+      expect(repo.pinEnabled, isTrue);
+    });
 
-    testWidgets(
-      'Backspace and the 4-digit limit in PIN sheet',
-      (WidgetTester tester) async {
-        await pumpSecurityApp(
-          tester,
-          initialLocation: AppRoutes.settingsSecurityPath,
-        );
+    testWidgets('Backspace and the 4-digit limit in PIN sheet', (
+      WidgetTester tester,
+    ) async {
+      await pumpSecurityApp(
+        tester,
+        initialLocation: AppRoutes.settingsSecurityPath,
+      );
 
-        final Finder pinRow = find.widgetWithText(
-          SettingsToggleRow,
-          SettingsSecurityStrings.numericPinLock,
-        );
-        final Finder pinSwitch = find.descendant(
-          of: pinRow,
-          matching: find.byType(SettingsSwitch),
-        );
-        await tester.tap(pinSwitch);
-        await tester.pumpAndSettle();
+      final Finder pinRow = find.widgetWithText(
+        SettingsToggleRow,
+        SettingsSecurityStrings.numericPinLock,
+      );
+      final Finder pinSwitch = find.descendant(
+        of: pinRow,
+        matching: find.byType(SettingsSwitch),
+      );
+      await tester.tap(pinSwitch);
+      await tester.pumpAndSettle();
 
-        final Finder saveBtn = find.widgetWithText(
-          PrimaryButton,
-          SettingsSecurityStrings.savePin,
-        );
+      final Finder saveBtn = find.widgetWithText(
+        PrimaryButton,
+        SettingsSecurityStrings.savePin,
+      );
 
-        // Enter 4 digits: 1, 2, 3, 4
-        await tester.tap(find.text('1'));
-        await tester.pump();
-        await tester.tap(find.text('2'));
-        await tester.pump();
-        await tester.tap(find.text('3'));
-        await tester.pump();
-        await tester.tap(find.text('4'));
-        await tester.pump();
+      // Enter 4 digits: 1, 2, 3, 4
+      await tester.tap(find.text('1'));
+      await tester.pump();
+      await tester.tap(find.text('2'));
+      await tester.pump();
+      await tester.tap(find.text('3'));
+      await tester.pump();
+      await tester.tap(find.text('4'));
+      await tester.pump();
 
-        expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
+      expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
 
-        // Extra tap on '5' is ignored (stays 4 digits)
-        await tester.tap(find.text('5'));
-        await tester.pump();
-        expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
+      // Extra tap on '5' is ignored (stays 4 digits)
+      await tester.tap(find.text('5'));
+      await tester.pump();
+      expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
 
-        // Tap Backspace
-        await tester.tap(find.byIcon(Icons.backspace_outlined));
-        await tester.pump();
+      // Tap Backspace
+      await tester.tap(find.byIcon(Icons.backspace_outlined));
+      await tester.pump();
 
-        // Now 3 digits, so Save button is disabled
-        expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNull);
+      // Now 3 digits, so Save button is disabled
+      expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNull);
 
-        // Tap '9' to complete 4 digits again
-        await tester.tap(find.text('9'));
-        await tester.pump();
-        expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
-      },
-    );
+      // Tap '9' to complete 4 digits again
+      await tester.tap(find.text('9'));
+      await tester.pump();
+      expect(tester.widget<PrimaryButton>(saveBtn).onPressed, isNotNull);
+    });
 
-    testWidgets(
-      'Fingerprint unlock switch tap keeps it off and shows toast',
-      (WidgetTester tester) async {
-        final (SettingsRepository repo, _) = await pumpSecurityApp(
-          tester,
-          initialLocation: AppRoutes.settingsSecurityPath,
-        );
+    testWidgets('Fingerprint unlock switch tap keeps it off and shows toast', (
+      WidgetTester tester,
+    ) async {
+      final (SettingsRepository repo, _) = await pumpSecurityApp(
+        tester,
+        initialLocation: AppRoutes.settingsSecurityPath,
+      );
 
-        final Finder fpRow = find.widgetWithText(
-          SettingsToggleRow,
-          SettingsSecurityStrings.fingerprintUnlock,
-        );
-        final Finder fpSwitch = find.descendant(
-          of: fpRow,
-          matching: find.byType(SettingsSwitch),
-        );
+      final Finder fpRow = find.widgetWithText(
+        SettingsToggleRow,
+        SettingsSecurityStrings.fingerprintUnlock,
+      );
+      final Finder fpSwitch = find.descendant(
+        of: fpRow,
+        matching: find.byType(SettingsSwitch),
+      );
 
-        await tester.tap(fpSwitch);
-        await tester.pump();
+      await tester.tap(fpSwitch);
+      await tester.pump();
 
-        expect(
-          find.text(SettingsSecurityStrings.notAvailableInDemoToast),
-          findsOneWidget,
-        );
-        await tester.pumpAndSettle();
+      expect(
+        find.text(SettingsSecurityStrings.notAvailableInDemoToast),
+        findsOneWidget,
+      );
+      await tester.pumpAndSettle();
 
-        expect(repo.biometricsEnabled, isFalse);
-      },
-    );
+      expect(repo.biometricsEnabled, isFalse);
+    });
 
     testWidgets(
       'Terminate sessions removes other sessions, shows toast, and hides button',

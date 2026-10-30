@@ -34,8 +34,7 @@ abstract final class SettingsAccountStrings {
       'Current password is incorrect';
   static const String passwordTooShortError =
       'Password must be at least 6 characters';
-  static const String passwordsDoNotMatchError =
-      'New passwords do not match';
+  static const String passwordsDoNotMatchError = 'New passwords do not match';
 
   // Actions
   static const String cancel = 'Cancel';

@@ -6,11 +6,7 @@ import 'app_icons.dart';
 
 /// Four-tab bottom bar (Home, Projects, Clients, More) with real Lucide icons.
 class AppTabBar extends StatelessWidget {
-  const AppTabBar({
-    super.key,
-    this.currentIndex = clientsTabIndex,
-    this.onTap,
-  });
+  const AppTabBar({super.key, this.currentIndex = clientsTabIndex, this.onTap});
 
   static const int homeTabIndex = 0;
   static const int projectsTabIndex = 1;
@@ -57,9 +53,7 @@ class AppTabBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.card,
-        border: Border(
-          top: BorderSide(color: AppColors.line, width: 1),
-        ),
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
       ),
       child: SafeArea(
         top: false,

@@ -222,10 +222,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
-        AppTextField(
-          controller: _emailController,
-          enabled: false,
-        ),
+        AppTextField(controller: _emailController, enabled: false),
       ],
     );
   }

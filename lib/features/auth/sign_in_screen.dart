@@ -6,6 +6,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import 'auth_strings.dart';
+import 'data/auth_service.dart';
 
 /// Screen 5: Sign in screen.
 ///
@@ -25,6 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   String? _emailError;
   String? _passwordError;
+  bool _busy = false;
 
   @override
   void dispose() {
@@ -33,7 +35,7 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  void _onSignIn() {
+  Future<void> _onSignIn() async {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text;
 
@@ -59,7 +61,22 @@ class _SignInScreenState extends State<SignInScreen> {
     setState(() {});
 
     if (isValid) {
+      await _run(AuthScope.of(context).signInWithEmail(email, password));
+    }
+  }
+
+  Future<void> _onGoogle() => _run(AuthScope.of(context).signInWithGoogle());
+
+  Future<void> _run(Future<AuthResult> call) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    final AuthResult result = await call;
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (result.isOk) {
       context.go(AppRoutes.homePath);
+    } else {
+      showAppToast(context, result.error!);
     }
   }
 
@@ -138,7 +155,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         const SizedBox(height: AppSpacing.xxl),
                         PrimaryButton(
                           label: AuthStrings.signIn,
-                          onPressed: _onSignIn,
+                          onPressed: _busy ? null : _onSignIn,
                         ),
                         const SizedBox(height: AppSpacing.xl),
                         Center(
@@ -157,7 +174,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             width: 22,
                             height: 22,
                           ),
-                          onPressed: () => context.go(AppRoutes.homePath),
+                          onPressed: _busy ? null : _onGoogle,
                         ),
                         const Spacer(),
                         const SizedBox(height: AppSpacing.xxl),

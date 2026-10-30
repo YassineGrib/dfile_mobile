@@ -50,166 +50,224 @@ void main() {
   }
 
   group('CashflowChart Widget', () {
-    testWidgets('chart renders for 6 months without exceptions and displays month labels', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
+    testWidgets(
+      'chart renders for 6 months without exceptions and displays month labels',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
 
-      final List<MonthFlow> sixMonthFlows = <MonthFlow>[
-        MonthFlow(month: DateTime(2026, 5, 1), inflow: 125000, outflow: 9000, net: 116000),
-        MonthFlow(month: DateTime(2026, 6, 1), inflow: 320000, outflow: 18000, net: 302000),
-        MonthFlow(month: DateTime(2026, 7, 1), inflow: 60000, outflow: 38000, net: 22000),
-        MonthFlow(month: DateTime(2026, 8, 1), inflow: 0, outflow: 6500, net: -6500),
-        MonthFlow(month: DateTime(2026, 9, 1), inflow: 0, outflow: 12000, net: -12000),
-        MonthFlow(month: DateTime(2026, 10, 1), inflow: 60000, outflow: 7700, net: 52300),
-      ];
+        final List<MonthFlow> sixMonthFlows = <MonthFlow>[
+          MonthFlow(
+            month: DateTime(2026, 5, 1),
+            inflow: 125000,
+            outflow: 9000,
+            net: 116000,
+          ),
+          MonthFlow(
+            month: DateTime(2026, 6, 1),
+            inflow: 320000,
+            outflow: 18000,
+            net: 302000,
+          ),
+          MonthFlow(
+            month: DateTime(2026, 7, 1),
+            inflow: 60000,
+            outflow: 38000,
+            net: 22000,
+          ),
+          MonthFlow(
+            month: DateTime(2026, 8, 1),
+            inflow: 0,
+            outflow: 6500,
+            net: -6500,
+          ),
+          MonthFlow(
+            month: DateTime(2026, 9, 1),
+            inflow: 0,
+            outflow: 12000,
+            net: -12000,
+          ),
+          MonthFlow(
+            month: DateTime(2026, 10, 1),
+            inflow: 60000,
+            outflow: 7700,
+            net: 52300,
+          ),
+        ];
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(20),
-              child: CashflowChart(flows: sixMonthFlows),
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(20),
+                child: CashflowChart(flows: sixMonthFlows),
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      expect(find.byType(CashflowChart), findsOneWidget);
-      expect(find.text('May'), findsOneWidget);
-      expect(find.text('Jun'), findsOneWidget);
-      expect(find.text('Jul'), findsOneWidget);
-      expect(find.text('Aug'), findsOneWidget);
-      expect(find.text('Sep'), findsOneWidget);
-      expect(find.text('Oct'), findsOneWidget);
-    });
-
-    testWidgets('chart renders for 12 months without exceptions and labels stay readable', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester, size: const Size(360, 800));
-
-      final List<MonthFlow> twelveMonthFlows = List<MonthFlow>.generate(12, (int i) {
-        return MonthFlow(
-          month: DateTime(2026, i + 1, 1),
-          inflow: (i == 5) ? 320000.0 : ((i % 2 == 0) ? 50000.0 : 0.0),
-          outflow: 10000.0,
-          net: (i == 5) ? 310000.0 : 40000.0,
         );
-      });
+        await tester.pumpAndSettle();
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(20),
-              child: CashflowChart(flows: twelveMonthFlows),
+        expect(find.byType(CashflowChart), findsOneWidget);
+        expect(find.text('May'), findsOneWidget);
+        expect(find.text('Jun'), findsOneWidget);
+        expect(find.text('Jul'), findsOneWidget);
+        expect(find.text('Aug'), findsOneWidget);
+        expect(find.text('Sep'), findsOneWidget);
+        expect(find.text('Oct'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'chart renders for 12 months without exceptions and labels stay readable',
+      (WidgetTester tester) async {
+        setTestSurface(tester, size: const Size(360, 800));
+
+        final List<MonthFlow> twelveMonthFlows = List<MonthFlow>.generate(12, (
+          int i,
+        ) {
+          return MonthFlow(
+            month: DateTime(2026, i + 1, 1),
+            inflow: (i == 5) ? 320000.0 : ((i % 2 == 0) ? 50000.0 : 0.0),
+            outflow: 10000.0,
+            net: (i == 5) ? 310000.0 : 40000.0,
+          );
+        });
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(20),
+                child: CashflowChart(flows: twelveMonthFlows),
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      expect(find.byType(CashflowChart), findsOneWidget);
-      expect(find.text('Jan'), findsOneWidget);
-      expect(find.text('Dec'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
-
-    testWidgets('chart renders for empty data without exceptions (flat line and friendly line)', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
-
-      final List<MonthFlow> zeroFlows = List<MonthFlow>.generate(6, (int i) {
-        return MonthFlow(
-          month: DateTime(2026, i + 1, 1),
-          inflow: 0.0,
-          outflow: 0.0,
-          net: 0.0,
         );
-      });
+        await tester.pumpAndSettle();
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(20),
-              child: CashflowChart(flows: zeroFlows),
+        expect(find.byType(CashflowChart), findsOneWidget);
+        expect(find.text('Jan'), findsOneWidget);
+        expect(find.text('Dec'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      'chart renders for empty data without exceptions (flat line and friendly line)',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
+
+        final List<MonthFlow> zeroFlows = List<MonthFlow>.generate(6, (int i) {
+          return MonthFlow(
+            month: DateTime(2026, i + 1, 1),
+            inflow: 0.0,
+            outflow: 0.0,
+            net: 0.0,
+          );
+        });
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(20),
+                child: CashflowChart(flows: zeroFlows),
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(CashflowChart), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.noCashMovement), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+        expect(find.byType(CashflowChart), findsOneWidget);
+        expect(
+          find.text(DashboardChartsStrings.noCashMovement),
+          findsOneWidget,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
 
-    testWidgets('best month bubble text "+320,000" renders above best inflow month', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
+    testWidgets(
+      'best month bubble text "+320,000" renders above best inflow month',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
 
-      final List<MonthFlow> flows = <MonthFlow>[
-        MonthFlow(month: DateTime(2026, 5, 1), inflow: 125000, outflow: 9000, net: 116000),
-        MonthFlow(month: DateTime(2026, 6, 1), inflow: 320000, outflow: 18000, net: 302000),
-        MonthFlow(month: DateTime(2026, 7, 1), inflow: 60000, outflow: 38000, net: 22000),
-      ];
+        final List<MonthFlow> flows = <MonthFlow>[
+          MonthFlow(
+            month: DateTime(2026, 5, 1),
+            inflow: 125000,
+            outflow: 9000,
+            net: 116000,
+          ),
+          MonthFlow(
+            month: DateTime(2026, 6, 1),
+            inflow: 320000,
+            outflow: 18000,
+            net: 302000,
+          ),
+          MonthFlow(
+            month: DateTime(2026, 7, 1),
+            inflow: 60000,
+            outflow: 38000,
+            net: 22000,
+          ),
+        ];
 
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(20),
-              child: CashflowChart(flows: flows),
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(20),
+                child: CashflowChart(flows: flows),
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('+320,000'), findsOneWidget);
-    });
+        expect(find.text('+320,000'), findsOneWidget);
+      },
+    );
   });
 
   group('CashflowCard Widget', () {
-    testWidgets('renders title, toggle, 6-month legend totals, and hint on 390x844', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
-      final ProjectsRepository projectsRepo = ProjectsRepository();
-      final ExpensesRepository expensesRepo = ExpensesRepository();
+    testWidgets(
+      'renders title, toggle, 6-month legend totals, and hint on 390x844',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
+        final ProjectsRepository projectsRepo = ProjectsRepository();
+        final ExpensesRepository expensesRepo = ExpensesRepository();
 
-      await tester.pumpWidget(
-        buildScopedApp(
-          projectsRepo: projectsRepo,
-          expensesRepo: expensesRepo,
-          child: SingleChildScrollView(
-            child: CashflowCard(clock: () => fixedNow),
+        await tester.pumpWidget(
+          buildScopedApp(
+            projectsRepo: projectsRepo,
+            expensesRepo: expensesRepo,
+            child: SingleChildScrollView(
+              child: CashflowCard(clock: () => fixedNow),
+            ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.sixMonths), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.year), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.sixMonths), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.year), findsOneWidget);
 
-      // Inflow: 565,000, Outflow: 91,200, Net: 473,800
-      expect(find.text('565,000'), findsOneWidget);
-      expect(find.text('91,200'), findsOneWidget);
-      expect(find.text('473,800'), findsOneWidget);
+        // Inflow: 565,000, Outflow: 91,200, Net: 473,800
+        expect(find.text('565,000'), findsOneWidget);
+        expect(find.text('91,200'), findsOneWidget);
+        expect(find.text('473,800'), findsOneWidget);
 
-      expect(find.text(DashboardChartsStrings.tapToSeeEveryMonth), findsOneWidget);
-      expect(find.byIcon(AppIcons.chevronRight), findsOneWidget);
-    });
+        expect(
+          find.text(DashboardChartsStrings.tapToSeeEveryMonth),
+          findsOneWidget,
+        );
+        expect(find.byIcon(AppIcons.chevronRight), findsOneWidget);
+      },
+    );
 
     testWidgets('the card toggle switches the totals between 6 mo and Year', (
       WidgetTester tester,
@@ -322,35 +380,39 @@ void main() {
   });
 
   group('StatusDonutCard Widget', () {
-    testWidgets('donut counts render total in center and legend items with counts', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
-      final ProjectsRepository projectsRepo = ProjectsRepository();
+    testWidgets(
+      'donut counts render total in center and legend items with counts',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
+        final ProjectsRepository projectsRepo = ProjectsRepository();
 
-      await tester.pumpWidget(
-        buildScopedApp(
-          projectsRepo: projectsRepo,
-          child: SingleChildScrollView(
-            child: StatusDonutCard(clock: () => fixedNow),
+        await tester.pumpWidget(
+          buildScopedApp(
+            projectsRepo: projectsRepo,
+            child: SingleChildScrollView(
+              child: StatusDonutCard(clock: () => fixedNow),
+            ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text(DashboardChartsStrings.projectsByStatus), findsOneWidget);
-      expect(find.text('5'), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.projects), findsOneWidget);
+        expect(
+          find.text(DashboardChartsStrings.projectsByStatus),
+          findsOneWidget,
+        );
+        expect(find.text('5'), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.projects), findsOneWidget);
 
-      expect(find.text(DashboardChartsStrings.delivered), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.completed), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.inProgress), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.waitingClient), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.planned), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.delivered), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.completed), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.inProgress), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.waitingClient), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.planned), findsOneWidget);
 
-      // Each count is 1 in seed data
-      expect(find.text('1'), findsNWidgets(5));
-    });
+        // Each count is 1 in seed data
+        expect(find.text('1'), findsNWidgets(5));
+      },
+    );
 
     testWidgets('empty line is displayed when no projects exist', (
       WidgetTester tester,
@@ -372,7 +434,10 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text(DashboardChartsStrings.projectsByStatus), findsOneWidget);
+      expect(
+        find.text(DashboardChartsStrings.projectsByStatus),
+        findsOneWidget,
+      );
       expect(find.text(DashboardChartsStrings.noProjectsYet), findsOneWidget);
       expect(find.text(DashboardChartsStrings.projects), findsNothing);
     });
@@ -398,57 +463,58 @@ void main() {
   });
 
   group('CashflowScreen Widget', () {
-    testWidgets('renders back, title, toggle, chart card, headers, and month rows with right numbers', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
-      final ProjectsRepository projectsRepo = ProjectsRepository();
-      final ExpensesRepository expensesRepo = ExpensesRepository();
+    testWidgets(
+      'renders back, title, toggle, chart card, headers, and month rows with right numbers',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
+        final ProjectsRepository projectsRepo = ProjectsRepository();
+        final ExpensesRepository expensesRepo = ExpensesRepository();
 
-      await tester.pumpWidget(
-        buildScopedApp(
-          projectsRepo: projectsRepo,
-          expensesRepo: expensesRepo,
-          child: CashflowScreen(clock: () => fixedNow),
-        ),
-      );
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildScopedApp(
+            projectsRepo: projectsRepo,
+            expensesRepo: expensesRepo,
+            child: CashflowScreen(clock: () => fixedNow),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
-      expect(find.byIcon(AppIcons.arrowLeft), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.lastSixMonths), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.thisYear), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.monthByMonth), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.inHeader), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.outHeader), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.netHeader), findsWidgets);
+        expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
+        expect(find.byIcon(AppIcons.arrowLeft), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.lastSixMonths), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.thisYear), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.monthByMonth), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.inHeader), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.outHeader), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.netHeader), findsWidgets);
 
-      // Verify month rows from seed data (newest first)
-      expect(find.text('Oct 2026'), findsOneWidget);
-      expect(find.text('+60k'), findsWidgets);
-      expect(find.text('-7.7k'), findsOneWidget);
-      expect(find.text('+52.3k'), findsOneWidget);
+        // Verify month rows from seed data (newest first)
+        expect(find.text('Oct 2026'), findsOneWidget);
+        expect(find.text('+60k'), findsWidgets);
+        expect(find.text('-7.7k'), findsOneWidget);
+        expect(find.text('+52.3k'), findsOneWidget);
 
-      expect(find.text('Sep 2026'), findsOneWidget);
-      expect(find.text('-12k'), findsWidgets);
+        expect(find.text('Sep 2026'), findsOneWidget);
+        expect(find.text('-12k'), findsWidgets);
 
-      expect(find.text('Aug 2026'), findsOneWidget);
-      expect(find.text('-6.5k'), findsWidgets);
+        expect(find.text('Aug 2026'), findsOneWidget);
+        expect(find.text('-6.5k'), findsWidgets);
 
-      expect(find.text('Jul 2026'), findsOneWidget);
-      expect(find.text('-38k'), findsOneWidget);
-      expect(find.text('+22k'), findsOneWidget);
+        expect(find.text('Jul 2026'), findsOneWidget);
+        expect(find.text('-38k'), findsOneWidget);
+        expect(find.text('+22k'), findsOneWidget);
 
-      expect(find.text('Jun 2026'), findsOneWidget);
-      expect(find.text('+320k'), findsOneWidget);
-      expect(find.text('-18k'), findsOneWidget);
-      expect(find.text('+302k'), findsOneWidget);
+        expect(find.text('Jun 2026'), findsOneWidget);
+        expect(find.text('+320k'), findsOneWidget);
+        expect(find.text('-18k'), findsOneWidget);
+        expect(find.text('+302k'), findsOneWidget);
 
-      expect(find.text('May 2026'), findsOneWidget);
-      expect(find.text('+125k'), findsOneWidget);
-      expect(find.text('-9k'), findsOneWidget);
-      expect(find.text('+116k'), findsOneWidget);
-    });
+        expect(find.text('May 2026'), findsOneWidget);
+        expect(find.text('+125k'), findsOneWidget);
+        expect(find.text('-9k'), findsOneWidget);
+        expect(find.text('+116k'), findsOneWidget);
+      },
+    );
 
     testWidgets('screen toggle switches between Last 6 months and This year', (
       WidgetTester tester,
@@ -497,29 +563,33 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('CashflowScreen has no overflow on 360x800 surface and scrolls', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester, size: const Size(360, 800));
-      final ProjectsRepository projectsRepo = ProjectsRepository();
-      final ExpensesRepository expensesRepo = ExpensesRepository();
+    testWidgets(
+      'CashflowScreen has no overflow on 360x800 surface and scrolls',
+      (WidgetTester tester) async {
+        setTestSurface(tester, size: const Size(360, 800));
+        final ProjectsRepository projectsRepo = ProjectsRepository();
+        final ExpensesRepository expensesRepo = ExpensesRepository();
 
-      await tester.pumpWidget(
-        buildScopedApp(
-          projectsRepo: projectsRepo,
-          expensesRepo: expensesRepo,
-          child: CashflowScreen(clock: () => fixedNow),
-        ),
-      );
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildScopedApp(
+            projectsRepo: projectsRepo,
+            expensesRepo: expensesRepo,
+            child: CashflowScreen(clock: () => fixedNow),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(tester.takeException(), isNull);
+        expect(tester.takeException(), isNull);
 
-      // Drag to scroll
-      await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -300));
-      await tester.pump();
+        // Drag to scroll
+        await tester.drag(
+          find.byType(SingleChildScrollView),
+          const Offset(0, -300),
+        );
+        await tester.pump();
 
-      expect(tester.takeException(), isNull);
-    });
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }

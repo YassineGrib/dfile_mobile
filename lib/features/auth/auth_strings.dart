@@ -31,8 +31,7 @@ abstract final class AuthStrings {
 
   // 5. Sign in screen
   static const String welcomeBack = 'Welcome back';
-  static const String signInSubtitle =
-      'Sign in to continue to your workspace.';
+  static const String signInSubtitle = 'Sign in to continue to your workspace.';
   static const String emailLabel = 'Email';
   static const String emailPlaceholder = 'you@example.com';
   static const String passwordLabel = 'Password';
@@ -45,8 +44,7 @@ abstract final class AuthStrings {
 
   // 6. Sign up screen
   static const String createAccount = 'Create account';
-  static const String signUpSubtitle =
-      'Start managing your freelance work.';
+  static const String signUpSubtitle = 'Start managing your freelance work.';
   static const String fullNameLabel = 'Full name';
   static const String fullNamePlaceholder = 'Your name';
   static const String passwordSignUpPlaceholder = 'At least 8 characters';
@@ -58,6 +56,10 @@ abstract final class AuthStrings {
   static const String forgotPasswordSubtitle =
       'Enter the email on your account and we will send you a 6-digit code.';
   static const String sendCode = 'Send code';
+  static const String sendResetLink = 'Send reset link';
+  static String resetLinkSent(String email) =>
+      'We sent a reset link to $email. Open it to choose a new password.';
+  static const String signingIn = 'Please wait...';
   static const String backToSignIn = 'Back to sign in';
 
   // 8. Verify code (OTP) screen

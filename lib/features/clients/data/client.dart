@@ -17,8 +17,7 @@ class Project {
   final double price;
   final int progress;
 
-  bool get isActive =>
-      status == 'In Progress' || status == 'Waiting Client';
+  bool get isActive => status == 'In Progress' || status == 'Waiting Client';
 
   Project copyWith({
     String? id,

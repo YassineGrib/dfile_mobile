@@ -7,10 +7,7 @@ import '../payments_list_strings.dart';
 
 /// 4 KPI tiles displayed at the top of the payments list matching screen PY2.
 class PaymentsListKpis extends StatelessWidget {
-  const PaymentsListKpis({
-    super.key,
-    required this.stats,
-  });
+  const PaymentsListKpis({super.key, required this.stats});
 
   final PaymentStats stats;
 
@@ -22,10 +19,7 @@ class PaymentsListKpis extends StatelessWidget {
   }) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 12,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: AppColors.card,
           borderRadius: BorderRadius.circular(AppRadius.cardSmall),

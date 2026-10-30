@@ -5,6 +5,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/app_icons.dart';
 import '../../core/widgets/app_toast.dart';
+import '../auth/data/auth_service.dart';
 import 'settings_about_strings.dart';
 import 'widgets/about_sign_out_sheet.dart';
 import 'widgets/settings_group_card.dart';
@@ -63,8 +64,9 @@ class _AboutScreenState extends State<AboutScreen> {
   void _showSignOutConfirmSheet(BuildContext context) {
     AboutSignOutSheetContent.show(
       context,
-      onConfirm: () {
-        context.go(AppRoutes.welcomePath);
+      onConfirm: () async {
+        await AuthScope.of(context).signOut();
+        if (context.mounted) context.go(AppRoutes.welcomePath);
       },
     );
   }

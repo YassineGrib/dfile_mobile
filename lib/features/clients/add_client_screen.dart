@@ -111,10 +111,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                ClientStrings.addNewClientTitle,
-                style: AppText.title,
-              ),
+              Text(ClientStrings.addNewClientTitle, style: AppText.title),
               const SizedBox(height: 4),
               Text(
                 ClientStrings.addNewClientSubtitle,
@@ -123,10 +120,7 @@ class _AddClientScreenState extends State<AddClientScreen> {
             ],
           ),
         ),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _popOrGoClients,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _popOrGoClients),
       ],
     );
   }

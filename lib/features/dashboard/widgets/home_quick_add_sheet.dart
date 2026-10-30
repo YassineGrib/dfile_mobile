@@ -55,15 +55,9 @@ class HomeQuickAddSheet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        title,
-                        style: AppText.bodyBold,
-                      ),
+                      Text(title, style: AppText.bodyBold),
                       const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        style: AppText.caption,
-                      ),
+                      Text(subtitle, style: AppText.caption),
                     ],
                   ),
                 ),
@@ -86,10 +80,7 @@ class HomeQuickAddSheet extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          DashboardHomeStrings.createNew,
-          style: AppText.sectionTitle,
-        ),
+        Text(DashboardHomeStrings.createNew, style: AppText.sectionTitle),
         const SizedBox(height: AppSpacing.lg),
         _buildRow(
           context: context,

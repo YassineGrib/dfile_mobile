@@ -27,10 +27,7 @@ class CalendarFormsBottomBar extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.card,
         border: Border(
-          top: BorderSide(
-            color: AppColors.line,
-            width: AppSpacing.borderWidth,
-          ),
+          top: BorderSide(color: AppColors.line, width: AppSpacing.borderWidth),
         ),
       ),
       padding: EdgeInsets.only(bottom: bottomInset),

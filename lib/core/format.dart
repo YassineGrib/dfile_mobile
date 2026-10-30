@@ -96,7 +96,6 @@ String formatMediumDate(DateTime date) {
   return '${formatShortDate(date)}, ${date.year}';
 }
 
-
 const List<String> _fullMonths = <String>[
   'January',
   'February',

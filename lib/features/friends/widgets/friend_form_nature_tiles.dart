@@ -58,10 +58,7 @@ class FriendFormNatureTiles extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          FriendFormsStrings.natureLabel,
-          style: AppText.label,
-        ),
+        Text(FriendFormsStrings.natureLabel, style: AppText.label),
         const SizedBox(height: AppSpacing.sm),
         Row(
           children: [

@@ -12,8 +12,7 @@ abstract final class SettingsPrivacyStrings {
   static const String privacyPolicySubtitle =
       'Read our data collection and protection policy';
   static const String termsTitle = 'Terms and conditions';
-  static const String termsSubtitle =
-      'Read our terms of service and agreement';
+  static const String termsSubtitle = 'Read our terms of service and agreement';
   static const String howWeUseDataTitle = 'How we use your data';
   static const String howWeUseDataSubtitle =
       'Clear explanation of permissions and data usage';
@@ -60,8 +59,7 @@ abstract final class SettingsPrivacyStrings {
   static const String deleteAnytimeTitle = 'Delete your data any time';
   static const String deleteAnytimeInApp =
       'In app: Settings > Privacy and data > Delete account';
-  static const String deleteAnytimeWeb =
-      'On web: decabyte.dz/delete-account';
+  static const String deleteAnytimeWeb = 'On web: decabyte.dz/delete-account';
   static const String deleteAnytimeWebUrl = 'decabyte.dz/delete-account';
 
   // PS3 Delete account - step 1

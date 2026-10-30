@@ -157,10 +157,13 @@ class _SettleSheetState extends State<SettleSheet> {
     final String? amountError = _getAmountError(remaining);
     final String? notesError = _getNotesError();
 
-    final (Color dirBg, Color dirFg, String dirLabel) =
-        liveTx.direction == FriendTxDirection.lent
-            ? (AppColors.greenBg, AppColors.green, FriendStrings.owedToYou)
-            : (AppColors.redBg, AppColors.red, FriendStrings.youOwe);
+    final (
+      Color dirBg,
+      Color dirFg,
+      String dirLabel,
+    ) = liveTx.direction == FriendTxDirection.lent
+        ? (AppColors.greenBg, AppColors.green, FriendStrings.owedToYou)
+        : (AppColors.redBg, AppColors.red, FriendStrings.youOwe);
 
     final bool isOffset = _selectedMethod == FriendSettleMethod.serviceOffset;
 

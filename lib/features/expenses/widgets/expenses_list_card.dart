@@ -11,11 +11,7 @@ import '../expenses_list_strings.dart';
 
 /// Single expense card displayed in the expenses list matching screen EX1.
 class ExpensesListCard extends StatelessWidget {
-  const ExpensesListCard({
-    super.key,
-    required this.expense,
-    this.projectName,
-  });
+  const ExpensesListCard({super.key, required this.expense, this.projectName});
 
   final Expense expense;
   final String? projectName;
@@ -55,9 +51,11 @@ class ExpensesListCard extends StatelessWidget {
     final (Color methodTextColor, Color methodBgColor) = _methodColors;
 
     final String projectSubtitle =
-        (expense.isProjectLinked && projectName != null && projectName!.isNotEmpty)
-            ? projectName!
-            : ExpensesListStrings.generalCost;
+        (expense.isProjectLinked &&
+            projectName != null &&
+            projectName!.isNotEmpty)
+        ? projectName!
+        : ExpensesListStrings.generalCost;
 
     final String referenceText = expense.reference.trim().isNotEmpty
         ? expense.reference.trim()
@@ -79,7 +77,8 @@ class ExpensesListCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.card),
           child: InkWell(
             borderRadius: BorderRadius.circular(AppRadius.card),
-            onTap: () => context.push('${AppRoutes.expensesPath}/${expense.id}'),
+            onTap: () =>
+                context.push('${AppRoutes.expensesPath}/${expense.id}'),
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(

@@ -18,7 +18,8 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
   });
 
-  Future<(ClientsRepository, ProjectsRepository, GoRouter)> pumpRecordPaymentApp(
+  Future<(ClientsRepository, ProjectsRepository, GoRouter)>
+  pumpRecordPaymentApp(
     WidgetTester tester, {
     String initialLocation = AppRoutes.recordPaymentPath,
     Size surfaceSize = const Size(390, 844),
@@ -49,111 +50,104 @@ void main() {
   }
 
   group('Record Payment Form', () {
-    testWidgets(
-      'validation errors (no client / no project / zero amount)',
-      (WidgetTester tester) async {
-        final (_, ProjectsRepository projectsRepo, _) =
-            await pumpRecordPaymentApp(tester);
+    testWidgets('validation errors (no client / no project / zero amount)', (
+      WidgetTester tester,
+    ) async {
+      final (_, ProjectsRepository projectsRepo, _) =
+          await pumpRecordPaymentApp(tester);
 
-        expect(find.byType(RecordPaymentScreen), findsOneWidget);
+      expect(find.byType(RecordPaymentScreen), findsOneWidget);
 
-        // Initially no errors shown
-        expect(find.text(RecordPaymentStrings.clientRequiredError), findsNothing);
-        expect(
-          find.text(RecordPaymentStrings.projectRequiredError),
-          findsNothing,
-        );
-        expect(find.text(RecordPaymentStrings.amountError), findsNothing);
+      // Initially no errors shown
+      expect(find.text(RecordPaymentStrings.clientRequiredError), findsNothing);
+      expect(
+        find.text(RecordPaymentStrings.projectRequiredError),
+        findsNothing,
+      );
+      expect(find.text(RecordPaymentStrings.amountError), findsNothing);
 
-        // Attempt to save empty form
-        await tester.tap(
-          find.widgetWithText(
-            PrimaryButton,
-            RecordPaymentStrings.recordPaymentAction,
-          ),
-        );
-        await tester.pumpAndSettle();
+      // Attempt to save empty form
+      await tester.tap(
+        find.widgetWithText(
+          PrimaryButton,
+          RecordPaymentStrings.recordPaymentAction,
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        // All 3 required errors should be displayed
-        expect(
-          find.text(RecordPaymentStrings.clientRequiredError),
-          findsOneWidget,
-        );
-        expect(
-          find.text(RecordPaymentStrings.projectRequiredError),
-          findsOneWidget,
-        );
-        expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
+      // All 3 required errors should be displayed
+      expect(
+        find.text(RecordPaymentStrings.clientRequiredError),
+        findsOneWidget,
+      );
+      expect(
+        find.text(RecordPaymentStrings.projectRequiredError),
+        findsOneWidget,
+      );
+      expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
 
-        // Select a client (Mohamed Bachir)
-        await tester.tap(
-          find.widgetWithText(
-            RecordPaymentSelectField,
-            RecordPaymentStrings.payingClientLabel,
-          ),
-        );
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Mohamed Bachir').last);
-        await tester.pumpAndSettle();
+      // Select a client (Mohamed Bachir)
+      await tester.tap(
+        find.widgetWithText(
+          RecordPaymentSelectField,
+          RecordPaymentStrings.payingClientLabel,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Mohamed Bachir').last);
+      await tester.pumpAndSettle();
 
-        // Client error cleared, project error remains
-        expect(find.text(RecordPaymentStrings.clientRequiredError), findsNothing);
-        expect(
-          find.text(RecordPaymentStrings.projectRequiredError),
-          findsOneWidget,
-        );
+      // Client error cleared, project error remains
+      expect(find.text(RecordPaymentStrings.clientRequiredError), findsNothing);
+      expect(
+        find.text(RecordPaymentStrings.projectRequiredError),
+        findsOneWidget,
+      );
 
-        // Select a project (Fintask Landing Page)
-        await tester.tap(
-          find.widgetWithText(
-            RecordPaymentSelectField,
-            RecordPaymentStrings.linkedProjectLabel,
-          ),
-        );
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Fintask Landing Page').last);
-        await tester.pumpAndSettle();
-        await tester.tap(
-          find.widgetWithText(
-            PrimaryButton,
-            RecordPaymentStrings.confirmProject,
-          ),
-        );
-        await tester.pumpAndSettle();
+      // Select a project (Fintask Landing Page)
+      await tester.tap(
+        find.widgetWithText(
+          RecordPaymentSelectField,
+          RecordPaymentStrings.linkedProjectLabel,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Fintask Landing Page').last);
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.widgetWithText(PrimaryButton, RecordPaymentStrings.confirmProject),
+      );
+      await tester.pumpAndSettle();
 
-        // Project error cleared, amount error remains
-        expect(
-          find.text(RecordPaymentStrings.projectRequiredError),
-          findsNothing,
-        );
-        expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
+      // Project error cleared, amount error remains
+      expect(
+        find.text(RecordPaymentStrings.projectRequiredError),
+        findsNothing,
+      );
+      expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
 
-        // Enter zero amount: error persists
-        final Finder amountInput = find.descendant(
-          of: find.widgetWithText(
-            AppTextField,
-            RecordPaymentStrings.amountLabel,
-          ),
-          matching: find.byType(TextField),
-        );
-        await tester.enterText(amountInput, '0');
-        await tester.pumpAndSettle();
-        expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
+      // Enter zero amount: error persists
+      final Finder amountInput = find.descendant(
+        of: find.widgetWithText(AppTextField, RecordPaymentStrings.amountLabel),
+        matching: find.byType(TextField),
+      );
+      await tester.enterText(amountInput, '0');
+      await tester.pumpAndSettle();
+      expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
 
-        // Enter valid amount: error disappears immediately
-        await tester.enterText(amountInput, '15000');
-        await tester.pumpAndSettle();
-        expect(find.text(RecordPaymentStrings.amountError), findsNothing);
+      // Enter valid amount: error disappears immediately
+      await tester.enterText(amountInput, '15000');
+      await tester.pumpAndSettle();
+      expect(find.text(RecordPaymentStrings.amountError), findsNothing);
 
-        // Erasing to empty shows error again since field was touched
-        await tester.enterText(amountInput, '');
-        await tester.pumpAndSettle();
-        expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
+      // Erasing to empty shows error again since field was touched
+      await tester.enterText(amountInput, '');
+      await tester.pumpAndSettle();
+      expect(find.text(RecordPaymentStrings.amountError), findsOneWidget);
 
-        // Verify no new payments were added to repository
-        expect(projectsRepo.paymentsOf('p1').length, 3);
-      },
-    );
+      // Verify no new payments were added to repository
+      expect(projectsRepo.paymentsOf('p1').length, 3);
+    });
 
     testWidgets(
       'picker lists only the client\'s projects and changing client clears project',
@@ -240,44 +234,43 @@ void main() {
       },
     );
 
-    testWidgets(
-      '100% full fills remaining balance',
-      (WidgetTester tester) async {
-        final (_, ProjectsRepository projectsRepo, _) =
-            await pumpRecordPaymentApp(
-          tester,
-          initialLocation: '/payments/new?projectId=p1',
-        );
+    testWidgets('100% full fills remaining balance', (
+      WidgetTester tester,
+    ) async {
+      final (
+        _,
+        ProjectsRepository projectsRepo,
+        _,
+      ) = await pumpRecordPaymentApp(
+        tester,
+        initialLocation: '/payments/new?projectId=p1',
+      );
 
-        // Project p1 has budget 450,000, paid 245,000 -> remaining 205,000
-        final ProjectItem project = projectsRepo.byId('p1')!;
-        final double remaining = projectsRepo.remaining(project);
-        expect(remaining, 205000.0);
+      // Project p1 has budget 450,000, paid 245,000 -> remaining 205,000
+      final ProjectItem project = projectsRepo.byId('p1')!;
+      final double remaining = projectsRepo.remaining(project);
+      expect(remaining, 205000.0);
 
-        // Tap "100% full" chip
-        await tester.tap(find.text(RecordPaymentStrings.fullChip));
-        await tester.pumpAndSettle();
+      // Tap "100% full" chip
+      await tester.tap(find.text(RecordPaymentStrings.fullChip));
+      await tester.pumpAndSettle();
 
-        // Amount field is populated with 205,000
-        expect(find.text('205,000'), findsOneWidget);
-        expect(find.text(RecordPaymentStrings.amountError), findsNothing);
-      },
-    );
+      // Amount field is populated with 205,000
+      expect(find.text('205,000'), findsOneWidget);
+      expect(find.text(RecordPaymentStrings.amountError), findsNothing);
+    });
 
-    testWidgets(
-      'preselect via projectId',
-      (WidgetTester tester) async {
-        await pumpRecordPaymentApp(
-          tester,
-          initialLocation: '/payments/new?projectId=p1',
-        );
+    testWidgets('preselect via projectId', (WidgetTester tester) async {
+      await pumpRecordPaymentApp(
+        tester,
+        initialLocation: '/payments/new?projectId=p1',
+      );
 
-        // Preselects project p1 ("Fintask Landing Page") and its client ("Mohamed Bachir")
-        expect(find.text('Mohamed Bachir'), findsOneWidget);
-        expect(find.text('Fintask Landing Page'), findsOneWidget);
-        expect(find.text('Due 205,000 DZ'), findsOneWidget);
-      },
-    );
+      // Preselects project p1 ("Fintask Landing Page") and its client ("Mohamed Bachir")
+      expect(find.text('Mohamed Bachir'), findsOneWidget);
+      expect(find.text('Fintask Landing Page'), findsOneWidget);
+      expect(find.text('Due 205,000 DZ'), findsOneWidget);
+    });
 
     testWidgets(
       'successful save adds the payment (repository + project paid / remaining change + client sync) and navigates to /payments',
@@ -294,8 +287,9 @@ void main() {
         final ProjectItem initialProject = projectsRepo.byId('p1')!;
         final double paidBefore = projectsRepo.paid(initialProject);
         final double remainingBefore = projectsRepo.remaining(initialProject);
-        final int projectPaymentsCountBefore =
-            projectsRepo.paymentsOf('p1').length;
+        final int projectPaymentsCountBefore = projectsRepo
+            .paymentsOf('p1')
+            .length;
 
         // Enter amount 50,000
         final Finder amountInput = find.descendant(
@@ -378,8 +372,7 @@ void main() {
         final Client updatedClient = clientsRepo.byId('c1')!;
         expect(
           updatedClient.payments.any(
-            (Payment p) =>
-                p.amount == 50000.0 && p.reference == 'TXN-998877',
+            (Payment p) => p.amount == 50000.0 && p.reference == 'TXN-998877',
           ),
           isTrue,
         );
@@ -391,35 +384,31 @@ void main() {
       },
     );
 
-    testWidgets(
-      'cancel and X buttons pop / navigate back to /payments',
-      (WidgetTester tester) async {
-        final (_, _, GoRouter router) = await pumpRecordPaymentApp(
-          tester,
-          initialLocation: AppRoutes.recordPaymentPath,
-        );
+    testWidgets('cancel and X buttons pop / navigate back to /payments', (
+      WidgetTester tester,
+    ) async {
+      final (_, _, GoRouter router) = await pumpRecordPaymentApp(
+        tester,
+        initialLocation: AppRoutes.recordPaymentPath,
+      );
 
-        // Tap close X button
-        await tester.tap(find.byIcon(Icons.close_rounded));
-        await tester.pumpAndSettle();
-        expect(router.state.matchedLocation, AppRoutes.paymentsPath);
+      // Tap close X button
+      await tester.tap(find.byIcon(Icons.close_rounded));
+      await tester.pumpAndSettle();
+      expect(router.state.matchedLocation, AppRoutes.paymentsPath);
 
-        // Now navigate back to record payment screen
-        router.go(AppRoutes.recordPaymentPath);
-        await tester.pumpAndSettle();
-        expect(find.byType(RecordPaymentScreen), findsOneWidget);
+      // Now navigate back to record payment screen
+      router.go(AppRoutes.recordPaymentPath);
+      await tester.pumpAndSettle();
+      expect(find.byType(RecordPaymentScreen), findsOneWidget);
 
-        // Tap Cancel button
-        await tester.tap(
-          find.widgetWithText(
-            SecondaryButton,
-            RecordPaymentStrings.cancel,
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(router.state.matchedLocation, AppRoutes.paymentsPath);
-      },
-    );
+      // Tap Cancel button
+      await tester.tap(
+        find.widgetWithText(SecondaryButton, RecordPaymentStrings.cancel),
+      );
+      await tester.pumpAndSettle();
+      expect(router.state.matchedLocation, AppRoutes.paymentsPath);
+    });
 
     testWidgets(
       '360x800 surface renders without overflow (including with software keyboard inset)',

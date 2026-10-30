@@ -173,18 +173,19 @@ class _FriendsScreenState extends State<FriendsScreen> {
           initialDirection: _txDirectionFilter,
           initialStatus: _txStatusFilter,
           initialType: _txTypeFilter,
-          onApply: (
-            FriendDirectionFilter direction,
-            FriendStatusFilter status,
-            FriendTypeFilter type,
-          ) {
-            setState(() {
-              _txDirectionFilter = direction;
-              _txStatusFilter = status;
-              _txTypeFilter = type;
-              _updateTxPillFromFilters();
-            });
-          },
+          onApply:
+              (
+                FriendDirectionFilter direction,
+                FriendStatusFilter status,
+                FriendTypeFilter type,
+              ) {
+                setState(() {
+                  _txDirectionFilter = direction;
+                  _txStatusFilter = status;
+                  _txTypeFilter = type;
+                  _updateTxPillFromFilters();
+                });
+              },
         );
       },
     );
@@ -262,16 +263,17 @@ class _FriendsScreenState extends State<FriendsScreen> {
     );
 
     final bool isFriendsTab = _activeTab == FriendsTab.friends;
-    final TextEditingController activeSearchController =
-        isFriendsTab ? _friendsSearchController : _txSearchController;
+    final TextEditingController activeSearchController = isFriendsTab
+        ? _friendsSearchController
+        : _txSearchController;
 
     const List<(String, FriendNetFilter)> friendPillOptions =
         <(String, FriendNetFilter)>[
-      (FriendsListStrings.pillAll, FriendNetFilter.all),
-      (FriendsListStrings.pillOweMe, FriendNetFilter.owedToMe),
-      (FriendsListStrings.pillIOwe, FriendNetFilter.iOwe),
-      (FriendsListStrings.pillSettled, FriendNetFilter.settled),
-    ];
+          (FriendsListStrings.pillAll, FriendNetFilter.all),
+          (FriendsListStrings.pillOweMe, FriendNetFilter.owedToMe),
+          (FriendsListStrings.pillIOwe, FriendNetFilter.iOwe),
+          (FriendsListStrings.pillSettled, FriendNetFilter.settled),
+        ];
 
     const List<(String, dynamic)> txPillOptions = <(String, dynamic)>[
       (FriendsListStrings.txPillAll, FriendDirectionFilter.all),
@@ -353,9 +355,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     const SizedBox(height: 14),
 
                     // Overall balance card
-                    FriendsListBalanceCard(
-                      balance: overall,
-                    ),
+                    FriendsListBalanceCard(balance: overall),
                     const SizedBox(height: 14),
 
                     // Two-way toggle: Friends / Transactions
@@ -398,7 +398,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                           hintText: isFriendsTab
                               ? FriendsListStrings.searchFriendsPlaceholder
                               : FriendsListStrings
-                                  .searchTransactionsPlaceholder,
+                                    .searchTransactionsPlaceholder,
                           hintStyle: AppText.body.copyWith(
                             color: AppColors.placeholder,
                           ),
@@ -531,9 +531,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                 ),
               )
             else
-              const SliverToBoxAdapter(
-                child: SizedBox(height: AppSpacing.md),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.md)),
 
             // Friends tab content
             if (isFriendsTab) ...[
@@ -684,42 +682,41 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     AppSpacing.xxl,
                   ),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        final Friend friend = displayedFriends[index];
-                        final FriendBalance balance =
-                            repo.friendBalance(friend.id);
-                        return LayoutBuilder(
-                          builder: (BuildContext context,
-                              BoxConstraints constraints) {
-                            Widget card = FriendCard(
-                              friend: friend,
-                              balance: balance,
-                              onTap: () =>
-                                  context.push('/friends/${friend.id}'),
-                            );
-
-                            if (constraints.maxWidth < 360) {
-                              card = FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.topCenter,
-                                child: SizedBox(
-                                  width: 360,
-                                  child: card,
-                                ),
+                    delegate: SliverChildBuilderDelegate((
+                      BuildContext context,
+                      int index,
+                    ) {
+                      final Friend friend = displayedFriends[index];
+                      final FriendBalance balance = repo.friendBalance(
+                        friend.id,
+                      );
+                      return LayoutBuilder(
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                              Widget card = FriendCard(
+                                friend: friend,
+                                balance: balance,
+                                onTap: () =>
+                                    context.push('/friends/${friend.id}'),
                               );
-                            }
 
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: AppSpacing.md),
-                              child: card,
-                            );
-                          },
-                        );
-                      },
-                      childCount: displayedFriends.length,
-                    ),
+                              if (constraints.maxWidth < 360) {
+                                card = FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.topCenter,
+                                  child: SizedBox(width: 360, child: card),
+                                );
+                              }
+
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: AppSpacing.md,
+                                ),
+                                child: card,
+                              );
+                            },
+                      );
+                    }, childCount: displayedFriends.length),
                   ),
                 ),
             ],
@@ -840,8 +837,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                               ),
                               const SizedBox(height: AppSpacing.lg),
                               Text(
-                                FriendsListStrings
-                                    .emptyTransactionsFilterTitle,
+                                FriendsListStrings.emptyTransactionsFilterTitle,
                                 textAlign: TextAlign.center,
                                 style: AppText.sectionTitle,
                               ),
@@ -875,47 +871,45 @@ class _FriendsScreenState extends State<FriendsScreen> {
                     AppSpacing.xxl,
                   ),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        final FriendTransaction tx =
-                            displayedTransactions[index];
-                        final Friend? friend = repo.friendById(tx.friendId);
-                        return LayoutBuilder(
-                          builder: (BuildContext context,
-                              BoxConstraints constraints) {
-                            Widget card = FriendTxCard(
-                              transaction: tx,
-                              showFriend: true,
-                              friendName: friend?.name,
-                              onTap: () => context
-                                  .push('/friends/transactions/${tx.id}'),
-                              onSettle: () => showSettleSheet(
-                                context,
-                                transactionId: tx.id,
-                              ),
-                            );
-
-                            if (constraints.maxWidth < 380) {
-                              card = FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.topCenter,
-                                child: SizedBox(
-                                  width: 380,
-                                  child: card,
+                    delegate: SliverChildBuilderDelegate((
+                      BuildContext context,
+                      int index,
+                    ) {
+                      final FriendTransaction tx = displayedTransactions[index];
+                      final Friend? friend = repo.friendById(tx.friendId);
+                      return LayoutBuilder(
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                              Widget card = FriendTxCard(
+                                transaction: tx,
+                                showFriend: true,
+                                friendName: friend?.name,
+                                onTap: () => context.push(
+                                  '/friends/transactions/${tx.id}',
+                                ),
+                                onSettle: () => showSettleSheet(
+                                  context,
+                                  transactionId: tx.id,
                                 ),
                               );
-                            }
 
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: AppSpacing.md),
-                              child: card,
-                            );
-                          },
-                        );
-                      },
-                      childCount: displayedTransactions.length,
-                    ),
+                              if (constraints.maxWidth < 380) {
+                                card = FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.topCenter,
+                                  child: SizedBox(width: 380, child: card),
+                                );
+                              }
+
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: AppSpacing.md,
+                                ),
+                                child: card,
+                              );
+                            },
+                      );
+                    }, childCount: displayedTransactions.length),
                   ),
                 ),
             ],

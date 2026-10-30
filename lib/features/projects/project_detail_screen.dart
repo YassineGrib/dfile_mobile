@@ -12,10 +12,7 @@ import 'widgets/project_status_chip.dart';
 import 'widgets/record_payment_sheet.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
-  const ProjectDetailScreen({
-    super.key,
-    required this.projectId,
-  });
+  const ProjectDetailScreen({super.key, required this.projectId});
 
   final String projectId;
 
@@ -327,9 +324,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         const SizedBox(height: 2),
                         Text(
                           ProjectStrings.deleteConfirmSubtitle,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.red,
-                          ),
+                          style: AppText.caption.copyWith(color: AppColors.red),
                         ),
                       ],
                     ),
@@ -400,10 +395,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   }) {
     return Row(
       children: [
-        RoundIconButton(
-          icon: Icons.arrow_back,
-          onPressed: onBack,
-        ),
+        RoundIconButton(icon: Icons.arrow_back, onPressed: onBack),
         Expanded(
           child: Center(
             child: Text(
@@ -414,10 +406,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             ),
           ),
         ),
-        RoundIconButton(
-          icon: Icons.more_horiz,
-          onPressed: onMore,
-        ),
+        RoundIconButton(icon: Icons.more_horiz, onPressed: onMore),
       ],
     );
   }
@@ -502,15 +491,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                   Expanded(
                     child: Text(
                       ProjectStrings.progressLabel,
-                      style: AppText.bodyMedium.copyWith(
-                        color: AppColors.mute,
-                      ),
+                      style: AppText.bodyMedium.copyWith(color: AppColors.mute),
                     ),
                   ),
-                  Text(
-                    '${project.progress}%',
-                    style: AppText.sectionTitle,
-                  ),
+                  Text('${project.progress}%', style: AppText.sectionTitle),
                 ],
               ),
               const SizedBox(height: AppSpacing.md),
@@ -929,9 +913,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.card,
-        border: Border(
-          top: BorderSide(color: AppColors.line, width: 1),
-        ),
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
       ),
       padding: EdgeInsets.only(bottom: bottomInset),
       child: SafeArea(
@@ -1093,9 +1075,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       clientName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppText.bodyMedium.copyWith(
-                        color: AppColors.mute,
-                      ),
+                      style: AppText.bodyMedium.copyWith(color: AppColors.mute),
                     ),
                   ),
                 ],

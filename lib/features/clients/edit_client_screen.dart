@@ -8,10 +8,7 @@ import 'client_strings.dart';
 import 'data/data.dart';
 
 class EditClientScreen extends StatefulWidget {
-  const EditClientScreen({
-    super.key,
-    required this.clientId,
-  });
+  const EditClientScreen({super.key, required this.clientId});
 
   final String clientId;
 
@@ -149,10 +146,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                ClientStrings.editClientTitle,
-                style: AppText.title,
-              ),
+              Text(ClientStrings.editClientTitle, style: AppText.title),
               const SizedBox(height: 4),
               Text(
                 ClientStrings.editClientSubtitle,
@@ -161,10 +155,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
             ],
           ),
         ),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _popOrGoClients,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _popOrGoClients),
       ],
     );
   }
@@ -209,10 +200,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  ClientStrings.clientNotFound,
-                  style: AppText.sectionTitle,
-                ),
+                Text(ClientStrings.clientNotFound, style: AppText.sectionTitle),
                 const SizedBox(height: AppSpacing.xl),
                 PrimaryButton(
                   label: ClientStrings.backToClients,

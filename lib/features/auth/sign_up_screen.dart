@@ -6,6 +6,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import 'auth_strings.dart';
+import 'data/auth_service.dart';
 
 /// Screen 6: Sign up screen.
 ///
@@ -27,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _nameError;
   String? _emailError;
   String? _passwordError;
+  bool _busy = false;
   bool _consentAccepted = false;
   String? _consentError;
 
@@ -38,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  void _onCreateAccount() {
+  Future<void> _onCreateAccount() async {
     final String name = _nameController.text.trim();
     final String email = _emailController.text.trim();
     final String password = _passwordController.text;
@@ -82,18 +84,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {});
 
     if (isValid) {
-      context.go(AppRoutes.homePath);
+      await _run(AuthScope.of(context).signUp(email, password, fullName: name));
     }
   }
 
-  void _onContinueWithGoogle() {
+  Future<void> _run(Future<AuthResult> call) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    final AuthResult result = await call;
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (result.isOk) {
+      context.go(AppRoutes.homePath);
+    } else {
+      showAppToast(context, result.error!);
+    }
+  }
+
+  Future<void> _onContinueWithGoogle() async {
     if (!_consentAccepted) {
       setState(() {
         _consentError = AuthStrings.consentRequiredError;
       });
       return;
     }
-    context.go(AppRoutes.homePath);
+    await _run(AuthScope.of(context).signInWithGoogle());
   }
 
   @override
@@ -176,14 +191,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: Container(
                                 width: 22,
                                 height: 22,
-                                margin: const EdgeInsets.only(top: 2, right: 10),
+                                margin: const EdgeInsets.only(
+                                  top: 2,
+                                  right: 10,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: _consentAccepted ? AppColors.ink : AppColors.card,
+                                  color: _consentAccepted
+                                      ? AppColors.ink
+                                      : AppColors.card,
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
                                     color: _consentError != null
                                         ? AppColors.red
-                                        : (_consentAccepted ? AppColors.ink : AppColors.line),
+                                        : (_consentAccepted
+                                              ? AppColors.ink
+                                              : AppColors.line),
                                     width: 1.5,
                                   ),
                                 ),
@@ -210,13 +232,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       alignment: PlaceholderAlignment.baseline,
                                       baseline: TextBaseline.alphabetic,
                                       child: GestureDetector(
-                                        onTap: () => context.push(AppRoutes.settingsTermsPath),
+                                        onTap: () => context.push(
+                                          AppRoutes.settingsTermsPath,
+                                        ),
                                         child: Text(
                                           AuthStrings.terms,
                                           style: AppText.bodyMedium.copyWith(
                                             color: AppColors.ink,
                                             fontWeight: FontWeight.w700,
-                                            decoration: TextDecoration.underline,
+                                            decoration:
+                                                TextDecoration.underline,
                                           ),
                                         ),
                                       ),
@@ -226,13 +251,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       alignment: PlaceholderAlignment.baseline,
                                       baseline: TextBaseline.alphabetic,
                                       child: GestureDetector(
-                                        onTap: () => context.push(AppRoutes.settingsPrivacyPath),
+                                        onTap: () => context.push(
+                                          AppRoutes.settingsPrivacyPath,
+                                        ),
                                         child: Text(
                                           AuthStrings.privacyPolicy,
                                           style: AppText.bodyMedium.copyWith(
                                             color: AppColors.ink,
                                             fontWeight: FontWeight.w700,
-                                            decoration: TextDecoration.underline,
+                                            decoration:
+                                                TextDecoration.underline,
                                           ),
                                         ),
                                       ),

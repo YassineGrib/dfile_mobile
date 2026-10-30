@@ -17,10 +17,7 @@ Future<bool?> showRecordPaymentSheet({
   return showAppSheet<bool>(
     context: context,
     builder: (BuildContext sheetContext) {
-      return RecordPaymentSheet(
-        project: project,
-        clientName: clientName,
-      );
+      return RecordPaymentSheet(project: project, clientName: clientName);
     },
   );
 }
@@ -134,10 +131,7 @@ class _RecordPaymentSheetState extends State<RecordPaymentSheet> {
           const SizedBox(height: 4),
           Text(
             '${liveProject.name} • ${widget.clientName}',
-            style: AppText.body.copyWith(
-              fontSize: 15,
-              color: AppColors.mute,
-            ),
+            style: AppText.body.copyWith(fontSize: 15, color: AppColors.mute),
           ),
           const SizedBox(height: AppSpacing.xl),
 

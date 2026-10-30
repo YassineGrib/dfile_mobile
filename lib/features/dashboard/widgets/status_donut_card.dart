@@ -24,10 +24,7 @@ class StatusSlice {
 
 /// Dashboard projects by status card with donut chart per HM2 in SPEC.md.
 class StatusDonutCard extends StatelessWidget {
-  const StatusDonutCard({
-    super.key,
-    this.clock,
-  });
+  const StatusDonutCard({super.key, this.clock});
 
   final DateTime Function()? clock;
 
@@ -192,10 +189,7 @@ class StatusDonutCard extends StatelessWidget {
 
 /// CustomPainter rendering donut arcs with small gaps and inner radius ~62%.
 class StatusDonutPainter extends CustomPainter {
-  const StatusDonutPainter({
-    required this.slices,
-    required this.total,
-  });
+  const StatusDonutPainter({required this.slices, required this.total});
 
   final List<StatusSlice> slices;
   final int total;
@@ -211,8 +205,9 @@ class StatusDonutPainter extends CustomPainter {
     final double strokeW = outerR - innerR;
     final double midR = (outerR + innerR) / 2;
 
-    final List<StatusSlice> activeSlices =
-        slices.where((StatusSlice s) => s.count > 0).toList();
+    final List<StatusSlice> activeSlices = slices
+        .where((StatusSlice s) => s.count > 0)
+        .toList();
 
     if (activeSlices.length == 1) {
       final Paint paint = Paint()

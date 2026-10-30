@@ -53,7 +53,10 @@ void main() {
       expect(FriendTxDirection.borrowed.isBorrowed, isTrue);
 
       expect(FriendTxDirection.tryParse('Owed to me'), FriendTxDirection.lent);
-      expect(FriendTxDirection.tryParse('borrowed'), FriendTxDirection.borrowed);
+      expect(
+        FriendTxDirection.tryParse('borrowed'),
+        FriendTxDirection.borrowed,
+      );
       expect(FriendTxDirection.tryParse('none'), isNull);
     });
 
@@ -72,10 +75,16 @@ void main() {
       expect(FriendSettleMethod.bank.label, 'Bank');
       expect(FriendSettleMethod.serviceOffset.label, 'Offset');
 
-      expect(FriendSettleMethod.tryParse('BaridiMob'), FriendSettleMethod.baridimob);
+      expect(
+        FriendSettleMethod.tryParse('BaridiMob'),
+        FriendSettleMethod.baridimob,
+      );
       expect(FriendSettleMethod.tryParse('cash'), FriendSettleMethod.cash);
       expect(FriendSettleMethod.tryParse('bank'), FriendSettleMethod.bank);
-      expect(FriendSettleMethod.tryParse('offset'), FriendSettleMethod.serviceOffset);
+      expect(
+        FriendSettleMethod.tryParse('offset'),
+        FriendSettleMethod.serviceOffset,
+      );
       expect(FriendSettleMethod.tryParse('invalid'), isNull);
     });
 
@@ -108,7 +117,10 @@ void main() {
       expect(FriendStrings.offset, 'Offset');
 
       expect(FriendStrings.typeLabel(FriendTxType.money), 'Money loan');
-      expect(FriendStrings.directionLabel(FriendTxDirection.lent), 'Owed to me');
+      expect(
+        FriendStrings.directionLabel(FriendTxDirection.lent),
+        'Owed to me',
+      );
       expect(FriendStrings.statusLabel(FriendTxStatus.pending), 'Pending');
       expect(FriendStrings.methodLabel(FriendSettleMethod.cash), 'Cash');
     });
@@ -128,34 +140,43 @@ void main() {
       expect(pendingTx.status, FriendTxStatus.pending);
       expect(pendingTx.isSettled, isFalse);
 
-      final FriendTransaction partialTx = pendingTx.copyWith(paidAmount: 4000.0);
+      final FriendTransaction partialTx = pendingTx.copyWith(
+        paidAmount: 4000.0,
+      );
       expect(partialTx.remaining, 6000.0);
       expect(partialTx.status, FriendTxStatus.partial);
       expect(partialTx.isSettled, isFalse);
 
-      final FriendTransaction settledTx = pendingTx.copyWith(paidAmount: 10000.0);
+      final FriendTransaction settledTx = pendingTx.copyWith(
+        paidAmount: 10000.0,
+      );
       expect(settledTx.remaining, 0.0);
       expect(settledTx.status, FriendTxStatus.settled);
       expect(settledTx.isSettled, isTrue);
 
-      final FriendTransaction overpaidTx = pendingTx.copyWith(paidAmount: 12000.0);
+      final FriendTransaction overpaidTx = pendingTx.copyWith(
+        paidAmount: 12000.0,
+      );
       expect(overpaidTx.remaining, 0.0);
       expect(overpaidTx.status, FriendTxStatus.settled);
     });
   });
 
   group('FriendsRepository Mock Seed & Balances (SPEC.md)', () {
-    test('Default FriendsRepository initializes exact mock seed data from SPEC.md', () {
-      final FriendsRepository repo = FriendsRepository();
-      expect(repo.friends.length, 4);
-      expect(repo.transactions.length, 5);
-      expect(repo.settlements.length, 3);
+    test(
+      'Default FriendsRepository initializes exact mock seed data from SPEC.md',
+      () {
+        final FriendsRepository repo = FriendsRepository();
+        expect(repo.friends.length, 4);
+        expect(repo.transactions.length, 5);
+        expect(repo.settlements.length, 3);
 
-      expect(repo.friendById('fr1')?.name, 'Karim Boualam');
-      expect(repo.friendById('fr2')?.name, 'Yacine Mebarki');
-      expect(repo.friendById('fr3')?.name, 'Amine Saidi');
-      expect(repo.friendById('fr4')?.name, 'Lina Cherif');
-    });
+        expect(repo.friendById('fr1')?.name, 'Karim Boualam');
+        expect(repo.friendById('fr2')?.name, 'Yacine Mebarki');
+        expect(repo.friendById('fr3')?.name, 'Amine Saidi');
+        expect(repo.friendById('fr4')?.name, 'Lina Cherif');
+      },
+    );
 
     test('overallBalance calculates net 58,000 / 70,000 / 12,000', () {
       final FriendsRepository repo = FriendsRepository();
@@ -166,17 +187,20 @@ void main() {
       expect(overall.net, 58000.0);
     });
 
-    test('friendBalance calculates Karim Boualam net 45,000 and last activity', () {
-      final FriendsRepository repo = FriendsRepository();
-      final FriendBalance karim = repo.friendBalance('fr1');
+    test(
+      'friendBalance calculates Karim Boualam net 45,000 and last activity',
+      () {
+        final FriendsRepository repo = FriendsRepository();
+        final FriendBalance karim = repo.friendBalance('fr1');
 
-      expect(karim.owedToYou, 45000.0);
-      expect(karim.youOwe, 0.0);
-      expect(karim.net, 45000.0);
-      expect(karim.active, 2);
-      expect(karim.settled, 0);
-      expect(karim.lastActivity, DateTime(2026, 10, 5));
-    });
+        expect(karim.owedToYou, 45000.0);
+        expect(karim.youOwe, 0.0);
+        expect(karim.net, 45000.0);
+        expect(karim.active, 2);
+        expect(karim.settled, 0);
+        expect(karim.lastActivity, DateTime(2026, 10, 5));
+      },
+    );
 
     test('friendBalance calculates Yacine, Amine, and Lina balances', () {
       final FriendsRepository repo = FriendsRepository();
@@ -236,41 +260,44 @@ void main() {
       );
     });
 
-    test('settle records exact full settlement and updates transaction to settled', () {
-      final FriendsRepository repo = FriendsRepository();
-      bool notified = false;
-      repo.addListener(() => notified = true);
+    test(
+      'settle records exact full settlement and updates transaction to settled',
+      () {
+        final FriendsRepository repo = FriendsRepository();
+        bool notified = false;
+        repo.addListener(() => notified = true);
 
-      // tx1 remaining is 30,000
-      final FriendSettlement settlement = repo.settle(
-        'tx1',
-        30000.0,
-        FriendSettleMethod.baridimob,
-        'Final payoff',
-        DateTime(2026, 10, 25),
-      );
+        // tx1 remaining is 30,000
+        final FriendSettlement settlement = repo.settle(
+          'tx1',
+          30000.0,
+          FriendSettleMethod.baridimob,
+          'Final payoff',
+          DateTime(2026, 10, 25),
+        );
 
-      expect(settlement.amount, 30000.0);
-      expect(settlement.method, FriendSettleMethod.baridimob);
-      expect(settlement.notes, 'Final payoff');
-      expect(notified, isTrue);
+        expect(settlement.amount, 30000.0);
+        expect(settlement.method, FriendSettleMethod.baridimob);
+        expect(settlement.notes, 'Final payoff');
+        expect(notified, isTrue);
 
-      final FriendTransaction updatedTx = repo.transactionById('tx1')!;
-      expect(updatedTx.paidAmount, 50000.0);
-      expect(updatedTx.remaining, 0.0);
-      expect(updatedTx.status, FriendTxStatus.settled);
+        final FriendTransaction updatedTx = repo.transactionById('tx1')!;
+        expect(updatedTx.paidAmount, 50000.0);
+        expect(updatedTx.remaining, 0.0);
+        expect(updatedTx.status, FriendTxStatus.settled);
 
-      // Check settlementsOf
-      final List<FriendSettlement> txSettlements = repo.settlementsOf('tx1');
-      expect(txSettlements.length, 3);
-      expect(txSettlements.last.amount, 30000.0);
+        // Check settlementsOf
+        final List<FriendSettlement> txSettlements = repo.settlementsOf('tx1');
+        expect(txSettlements.length, 3);
+        expect(txSettlements.last.amount, 30000.0);
 
-      // Karim net balance reduced by 30,000 (was 45,000 -> now 15,000)
-      final FriendBalance karim = repo.friendBalance('fr1');
-      expect(karim.net, 15000.0);
-      expect(karim.active, 1);
-      expect(karim.settled, 1);
-    });
+        // Karim net balance reduced by 30,000 (was 45,000 -> now 15,000)
+        final FriendBalance karim = repo.friendBalance('fr1');
+        expect(karim.net, 15000.0);
+        expect(karim.active, 1);
+        expect(karim.settled, 1);
+      },
+    );
 
     test('settle partial amount updates remaining and paidAmount', () {
       final FriendsRepository repo = FriendsRepository();
@@ -286,28 +313,34 @@ void main() {
   });
 
   group('FriendsRepository Cascade Deletion', () {
-    test('deleteTransaction cascades deletion to all associated settlements', () {
-      final FriendsRepository repo = FriendsRepository();
-      expect(repo.settlementsOf('tx1').length, 2);
+    test(
+      'deleteTransaction cascades deletion to all associated settlements',
+      () {
+        final FriendsRepository repo = FriendsRepository();
+        expect(repo.settlementsOf('tx1').length, 2);
 
-      final bool deleted = repo.deleteTransaction('tx1');
-      expect(deleted, isTrue);
-      expect(repo.transactionById('tx1'), isNull);
-      expect(repo.settlementsOf('tx1'), isEmpty);
-    });
+        final bool deleted = repo.deleteTransaction('tx1');
+        expect(deleted, isTrue);
+        expect(repo.transactionById('tx1'), isNull);
+        expect(repo.settlementsOf('tx1'), isEmpty);
+      },
+    );
 
-    test('deleteFriend cascades deletion to friend, transactions, and settlements', () {
-      final FriendsRepository repo = FriendsRepository();
-      expect(repo.friendById('fr1'), isNotNull);
-      expect(repo.transactionsOf('fr1').length, 2);
-      expect(repo.settlementsOf('tx1').length, 2);
+    test(
+      'deleteFriend cascades deletion to friend, transactions, and settlements',
+      () {
+        final FriendsRepository repo = FriendsRepository();
+        expect(repo.friendById('fr1'), isNotNull);
+        expect(repo.transactionsOf('fr1').length, 2);
+        expect(repo.settlementsOf('tx1').length, 2);
 
-      final bool deleted = repo.deleteFriend('fr1');
-      expect(deleted, isTrue);
-      expect(repo.friendById('fr1'), isNull);
-      expect(repo.transactionsOf('fr1'), isEmpty);
-      expect(repo.settlementsOf('tx1'), isEmpty);
-    });
+        final bool deleted = repo.deleteFriend('fr1');
+        expect(deleted, isTrue);
+        expect(repo.friendById('fr1'), isNull);
+        expect(repo.transactionsOf('fr1'), isEmpty);
+        expect(repo.settlementsOf('tx1'), isEmpty);
+      },
+    );
   });
 
   group('Pure Filter Helpers', () {
@@ -330,7 +363,10 @@ void main() {
         filter: FriendNetFilter.owedToMe,
         balanceLookup: repo.friendBalance,
       );
-      expect(owedToMe.map((Friend f) => f.id), containsAll(<String>['fr1', 'fr2']));
+      expect(
+        owedToMe.map((Friend f) => f.id),
+        containsAll(<String>['fr1', 'fr2']),
+      );
 
       final List<Friend> iOwe = filterFriends(
         friends,
@@ -347,217 +383,222 @@ void main() {
       expect(settled.map((Friend f) => f.id), containsAll(<String>['fr4']));
     });
 
-    test('filterTransactions filters by query, directions, status, and type', () {
-      final FriendsRepository repo = FriendsRepository();
-      final List<FriendTransaction> txs = repo.transactions;
+    test(
+      'filterTransactions filters by query, directions, status, and type',
+      () {
+        final FriendsRepository repo = FriendsRepository();
+        final List<FriendTransaction> txs = repo.transactions;
 
-      String nameOf(String id) => repo.friendById(id)?.name ?? '';
+        String nameOf(String id) => repo.friendById(id)?.name ?? '';
 
-      // Query matching description
-      final List<FriendTransaction> hostingSplit = filterTransactions(
-        txs,
-        query: 'hosting bill split',
-        nameOf: nameOf,
-      );
-      expect(hostingSplit.length, 1);
-      expect(hostingSplit.first.id, 'tx3');
+        // Query matching description
+        final List<FriendTransaction> hostingSplit = filterTransactions(
+          txs,
+          query: 'hosting bill split',
+          nameOf: nameOf,
+        );
+        expect(hostingSplit.length, 1);
+        expect(hostingSplit.first.id, 'tx3');
 
-      // Query matching friend name
-      final List<FriendTransaction> karimTxs = filterTransactions(
-        txs,
-        query: 'Karim',
-        nameOf: nameOf,
-      );
-      expect(karimTxs.length, 2);
+        // Query matching friend name
+        final List<FriendTransaction> karimTxs = filterTransactions(
+          txs,
+          query: 'Karim',
+          nameOf: nameOf,
+        );
+        expect(karimTxs.length, 2);
 
-      // Direction filter
-      final List<FriendTransaction> lentTxs = filterTransactions(
-        txs,
-        directions: FriendTxDirection.lent,
-      );
-      expect(lentTxs.length, 4);
+        // Direction filter
+        final List<FriendTransaction> lentTxs = filterTransactions(
+          txs,
+          directions: FriendTxDirection.lent,
+        );
+        expect(lentTxs.length, 4);
 
-      final List<FriendTransaction> borrowedTxs = filterTransactions(
-        txs,
-        directions: FriendTxDirection.borrowed,
-      );
-      expect(borrowedTxs.length, 1);
+        final List<FriendTransaction> borrowedTxs = filterTransactions(
+          txs,
+          directions: FriendTxDirection.borrowed,
+        );
+        expect(borrowedTxs.length, 1);
 
-      // Status filter
-      final List<FriendTransaction> partialTxs = filterTransactions(
-        txs,
-        status: FriendTxStatus.partial,
-      );
-      expect(partialTxs.length, 1);
-      expect(partialTxs.first.id, 'tx1');
+        // Status filter
+        final List<FriendTransaction> partialTxs = filterTransactions(
+          txs,
+          status: FriendTxStatus.partial,
+        );
+        expect(partialTxs.length, 1);
+        expect(partialTxs.first.id, 'tx1');
 
-      final List<FriendTransaction> settledTxs = filterTransactions(
-        txs,
-        status: FriendTxStatus.settled,
-      );
-      expect(settledTxs.length, 1);
-      expect(settledTxs.first.id, 'tx4');
+        final List<FriendTransaction> settledTxs = filterTransactions(
+          txs,
+          status: FriendTxStatus.settled,
+        );
+        expect(settledTxs.length, 1);
+        expect(settledTxs.first.id, 'tx4');
 
-      // Type filter
-      final List<FriendTransaction> serviceTxs = filterTransactions(
-        txs,
-        type: FriendTxType.service,
-      );
-      expect(serviceTxs.length, 1);
-      expect(serviceTxs.first.description, 'Frontend UI design');
+        // Type filter
+        final List<FriendTransaction> serviceTxs = filterTransactions(
+          txs,
+          type: FriendTxType.service,
+        );
+        expect(serviceTxs.length, 1);
+        expect(serviceTxs.first.description, 'Frontend UI design');
 
-      final List<FriendTransaction> expenseTxs = filterTransactions(
-        txs,
-        type: FriendTxType.expense,
-      );
-      expect(expenseTxs.length, 1);
-      expect(expenseTxs.first.description, 'Server hosting bill');
-    });
+        final List<FriendTransaction> expenseTxs = filterTransactions(
+          txs,
+          type: FriendTxType.expense,
+        );
+        expect(expenseTxs.length, 1);
+        expect(expenseTxs.first.description, 'Server hosting bill');
+      },
+    );
   });
 
   group('Friends Widgets & 390x844 Surface', () {
-    testWidgets('FriendCard renders name, phone, avatar, net chip, counts, and handles tap', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+    testWidgets(
+      'FriendCard renders name, phone, avatar, net chip, counts, and handles tap',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      final Friend friend = Friend(
-        id: 'fr1',
-        name: 'Karim Boualam',
-        phone: '+213 550 12 34 56',
-        createdAt: DateTime(2026, 8, 1),
-        avatarColorIndex: 0,
-      );
-      final FriendBalance balance = FriendBalance(
-        net: 45000.0,
-        owedToYou: 45000.0,
-        youOwe: 0.0,
-        active: 2,
-        settled: 0,
-        lastActivity: DateTime(2026, 10, 5),
-      );
+        final Friend friend = Friend(
+          id: 'fr1',
+          name: 'Karim Boualam',
+          phone: '+213 550 12 34 56',
+          createdAt: DateTime(2026, 8, 1),
+          avatarColorIndex: 0,
+        );
+        final FriendBalance balance = FriendBalance(
+          net: 45000.0,
+          owedToYou: 45000.0,
+          youOwe: 0.0,
+          active: 2,
+          settled: 0,
+          lastActivity: DateTime(2026, 10, 5),
+        );
 
-      bool tapped = false;
+        bool tapped = false;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: FriendCard(
-                friend: friend,
-                balance: balance,
-                onTap: () => tapped = true,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: FriendCard(
+                  friend: friend,
+                  balance: balance,
+                  onTap: () => tapped = true,
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Karim Boualam'), findsOneWidget);
-      expect(find.text('+213 550 12 34 56'), findsOneWidget);
-      expect(find.text('K'), findsOneWidget); // avatar initial
-      expect(find.text('Owed 45,000 DZ'), findsOneWidget);
-      expect(find.text('2 active • 0 settled'), findsOneWidget);
-      expect(find.text('Last: 2026-10-05'), findsOneWidget);
+        expect(find.text('Karim Boualam'), findsOneWidget);
+        expect(find.text('+213 550 12 34 56'), findsOneWidget);
+        expect(find.text('K'), findsOneWidget); // avatar initial
+        expect(find.text('Owed 45,000 DZ'), findsOneWidget);
+        expect(find.text('2 active • 0 settled'), findsOneWidget);
+        expect(find.text('Last: 2026-10-05'), findsOneWidget);
 
-      await tester.tap(find.byType(FriendCard));
-      expect(tapped, isTrue);
-    });
+        await tester.tap(find.byType(FriendCard));
+        expect(tapped, isTrue);
+      },
+    );
 
-    testWidgets('FriendTxCard renders type glyph, amount, chips, and Settle button', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+    testWidgets(
+      'FriendTxCard renders type glyph, amount, chips, and Settle button',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      final FriendTransaction pendingTx = FriendTransaction(
-        id: 'tx1',
-        friendId: 'fr1',
-        type: FriendTxType.money,
-        direction: FriendTxDirection.lent,
-        amount: 50000.0,
-        paidAmount: 20000.0,
-        description: 'Cash via BaridiMob',
-        date: DateTime(2026, 9, 2),
-        dueDate: DateTime(2026, 11, 2),
-      );
+        final FriendTransaction pendingTx = FriendTransaction(
+          id: 'tx1',
+          friendId: 'fr1',
+          type: FriendTxType.money,
+          direction: FriendTxDirection.lent,
+          amount: 50000.0,
+          paidAmount: 20000.0,
+          description: 'Cash via BaridiMob',
+          date: DateTime(2026, 9, 2),
+          dueDate: DateTime(2026, 11, 2),
+        );
 
-      bool settledClicked = false;
-      bool cardClicked = false;
+        bool settledClicked = false;
+        bool cardClicked = false;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: FriendTxCard(
-                transaction: pendingTx,
-                friendName: 'Karim Boualam',
-                showFriend: true,
-                onTap: () => cardClicked = true,
-                onSettle: () => settledClicked = true,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: FriendTxCard(
+                  transaction: pendingTx,
+                  friendName: 'Karim Boualam',
+                  showFriend: true,
+                  onTap: () => cardClicked = true,
+                  onSettle: () => settledClicked = true,
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Cash via BaridiMob'), findsOneWidget);
-      expect(find.text('50,000 DZ'), findsOneWidget);
-      expect(find.text(r'$'), findsOneWidget);
-      expect(find.text('Karim Boualam • Money loan • 2026-09-02'), findsOneWidget);
-      expect(find.text('Lent'), findsOneWidget);
-      expect(find.text('Partial'), findsOneWidget);
-      expect(find.text('Due 11-02'), findsOneWidget);
-      expect(find.text('Settle'), findsOneWidget);
-      expect(find.text('Paid 20,000 DZ'), findsOneWidget);
-      expect(find.text('Remaining 30,000 DZ'), findsOneWidget);
+        expect(find.text('Cash via BaridiMob'), findsOneWidget);
+        expect(find.text('50,000 DZ'), findsOneWidget);
+        expect(find.text(r'$'), findsOneWidget);
+        expect(
+          find.text('Karim Boualam • Money loan • 2026-09-02'),
+          findsOneWidget,
+        );
+        expect(find.text('Lent'), findsOneWidget);
+        expect(find.text('Partial'), findsOneWidget);
+        expect(find.text('Due 11-02'), findsOneWidget);
+        expect(find.text('Settle'), findsOneWidget);
+        expect(find.text('Paid 20,000 DZ'), findsOneWidget);
+        expect(find.text('Remaining 30,000 DZ'), findsOneWidget);
 
-      await tester.tap(find.text('Settle'));
-      expect(settledClicked, isTrue);
+        await tester.tap(find.text('Settle'));
+        expect(settledClicked, isTrue);
 
-      await tester.tap(find.byType(FriendTxCard));
-      expect(cardClicked, isTrue);
-    });
+        await tester.tap(find.byType(FriendTxCard));
+        expect(cardClicked, isTrue);
+      },
+    );
 
-    testWidgets('FriendTxCard hides Settle button and shows green Settled when fully paid', (
-      WidgetTester tester,
-    ) async {
-      final FriendTransaction settledTx = FriendTransaction(
-        id: 'tx4',
-        friendId: 'fr4',
-        type: FriendTxType.money,
-        direction: FriendTxDirection.lent,
-        amount: 8000.0,
-        paidAmount: 8000.0,
-        description: 'Lunch and taxi',
-        date: DateTime(2026, 8, 14),
-      );
+    testWidgets(
+      'FriendTxCard hides Settle button and shows green Settled when fully paid',
+      (WidgetTester tester) async {
+        final FriendTransaction settledTx = FriendTransaction(
+          id: 'tx4',
+          friendId: 'fr4',
+          type: FriendTxType.money,
+          direction: FriendTxDirection.lent,
+          amount: 8000.0,
+          paidAmount: 8000.0,
+          description: 'Lunch and taxi',
+          date: DateTime(2026, 8, 14),
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: FriendTxCard(
-                transaction: settledTx,
-              ),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(child: FriendTxCard(transaction: settledTx)),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Settle'), findsNothing);
-      expect(find.text('Paid 8,000 DZ'), findsOneWidget);
-      expect(find.text('Settled'), findsWidgets);
-    });
+        expect(find.text('Settle'), findsNothing);
+        expect(find.text('Paid 8,000 DZ'), findsOneWidget);
+        expect(find.text('Settled'), findsWidgets);
+      },
+    );
 
     testWidgets('FriendBalanceCard renders overall and statement variants', (
       WidgetTester tester,
@@ -571,9 +612,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Center(
-              child: FriendBalanceCard.overall(balance: overall),
-            ),
+            body: Center(child: FriendBalanceCard.overall(balance: overall)),
           ),
         ),
       );
@@ -606,33 +645,35 @@ void main() {
       expect(find.text('45,000 DZ'), findsOneWidget);
     });
 
-    testWidgets('showSettleSheet displays modal bottom sheet with settlement form', (
-      WidgetTester tester,
-    ) async {
-      final FriendsRepository repo = FriendsRepository();
-      await tester.pumpWidget(
-        FriendsScope(
-          repository: repo,
-          child: MaterialApp(
-            home: Scaffold(
-              body: Builder(
-                builder: (BuildContext context) {
-                  return ElevatedButton(
-                    onPressed: () => showSettleSheet(context, transactionId: 'tx1'),
-                    child: const Text('Open Settle'),
-                  );
-                },
+    testWidgets(
+      'showSettleSheet displays modal bottom sheet with settlement form',
+      (WidgetTester tester) async {
+        final FriendsRepository repo = FriendsRepository();
+        await tester.pumpWidget(
+          FriendsScope(
+            repository: repo,
+            child: MaterialApp(
+              home: Scaffold(
+                body: Builder(
+                  builder: (BuildContext context) {
+                    return ElevatedButton(
+                      onPressed: () =>
+                          showSettleSheet(context, transactionId: 'tx1'),
+                      child: const Text('Open Settle'),
+                    );
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.text('Open Settle'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('Open Settle'));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Record settlement'), findsOneWidget);
-    });
+        expect(find.text('Record settlement'), findsOneWidget);
+      },
+    );
   });
 
   group('MoreScreen & Friends Routes Navigation on 390x844 Surface', () {
@@ -648,8 +689,9 @@ void main() {
       });
 
       final ClientsRepository clientsRepo = ClientsRepository();
-      final ProjectsRepository projectsRepo =
-          ProjectsRepository(clientsRepository: clientsRepo);
+      final ProjectsRepository projectsRepo = ProjectsRepository(
+        clientsRepository: clientsRepo,
+      );
       final ExpensesRepository expensesRepo = ExpensesRepository();
       final FriendsRepository friendsRepo = FriendsRepository();
       final GoRouter router = createAppRouter(initialLocation: initialLocation);
@@ -667,29 +709,30 @@ void main() {
       return (friendsRepo, router);
     }
 
-    testWidgets('Tapping Friends debts row in MoreScreen navigates to /friends and back', (
-      WidgetTester tester,
-    ) async {
-      await pumpApp(tester, initialLocation: AppRoutes.morePath);
+    testWidgets(
+      'Tapping Friends debts row in MoreScreen navigates to /friends and back',
+      (WidgetTester tester) async {
+        await pumpApp(tester, initialLocation: AppRoutes.morePath);
 
-      expect(find.byType(MoreScreen), findsOneWidget);
-      expect(find.text(MoreStrings.friendsDebtsTitle), findsOneWidget);
+        expect(find.byType(MoreScreen), findsOneWidget);
+        expect(find.text(MoreStrings.friendsDebtsTitle), findsOneWidget);
 
-      // Tap Friends' debts row
-      await tester.tap(find.text(MoreStrings.friendsDebtsTitle));
-      await tester.pumpAndSettle();
+        // Tap Friends' debts row
+        await tester.tap(find.text(MoreStrings.friendsDebtsTitle));
+        await tester.pumpAndSettle();
 
-      // Navigated to FriendsScreen
-      expect(find.byType(FriendsScreen), findsOneWidget);
-      expect(find.text('FriendsScreen'), findsOneWidget);
+        // Navigated to FriendsScreen
+        expect(find.byType(FriendsScreen), findsOneWidget);
+        expect(find.text('FriendsScreen'), findsOneWidget);
 
-      // Tap back button
-      await tester.tap(find.byIcon(Icons.arrow_back));
-      await tester.pumpAndSettle();
+        // Tap back button
+        await tester.tap(find.byIcon(Icons.arrow_back));
+        await tester.pumpAndSettle();
 
-      // Back on MoreScreen
-      expect(find.byType(MoreScreen), findsOneWidget);
-    });
+        // Back on MoreScreen
+        expect(find.byType(MoreScreen), findsOneWidget);
+      },
+    );
 
     testWidgets('Placeholder screens render for all friends debt routes', (
       WidgetTester tester,
@@ -705,7 +748,10 @@ void main() {
       expect(find.byType(MoreScreen), findsOneWidget);
 
       // 2. /friends/transactions/new
-      await pumpApp(tester, initialLocation: AppRoutes.newFriendTransactionPath);
+      await pumpApp(
+        tester,
+        initialLocation: AppRoutes.newFriendTransactionPath,
+      );
       expect(find.byType(TransactionFormScreen), findsOneWidget);
       expect(find.text('TransactionFormScreen'), findsOneWidget);
 

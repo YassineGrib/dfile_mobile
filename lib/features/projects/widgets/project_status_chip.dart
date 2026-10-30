@@ -5,10 +5,7 @@ import '../data/project.dart';
 
 /// Coloured stadium pill displaying a [ProjectStatus] per `docs/design/SPEC.md`.
 class ProjectStatusChip extends StatelessWidget {
-  const ProjectStatusChip({
-    super.key,
-    required this.status,
-  });
+  const ProjectStatusChip({super.key, required this.status});
 
   final ProjectStatus status;
 
@@ -54,10 +51,7 @@ class ProjectStatusChip extends StatelessWidget {
 
 /// Neutral stadium chip displaying a project category (`Development`, `Design`, etc.).
 class ProjectCategoryChip extends StatelessWidget {
-  const ProjectCategoryChip({
-    super.key,
-    required this.category,
-  });
+  const ProjectCategoryChip({super.key, required this.category});
 
   final String category;
 
@@ -85,10 +79,7 @@ class ProjectCategoryChip extends StatelessWidget {
 
 /// Coloured stadium pill displaying a [TaskStatus] on the Tasks tab (P6).
 class TaskStatusChip extends StatelessWidget {
-  const TaskStatusChip({
-    super.key,
-    required this.status,
-  });
+  const TaskStatusChip({super.key, required this.status});
 
   final TaskStatus status;
 

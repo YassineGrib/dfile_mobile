@@ -22,7 +22,8 @@ class FriendsListFilterSheet extends StatefulWidget {
     FriendDirectionFilter direction,
     FriendStatusFilter status,
     FriendTypeFilter type,
-  ) onApply;
+  )
+  onApply;
 
   @override
   State<FriendsListFilterSheet> createState() => _FriendsListFilterSheetState();
@@ -50,26 +51,29 @@ class _FriendsListFilterSheetState extends State<FriendsListFilterSheet> {
   Widget build(BuildContext context) {
     const List<(String, FriendDirectionFilter)> directionOptions =
         <(String, FriendDirectionFilter)>[
-      (FriendsListStrings.directionAll, FriendDirectionFilter.all),
-      (FriendsListStrings.directionOwedToMe, FriendDirectionFilter.owedToMe),
-      (FriendsListStrings.directionIOwe, FriendDirectionFilter.iOwe),
-    ];
+          (FriendsListStrings.directionAll, FriendDirectionFilter.all),
+          (
+            FriendsListStrings.directionOwedToMe,
+            FriendDirectionFilter.owedToMe,
+          ),
+          (FriendsListStrings.directionIOwe, FriendDirectionFilter.iOwe),
+        ];
 
     const List<(String, FriendStatusFilter)> statusOptions =
         <(String, FriendStatusFilter)>[
-      (FriendsListStrings.statusAll, FriendStatusFilter.all),
-      (FriendsListStrings.statusPending, FriendStatusFilter.pending),
-      (FriendsListStrings.statusPartial, FriendStatusFilter.partial),
-      (FriendsListStrings.statusSettled, FriendStatusFilter.settled),
-    ];
+          (FriendsListStrings.statusAll, FriendStatusFilter.all),
+          (FriendsListStrings.statusPending, FriendStatusFilter.pending),
+          (FriendsListStrings.statusPartial, FriendStatusFilter.partial),
+          (FriendsListStrings.statusSettled, FriendStatusFilter.settled),
+        ];
 
     const List<(String, FriendTypeFilter)> natureOptions =
         <(String, FriendTypeFilter)>[
-      (FriendsListStrings.natureAll, FriendTypeFilter.all),
-      (FriendsListStrings.natureMoney, FriendTypeFilter.money),
-      (FriendsListStrings.natureService, FriendTypeFilter.service),
-      (FriendsListStrings.natureExpense, FriendTypeFilter.expense),
-    ];
+          (FriendsListStrings.natureAll, FriendTypeFilter.all),
+          (FriendsListStrings.natureMoney, FriendTypeFilter.money),
+          (FriendsListStrings.natureService, FriendTypeFilter.service),
+          (FriendsListStrings.natureExpense, FriendTypeFilter.expense),
+        ];
 
     return SingleChildScrollView(
       child: Column(
@@ -138,7 +142,8 @@ class _FriendsListFilterSheetState extends State<FriendsListFilterSheet> {
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: [
-              for (final (String label, FriendStatusFilter stat) in statusOptions)
+              for (final (String label, FriendStatusFilter stat)
+                  in statusOptions)
                 AppPill(
                   label: label,
                   selected: _draftStatus == stat,

@@ -44,7 +44,9 @@ void main() {
   }
 
   group('HomeScreen Tests (Task 9A)', () {
-    testWidgets('Greeting by time with clock injection', (WidgetTester tester) async {
+    testWidgets('Greeting by time with clock injection', (
+      WidgetTester tester,
+    ) async {
       setTestSurface(tester);
       final SettingsRepository settings = SettingsRepository(
         initialProfile: const UserProfile(
@@ -56,7 +58,9 @@ void main() {
         ),
       );
       final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
+      final ProjectsRepository projects = ProjectsRepository(
+        clientsRepository: clients,
+      );
       final ExpensesRepository expenses = ExpensesRepository();
       final FriendsRepository friends = FriendsRepository();
       final NotificationsStore notifs = NotificationsStore();
@@ -76,9 +80,7 @@ void main() {
                   repository: settings,
                   child: NotificationsScope(
                     store: notifs,
-                    child: MaterialApp(
-                      home: HomeScreen(clock: () => now),
-                    ),
+                    child: MaterialApp(home: HomeScreen(clock: () => now)),
                   ),
                 ),
               ),
@@ -109,7 +111,9 @@ void main() {
     ) async {
       setTestSurface(tester);
       final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
+      final ProjectsRepository projects = ProjectsRepository(
+        clientsRepository: clients,
+      );
       final ExpensesRepository expenses = ExpensesRepository();
       final FriendsRepository friends = FriendsRepository();
       final SettingsRepository settings = SettingsRepository();
@@ -118,7 +122,9 @@ void main() {
       final DateTime oct2026 = DateTime(2026, 10, 30, 10, 0);
 
       // Seed stats: 573,800 DZ all time net, +52,300 this month
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.homePath,
+      );
       await tester.pumpWidget(
         DfileApp(
           router: router,
@@ -160,16 +166,22 @@ void main() {
       expect(find.text('-47,700 this month'), findsOneWidget);
     });
 
-    testWidgets('KPI values match repository stats', (WidgetTester tester) async {
+    testWidgets('KPI values match repository stats', (
+      WidgetTester tester,
+    ) async {
       setTestSurface(tester);
       final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
+      final ProjectsRepository projects = ProjectsRepository(
+        clientsRepository: clients,
+      );
       final ExpensesRepository expenses = ExpensesRepository();
       final FriendsRepository friends = FriendsRepository();
       final SettingsRepository settings = SettingsRepository();
       final NotificationsStore notifs = NotificationsStore();
 
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.homePath,
+      );
       await tester.pumpWidget(
         DfileApp(
           router: router,
@@ -194,16 +206,22 @@ void main() {
       expect(find.text(formatMoney(58000), skipOffstage: false), findsWidgets);
     });
 
-    testWidgets('Quick actions navigate to expected routes', (WidgetTester tester) async {
+    testWidgets('Quick actions navigate to expected routes', (
+      WidgetTester tester,
+    ) async {
       setTestSurface(tester);
       final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
+      final ProjectsRepository projects = ProjectsRepository(
+        clientsRepository: clients,
+      );
       final ExpensesRepository expenses = ExpensesRepository();
       final FriendsRepository friends = FriendsRepository();
       final SettingsRepository settings = SettingsRepository();
       final NotificationsStore notifs = NotificationsStore();
 
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.homePath,
+      );
       await tester.pumpWidget(
         DfileApp(
           router: router,
@@ -274,13 +292,17 @@ void main() {
     ) async {
       setTestSurface(tester);
       final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
+      final ProjectsRepository projects = ProjectsRepository(
+        clientsRepository: clients,
+      );
       final ExpensesRepository expenses = ExpensesRepository();
       final FriendsRepository friends = FriendsRepository();
       final SettingsRepository settings = SettingsRepository();
       final NotificationsStore notifs = NotificationsStore();
 
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.homePath,
+      );
       await tester.pumpWidget(
         DfileApp(
           router: router,
@@ -339,13 +361,17 @@ void main() {
     ) async {
       setTestSurface(tester);
       final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
+      final ProjectsRepository projects = ProjectsRepository(
+        clientsRepository: clients,
+      );
       final ExpensesRepository expenses = ExpensesRepository();
       final FriendsRepository friends = FriendsRepository();
       final SettingsRepository settings = SettingsRepository();
       final NotificationsStore notifs = NotificationsStore();
 
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.homePath,
+      );
       await tester.pumpWidget(
         DfileApp(
           router: router,
@@ -368,7 +394,10 @@ void main() {
       // Tap "See all" -> /projects
       await tester.tap(find.text(DashboardHomeStrings.seeAll));
       await pumpBounded(tester);
-      expect(router.state.uri.toString(), '${AppRoutes.calendarPath}?tab=agenda');
+      expect(
+        router.state.uri.toString(),
+        '${AppRoutes.calendarPath}?tab=agenda',
+      );
 
       // Tap deadline card -> /projects/:id
       router.go(AppRoutes.homePath);
@@ -378,212 +407,235 @@ void main() {
       expect(router.state.uri.toString().startsWith('/projects/'), isTrue);
     });
 
-    testWidgets('Bell dot appears with unread notification and disappears after markAllRead', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
-      final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
-      final ExpensesRepository expenses = ExpensesRepository();
-      final FriendsRepository friends = FriendsRepository();
-      final SettingsRepository settings = SettingsRepository();
-      final NotificationsStore notifs = NotificationsStore();
+    testWidgets(
+      'Bell dot appears with unread notification and disappears after markAllRead',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
+        final ClientsRepository clients = ClientsRepository();
+        final ProjectsRepository projects = ProjectsRepository(
+          clientsRepository: clients,
+        );
+        final ExpensesRepository expenses = ExpensesRepository();
+        final FriendsRepository friends = FriendsRepository();
+        final SettingsRepository settings = SettingsRepository();
+        final NotificationsStore notifs = NotificationsStore();
 
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
-      await tester.pumpWidget(
-        DfileApp(
-          router: router,
-          repository: clients,
-          projectsRepository: projects,
-          expensesRepository: expenses,
-          friendsRepository: friends,
-          settingsRepository: settings,
-          notificationsStore: notifs,
-        ),
-      );
-      await pumpBounded(tester);
+        final GoRouter router = createAppRouter(
+          initialLocation: AppRoutes.homePath,
+        );
+        await tester.pumpWidget(
+          DfileApp(
+            router: router,
+            repository: clients,
+            projectsRepository: projects,
+            expensesRepository: expenses,
+            friendsRepository: friends,
+            settingsRepository: settings,
+            notificationsStore: notifs,
+          ),
+        );
+        await pumpBounded(tester);
 
-      // Verify bell button exists
-      expect(find.byIcon(AppIcons.bell), findsOneWidget);
+        // Verify bell button exists
+        expect(find.byIcon(AppIcons.bell), findsOneWidget);
 
-      // With default seed, there are deadline / payment notifications unread -> coral dot visible
-      Finder coralDotFinder() => find.byWidgetPredicate((Widget widget) {
-            return widget is Container &&
-                widget.decoration is BoxDecoration &&
-                (widget.decoration as BoxDecoration).color == AppColors.coral &&
-                (widget.decoration as BoxDecoration).shape == BoxShape.circle;
-          });
+        // With default seed, there are deadline / payment notifications unread -> coral dot visible
+        Finder coralDotFinder() => find.byWidgetPredicate((Widget widget) {
+          return widget is Container &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).color == AppColors.coral &&
+              (widget.decoration as BoxDecoration).shape == BoxShape.circle;
+        });
 
-      expect(coralDotFinder(), findsOneWidget);
+        expect(coralDotFinder(), findsOneWidget);
 
-      // Tap bell button -> navigates to /home/notifications
-      await tester.tap(find.byIcon(AppIcons.bell));
-      await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.homeNotificationsPath);
+        // Tap bell button -> navigates to /home/notifications
+        await tester.tap(find.byIcon(AppIcons.bell));
+        await pumpBounded(tester);
+        expect(router.state.uri.toString(), AppRoutes.homeNotificationsPath);
 
-      // Mark all read in notifications store
-      final List<AppNotification> items = deriveNotifications(
-        now: DateTime.now(),
-        settings: settings.notifications,
-        projects: projects.projects,
-        transactions: friends.transactions,
-        payments: projects.payments,
-      );
-      notifs.markAllRead(items.map((e) => e.id));
+        // Mark all read in notifications store
+        final List<AppNotification> items = deriveNotifications(
+          now: DateTime.now(),
+          settings: settings.notifications,
+          projects: projects.projects,
+          transactions: friends.transactions,
+          payments: projects.payments,
+        );
+        notifs.markAllRead(items.map((e) => e.id));
 
-      router.go(AppRoutes.homePath);
-      await pumpBounded(tester);
+        router.go(AppRoutes.homePath);
+        await pumpBounded(tester);
 
-      // Dot should be gone
-      expect(coralDotFinder(), findsNothing);
-    });
+        // Dot should be gone
+        expect(coralDotFinder(), findsNothing);
+      },
+    );
 
-    testWidgets('Empty-home setup progress and transition to normal home after 3 steps', (
-      WidgetTester tester,
-    ) async {
-      setTestSurface(tester);
-      // Empty repositories
-      final ClientsRepository clients = ClientsRepository(initialClients: <Client>[]);
-      final ProjectsRepository projects = ProjectsRepository(
-        clientsRepository: clients,
-        initialProjects: <ProjectItem>[],
-        initialPayments: <ProjectPayment>[],
-      );
-      final ExpensesRepository expenses = ExpensesRepository(initialExpenses: <Expense>[]);
-      final FriendsRepository friends = FriendsRepository(
-        initialFriends: <Friend>[],
-        initialTransactions: <FriendTransaction>[],
-        initialSettlements: <FriendSettlement>[],
-      );
-      final SettingsRepository settings = SettingsRepository();
-      final NotificationsStore notifs = NotificationsStore();
+    testWidgets(
+      'Empty-home setup progress and transition to normal home after 3 steps',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
+        // Empty repositories
+        final ClientsRepository clients = ClientsRepository(
+          initialClients: <Client>[],
+        );
+        final ProjectsRepository projects = ProjectsRepository(
+          clientsRepository: clients,
+          initialProjects: <ProjectItem>[],
+          initialPayments: <ProjectPayment>[],
+        );
+        final ExpensesRepository expenses = ExpensesRepository(
+          initialExpenses: <Expense>[],
+        );
+        final FriendsRepository friends = FriendsRepository(
+          initialFriends: <Friend>[],
+          initialTransactions: <FriendTransaction>[],
+          initialSettlements: <FriendSettlement>[],
+        );
+        final SettingsRepository settings = SettingsRepository();
+        final NotificationsStore notifs = NotificationsStore();
 
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
-      await tester.pumpWidget(
-        DfileApp(
-          router: router,
-          repository: clients,
-          projectsRepository: projects,
-          expensesRepository: expenses,
-          friendsRepository: friends,
-          settingsRepository: settings,
-          notificationsStore: notifs,
-        ),
-      );
-      await pumpBounded(tester);
+        final GoRouter router = createAppRouter(
+          initialLocation: AppRoutes.homePath,
+        );
+        await tester.pumpWidget(
+          DfileApp(
+            router: router,
+            repository: clients,
+            projectsRepository: projects,
+            expensesRepository: expenses,
+            friendsRepository: friends,
+            settingsRepository: settings,
+            notificationsStore: notifs,
+          ),
+        );
+        await pumpBounded(tester);
 
-      // HM7 Empty state is displayed
-      expect(find.byType(HomeEmptyView), findsOneWidget);
-      expect(find.text(DashboardHomeStrings.welcome), findsOneWidget);
-      expect(find.text('0 of 3'), findsOneWidget);
+        // HM7 Empty state is displayed
+        expect(find.byType(HomeEmptyView), findsOneWidget);
+        expect(find.text(DashboardHomeStrings.welcome), findsOneWidget);
+        expect(find.text('0 of 3'), findsOneWidget);
 
-      // Step 1: Add a client
-      clients.add(
-        Client(
-          id: 'c_test',
-          name: 'Acme Corp',
-          email: 'contact@acme.dz',
-          createdAt: DateTime.now(),
-        ),
-      );
-      await pumpBounded(tester);
-      expect(find.text('1 of 3'), findsOneWidget);
+        // Step 1: Add a client
+        clients.add(
+          Client(
+            id: 'c_test',
+            name: 'Acme Corp',
+            email: 'contact@acme.dz',
+            createdAt: DateTime.now(),
+          ),
+        );
+        await pumpBounded(tester);
+        expect(find.text('1 of 3'), findsOneWidget);
 
-      // Step 2: Add a project
-      projects.add(
-        ProjectItem(
-          id: 'p_test',
-          clientId: 'c_test',
-          name: 'Website Redesign',
-          price: 50000,
-          progress: 20,
-          startDate: DateTime.now(),
-          status: ProjectStatus.inProgress,
-          category: 'Development',
-          createdAt: DateTime.now(),
-        ),
-      );
-      await pumpBounded(tester);
-      expect(find.text('2 of 3'), findsOneWidget);
+        // Step 2: Add a project
+        projects.add(
+          ProjectItem(
+            id: 'p_test',
+            clientId: 'c_test',
+            name: 'Website Redesign',
+            price: 50000,
+            progress: 20,
+            startDate: DateTime.now(),
+            status: ProjectStatus.inProgress,
+            category: 'Development',
+            createdAt: DateTime.now(),
+          ),
+        );
+        await pumpBounded(tester);
+        expect(find.text('2 of 3'), findsOneWidget);
 
-      // Step 3: Add a payment
-      projects.addPayment(
-        ProjectPayment(
-          id: 'pm_test',
-          projectId: 'p_test',
-          clientId: 'c_test',
-          amount: 25000,
-          date: DateTime.now(),
-          reference: 'Deposit',
-          method: PaymentMethod.cash,
-        ),
-      );
-      await pumpBounded(tester);
+        // Step 3: Add a payment
+        projects.addPayment(
+          ProjectPayment(
+            id: 'pm_test',
+            projectId: 'p_test',
+            clientId: 'c_test',
+            amount: 25000,
+            date: DateTime.now(),
+            reference: 'Deposit',
+            method: PaymentMethod.cash,
+          ),
+        );
+        await pumpBounded(tester);
 
-      // Now all 3 steps are complete -> Normal home is shown
-      expect(find.byType(HomeEmptyView), findsNothing);
-      expect(find.byType(HomeHeroProfitCard), findsOneWidget);
-    });
+        // Now all 3 steps are complete -> Normal home is shown
+        expect(find.byType(HomeEmptyView), findsNothing);
+        expect(find.byType(HomeHeroProfitCard), findsOneWidget);
+      },
+    );
 
-    testWidgets('No overflow on 360x800 surface for both Normal Home and Empty Home', (
-      WidgetTester tester,
-    ) async {
-      // 1. Normal Home on 360x800
-      setTestSurface(tester, size: const Size(360, 800));
-      final ClientsRepository clients = ClientsRepository();
-      final ProjectsRepository projects = ProjectsRepository(clientsRepository: clients);
-      final ExpensesRepository expenses = ExpensesRepository();
-      final FriendsRepository friends = FriendsRepository();
-      final SettingsRepository settings = SettingsRepository();
-      final NotificationsStore notifs = NotificationsStore();
+    testWidgets(
+      'No overflow on 360x800 surface for both Normal Home and Empty Home',
+      (WidgetTester tester) async {
+        // 1. Normal Home on 360x800
+        setTestSurface(tester, size: const Size(360, 800));
+        final ClientsRepository clients = ClientsRepository();
+        final ProjectsRepository projects = ProjectsRepository(
+          clientsRepository: clients,
+        );
+        final ExpensesRepository expenses = ExpensesRepository();
+        final FriendsRepository friends = FriendsRepository();
+        final SettingsRepository settings = SettingsRepository();
+        final NotificationsStore notifs = NotificationsStore();
 
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
-      await tester.pumpWidget(
-        DfileApp(
-          router: router,
-          repository: clients,
-          projectsRepository: projects,
-          expensesRepository: expenses,
-          friendsRepository: friends,
-          settingsRepository: settings,
-          notificationsStore: notifs,
-        ),
-      );
-      await pumpBounded(tester);
+        final GoRouter router = createAppRouter(
+          initialLocation: AppRoutes.homePath,
+        );
+        await tester.pumpWidget(
+          DfileApp(
+            router: router,
+            repository: clients,
+            projectsRepository: projects,
+            expensesRepository: expenses,
+            friendsRepository: friends,
+            settingsRepository: settings,
+            notificationsStore: notifs,
+          ),
+        );
+        await pumpBounded(tester);
 
-      expect(find.byType(HomeScreen), findsOneWidget);
-      expect(tester.takeException(), isNull);
+        expect(find.byType(HomeScreen), findsOneWidget);
+        expect(tester.takeException(), isNull);
 
-      // 2. Empty Home on 360x800
-      final ClientsRepository emptyClients = ClientsRepository(initialClients: <Client>[]);
-      final ProjectsRepository emptyProjects = ProjectsRepository(
-        clientsRepository: emptyClients,
-        initialProjects: <ProjectItem>[],
-        initialPayments: <ProjectPayment>[],
-      );
-      final ExpensesRepository emptyExpenses = ExpensesRepository(initialExpenses: <Expense>[]);
-      final FriendsRepository emptyFriends = FriendsRepository(
-        initialFriends: <Friend>[],
-        initialTransactions: <FriendTransaction>[],
-        initialSettlements: <FriendSettlement>[],
-      );
+        // 2. Empty Home on 360x800
+        final ClientsRepository emptyClients = ClientsRepository(
+          initialClients: <Client>[],
+        );
+        final ProjectsRepository emptyProjects = ProjectsRepository(
+          clientsRepository: emptyClients,
+          initialProjects: <ProjectItem>[],
+          initialPayments: <ProjectPayment>[],
+        );
+        final ExpensesRepository emptyExpenses = ExpensesRepository(
+          initialExpenses: <Expense>[],
+        );
+        final FriendsRepository emptyFriends = FriendsRepository(
+          initialFriends: <Friend>[],
+          initialTransactions: <FriendTransaction>[],
+          initialSettlements: <FriendSettlement>[],
+        );
 
-      final GoRouter emptyRouter = createAppRouter(initialLocation: AppRoutes.homePath);
-      await tester.pumpWidget(
-        DfileApp(
-          router: emptyRouter,
-          repository: emptyClients,
-          projectsRepository: emptyProjects,
-          expensesRepository: emptyExpenses,
-          friendsRepository: emptyFriends,
-          settingsRepository: settings,
-          notificationsStore: notifs,
-        ),
-      );
-      await pumpBounded(tester);
+        final GoRouter emptyRouter = createAppRouter(
+          initialLocation: AppRoutes.homePath,
+        );
+        await tester.pumpWidget(
+          DfileApp(
+            router: emptyRouter,
+            repository: emptyClients,
+            projectsRepository: emptyProjects,
+            expensesRepository: emptyExpenses,
+            friendsRepository: emptyFriends,
+            settingsRepository: settings,
+            notificationsStore: notifs,
+          ),
+        );
+        await pumpBounded(tester);
 
-      expect(find.byType(HomeEmptyView), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+        expect(find.byType(HomeEmptyView), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }

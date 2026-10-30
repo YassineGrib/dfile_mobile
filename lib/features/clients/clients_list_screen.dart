@@ -152,8 +152,9 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
       if (query.isNotEmpty) {
         final bool nameMatch = client.name.toLowerCase().contains(query);
         final bool emailMatch = client.email.toLowerCase().contains(query);
-        final bool phoneMatch =
-            client.phone.replaceAll(' ', '').contains(normalizedQuery);
+        final bool phoneMatch = client.phone
+            .replaceAll(' ', '')
+            .contains(normalizedQuery);
         if (!nameMatch && !emailMatch && !phoneMatch) {
           return false;
         }
@@ -199,8 +200,8 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
   Widget build(BuildContext context) {
     final ClientsRepository repo = ClientsScope.of(context);
     final List<Client> displayedClients = _getFilteredAndSortedClients(repo);
-    final bool isSearchActive = _searchController.text.trim().isNotEmpty ||
-        _filter != ClientFilter.all;
+    final bool isSearchActive =
+        _searchController.text.trim().isNotEmpty || _filter != ClientFilter.all;
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -255,7 +256,8 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
                           borderColor: AppColors.ink,
                           iconColor: AppColors.white,
                           icon: Icons.add,
-                          onPressed: () => context.push(AppRoutes.addClientPath),
+                          onPressed: () =>
+                              context.push(AppRoutes.addClientPath),
                         ),
                       ],
                     ),
@@ -301,15 +303,13 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
 
                     // Filters and sort row
                     LayoutBuilder(
-                      builder: (
-                        BuildContext context,
-                        BoxConstraints constraints,
-                      ) {
+                      builder: (BuildContext context, BoxConstraints constraints) {
                         const double minSortWidth = 72;
-                        final double maxPillsWidth = (constraints.maxWidth -
-                                AppSpacing.sm -
-                                minSortWidth)
-                            .clamp(0.0, constraints.maxWidth);
+                        final double maxPillsWidth =
+                            (constraints.maxWidth -
+                                    AppSpacing.sm -
+                                    minSortWidth)
+                                .clamp(0.0, constraints.maxWidth);
                         return Row(
                           children: [
                             ConstrainedBox(
@@ -478,151 +478,150 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final Client client = displayedClients[index];
-                      final double revenue = repo.totalRevenue(client);
-                      final int activeProjs = repo.activeProjectsCount(client);
-                      final bool isActive = repo.isActive(client);
+                  delegate: SliverChildBuilderDelegate((
+                    BuildContext context,
+                    int index,
+                  ) {
+                    final Client client = displayedClients[index];
+                    final double revenue = repo.totalRevenue(client);
+                    final int activeProjs = repo.activeProjectsCount(client);
+                    final bool isActive = repo.isActive(client);
 
-                      final List<Widget> dots = <Widget>[];
-                      if (client.github.isNotEmpty) {
-                        dots.add(_socialDot('gh'));
-                      }
-                      if (client.twitter.isNotEmpty) {
-                        dots.add(_socialDot('x'));
-                      }
-                      if (client.linkedin.isNotEmpty) {
-                        dots.add(_socialDot('in'));
-                      }
-                      if (client.website.isNotEmpty && client.id != 'c1') {
-                        dots.add(_socialDot('web'));
-                      }
+                    final List<Widget> dots = <Widget>[];
+                    if (client.github.isNotEmpty) {
+                      dots.add(_socialDot('gh'));
+                    }
+                    if (client.twitter.isNotEmpty) {
+                      dots.add(_socialDot('x'));
+                    }
+                    if (client.linkedin.isNotEmpty) {
+                      dots.add(_socialDot('in'));
+                    }
+                    if (client.website.isNotEmpty && client.id != 'c1') {
+                      dots.add(_socialDot('web'));
+                    }
 
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.card,
-                            borderRadius: BorderRadius.circular(AppRadius.card),
-                            border: Border.all(
-                              color: AppColors.line,
-                              width: AppSpacing.borderWidth,
-                            ),
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.card,
+                          borderRadius: BorderRadius.circular(AppRadius.card),
+                          border: Border.all(
+                            color: AppColors.line,
+                            width: AppSpacing.borderWidth,
                           ),
-                          child: Material(
-                            color: AppColors.transparent,
+                        ),
+                        child: Material(
+                          color: AppColors.transparent,
+                          borderRadius: BorderRadius.circular(AppRadius.card),
+                          child: InkWell(
                             borderRadius: BorderRadius.circular(AppRadius.card),
-                            child: InkWell(
-                              borderRadius:
-                                  BorderRadius.circular(AppRadius.card),
-                              onTap: () => context.push('/clients/${client.id}'),
-                              child: Padding(
-                                padding: const EdgeInsets.all(AppSpacing.lg),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        InitialAvatar(
-                                          initial: client.name,
-                                          color: _avatarColor(
-                                            client.avatarColorIndex,
-                                          ),
-                                          size: 48,
+                            onTap: () => context.push('/clients/${client.id}'),
+                            child: Padding(
+                              padding: const EdgeInsets.all(AppSpacing.lg),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      InitialAvatar(
+                                        initial: client.name,
+                                        color: _avatarColor(
+                                          client.avatarColorIndex,
                                         ),
-                                        const SizedBox(width: AppSpacing.md),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                client.name,
-                                                style: AppText.cardTitle,
+                                        size: 48,
+                                      ),
+                                      const SizedBox(width: AppSpacing.md),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              client.name,
+                                              style: AppText.cardTitle,
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              ClientStrings.addedDate(
+                                                formatDate(client.createdAt),
                                               ),
-                                              const SizedBox(height: 2),
-                                              Text(
-                                                ClientStrings.addedDate(
-                                                  formatDate(client.createdAt),
-                                                ),
-                                                style: AppText.caption,
-                                              ),
-                                            ],
-                                          ),
+                                              style: AppText.caption,
+                                            ),
+                                          ],
                                         ),
-                                        StatusPill(isActive: isActive),
-                                      ],
-                                    ),
-                                    const SizedBox(height: AppSpacing.md),
-                                    const Divider(
-                                      color: AppColors.line,
-                                      height: 1,
-                                      thickness: 1,
-                                    ),
-                                    const SizedBox(height: AppSpacing.md),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          formatMoney(revenue),
-                                          style: AppText.cardTitle.copyWith(
-                                            fontSize: 17,
-                                            letterSpacing: 0,
-                                          ),
+                                      ),
+                                      StatusPill(isActive: isActive),
+                                    ],
+                                  ),
+                                  const SizedBox(height: AppSpacing.md),
+                                  const Divider(
+                                    color: AppColors.line,
+                                    height: 1,
+                                    thickness: 1,
+                                  ),
+                                  const SizedBox(height: AppSpacing.md),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        formatMoney(revenue),
+                                        style: AppText.cardTitle.copyWith(
+                                          fontSize: 17,
+                                          letterSpacing: 0,
                                         ),
-                                        const SizedBox(width: AppSpacing.md),
-                                        Expanded(
-                                          child: Align(
+                                      ),
+                                      const SizedBox(width: AppSpacing.md),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
                                             alignment: Alignment.centerLeft,
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              alignment: Alignment.centerLeft,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Container(
-                                                    width: 6,
-                                                    height: 6,
-                                                    decoration: BoxDecoration(
-                                                      color: activeProjs > 0
-                                                          ? AppColors.green
-                                                          : AppColors.mute,
-                                                      shape: BoxShape.circle,
-                                                    ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: 6,
+                                                  height: 6,
+                                                  decoration: BoxDecoration(
+                                                    color: activeProjs > 0
+                                                        ? AppColors.green
+                                                        : AppColors.mute,
+                                                    shape: BoxShape.circle,
                                                   ),
-                                                  const SizedBox(width: 5),
-                                                  Text(
-                                                    '$activeProjs active projs',
-                                                    maxLines: 1,
-                                                    softWrap: false,
-                                                    style: AppText.captionSm
-                                                        .copyWith(
-                                                      color: activeProjs > 0
-                                                          ? AppColors.green
-                                                          : AppColors.mute,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      letterSpacing: 0,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  '$activeProjs active projs',
+                                                  maxLines: 1,
+                                                  softWrap: false,
+                                                  style: AppText.captionSm
+                                                      .copyWith(
+                                                        color: activeProjs > 0
+                                                            ? AppColors.green
+                                                            : AppColors.mute,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        letterSpacing: 0,
+                                                      ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(width: AppSpacing.xs),
-                                        ...dots,
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                      const SizedBox(width: AppSpacing.xs),
+                                      ...dots,
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                    childCount: displayedClients.length,
-                  ),
+                      ),
+                    );
+                  }, childCount: displayedClients.length),
                 ),
               ),
           ],

@@ -16,13 +16,13 @@ class FriendsScope extends InheritedNotifier<FriendsRepository> {
   /// the repository notifies listeners.
   static FriendsRepository of(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final FriendsScope? scope =
-          context.dependOnInheritedWidgetOfExactType<FriendsScope>();
+      final FriendsScope? scope = context
+          .dependOnInheritedWidgetOfExactType<FriendsScope>();
       assert(scope != null, 'No FriendsScope found in context.');
       return scope!.notifier!;
     } else {
-      final FriendsScope? scope =
-          context.getInheritedWidgetOfExactType<FriendsScope>();
+      final FriendsScope? scope = context
+          .getInheritedWidgetOfExactType<FriendsScope>();
       assert(scope != null, 'No FriendsScope found in context.');
       return scope!.notifier!;
     }

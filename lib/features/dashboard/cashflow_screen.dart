@@ -57,10 +57,7 @@ String _formatNetK(double net) {
 
 /// Cashflow detail screen per HM4 in SPEC.md.
 class CashflowScreen extends StatefulWidget {
-  const CashflowScreen({
-    super.key,
-    this.clock,
-  });
+  const CashflowScreen({super.key, this.clock});
 
   final DateTime Function()? clock;
 
@@ -92,8 +89,7 @@ class _CashflowScreenState extends State<CashflowScreen> {
 
     final List<ProjectPayment> payments =
         projectsRepo?.payments ?? const <ProjectPayment>[];
-    final List<Expense> expenses =
-        expensesRepo?.expenses ?? const <Expense>[];
+    final List<Expense> expenses = expensesRepo?.expenses ?? const <Expense>[];
 
     final List<MonthFlow> flows = _rangeIndex == 0
         ? monthFlows(now, months: 6, payments: payments, expenses: expenses)
@@ -118,10 +114,7 @@ class _CashflowScreenState extends State<CashflowScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: Text(
-          DashboardChartsStrings.cashflow,
-          style: AppText.cardTitle,
-        ),
+        title: Text(DashboardChartsStrings.cashflow, style: AppText.cardTitle),
         leading: IconButton(
           icon: const Icon(AppIcons.arrowLeft, color: AppColors.ink),
           onPressed: () => _handleBack(context),
@@ -251,7 +244,9 @@ class _CashflowScreenState extends State<CashflowScreen> {
             DashCard(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Column(
-                children: List<Widget>.generate(newestFirstFlows.length, (int i) {
+                children: List<Widget>.generate(newestFirstFlows.length, (
+                  int i,
+                ) {
                   final MonthFlow flow = newestFirstFlows[i];
                   final bool isLast = i == newestFirstFlows.length - 1;
 
@@ -368,10 +363,7 @@ class _CashflowScreenState extends State<CashflowScreen> {
           value,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppText.bodyBold.copyWith(
-            fontSize: 14,
-            color: AppColors.ink,
-          ),
+          style: AppText.bodyBold.copyWith(fontSize: 14, color: AppColors.ink),
         ),
       ],
     );

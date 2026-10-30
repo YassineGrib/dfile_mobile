@@ -35,7 +35,8 @@ abstract final class FriendStrings {
 
   // Chip labels
   static String owedAmount(String formattedMoney) => 'Owed $formattedMoney';
-  static String youOweAmount(String formattedMoney) => 'You owe $formattedMoney';
+  static String youOweAmount(String formattedMoney) =>
+      'You owe $formattedMoney';
   static const String settledChip = 'Settled';
 
   // Label resolvers

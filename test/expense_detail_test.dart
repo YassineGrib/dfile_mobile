@@ -20,7 +20,7 @@ void main() {
   });
 
   Future<(ExpensesRepository, ProjectsRepository, ClientsRepository, GoRouter)>
-      pumpExpenseApp(
+  pumpExpenseApp(
     WidgetTester tester, {
     required String initialLocation,
     Size surfaceSize = const Size(390, 844),
@@ -37,10 +37,9 @@ void main() {
 
     final ClientsRepository effectiveClientsRepo =
         clientsRepo ?? ClientsRepository();
-    final ProjectsRepository effectiveProjectsRepo = projectsRepo ??
-        ProjectsRepository(
-          clientsRepository: effectiveClientsRepo,
-        );
+    final ProjectsRepository effectiveProjectsRepo =
+        projectsRepo ??
+        ProjectsRepository(clientsRepository: effectiveClientsRepo);
     final ExpensesRepository effectiveExpensesRepo =
         expensesRepo ?? ExpensesRepository();
     final GoRouter router = createAppRouter(initialLocation: initialLocation);
@@ -58,7 +57,7 @@ void main() {
       effectiveExpensesRepo,
       effectiveProjectsRepo,
       effectiveClientsRepo,
-      router
+      router,
     );
   }
 
@@ -95,10 +94,7 @@ void main() {
 
       // Notes
       expect(find.text(ExpenseDetailStrings.notes), findsOneWidget);
-      expect(
-        find.text('Campaign for the brand launch week.'),
-        findsOneWidget,
-      );
+      expect(find.text('Campaign for the brand launch week.'), findsOneWidget);
 
       // Bottom bar
       expect(find.text(ExpenseDetailStrings.editExpense), findsOneWidget);
@@ -137,37 +133,35 @@ void main() {
       // exp3 has notes
       await pumpExpenseApp(tester, initialLocation: '/expenses/exp3');
       expect(find.text(ExpenseDetailStrings.notes), findsOneWidget);
-      expect(
-        find.text('Campaign for the brand launch week.'),
-        findsOneWidget,
-      );
+      expect(find.text('Campaign for the brand launch week.'), findsOneWidget);
 
       // exp1 has no notes
       await pumpExpenseApp(tester, initialLocation: '/expenses/exp1');
       expect(find.text(ExpenseDetailStrings.notes), findsNothing);
     });
 
-    testWidgets('copy reference copies to Clipboard and shows toast when present', (
-      WidgetTester tester,
-    ) async {
-      await pumpExpenseApp(tester, initialLocation: '/expenses/exp3');
+    testWidgets(
+      'copy reference copies to Clipboard and shows toast when present',
+      (WidgetTester tester) async {
+        await pumpExpenseApp(tester, initialLocation: '/expenses/exp3');
 
-      // Open actions sheet
-      await tester.tap(find.byIcon(Icons.more_horiz));
-      await tester.pumpAndSettle();
+        // Open actions sheet
+        await tester.tap(find.byIcon(Icons.more_horiz));
+        await tester.pumpAndSettle();
 
-      expect(find.text(ExpenseDetailStrings.copyReference), findsOneWidget);
-      await tester.tap(find.text(ExpenseDetailStrings.copyReference));
-      await tester.pump();
+        expect(find.text(ExpenseDetailStrings.copyReference), findsOneWidget);
+        await tester.tap(find.text(ExpenseDetailStrings.copyReference));
+        await tester.pump();
 
-      expect(
-        find.text(ExpenseDetailStrings.copiedReferenceToast),
-        findsOneWidget,
-      );
+        expect(
+          find.text(ExpenseDetailStrings.copiedReferenceToast),
+          findsOneWidget,
+        );
 
-      await tester.pump(const Duration(seconds: 4));
-      expect(find.byType(AppToast), findsNothing);
-    });
+        await tester.pump(const Duration(seconds: 4));
+        expect(find.byType(AppToast), findsNothing);
+      },
+    );
 
     testWidgets('copy reference on empty reference shows no reference toast', (
       WidgetTester tester,
@@ -286,10 +280,7 @@ void main() {
         );
         expect(
           find.text(
-            ExpenseDetailStrings.deleteWarningExpense(
-              'Instagram ads',
-              12000,
-            ),
+            ExpenseDetailStrings.deleteWarningExpense('Instagram ads', 12000),
           ),
           findsOneWidget,
         );
@@ -310,19 +301,20 @@ void main() {
       },
     );
 
-    testWidgets('unknown expense id renders friendly Expense not found screen', (
-      WidgetTester tester,
-    ) async {
-      await pumpExpenseApp(tester, initialLocation: '/expenses/unknown_id');
+    testWidgets(
+      'unknown expense id renders friendly Expense not found screen',
+      (WidgetTester tester) async {
+        await pumpExpenseApp(tester, initialLocation: '/expenses/unknown_id');
 
-      expect(find.text(ExpenseDetailStrings.expenseNotFound), findsOneWidget);
-      expect(find.text(ExpenseDetailStrings.backToExpenses), findsOneWidget);
+        expect(find.text(ExpenseDetailStrings.expenseNotFound), findsOneWidget);
+        expect(find.text(ExpenseDetailStrings.backToExpenses), findsOneWidget);
 
-      await tester.tap(find.text(ExpenseDetailStrings.backToExpenses));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text(ExpenseDetailStrings.backToExpenses));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(ExpensesListScreen), findsOneWidget);
-    });
+        expect(find.byType(ExpensesListScreen), findsOneWidget);
+      },
+    );
 
     testWidgets(
       '360x800 surface renders detail, actions, and delete sheet with no overflow',

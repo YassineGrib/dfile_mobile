@@ -467,16 +467,10 @@ class _ProjectsListScreenState extends State<ProjectsListScreen> {
     );
   }
 
-  Widget _buildSummaryTile({
-    required String label,
-    required String value,
-  }) {
+  Widget _buildSummaryTile({required String label, required String value}) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.card,
           borderRadius: BorderRadius.circular(AppRadius.cardSmall),
@@ -521,7 +515,11 @@ class _ProjectsListScreenState extends State<ProjectsListScreen> {
     );
   }
 
-  Widget _buildProjectCard(BuildContext context, ProjectsRepository repo, ProjectItem project) {
+  Widget _buildProjectCard(
+    BuildContext context,
+    ProjectsRepository repo,
+    ProjectItem project,
+  ) {
     final String clientName = repo.clientNameOf(project);
     final double paidAmount = repo.paid(project);
     final double remainingAmount = repo.remaining(project);
@@ -981,16 +979,16 @@ class _ProjectsListScreenState extends State<ProjectsListScreen> {
                   AppSpacing.xxl,
                 ),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return _buildProjectCard(
-                        context,
-                        repo,
-                        displayedProjects[index],
-                      );
-                    },
-                    childCount: displayedProjects.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((
+                    BuildContext context,
+                    int index,
+                  ) {
+                    return _buildProjectCard(
+                      context,
+                      repo,
+                      displayedProjects[index],
+                    );
+                  }, childCount: displayedProjects.length),
                 ),
               ),
           ],

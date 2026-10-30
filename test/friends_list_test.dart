@@ -27,7 +27,7 @@ void main() {
 
   group('FriendsScreen tests on 390x844 surface', () {
     Future<(ClientsRepository, ProjectsRepository, FriendsRepository, GoRouter)>
-        pumpFriendsApp(
+    pumpFriendsApp(
       WidgetTester tester, {
       String initialLocation = AppRoutes.friendsPath,
       Size surfaceSize = const Size(390, 844),
@@ -74,7 +74,9 @@ void main() {
         // Screen title and subtitle
         expect(find.text(FriendsListStrings.title), findsOneWidget);
         expect(
-          find.text(FriendsListStrings.friendsCount(friendsRepo.friends.length)),
+          find.text(
+            FriendsListStrings.friendsCount(friendsRepo.friends.length),
+          ),
           findsOneWidget,
         );
 
@@ -107,7 +109,12 @@ void main() {
         final (_, _, friendsRepo, _) = await pumpFriendsApp(tester);
 
         // Initially Friends tab
-        expect(find.text(FriendsListStrings.friendsCount(friendsRepo.friends.length)), findsOneWidget);
+        expect(
+          find.text(
+            FriendsListStrings.friendsCount(friendsRepo.friends.length),
+          ),
+          findsOneWidget,
+        );
         expect(find.byType(FriendCard), findsWidgets);
 
         // Switch to Transactions tab via SegmentedToggle
@@ -116,7 +123,11 @@ void main() {
 
         // Subtitle now shows transactions count
         expect(
-          find.text(FriendsListStrings.transactionsCount(friendsRepo.transactions.length)),
+          find.text(
+            FriendsListStrings.transactionsCount(
+              friendsRepo.transactions.length,
+            ),
+          ),
           findsNWidgets(2), // In header and in count row
         );
         expect(find.byType(FriendTxCard), findsWidgets);
@@ -136,7 +147,9 @@ void main() {
 
         // Friends search is empty and shows friends
         expect(find.byType(FriendCard), findsWidgets);
-        final TextField friendsField = tester.widget<TextField>(find.byType(TextField));
+        final TextField friendsField = tester.widget<TextField>(
+          find.byType(TextField),
+        );
         expect(friendsField.controller?.text, isEmpty);
 
         // Switch back to Transactions tab
@@ -144,7 +157,9 @@ void main() {
         await tester.pumpAndSettle();
 
         // Preserved transactions search query "Server" and filtered list
-        final TextField txField = tester.widget<TextField>(find.byType(TextField));
+        final TextField txField = tester.widget<TextField>(
+          find.byType(TextField),
+        );
         expect(txField.controller?.text, 'Server');
         expect(find.byType(FriendTxCard), findsOneWidget);
       },
@@ -168,34 +183,48 @@ void main() {
         expect(find.byType(FriendCard), findsWidgets);
 
         // Tap "Owe me" pill (net > 0: Karim and Yacine)
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.pillOweMe));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.pillOweMe),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendCard), findsNWidgets(2));
         expect(find.text('Karim Boualam'), findsOneWidget);
         expect(find.text('Yacine Mebarki'), findsOneWidget);
 
         // Tap "I owe" pill (net < 0: Amine)
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.pillIOwe));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.pillIOwe),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendCard), findsOneWidget);
         expect(find.text('Amine Saidi'), findsOneWidget);
 
         // Drag pills row to bring Settled pill into view
-        await tester.drag(find.byKey(const Key('friend-net-pills')), const Offset(-150, 0));
+        await tester.drag(
+          find.byKey(const Key('friend-net-pills')),
+          const Offset(-150, 0),
+        );
         await tester.pumpAndSettle();
 
         // Tap "Settled" pill (net == 0: Lina)
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.pillSettled));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.pillSettled),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendCard), findsOneWidget);
         expect(find.text('Lina Cherif'), findsOneWidget);
 
         // Drag pills row back to bring All pill into view
-        await tester.drag(find.byKey(const Key('friend-net-pills')), const Offset(200, 0));
+        await tester.drag(
+          find.byKey(const Key('friend-net-pills')),
+          const Offset(200, 0),
+        );
         await tester.pumpAndSettle();
 
         // Tap "All" pill
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.pillAll));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.pillAll),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendCard), findsWidgets);
       },
@@ -214,33 +243,47 @@ void main() {
         expect(find.byType(FriendTxCard), findsWidgets);
 
         // Tap "Owed to me" pill (lent: 4 transactions)
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.txPillOwedToMe));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.txPillOwedToMe),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendTxCard), findsWidgets);
         expect(find.text('Hosting bill split'), findsNothing); // borrowed
 
         // Tap "I owe" pill (borrowed: 1 transaction)
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.txPillIOwe));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.txPillIOwe),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendTxCard), findsOneWidget);
         expect(find.text('Hosting bill split'), findsOneWidget);
 
         // Drag pills row to bring Settled pill into view
-        await tester.drag(find.byKey(const Key('tx-quick-pills')), const Offset(-150, 0));
+        await tester.drag(
+          find.byKey(const Key('tx-quick-pills')),
+          const Offset(-150, 0),
+        );
         await tester.pumpAndSettle();
 
         // Tap "Settled" pill (1 settled transaction: Lunch and taxi)
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.txPillSettled));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.txPillSettled),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendTxCard), findsOneWidget);
         expect(find.text('Lunch and taxi'), findsOneWidget);
 
         // Drag pills row back to bring All pill into view
-        await tester.drag(find.byKey(const Key('tx-quick-pills')), const Offset(200, 0));
+        await tester.drag(
+          find.byKey(const Key('tx-quick-pills')),
+          const Offset(200, 0),
+        );
         await tester.pumpAndSettle();
 
         // Tap "All" pill
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.txPillAll));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.txPillAll),
+        );
         await tester.pumpAndSettle();
         expect(find.byType(FriendTxCard), findsWidgets);
 
@@ -252,7 +295,9 @@ void main() {
         expect(find.text(FriendsListStrings.filterSheetTitle), findsOneWidget);
 
         // In filter sheet, select Nature: Shared costs
-        await tester.tap(find.widgetWithText(AppPill, FriendsListStrings.natureExpense));
+        await tester.tap(
+          find.widgetWithText(AppPill, FriendsListStrings.natureExpense),
+        );
         await tester.pumpAndSettle();
 
         // Apply filters
@@ -289,7 +334,10 @@ void main() {
         );
 
         expect(find.text(FriendsListStrings.emptyFriendsTitle), findsOneWidget);
-        expect(find.text(FriendsListStrings.emptyFriendsSubtitle), findsOneWidget);
+        expect(
+          find.text(FriendsListStrings.emptyFriendsSubtitle),
+          findsOneWidget,
+        );
         expect(find.text(FriendsListStrings.addFriendButton), findsOneWidget);
 
         // Drag down to ensure button is visible then tap [+ Add friend]
@@ -305,7 +353,10 @@ void main() {
         await tester.enterText(find.byType(TextField), 'NonExistentPerson');
         await tester.pumpAndSettle();
 
-        expect(find.text(FriendsListStrings.emptyFriendsFilterTitle), findsOneWidget);
+        expect(
+          find.text(FriendsListStrings.emptyFriendsFilterTitle),
+          findsOneWidget,
+        );
         expect(find.text(FriendsListStrings.clearFilters), findsOneWidget);
 
         await tester.drag(find.byType(CustomScrollView), const Offset(0, -250));
@@ -322,7 +373,10 @@ void main() {
         await tester.tap(find.text(FriendsListStrings.tabTransactions));
         await tester.pumpAndSettle();
 
-        expect(find.text(FriendsListStrings.emptyTransactionsTitle), findsOneWidget);
+        expect(
+          find.text(FriendsListStrings.emptyTransactionsTitle),
+          findsOneWidget,
+        );
 
         // 4. No-match transactions filter state
         await pumpFriendsApp(tester);
@@ -332,7 +386,10 @@ void main() {
         await tester.enterText(find.byType(TextField), 'NonExistentTx');
         await tester.pumpAndSettle();
 
-        expect(find.text(FriendsListStrings.emptyTransactionsFilterTitle), findsOneWidget);
+        expect(
+          find.text(FriendsListStrings.emptyTransactionsFilterTitle),
+          findsOneWidget,
+        );
         await tester.drag(find.byType(CustomScrollView), const Offset(0, -250));
         await tester.pumpAndSettle();
         await tester.tap(find.text(FriendsListStrings.clearFilters));
@@ -356,7 +413,10 @@ void main() {
         await pumpFriendsApp(tester);
 
         // Tap "+" button in header -> navigates to /friends/new
-        final Finder addButton = find.widgetWithIcon(RoundIconButton, Icons.add);
+        final Finder addButton = find.widgetWithIcon(
+          RoundIconButton,
+          Icons.add,
+        );
         expect(addButton, findsOneWidget);
         await tester.tap(addButton);
         await tester.pumpAndSettle();
@@ -376,27 +436,26 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Settle button on transaction card opens the settle sheet',
-      (WidgetTester tester) async {
-        await pumpFriendsApp(tester);
+    testWidgets('Settle button on transaction card opens the settle sheet', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendsApp(tester);
 
-        // Switch to Transactions tab
-        await tester.tap(find.text(FriendsListStrings.tabTransactions));
-        await tester.pumpAndSettle();
+      // Switch to Transactions tab
+      await tester.tap(find.text(FriendsListStrings.tabTransactions));
+      await tester.pumpAndSettle();
 
-        // Find Settle buttons on non-settled transactions
-        final Finder settleButtons = find.text(FriendsListStrings.settle);
-        expect(settleButtons, findsWidgets);
+      // Find Settle buttons on non-settled transactions
+      final Finder settleButtons = find.text(FriendsListStrings.settle);
+      expect(settleButtons, findsWidgets);
 
-        // Tap the first Settle button
-        await tester.tap(settleButtons.first);
-        await tester.pumpAndSettle();
+      // Tap the first Settle button
+      await tester.tap(settleButtons.first);
+      await tester.pumpAndSettle();
 
-        // Bottom sheet opens
-        expect(find.text('Record settlement'), findsOneWidget);
-      },
-    );
+      // Bottom sheet opens
+      expect(find.text('Record settlement'), findsOneWidget);
+    });
 
     testWidgets(
       'Toast via GoRouterState.extra works for Map, plain String, and tab switching',
@@ -412,7 +471,10 @@ void main() {
         );
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 50));
-        expect(find.text(FriendsListStrings.friendDeletedToast), findsOneWidget);
+        expect(
+          find.text(FriendsListStrings.friendDeletedToast),
+          findsOneWidget,
+        );
 
         // Wait to auto-dismiss
         await tester.pump(const Duration(seconds: 4));
@@ -433,9 +495,7 @@ void main() {
         // Map payload with 'tab': 'transactions'
         router.go(
           AppRoutes.friendsPath,
-          extra: <String, Object?>{
-            'tab': 'transactions',
-          },
+          extra: <String, Object?>{'tab': 'transactions'},
         );
         await tester.pump();
         await tester.pumpAndSettle();
@@ -458,43 +518,39 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Renders on 360x800 surface without any layout overflow',
-      (WidgetTester tester) async {
-        await pumpFriendsApp(
-          tester,
-          surfaceSize: const Size(360, 800),
-        );
+    testWidgets('Renders on 360x800 surface without any layout overflow', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendsApp(tester, surfaceSize: const Size(360, 800));
 
-        expect(find.byType(FriendsScreen), findsOneWidget);
-        expect(tester.takeException(), isNull);
+      expect(find.byType(FriendsScreen), findsOneWidget);
+      expect(tester.takeException(), isNull);
 
-        // Scroll Friends list on 360x800
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
+      // Scroll Friends list on 360x800
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
 
-        // Switch to Transactions on 360x800
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, 500));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(FriendsListStrings.tabTransactions));
-        await tester.pumpAndSettle();
+      // Switch to Transactions on 360x800
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, 500));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(FriendsListStrings.tabTransactions));
+      await tester.pumpAndSettle();
 
-        // Scroll Transactions list on 360x800
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
+      // Scroll Transactions list on 360x800
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
 
-        // Check empty states on 360x800
-        await pumpFriendsApp(
-          tester,
-          surfaceSize: const Size(360, 800),
-          initialFriends: <Friend>[],
-          initialTransactions: <FriendTransaction>[],
-        );
-        expect(find.text(FriendsListStrings.emptyFriendsTitle), findsOneWidget);
-        expect(tester.takeException(), isNull);
-      },
-    );
+      // Check empty states on 360x800
+      await pumpFriendsApp(
+        tester,
+        surfaceSize: const Size(360, 800),
+        initialFriends: <Friend>[],
+        initialTransactions: <FriendTransaction>[],
+      );
+      expect(find.text(FriendsListStrings.emptyFriendsTitle), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
   });
 }

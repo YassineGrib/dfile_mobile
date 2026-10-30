@@ -59,10 +59,7 @@ class SettingsHeader extends StatelessWidget {
             ),
           ),
           if (rightAction != null)
-            Align(
-              alignment: Alignment.centerRight,
-              child: rightAction!,
-            ),
+            Align(alignment: Alignment.centerRight, child: rightAction!),
         ],
       ),
     );

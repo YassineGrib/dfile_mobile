@@ -7,14 +7,7 @@ import '../../projects/data/data.dart';
 import 'milestone.dart';
 
 /// Classification of calendar events per `docs/design/SPEC.md`.
-enum CalendarEventKind {
-  over,
-  due,
-  start,
-  milestone,
-  done,
-  debt,
-}
+enum CalendarEventKind { over, due, start, milestone, done, debt }
 
 /// A calendar event representing a project deadline, project start date,
 /// milestone target, or friend debt settlement due date.
@@ -76,16 +69,16 @@ class CalendarEvent {
 
   @override
   int get hashCode => Object.hash(
-        kind,
-        title,
-        subtitle,
-        date,
-        pillText,
-        route,
-        milestoneId,
-        projectId,
-        transactionId,
-      );
+    kind,
+    title,
+    subtitle,
+    date,
+    pillText,
+    route,
+    milestoneId,
+    projectId,
+    transactionId,
+  );
 
   @override
   String toString() =>
@@ -151,8 +144,9 @@ List<CalendarEvent> calendarEvents({
           pill = diff == 0 ? 'Today' : '${diff}d left';
         }
 
-        final String subtitle =
-            clientName.isNotEmpty ? clientName : 'Deadline ${_formatShortDate(endDay)}';
+        final String subtitle = clientName.isNotEmpty
+            ? clientName
+            : 'Deadline ${_formatShortDate(endDay)}';
 
         events.add(
           CalendarEvent(
@@ -169,8 +163,9 @@ List<CalendarEvent> calendarEvents({
 
       // Project start date
       final DateTime startDay = _dateOnly(p.startDate);
-      final String subtitle =
-          clientName.isNotEmpty ? clientName : 'Project start';
+      final String subtitle = clientName.isNotEmpty
+          ? clientName
+          : 'Project start';
 
       events.add(
         CalendarEvent(
@@ -189,7 +184,9 @@ List<CalendarEvent> calendarEvents({
   if (milestones != null) {
     for (final Milestone m in milestones) {
       // Deleting a project removes its milestones: filter out orphaned milestones
-      if (projects != null && projects.isNotEmpty && !projectsMap.containsKey(m.projectId)) {
+      if (projects != null &&
+          projects.isNotEmpty &&
+          !projectsMap.containsKey(m.projectId)) {
         continue;
       }
       final DateTime mDay = _dateOnly(m.date);
@@ -283,8 +280,18 @@ List<CalendarEvent> calendarEvents({
 
 String _formatShortDate(DateTime date) {
   const List<String> months = <String>[
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
   return '${months[date.month - 1]} ${date.day}';
 }
@@ -296,12 +303,15 @@ Map<int, List<CalendarEventKind>> dotsForMonth(
   int year,
   int month,
 ) {
-  final Map<int, List<CalendarEventKind>> map = <int, List<CalendarEventKind>>{};
+  final Map<int, List<CalendarEventKind>> map =
+      <int, List<CalendarEventKind>>{};
 
   for (final CalendarEvent event in events) {
     if (event.date.year == year && event.date.month == month) {
-      final List<CalendarEventKind> kinds =
-          map.putIfAbsent(event.date.day, () => <CalendarEventKind>[]);
+      final List<CalendarEventKind> kinds = map.putIfAbsent(
+        event.date.day,
+        () => <CalendarEventKind>[],
+      );
       if (kinds.length < 3 && !kinds.contains(event.kind)) {
         kinds.add(event.kind);
       }
@@ -322,10 +332,7 @@ List<CalendarEvent> eventsOnDay(List<CalendarEvent> events, DateTime day) {
 /// A single cell in the calendar month grid.
 @immutable
 class MonthGridCell {
-  const MonthGridCell({
-    required this.date,
-    required this.inMonth,
-  });
+  const MonthGridCell({required this.date, required this.inMonth});
 
   final DateTime date;
   final bool inMonth;
@@ -432,13 +439,16 @@ AgendaGroups agendaGroups(List<CalendarEvent> events, DateTime now) {
       todayEvents.add(event);
     } else if (eventDate.isAfter(today) && !eventDate.isAfter(nextWeekEnd)) {
       thisWeek.add(event);
-    } else if (eventDate.isAfter(nextWeekEnd) && !eventDate.isAfter(ninetyDaysEnd)) {
+    } else if (eventDate.isAfter(nextWeekEnd) &&
+        !eventDate.isAfter(ninetyDaysEnd)) {
       later.add(event);
     }
   }
 
   overdue.sort((CalendarEvent a, CalendarEvent b) => a.date.compareTo(b.date));
-  todayEvents.sort((CalendarEvent a, CalendarEvent b) => a.title.compareTo(b.title));
+  todayEvents.sort(
+    (CalendarEvent a, CalendarEvent b) => a.title.compareTo(b.title),
+  );
   thisWeek.sort((CalendarEvent a, CalendarEvent b) => a.date.compareTo(b.date));
   later.sort((CalendarEvent a, CalendarEvent b) => a.date.compareTo(b.date));
 
@@ -559,8 +569,18 @@ class CapacityInfo {
 
   static String _formatDate(DateTime dt) {
     const List<String> months = <String>[
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[dt.month - 1]} ${dt.day}, ${dt.year}';
   }
@@ -590,22 +610,28 @@ CapacityInfo capacityInfo(List<ProjectItem> projects, DateTime now) {
 
   final int averageProgress = activeProjects.isEmpty
       ? 0
-      : (activeProjects.fold<int>(0, (int sum, ProjectItem p) => sum + p.progress) /
-              activeProjects.length)
-          .round();
+      : (activeProjects.fold<int>(
+                  0,
+                  (int sum, ProjectItem p) => sum + p.progress,
+                ) /
+                activeProjects.length)
+            .round();
 
   // Earliest FUTURE end date among active projects
   final List<ProjectItem> futureEndProjects = activeProjects
-      .where((ProjectItem p) =>
-          p.endDate != null && _dateOnly(p.endDate!).isAfter(today))
+      .where(
+        (ProjectItem p) =>
+            p.endDate != null && _dateOnly(p.endDate!).isAfter(today),
+      )
       .toList();
 
   DateTime? nextAvailableDate;
   ProjectItem? nextProject;
 
   if (futureEndProjects.isNotEmpty) {
-    futureEndProjects.sort((ProjectItem a, ProjectItem b) =>
-        a.endDate!.compareTo(b.endDate!));
+    futureEndProjects.sort(
+      (ProjectItem a, ProjectItem b) => a.endDate!.compareTo(b.endDate!),
+    );
     nextProject = futureEndProjects.first;
     nextAvailableDate = nextProject.endDate;
   }

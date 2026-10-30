@@ -79,7 +79,9 @@ class SecurityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final SettingsRepository repo = SettingsScope.of(context);
     final List<DeviceSession> sessions = repo.sessions;
-    final bool hasOtherSessions = sessions.any((DeviceSession s) => !s.isCurrent);
+    final bool hasOtherSessions = sessions.any(
+      (DeviceSession s) => !s.isCurrent,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -206,7 +208,8 @@ class SecurityScreen extends StatelessWidget {
                               },
                               child: Center(
                                 child: Text(
-                                  SettingsSecurityStrings.terminateOtherSessions,
+                                  SettingsSecurityStrings
+                                      .terminateOtherSessions,
                                   style: AppText.button.copyWith(
                                     color: AppColors.red,
                                   ),

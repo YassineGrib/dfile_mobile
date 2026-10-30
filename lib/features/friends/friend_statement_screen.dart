@@ -13,10 +13,7 @@ import 'widgets/widgets.dart';
 
 /// Screen displaying an individual friend's debt statement per `docs/design/SPEC.md` (FD3).
 class FriendStatementScreen extends StatefulWidget {
-  const FriendStatementScreen({
-    super.key,
-    required this.friendId,
-  });
+  const FriendStatementScreen({super.key, required this.friendId});
 
   final String friendId;
 
@@ -105,10 +102,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
                         ),
                         if (friend.phone.trim().isNotEmpty) ...[
                           const SizedBox(height: 2),
-                          Text(
-                            friend.phone.trim(),
-                            style: AppText.caption,
-                          ),
+                          Text(friend.phone.trim(), style: AppText.caption),
                         ],
                       ],
                     ),
@@ -133,9 +127,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
                 onTap: () {
                   Navigator.of(sheetContext).pop();
                   if (friend.phone.trim().isNotEmpty) {
-                    Clipboard.setData(
-                      ClipboardData(text: friend.phone.trim()),
-                    );
+                    Clipboard.setData(ClipboardData(text: friend.phone.trim()));
                     showAppToast(
                       context,
                       FriendStatementStrings.copiedPhoneToast,
@@ -231,9 +223,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
                         const SizedBox(height: 2),
                         Text(
                           FriendStatementStrings.deleteFriendSubtitle,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.red,
-                          ),
+                          style: AppText.caption.copyWith(color: AppColors.red),
                         ),
                       ],
                     ),
@@ -429,10 +419,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
   }) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 10,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         decoration: BoxDecoration(
           color: AppColors.card,
           borderRadius: BorderRadius.circular(AppRadius.cardSmall),
@@ -525,10 +512,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
             '${AppRoutes.newFriendTransactionPath}?friendId=${friend.id}',
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 4,
-              vertical: 2,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             child: Text(
               FriendStatementStrings.addTransactionShort,
               style: AppText.bodyMedium.copyWith(
@@ -588,12 +572,14 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
     }
 
     final FriendBalance balance = repo.friendBalance(widget.friendId);
-    final List<FriendTransaction> transactions =
-        repo.transactionsOf(widget.friendId);
+    final List<FriendTransaction> transactions = repo.transactionsOf(
+      widget.friendId,
+    );
 
     final double screenWidth = MediaQuery.sizeOf(context).width;
-    final double horizontalGutter =
-        screenWidth < 380 ? AppSpacing.lg : AppSpacing.pageGutter;
+    final double horizontalGutter = screenWidth < 380
+        ? AppSpacing.lg
+        : AppSpacing.pageGutter;
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -640,40 +626,36 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
                   child: Text(
                     FriendStatementStrings.noTransactions,
                     textAlign: TextAlign.center,
-                    style: AppText.bodyMedium.copyWith(
-                      color: AppColors.mute,
-                    ),
+                    style: AppText.bodyMedium.copyWith(color: AppColors.mute),
                   ),
                 )
               else
                 for (int i = 0; i < transactions.length; i++) ...[
                   if (i > 0) const SizedBox(height: AppSpacing.md),
                   LayoutBuilder(
-                    builder: (BuildContext context, BoxConstraints constraints) {
-                      Widget card = FriendTxCard(
-                        transaction: transactions[i],
-                        friendName: friend.name,
-                        showFriend: false,
-                        onTap: () => context.push(
-                          '/friends/transactions/${transactions[i].id}',
-                        ),
-                        onSettle: () => showSettleSheet(
-                          context,
-                          transactionId: transactions[i].id,
-                        ),
-                      );
-                      if (constraints.maxWidth < 380) {
-                        card = FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.topCenter,
-                          child: SizedBox(
-                            width: 380,
-                            child: card,
-                          ),
-                        );
-                      }
-                      return card;
-                    },
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                          Widget card = FriendTxCard(
+                            transaction: transactions[i],
+                            friendName: friend.name,
+                            showFriend: false,
+                            onTap: () => context.push(
+                              '/friends/transactions/${transactions[i].id}',
+                            ),
+                            onSettle: () => showSettleSheet(
+                              context,
+                              transactionId: transactions[i].id,
+                            ),
+                          );
+                          if (constraints.maxWidth < 380) {
+                            card = FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.topCenter,
+                              child: SizedBox(width: 380, child: card),
+                            );
+                          }
+                          return card;
+                        },
                   ),
                 ],
             ],

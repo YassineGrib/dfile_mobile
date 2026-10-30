@@ -11,10 +11,19 @@ import 'settings_scope.dart';
 /// Synchronously clears all user data across all repositories from [context].
 void wipeAllUserData(BuildContext context) {
   final ClientsRepository clientsRepo = ClientsScope.of(context, listen: false);
-  final ProjectsRepository projectsRepo = ProjectsScope.of(context, listen: false);
-  final ExpensesRepository expensesRepo = ExpensesScope.of(context, listen: false);
+  final ProjectsRepository projectsRepo = ProjectsScope.of(
+    context,
+    listen: false,
+  );
+  final ExpensesRepository expensesRepo = ExpensesScope.of(
+    context,
+    listen: false,
+  );
   final FriendsRepository friendsRepo = FriendsScope.of(context, listen: false);
-  final SettingsRepository settingsRepo = SettingsScope.of(context, listen: false);
+  final SettingsRepository settingsRepo = SettingsScope.of(
+    context,
+    listen: false,
+  );
   CalendarRepository? calendarRepo;
   try {
     calendarRepo = CalendarScope.of(context, listen: false);

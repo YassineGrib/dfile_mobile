@@ -58,11 +58,7 @@ class SettingsToggleRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppSpacing.md),
-          SettingsSwitch(
-            value: value,
-            onChanged: onChanged,
-            enabled: enabled,
-          ),
+          SettingsSwitch(value: value, onChanged: onChanged, enabled: enabled),
         ],
       ),
     );
@@ -75,11 +71,7 @@ class SettingsToggleRow extends StatelessWidget {
         if (!last)
           const Padding(
             padding: EdgeInsets.only(left: AppSpacing.lg),
-            child: Divider(
-              height: 1,
-              thickness: 1,
-              color: AppColors.line,
-            ),
+            child: Divider(height: 1, thickness: 1, color: AppColors.line),
           ),
       ],
     );

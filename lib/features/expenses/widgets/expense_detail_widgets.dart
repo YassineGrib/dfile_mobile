@@ -54,10 +54,7 @@ class ExpenseDetailCategoryIcon extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: bg,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
       alignment: Alignment.center,
       child: Text(
         initial,
@@ -73,10 +70,7 @@ class ExpenseDetailCategoryIcon extends StatelessWidget {
 
 /// Coloured stadium chip displaying [ExpenseCategory.shortLabel] per SPEC.md.
 class ExpenseDetailCategoryChip extends StatelessWidget {
-  const ExpenseDetailCategoryChip({
-    super.key,
-    required this.category,
-  });
+  const ExpenseDetailCategoryChip({super.key, required this.category});
 
   final ExpenseCategory category;
 
@@ -104,10 +98,7 @@ class ExpenseDetailCategoryChip extends StatelessWidget {
 
 /// Coloured stadium pill displaying a [PaymentMethod] per SPEC.md.
 class ExpenseDetailMethodBadge extends StatelessWidget {
-  const ExpenseDetailMethodBadge({
-    super.key,
-    required this.method,
-  });
+  const ExpenseDetailMethodBadge({super.key, required this.method});
 
   final PaymentMethod method;
 

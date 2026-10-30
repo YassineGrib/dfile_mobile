@@ -37,10 +37,7 @@ class ProjectStepIndicator extends StatelessWidget {
                 top: (_circleSize - 1.5) / 2,
                 left: stepWidth / 2,
                 right: stepWidth / 2,
-                child: Container(
-                  height: 1.5,
-                  color: AppColors.line,
-                ),
+                child: Container(height: 1.5, color: AppColors.line),
               ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,

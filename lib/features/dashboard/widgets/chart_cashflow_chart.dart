@@ -28,11 +28,7 @@ const List<String> _shortMonths = <String>[
 /// and outflow (coral), baseline, month labels, and highlights the best-inflow month
 /// with strong colours and a dark bubble pill above its bar.
 class CashflowChart extends StatelessWidget {
-  const CashflowChart({
-    super.key,
-    required this.flows,
-    this.height = 180.0,
-  });
+  const CashflowChart({super.key, required this.flows, this.height = 180.0});
 
   final List<MonthFlow> flows;
   final double height;

@@ -6,11 +6,7 @@ import '../../projects/data/project.dart';
 import '../../settings/data/notification_prefs.dart';
 
 /// Categories of dashboard notifications derived from repositories.
-enum AppNotificationKind {
-  deadline,
-  overdueDebt,
-  payment,
-}
+enum AppNotificationKind { deadline, overdueDebt, payment }
 
 /// A derived notification item displayed on HM5 (/home/notifications).
 class AppNotification {
@@ -46,7 +42,8 @@ class AppNotification {
   }
 
   @override
-  int get hashCode => Object.hash(id, kind, title, subtitle, date, route, isOverdue);
+  int get hashCode =>
+      Object.hash(id, kind, title, subtitle, date, route, isOverdue);
 }
 
 DateTime _dateOnly(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
@@ -97,8 +94,8 @@ List<AppNotification> deriveNotifications({
         final String subtitle = isOverdue
             ? '${project.name} is ${daysLeft.abs()}d overdue'
             : (daysLeft == 0
-                ? '${project.name} is due today'
-                : '${project.name} is due in ${daysLeft}d');
+                  ? '${project.name} is due today'
+                  : '${project.name} is due in ${daysLeft}d');
 
         notifications.add(
           AppNotification(
@@ -157,8 +154,9 @@ List<AppNotification> deriveNotifications({
     }
   }
 
-  notifications.sort((AppNotification a, AppNotification b) =>
-      b.date.compareTo(a.date));
+  notifications.sort(
+    (AppNotification a, AppNotification b) => b.date.compareTo(a.date),
+  );
 
   return notifications;
 }
@@ -166,7 +164,7 @@ List<AppNotification> deriveNotifications({
 /// In-memory store managing notification read state per SPEC.md HM5.
 class NotificationsStore extends ChangeNotifier {
   NotificationsStore({Set<String>? initialReadIds})
-      : _readIds = Set<String>.of(initialReadIds ?? <String>{});
+    : _readIds = Set<String>.of(initialReadIds ?? <String>{});
 
   final Set<String> _readIds;
 
@@ -200,7 +198,9 @@ class NotificationsStore extends ChangeNotifier {
 
   /// Calculates the unread count from a collection of [items].
   int unreadCount(Iterable<AppNotification> items) {
-    return items.where((AppNotification item) => !_readIds.contains(item.id)).length;
+    return items
+        .where((AppNotification item) => !_readIds.contains(item.id))
+        .length;
   }
 
   /// Resets the read IDs set.
@@ -220,13 +220,13 @@ class NotificationsScope extends InheritedNotifier<NotificationsStore> {
 
   static NotificationsStore of(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final NotificationsScope? scope =
-          context.dependOnInheritedWidgetOfExactType<NotificationsScope>();
+      final NotificationsScope? scope = context
+          .dependOnInheritedWidgetOfExactType<NotificationsScope>();
       assert(scope != null, 'No NotificationsScope found in context.');
       return scope!.notifier!;
     } else {
-      final NotificationsScope? scope =
-          context.getInheritedWidgetOfExactType<NotificationsScope>();
+      final NotificationsScope? scope = context
+          .getInheritedWidgetOfExactType<NotificationsScope>();
       assert(scope != null, 'No NotificationsScope found in context.');
       return scope!.notifier!;
     }

@@ -66,7 +66,11 @@ class _FriendPickerSheetContent extends StatelessWidget {
                 Navigator.of(context).pop();
                 context.push(AppRoutes.addFriendPath);
               },
-              icon: const Icon(Icons.add_rounded, size: 18, color: AppColors.purple),
+              icon: const Icon(
+                Icons.add_rounded,
+                size: 18,
+                color: AppColors.purple,
+              ),
               label: Text(
                 FriendFormsStrings.newFriendLink,
                 style: AppText.captionSm.copyWith(
@@ -96,10 +100,8 @@ class _FriendPickerSheetContent extends StatelessWidget {
             child: ListView.separated(
               shrinkWrap: true,
               itemCount: friends.length,
-              separatorBuilder: (BuildContext context, int index) => const Divider(
-                height: 1,
-                color: AppColors.line,
-              ),
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(height: 1, color: AppColors.line),
               itemBuilder: (BuildContext context, int index) {
                 final Friend friend = friends[index];
                 final bool isSelected = friend.id == selectedFriendId;
@@ -119,13 +121,17 @@ class _FriendPickerSheetContent extends StatelessWidget {
                     title: Text(
                       friend.name,
                       style: AppText.body.copyWith(
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
                       ),
                     ),
                     subtitle: friend.phone.isNotEmpty
                         ? Text(
                             friend.phone,
-                            style: AppText.captionSm.copyWith(color: AppColors.mute),
+                            style: AppText.captionSm.copyWith(
+                              color: AppColors.mute,
+                            ),
                           )
                         : null,
                     trailing: isSelected

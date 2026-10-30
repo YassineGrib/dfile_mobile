@@ -16,22 +16,27 @@ class CalendarScope extends InheritedNotifier<CalendarRepository> {
   /// repository notifies listeners.
   static CalendarRepository of(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final CalendarScope? scope =
-          context.dependOnInheritedWidgetOfExactType<CalendarScope>();
+      final CalendarScope? scope = context
+          .dependOnInheritedWidgetOfExactType<CalendarScope>();
       assert(scope != null, 'No CalendarScope found in context.');
       return scope!.notifier!;
     } else {
-      final CalendarScope? scope =
-          context.getInheritedWidgetOfExactType<CalendarScope>();
+      final CalendarScope? scope = context
+          .getInheritedWidgetOfExactType<CalendarScope>();
       assert(scope != null, 'No CalendarScope found in context.');
       return scope!.notifier!;
     }
   }
 
   /// Attempts to retrieve the [CalendarRepository] from [context], or returns `null`.
-  static CalendarRepository? maybeOf(BuildContext context, {bool listen = true}) {
+  static CalendarRepository? maybeOf(
+    BuildContext context, {
+    bool listen = true,
+  }) {
     if (listen) {
-      return context.dependOnInheritedWidgetOfExactType<CalendarScope>()?.notifier;
+      return context
+          .dependOnInheritedWidgetOfExactType<CalendarScope>()
+          ?.notifier;
     } else {
       return context.getInheritedWidgetOfExactType<CalendarScope>()?.notifier;
     }

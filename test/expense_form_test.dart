@@ -19,7 +19,7 @@ void main() {
   });
 
   Future<(ClientsRepository, ProjectsRepository, ExpensesRepository, GoRouter)>
-      pumpExpenseFormApp(
+  pumpExpenseFormApp(
     WidgetTester tester, {
     String initialLocation = AppRoutes.newExpensePath,
     Size surfaceSize = const Size(390, 844),
@@ -37,7 +37,8 @@ void main() {
 
     final ClientsRepository effectiveClientsRepo =
         clientsRepo ?? ClientsRepository();
-    final ProjectsRepository effectiveProjectsRepo = projectsRepo ??
+    final ProjectsRepository effectiveProjectsRepo =
+        projectsRepo ??
         ProjectsRepository(clientsRepository: effectiveClientsRepo);
     final ExpensesRepository effectiveExpensesRepo =
         expensesRepo ?? ExpensesRepository();
@@ -61,8 +62,9 @@ void main() {
   }
 
   group('Expense Form Screen', () {
-    testWidgets('validation errors (empty amount / zero / empty description)',
-        (WidgetTester tester) async {
+    testWidgets('validation errors (empty amount / zero / empty description)', (
+      WidgetTester tester,
+    ) async {
       await pumpExpenseFormApp(tester);
 
       expect(find.byType(ExpenseFormScreen), findsOneWidget);
@@ -86,10 +88,7 @@ void main() {
 
       // Amount field finder
       final Finder amountInput = find.descendant(
-        of: find.widgetWithText(
-          AppTextField,
-          ExpenseFormStrings.amountLabel,
-        ),
+        of: find.widgetWithText(AppTextField, ExpenseFormStrings.amountLabel),
         matching: find.byType(TextField),
       );
 
@@ -131,8 +130,9 @@ void main() {
       expect(find.text(ExpenseFormStrings.amountError), findsOneWidget);
     });
 
-    testWidgets('category selection updates selected category',
-        (WidgetTester tester) async {
+    testWidgets('category selection updates selected category', (
+      WidgetTester tester,
+    ) async {
       final (_, _, ExpensesRepository expensesRepo, _) =
           await pumpExpenseFormApp(tester);
 
@@ -173,55 +173,51 @@ void main() {
     });
 
     testWidgets(
-        'project sheet lists General + all projects and preselects on confirm',
-        (WidgetTester tester) async {
-      final (_, ProjectsRepository projectsRepo, _, _) =
-          await pumpExpenseFormApp(tester);
+      'project sheet lists General + all projects and preselects on confirm',
+      (WidgetTester tester) async {
+        final (_, ProjectsRepository projectsRepo, _, _) =
+            await pumpExpenseFormApp(tester);
 
-      // Tap linked project field
-      await tester.tap(
-        find.widgetWithText(
-          ExpenseFormSelectField,
-          ExpenseFormStrings.linkedProjectLabel,
-        ),
-      );
-      await tester.pumpAndSettle();
+        // Tap linked project field
+        await tester.tap(
+          find.widgetWithText(
+            ExpenseFormSelectField,
+            ExpenseFormStrings.linkedProjectLabel,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      // Link project sheet opens
-      expect(
-        find.text(ExpenseFormStrings.linkProjectSheetTitle),
-        findsOneWidget,
-      );
-      expect(
-        find.text(ExpenseFormStrings.generalBusinessCost),
-        findsWidgets,
-      );
-      expect(
-        find.text(ExpenseFormStrings.notLinkedSubtitle),
-        findsOneWidget,
-      );
+        // Link project sheet opens
+        expect(
+          find.text(ExpenseFormStrings.linkProjectSheetTitle),
+          findsOneWidget,
+        );
+        expect(find.text(ExpenseFormStrings.generalBusinessCost), findsWidgets);
+        expect(find.text(ExpenseFormStrings.notLinkedSubtitle), findsOneWidget);
 
-      // Every project is listed with client name
-      for (final ProjectItem project in projectsRepo.projects) {
-        expect(find.text(project.name), findsOneWidget);
-      }
+        // Every project is listed with client name
+        for (final ProjectItem project in projectsRepo.projects) {
+          expect(find.text(project.name), findsOneWidget);
+        }
 
-      // Select "Brand Identity"
-      await tester.tap(find.text('Brand Identity'));
-      await tester.pumpAndSettle();
+        // Select "Brand Identity"
+        await tester.tap(find.text('Brand Identity'));
+        await tester.pumpAndSettle();
 
-      // Tap Confirm
-      await tester.tap(
-        find.widgetWithText(PrimaryButton, ExpenseFormStrings.confirm),
-      );
-      await tester.pumpAndSettle();
+        // Tap Confirm
+        await tester.tap(
+          find.widgetWithText(PrimaryButton, ExpenseFormStrings.confirm),
+        );
+        await tester.pumpAndSettle();
 
-      // Sheet closed, field now displays Brand Identity
-      expect(find.text('Brand Identity'), findsOneWidget);
-    });
+        // Sheet closed, field now displays Brand Identity
+        expect(find.text('Brand Identity'), findsOneWidget);
+      },
+    );
 
-    testWidgets('preselect via projectId query parameter',
-        (WidgetTester tester) async {
+    testWidgets('preselect via projectId query parameter', (
+      WidgetTester tester,
+    ) async {
       // p1 = Fintask Landing Page
       await pumpExpenseFormApp(
         tester,
@@ -245,84 +241,90 @@ void main() {
     });
 
     testWidgets(
-        'successful record adds the expense and navigates to /expenses',
-        (WidgetTester tester) async {
-      final (_, _, ExpensesRepository expensesRepo, _) =
-          await pumpExpenseFormApp(tester);
+      'successful record adds the expense and navigates to /expenses',
+      (WidgetTester tester) async {
+        final (_, _, ExpensesRepository expensesRepo, _) =
+            await pumpExpenseFormApp(tester);
 
-      final int initialCount = expensesRepo.expenses.length;
+        final int initialCount = expensesRepo.expenses.length;
 
-      // Fill in amount
-      final Finder amountInput = find.descendant(
-        of: find.widgetWithText(AppTextField, ExpenseFormStrings.amountLabel),
-        matching: find.byType(TextField),
-      );
-      await tester.enterText(amountInput, '3200');
+        // Fill in amount
+        final Finder amountInput = find.descendant(
+          of: find.widgetWithText(AppTextField, ExpenseFormStrings.amountLabel),
+          matching: find.byType(TextField),
+        );
+        await tester.enterText(amountInput, '3200');
 
-      // Select Hosting category
-      await tester.tap(find.text('Hosting'));
-      await tester.pumpAndSettle();
+        // Select Hosting category
+        await tester.tap(find.text('Hosting'));
+        await tester.pumpAndSettle();
 
-      // Fill in description
-      final Finder descInput = find.descendant(
-        of: find.widgetWithText(
-          AppTextField,
-          ExpenseFormStrings.descriptionLabel,
-        ),
-        matching: find.byType(TextField),
-      );
-      await tester.enterText(descInput, 'Domain renewal test');
+        // Fill in description
+        final Finder descInput = find.descendant(
+          of: find.widgetWithText(
+            AppTextField,
+            ExpenseFormStrings.descriptionLabel,
+          ),
+          matching: find.byType(TextField),
+        );
+        await tester.enterText(descInput, 'Domain renewal test');
 
-      // Select Bank wire method
-      await tester.tap(find.text('Bank wire'));
-      await tester.pumpAndSettle();
+        // Select Bank wire method
+        await tester.tap(find.text('Bank wire'));
+        await tester.pumpAndSettle();
 
-      // Fill in reference
-      final Finder refInput = find.descendant(
-        of: find.widgetWithText(
-          AppTextField,
-          ExpenseFormStrings.invoiceRefLabel,
-        ),
-        matching: find.byType(TextField),
-      );
-      await tester.enterText(refInput, 'REF-TEST-101');
+        // Fill in reference
+        final Finder refInput = find.descendant(
+          of: find.widgetWithText(
+            AppTextField,
+            ExpenseFormStrings.invoiceRefLabel,
+          ),
+          matching: find.byType(TextField),
+        );
+        await tester.enterText(refInput, 'REF-TEST-101');
 
-      // Fill in notes
-      final Finder notesInput = find.descendant(
-        of: find.widgetWithText(AppTextField, ExpenseFormStrings.notesLabel),
-        matching: find.byType(TextField),
-      );
-      await tester.enterText(notesInput, 'Test expense notes');
+        // Fill in notes
+        final Finder notesInput = find.descendant(
+          of: find.widgetWithText(AppTextField, ExpenseFormStrings.notesLabel),
+          matching: find.byType(TextField),
+        );
+        await tester.enterText(notesInput, 'Test expense notes');
 
-      // Tap Record expense
-      await tester.tap(
-        find.widgetWithText(
-          PrimaryButton,
-          ExpenseFormStrings.recordExpenseAction,
-        ),
-      );
-      await tester.pumpAndSettle();
+        // Tap Record expense
+        await tester.tap(
+          find.widgetWithText(
+            PrimaryButton,
+            ExpenseFormStrings.recordExpenseAction,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      // Navigation: should no longer be on ExpenseFormScreen (navigated to /expenses)
-      expect(find.byType(ExpenseFormScreen), findsNothing);
+        // Navigation: should no longer be on ExpenseFormScreen (navigated to /expenses)
+        expect(find.byType(ExpenseFormScreen), findsNothing);
 
-      // Verify repository has added the expense
-      expect(expensesRepo.expenses.length, initialCount + 1);
-      final Expense added = expensesRepo.expenses.last;
-      expect(added.amount, 3200.0);
-      expect(added.description, 'Domain renewal test');
-      expect(added.category, ExpenseCategory.hostingServices);
-      expect(added.method, PaymentMethod.bank);
-      expect(added.reference, 'REF-TEST-101');
-      expect(added.notes, 'Test expense notes');
-      expect(added.projectId, isNull);
-    });
+        // Verify repository has added the expense
+        expect(expensesRepo.expenses.length, initialCount + 1);
+        final Expense added = expensesRepo.expenses.last;
+        expect(added.amount, 3200.0);
+        expect(added.description, 'Domain renewal test');
+        expect(added.category, ExpenseCategory.hostingServices);
+        expect(added.method, PaymentMethod.bank);
+        expect(added.reference, 'REF-TEST-101');
+        expect(added.notes, 'Test expense notes');
+        expect(added.projectId, isNull);
+      },
+    );
 
-    testWidgets('edit prefill + save updates the repository',
-        (WidgetTester tester) async {
+    testWidgets('edit prefill + save updates the repository', (
+      WidgetTester tester,
+    ) async {
       // exp1: Figma Pro plan, 4,500 DZ, Software/Tools, general cost, CCP, INV-802
-      final (_, _, ExpensesRepository expensesRepo, _) =
-          await pumpExpenseFormApp(
+      final (
+        _,
+        _,
+        ExpensesRepository expensesRepo,
+        _,
+      ) = await pumpExpenseFormApp(
         tester,
         initialLocation: '/expenses/exp1/edit',
       );
@@ -374,8 +376,9 @@ void main() {
       expect(updated.category, ExpenseCategory.equipment);
     });
 
-    testWidgets('edit unknown id displays friendly Expense not found screen',
-        (WidgetTester tester) async {
+    testWidgets('edit unknown id displays friendly Expense not found screen', (
+      WidgetTester tester,
+    ) async {
       await pumpExpenseFormApp(
         tester,
         initialLocation: '/expenses/non_existent_exp_999/edit',
@@ -387,10 +390,7 @@ void main() {
 
       // Tap Back to expenses
       await tester.tap(
-        find.widgetWithText(
-          PrimaryButton,
-          ExpenseFormStrings.backToExpenses,
-        ),
+        find.widgetWithText(PrimaryButton, ExpenseFormStrings.backToExpenses),
       );
       await tester.pumpAndSettle();
 
@@ -398,10 +398,14 @@ void main() {
       expect(find.text(ExpenseFormStrings.expenseNotFound), findsNothing);
     });
 
-    testWidgets('cancel and X buttons pop or fallback to /expenses',
-        (WidgetTester tester) async {
+    testWidgets('cancel and X buttons pop or fallback to /expenses', (
+      WidgetTester tester,
+    ) async {
       // 1. Test X close button
-      await pumpExpenseFormApp(tester, initialLocation: AppRoutes.newExpensePath);
+      await pumpExpenseFormApp(
+        tester,
+        initialLocation: AppRoutes.newExpensePath,
+      );
       expect(find.byType(ExpenseFormScreen), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.close_rounded));
@@ -409,7 +413,10 @@ void main() {
       expect(find.byType(ExpenseFormScreen), findsNothing);
 
       // 2. Test Cancel button in bottom bar
-      await pumpExpenseFormApp(tester, initialLocation: AppRoutes.newExpensePath);
+      await pumpExpenseFormApp(
+        tester,
+        initialLocation: AppRoutes.newExpensePath,
+      );
       expect(find.byType(ExpenseFormScreen), findsOneWidget);
 
       await tester.tap(
@@ -419,8 +426,9 @@ void main() {
       expect(find.byType(ExpenseFormScreen), findsNothing);
     });
 
-    testWidgets('360x800 surface renders record and edit without overflow',
-        (WidgetTester tester) async {
+    testWidgets('360x800 surface renders record and edit without overflow', (
+      WidgetTester tester,
+    ) async {
       // Record mode on 360x800
       await pumpExpenseFormApp(
         tester,

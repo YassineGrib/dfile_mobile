@@ -47,10 +47,7 @@ class AppBottomSheet extends StatelessWidget {
                 ),
               ),
               Flexible(
-                child: Padding(
-                  padding: padding,
-                  child: child,
-                ),
+                child: Padding(padding: padding, child: child),
               ),
             ],
           ),
@@ -76,8 +73,7 @@ Future<T?> showAppSheet<T>({
     elevation: 0,
     backgroundColor: AppColors.transparent,
     barrierColor: AppColors.scrim,
-    builder: (BuildContext sheetContext) => AppBottomSheet(
-      child: builder(sheetContext),
-    ),
+    builder: (BuildContext sheetContext) =>
+        AppBottomSheet(child: builder(sheetContext)),
   );
 }

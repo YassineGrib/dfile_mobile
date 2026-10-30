@@ -51,7 +51,9 @@ void main() {
   }
 
   group('SettleSheet Widget Tests', () {
-    testWidgets('validation (zero, too large, exact full)', (WidgetTester tester) async {
+    testWidgets('validation (zero, too large, exact full)', (
+      WidgetTester tester,
+    ) async {
       final (FriendsRepository repo, _) = await pumpSettleSheetApp(
         tester,
         initialLocation: '/friends/transactions/tx1',
@@ -65,7 +67,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(SettleSheet), findsOneWidget);
-      expect(find.text(TransactionDetailStrings.recordSettlementTitle), findsOneWidget);
+      expect(
+        find.text(TransactionDetailStrings.recordSettlementTitle),
+        findsOneWidget,
+      );
 
       final Finder amountInput = find.descendant(
         of: find.widgetWithText(
@@ -116,7 +121,9 @@ void main() {
       expect(updatedTx?.isSettled, isTrue);
     });
 
-    testWidgets('100% full chip fills remaining amount', (WidgetTester tester) async {
+    testWidgets('100% full chip fills remaining amount', (
+      WidgetTester tester,
+    ) async {
       final (FriendsRepository _, _) = await pumpSettleSheetApp(
         tester,
         initialLocation: '/friends/transactions/tx1',
@@ -125,7 +132,10 @@ void main() {
       await tester.tap(find.text(TransactionDetailStrings.settlePayment));
       await tester.pumpAndSettle();
 
-      expect(find.text(TransactionDetailStrings.full100Percent), findsOneWidget);
+      expect(
+        find.text(TransactionDetailStrings.full100Percent),
+        findsOneWidget,
+      );
 
       // Tap 100% full
       await tester.tap(find.text(TransactionDetailStrings.full100Percent));
@@ -135,7 +145,9 @@ void main() {
       expect(find.text('30000'), findsOneWidget);
     });
 
-    testWidgets('offset method requires notes with inline error', (WidgetTester tester) async {
+    testWidgets('offset method requires notes with inline error', (
+      WidgetTester tester,
+    ) async {
       final (FriendsRepository _, _) = await pumpSettleSheetApp(
         tester,
         initialLocation: '/friends/transactions/tx1',
@@ -266,7 +278,10 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.byType(SettleSheet), findsOneWidget);
-      expect(find.text(TransactionDetailStrings.recordSettlementTitle), findsOneWidget);
+      expect(
+        find.text(TransactionDetailStrings.recordSettlementTitle),
+        findsOneWidget,
+      );
     });
   });
 }

@@ -14,12 +14,7 @@ import 'widgets/calendar_forms_select_field.dart';
 
 /// Milestone creation form per `docs/design/SPEC.md` (CL8-CL10).
 class MilestoneFormScreen extends StatefulWidget {
-  const MilestoneFormScreen({
-    super.key,
-    this.projectId,
-    this.date,
-    this.clock,
-  });
+  const MilestoneFormScreen({super.key, this.projectId, this.date, this.clock});
 
   final String? projectId;
   final String? date;
@@ -154,11 +149,27 @@ class _MilestoneFormScreenState extends State<MilestoneFormScreen> {
 
   String _formatDisplayDate(DateTime dt) {
     const List<String> weekdays = <String>[
-      'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat',
+      'Sun',
     ];
     const List<String> months = <String>[
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${weekdays[dt.weekday - 1]}, ${months[dt.month - 1]} ${dt.day}, ${dt.year}';
   }
@@ -178,18 +189,13 @@ class _MilestoneFormScreenState extends State<MilestoneFormScreen> {
               const SizedBox(height: 4),
               Text(
                 CalendarFormsStrings.newMilestoneSubtitle,
-                style: AppText.body.copyWith(
-                  color: AppColors.mute,
-                ),
+                style: AppText.body.copyWith(color: AppColors.mute),
               ),
             ],
           ),
         ),
         const SizedBox(width: AppSpacing.md),
-        RoundIconButton(
-          icon: AppIcons.x,
-          onPressed: _close,
-        ),
+        RoundIconButton(icon: AppIcons.x, onPressed: _close),
       ],
     );
   }
@@ -249,7 +255,8 @@ class _MilestoneFormScreenState extends State<MilestoneFormScreen> {
                 placeholder: CalendarFormsStrings.milestoneTitlePlaceholder,
                 controller: _titleController,
                 focusNode: _titleFocusNode,
-                errorText: _saveAttempted && _titleController.text.trim().isEmpty
+                errorText:
+                    _saveAttempted && _titleController.text.trim().isEmpty
                     ? CalendarFormsStrings.titleRequiredError
                     : null,
               ),

@@ -6,9 +6,7 @@ import 'expense.dart';
 /// In-memory repository managing business expenses and statistics per `docs/design/SPEC.md`.
 class ExpensesRepository extends ChangeNotifier {
   ExpensesRepository({List<Expense>? initialExpenses})
-      : _expenses = List<Expense>.of(
-          initialExpenses ?? _createInitialExpenses(),
-        );
+    : _expenses = List<Expense>.of(initialExpenses ?? _createInitialExpenses());
 
   final List<Expense> _expenses;
 
@@ -225,27 +223,25 @@ List<Expense> filterExpenses(
     }
 
     if (normalizedQuery.isNotEmpty) {
-      final bool matchesDescription =
-          expense.description.toLowerCase().contains(normalizedQuery);
-      final bool matchesCategory = expense.category.fullLabel
-              .toLowerCase()
-              .contains(normalizedQuery) ||
-          expense.category.shortLabel
-              .toLowerCase()
-              .contains(normalizedQuery) ||
-          expense.category.storageName
-              .toLowerCase()
-              .contains(normalizedQuery);
+      final bool matchesDescription = expense.description
+          .toLowerCase()
+          .contains(normalizedQuery);
+      final bool matchesCategory =
+          expense.category.fullLabel.toLowerCase().contains(normalizedQuery) ||
+          expense.category.shortLabel.toLowerCase().contains(normalizedQuery) ||
+          expense.category.storageName.toLowerCase().contains(normalizedQuery);
       final bool matchesProject =
           (expense.isProjectLinked && projectName != null)
-              ? projectName(expense.projectId!)
-                  .toLowerCase()
-                  .contains(normalizedQuery)
-              : false;
-      final bool matchesReference =
-          expense.reference.toLowerCase().contains(normalizedQuery);
-      final bool matchesNotes =
-          expense.notes.toLowerCase().contains(normalizedQuery);
+          ? projectName(expense.projectId!)
+                .toLowerCase()
+                .contains(normalizedQuery)
+          : false;
+      final bool matchesReference = expense.reference.toLowerCase().contains(
+        normalizedQuery,
+      );
+      final bool matchesNotes = expense.notes.toLowerCase().contains(
+        normalizedQuery,
+      );
 
       if (!matchesDescription &&
           !matchesCategory &&
@@ -261,10 +257,7 @@ List<Expense> filterExpenses(
 }
 
 /// Pure sorting function for expenses per `docs/design/SPEC.md`.
-List<Expense> sortExpenses(
-  List<Expense> expenses,
-  ExpenseSort sort,
-) {
+List<Expense> sortExpenses(List<Expense> expenses, ExpenseSort sort) {
   final List<Expense> result = List<Expense>.of(expenses);
   switch (sort) {
     case ExpenseSort.newest:

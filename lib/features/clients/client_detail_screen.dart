@@ -12,10 +12,7 @@ import 'data/data.dart';
 enum DetailViewMode { overview, tabs }
 
 class ClientDetailScreen extends StatefulWidget {
-  const ClientDetailScreen({
-    super.key,
-    required this.clientId,
-  });
+  const ClientDetailScreen({super.key, required this.clientId});
 
   final String clientId;
 
@@ -112,10 +109,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
               textColor: AppColors.ink,
               onTap: () {
                 Navigator.of(sheetContext).pop();
-                _copyToClipboard(
-                  client.email,
-                  ClientStrings.copiedEmailToast,
-                );
+                _copyToClipboard(client.email, ClientStrings.copiedEmailToast);
               },
             ),
             const SizedBox(height: AppSpacing.md),
@@ -285,10 +279,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
   }) {
     return Row(
       children: [
-        RoundIconButton(
-          icon: Icons.arrow_back,
-          onPressed: onBack,
-        ),
+        RoundIconButton(icon: Icons.arrow_back, onPressed: onBack),
         Expanded(
           child: Center(
             child: Text(
@@ -299,10 +290,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
             ),
           ),
         ),
-        RoundIconButton(
-          icon: Icons.more_horiz,
-          onPressed: onMore,
-        ),
+        RoundIconButton(icon: Icons.more_horiz, onPressed: onMore),
       ],
     );
   }
@@ -319,10 +307,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
       ),
       child: Row(
         children: [
-          SizedBox(
-            width: 70,
-            child: Text(label, style: AppText.label),
-          ),
+          SizedBox(width: 70, child: Text(label, style: AppText.label)),
           Expanded(
             child: Text(
               value,
@@ -490,19 +475,15 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
             _buildQuickActionButton(
               icon: Icons.phone,
               label: ClientStrings.quickActionCall,
-              onTap: () => showAppToast(
-                context,
-                ClientStrings.demoNotAvailableToast,
-              ),
+              onTap: () =>
+                  showAppToast(context, ClientStrings.demoNotAvailableToast),
             ),
             const SizedBox(width: AppSpacing.xxl),
             _buildQuickActionButton(
               icon: Icons.alternate_email,
               label: ClientStrings.quickActionEmail,
-              onTap: () => showAppToast(
-                context,
-                ClientStrings.demoNotAvailableToast,
-              ),
+              onTap: () =>
+                  showAppToast(context, ClientStrings.demoNotAvailableToast),
             ),
             const SizedBox(width: AppSpacing.xxl),
             _buildQuickActionButton(
@@ -621,11 +602,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
   }) {
     return Column(
       children: [
-        RoundIconButton(
-          size: 52,
-          icon: icon,
-          onPressed: onTap,
-        ),
+        RoundIconButton(size: 52, icon: icon, onPressed: onTap),
         const SizedBox(height: 6),
         Text(
           label,
@@ -699,10 +676,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        project.name,
-                        style: AppText.cardTitle,
-                      ),
+                      child: Text(project.name, style: AppText.cardTitle),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -726,9 +700,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
                 const SizedBox(height: 6),
                 Text(
                   formatMoney(project.price),
-                  style: AppText.body.copyWith(
-                    color: AppColors.mute,
-                  ),
+                  style: AppText.body.copyWith(color: AppColors.mute),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 // Progress bar
@@ -753,9 +725,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   ClientStrings.completePercent(project.progress),
-                  style: AppText.captionSm.copyWith(
-                    color: AppColors.mute,
-                  ),
+                  style: AppText.captionSm.copyWith(color: AppColors.mute),
                 ),
               ],
             ),
@@ -879,9 +849,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
                   ClientStrings.totalCleared,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppText.bodyMedium.copyWith(
-                    color: AppColors.mute,
-                  ),
+                  style: AppText.bodyMedium.copyWith(color: AppColors.mute),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
@@ -910,10 +878,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  ClientStrings.clientNotFound,
-                  style: AppText.sectionTitle,
-                ),
+                Text(ClientStrings.clientNotFound, style: AppText.sectionTitle),
                 const SizedBox(height: AppSpacing.xl),
                 PrimaryButton(
                   label: ClientStrings.backToClients,

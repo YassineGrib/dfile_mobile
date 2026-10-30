@@ -14,10 +14,7 @@ import 'widgets/project_form_fields.dart';
 
 /// Single scrolling form screen for `/projects/:id/edit` matching screen P17.
 class EditProjectScreen extends StatefulWidget {
-  const EditProjectScreen({
-    super.key,
-    required this.projectId,
-  });
+  const EditProjectScreen({super.key, required this.projectId});
 
   final String projectId;
 
@@ -112,9 +109,8 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
     if (_endDate == null) {
       return false;
     }
-    return DateUtils.dateOnly(
-      _endDate!,
-    ).isBefore(DateUtils.dateOnly(_startDate));
+    return DateUtils.dateOnly(_endDate!)
+        .isBefore(DateUtils.dateOnly(_startDate));
   }
 
   bool _isValid(ClientsRepository clientsRepo) {
@@ -273,10 +269,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                ProjectStrings.editProjectTitle,
-                style: AppText.title,
-              ),
+              Text(ProjectStrings.editProjectTitle, style: AppText.title),
               const SizedBox(height: 4),
               Text(
                 ProjectStrings.editProjectSubtitle,
@@ -286,10 +279,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _close,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _close),
       ],
     );
   }

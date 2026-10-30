@@ -10,7 +10,8 @@ import 'package:dfile_mobile/features/dashboard/dashboard_charts_strings.dart';
 import 'package:dfile_mobile/features/dashboard/dashboard_home_strings.dart';
 import 'package:dfile_mobile/features/dashboard/data/data.dart';
 import 'package:dfile_mobile/features/dashboard/home_screen.dart';
-import 'package:dfile_mobile/features/dashboard/notifications_screen.dart' as dashboard;
+import 'package:dfile_mobile/features/dashboard/notifications_screen.dart'
+    as dashboard;
 import 'package:dfile_mobile/features/dashboard/profit_screen.dart';
 import 'package:dfile_mobile/features/dashboard/widgets/widgets.dart';
 import 'package:dfile_mobile/features/expenses/data/data.dart';
@@ -63,7 +64,10 @@ void main() {
       final ProjectsRepository projectsRepo = ProjectsRepository();
       final ExpensesRepository expensesRepo = ExpensesRepository();
 
-      final double profit = netProfit(projectsRepo.payments, expensesRepo.expenses);
+      final double profit = netProfit(
+        projectsRepo.payments,
+        expensesRepo.expenses,
+      );
       expect(profit, 573800.0);
     });
 
@@ -83,18 +87,18 @@ void main() {
       // Inflow: 125,000 / 320,000 / 60,000 / 0 / 0 / 60,000
       expect(flows[0].inflow, 125000.0); // May 2026
       expect(flows[1].inflow, 320000.0); // Jun 2026
-      expect(flows[2].inflow, 60000.0);  // Jul 2026
-      expect(flows[3].inflow, 0.0);      // Aug 2026
-      expect(flows[4].inflow, 0.0);      // Sep 2026
-      expect(flows[5].inflow, 60000.0);  // Oct 2026
+      expect(flows[2].inflow, 60000.0); // Jul 2026
+      expect(flows[3].inflow, 0.0); // Aug 2026
+      expect(flows[4].inflow, 0.0); // Sep 2026
+      expect(flows[5].inflow, 60000.0); // Oct 2026
 
       // Outflow: 9,000 / 18,000 / 38,000 / 6,500 / 12,000 / 7,700
-      expect(flows[0].outflow, 9000.0);  // May 2026
+      expect(flows[0].outflow, 9000.0); // May 2026
       expect(flows[1].outflow, 18000.0); // Jun 2026
       expect(flows[2].outflow, 38000.0); // Jul 2026
-      expect(flows[3].outflow, 6500.0);  // Aug 2026
+      expect(flows[3].outflow, 6500.0); // Aug 2026
       expect(flows[4].outflow, 12000.0); // Sep 2026
-      expect(flows[5].outflow, 7700.0);  // Oct 2026
+      expect(flows[5].outflow, 7700.0); // Oct 2026
 
       // Net
       expect(flows[0].net, 116000.0);
@@ -105,17 +109,20 @@ void main() {
       expect(flows[5].net, 52300.0);
     });
 
-    test('thisMonthNet matches current month inflow minus outflow (52,300 DZ)', () {
-      final ProjectsRepository projectsRepo = ProjectsRepository();
-      final ExpensesRepository expensesRepo = ExpensesRepository();
+    test(
+      'thisMonthNet matches current month inflow minus outflow (52,300 DZ)',
+      () {
+        final ProjectsRepository projectsRepo = ProjectsRepository();
+        final ExpensesRepository expensesRepo = ExpensesRepository();
 
-      final double currentNet = thisMonthNet(
-        fixedNow,
-        payments: projectsRepo.payments,
-        expenses: expensesRepo.expenses,
-      );
-      expect(currentNet, 52300.0);
-    });
+        final double currentNet = thisMonthNet(
+          fixedNow,
+          payments: projectsRepo.payments,
+          expenses: expensesRepo.expenses,
+        );
+        expect(currentNet, 52300.0);
+      },
+    );
 
     test('yearFlows returns 12 calendar months for now.year', () {
       final ProjectsRepository projectsRepo = ProjectsRepository();
@@ -132,35 +139,42 @@ void main() {
       expect(year.last.month.month, 12);
     });
 
-    test('statusCounts counts 5 active/visible statuses and ignores Cancelled', () {
-      final ProjectsRepository projectsRepo = ProjectsRepository();
-      final Map<ProjectStatus, int> counts = statusCounts(projectsRepo.projects);
-
-      expect(counts[ProjectStatus.delivered], 1);
-      expect(counts[ProjectStatus.completed], 1);
-      expect(counts[ProjectStatus.inProgress], 1);
-      expect(counts[ProjectStatus.waitingClient], 1);
-      expect(counts[ProjectStatus.planned], 1);
-      expect(counts.containsKey(ProjectStatus.cancelled), false);
-
-      // If a cancelled project is present, it must be ignored
-      final List<ProjectItem> withCancelled = List<ProjectItem>.from(projectsRepo.projects)
-        ..add(
-          ProjectItem(
-            id: 'p_cancel',
-            name: 'Cancelled Project',
-            category: 'Design',
-            clientId: 'c1',
-            price: 50000.0,
-            status: ProjectStatus.cancelled,
-            progress: 10,
-            startDate: DateTime(2026, 1, 1),
-            createdAt: DateTime(2026, 1, 1),
-          ),
+    test(
+      'statusCounts counts 5 active/visible statuses and ignores Cancelled',
+      () {
+        final ProjectsRepository projectsRepo = ProjectsRepository();
+        final Map<ProjectStatus, int> counts = statusCounts(
+          projectsRepo.projects,
         );
-      final Map<ProjectStatus, int> countsWithCancelled = statusCounts(withCancelled);
-      expect(countsWithCancelled[ProjectStatus.cancelled], null);
-    });
+
+        expect(counts[ProjectStatus.delivered], 1);
+        expect(counts[ProjectStatus.completed], 1);
+        expect(counts[ProjectStatus.inProgress], 1);
+        expect(counts[ProjectStatus.waitingClient], 1);
+        expect(counts[ProjectStatus.planned], 1);
+        expect(counts.containsKey(ProjectStatus.cancelled), false);
+
+        // If a cancelled project is present, it must be ignored
+        final List<ProjectItem> withCancelled =
+            List<ProjectItem>.from(projectsRepo.projects)..add(
+              ProjectItem(
+                id: 'p_cancel',
+                name: 'Cancelled Project',
+                category: 'Design',
+                clientId: 'c1',
+                price: 50000.0,
+                status: ProjectStatus.cancelled,
+                progress: 10,
+                startDate: DateTime(2026, 1, 1),
+                createdAt: DateTime(2026, 1, 1),
+              ),
+            );
+        final Map<ProjectStatus, int> countsWithCancelled = statusCounts(
+          withCancelled,
+        );
+        expect(countsWithCancelled[ProjectStatus.cancelled], null);
+      },
+    );
 
     test('upcomingDeadlines filters completed/delivered and orders by end date ascending', () {
       final ProjectsRepository projectsRepo = ProjectsRepository();
@@ -287,49 +301,55 @@ void main() {
 
       expect(activities.isNotEmpty, true);
       for (int i = 0; i < activities.length - 1; i++) {
-        expect(activities[i].date.isAfter(activities[i + 1].date) ||
-            activities[i].date.isAtSameMomentAs(activities[i + 1].date), true);
+        expect(
+          activities[i].date.isAfter(activities[i + 1].date) ||
+              activities[i].date.isAtSameMomentAs(activities[i + 1].date),
+          true,
+        );
       }
     });
 
-    test('newAccountSetup accurately detects brand new vs populated account', () {
-      final ClientsRepository clientsRepo = ClientsRepository();
-      final ProjectsRepository projectsRepo = ProjectsRepository();
-      final ExpensesRepository expensesRepo = ExpensesRepository();
-      final FriendsRepository friendsRepo = FriendsRepository();
+    test(
+      'newAccountSetup accurately detects brand new vs populated account',
+      () {
+        final ClientsRepository clientsRepo = ClientsRepository();
+        final ProjectsRepository projectsRepo = ProjectsRepository();
+        final ExpensesRepository expensesRepo = ExpensesRepository();
+        final FriendsRepository friendsRepo = FriendsRepository();
 
-      final NewAccountSetup populated = newAccountSetup(
-        clients: clientsRepo.clients,
-        projects: projectsRepo.projects,
-        payments: projectsRepo.payments,
-        expenses: expensesRepo.expenses,
-        friends: friendsRepo.friends,
-      );
-      expect(populated.isNewAccount, false);
-      expect(populated.completedCount, 3);
-      expect(populated.hasClient, true);
-      expect(populated.hasProject, true);
-      expect(populated.hasPayment, true);
+        final NewAccountSetup populated = newAccountSetup(
+          clients: clientsRepo.clients,
+          projects: projectsRepo.projects,
+          payments: projectsRepo.payments,
+          expenses: expensesRepo.expenses,
+          friends: friendsRepo.friends,
+        );
+        expect(populated.isNewAccount, false);
+        expect(populated.completedCount, 3);
+        expect(populated.hasClient, true);
+        expect(populated.hasProject, true);
+        expect(populated.hasPayment, true);
 
-      // Clear all
-      clientsRepo.clearAll();
-      projectsRepo.clearAll();
-      expensesRepo.clearAll();
-      friendsRepo.clearAll();
+        // Clear all
+        clientsRepo.clearAll();
+        projectsRepo.clearAll();
+        expensesRepo.clearAll();
+        friendsRepo.clearAll();
 
-      final NewAccountSetup empty = newAccountSetup(
-        clients: clientsRepo.clients,
-        projects: projectsRepo.projects,
-        payments: projectsRepo.payments,
-        expenses: expensesRepo.expenses,
-        friends: friendsRepo.friends,
-      );
-      expect(empty.isNewAccount, true);
-      expect(empty.completedCount, 0);
-      expect(empty.hasClient, false);
-      expect(empty.hasProject, false);
-      expect(empty.hasPayment, false);
-    });
+        final NewAccountSetup empty = newAccountSetup(
+          clients: clientsRepo.clients,
+          projects: projectsRepo.projects,
+          payments: projectsRepo.payments,
+          expenses: expensesRepo.expenses,
+          friends: friendsRepo.friends,
+        );
+        expect(empty.isNewAccount, true);
+        expect(empty.completedCount, 0);
+        expect(empty.hasClient, false);
+        expect(empty.hasProject, false);
+        expect(empty.hasPayment, false);
+      },
+    );
   });
 
   group('Notifications derivation and store', () {
@@ -388,7 +408,9 @@ void main() {
         payments: projectsRepo.payments,
       );
       expect(
-        noDeadlines.any((AppNotification n) => n.kind == AppNotificationKind.deadline),
+        noDeadlines.any(
+          (AppNotification n) => n.kind == AppNotificationKind.deadline,
+        ),
         false,
       );
 
@@ -407,11 +429,15 @@ void main() {
         payments: projectsRepo.payments,
       );
       expect(
-        noPayments.any((AppNotification n) => n.kind == AppNotificationKind.payment),
+        noPayments.any(
+          (AppNotification n) => n.kind == AppNotificationKind.payment,
+        ),
         false,
       );
       expect(
-        noPayments.any((AppNotification n) => n.kind == AppNotificationKind.overdueDebt),
+        noPayments.any(
+          (AppNotification n) => n.kind == AppNotificationKind.overdueDebt,
+        ),
         false,
       );
     });
@@ -482,8 +508,12 @@ void main() {
       expect(moreText.style?.color, AppColors.mute);
     });
 
-    testWidgets('AppTabBar Home tab navigates to /home', (WidgetTester tester) async {
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.clientsPath);
+    testWidgets('AppTabBar Home tab navigates to /home', (
+      WidgetTester tester,
+    ) async {
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.clientsPath,
+      );
       await tester.pumpWidget(DfileApp(router: router));
       await tester.pumpAndSettle();
 
@@ -502,7 +532,9 @@ void main() {
       expect(find.byType(HomeScreen), findsOneWidget);
     });
 
-    testWidgets('Shared Dash widgets render as designed', (WidgetTester tester) async {
+    testWidgets('Shared Dash widgets render as designed', (
+      WidgetTester tester,
+    ) async {
       bool tappedAction = false;
       bool tappedCard = false;
 
@@ -554,7 +586,9 @@ void main() {
       WidgetTester tester,
     ) async {
       setTestSurface(tester);
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.signInPath);
+      final GoRouter router = createAppRouter(
+        initialLocation: AppRoutes.signInPath,
+      );
       await tester.pumpWidget(DfileApp(router: router));
       await tester.pumpAndSettle();
 
@@ -570,55 +604,64 @@ void main() {
       expect(find.byType(HomeScreen), findsOneWidget);
     });
 
-    testWidgets('All 4 dashboard routes resolve to their screens with working back buttons', (
+    testWidgets(
+      'All 4 dashboard routes resolve to their screens with working back buttons',
+      (WidgetTester tester) async {
+        setTestSurface(tester);
+        final GoRouter router = createAppRouter(
+          initialLocation: AppRoutes.homePath,
+        );
+        await tester.pumpWidget(DfileApp(router: router));
+        await tester.pumpAndSettle();
+
+        // /home
+        expect(find.byType(HomeScreen), findsOneWidget);
+        expect(find.text(DashboardHomeStrings.quickActions), findsOneWidget);
+
+        // /home/cashflow
+        router.go(AppRoutes.cashflowPath);
+        await tester.pumpAndSettle();
+        expect(find.byType(CashflowScreen), findsOneWidget);
+        expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
+
+        // Back button navigates back to /home
+        await tester.tap(find.byIcon(AppIcons.arrowLeft));
+        await tester.pumpAndSettle();
+        expect(router.state.uri.toString(), AppRoutes.homePath);
+
+        // /home/profit
+        router.go(AppRoutes.profitPath);
+        await tester.pumpAndSettle();
+        expect(find.byType(ProfitScreen), findsOneWidget);
+        expect(find.text(DashboardActivityStrings.profit), findsOneWidget);
+
+        await tester.tap(find.byIcon(AppIcons.arrowLeft));
+        await tester.pumpAndSettle();
+        expect(router.state.uri.toString(), AppRoutes.homePath);
+
+        // /home/notifications
+        router.go(AppRoutes.homeNotificationsPath);
+        await tester.pumpAndSettle();
+        expect(find.byType(dashboard.NotificationsScreen), findsOneWidget);
+        expect(
+          find.text(DashboardActivityStrings.notifications),
+          findsOneWidget,
+        );
+
+        await tester.tap(find.byIcon(AppIcons.arrowLeft));
+        await tester.pumpAndSettle();
+        expect(router.state.uri.toString(), AppRoutes.homePath);
+      },
+    );
+
+    testWidgets('Card widgets render real content', (
       WidgetTester tester,
     ) async {
       setTestSurface(tester);
-      final GoRouter router = createAppRouter(initialLocation: AppRoutes.homePath);
-      await tester.pumpWidget(DfileApp(router: router));
-      await tester.pumpAndSettle();
-
-      // /home
-      expect(find.byType(HomeScreen), findsOneWidget);
-      expect(find.text(DashboardHomeStrings.quickActions), findsOneWidget);
-
-      // /home/cashflow
-      router.go(AppRoutes.cashflowPath);
-      await tester.pumpAndSettle();
-      expect(find.byType(CashflowScreen), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
-
-      // Back button navigates back to /home
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
-      await tester.pumpAndSettle();
-      expect(router.state.uri.toString(), AppRoutes.homePath);
-
-      // /home/profit
-      router.go(AppRoutes.profitPath);
-      await tester.pumpAndSettle();
-      expect(find.byType(ProfitScreen), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.profit), findsOneWidget);
-
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
-      await tester.pumpAndSettle();
-      expect(router.state.uri.toString(), AppRoutes.homePath);
-
-      // /home/notifications
-      router.go(AppRoutes.homeNotificationsPath);
-      await tester.pumpAndSettle();
-      expect(find.byType(dashboard.NotificationsScreen), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.notifications), findsOneWidget);
-
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
-      await tester.pumpAndSettle();
-      expect(router.state.uri.toString(), AppRoutes.homePath);
-    });
-
-    testWidgets('Card widgets render real content', (WidgetTester tester) async {
-      setTestSurface(tester);
       final ClientsRepository clientsRepo = ClientsRepository();
-      final ProjectsRepository projectsRepo =
-          ProjectsRepository(clientsRepository: clientsRepo);
+      final ProjectsRepository projectsRepo = ProjectsRepository(
+        clientsRepository: clientsRepo,
+      );
       final ExpensesRepository expensesRepo = ExpensesRepository();
       final FriendsRepository friendsRepo = FriendsRepository();
 
@@ -659,8 +702,14 @@ void main() {
       expect(find.byType(FriendsSnapshotCard), findsOneWidget);
 
       expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
-      expect(find.text(DashboardChartsStrings.projectsByStatus), findsOneWidget);
-      expect(find.text(DashboardActivityStrings.recentActivity), findsOneWidget);
+      expect(
+        find.text(DashboardChartsStrings.projectsByStatus),
+        findsOneWidget,
+      );
+      expect(
+        find.text(DashboardActivityStrings.recentActivity),
+        findsOneWidget,
+      );
       expect(find.text(DashboardActivityStrings.friendsDebts), findsOneWidget);
     });
   });

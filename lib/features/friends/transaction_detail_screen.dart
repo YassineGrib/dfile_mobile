@@ -13,10 +13,7 @@ import 'widgets/transaction_detail_settlement_row.dart';
 
 /// Screen displaying transaction details and settlement history per `docs/design/SPEC.md` (FD10).
 class TransactionDetailScreen extends StatelessWidget {
-  const TransactionDetailScreen({
-    super.key,
-    required this.transactionId,
-  });
+  const TransactionDetailScreen({super.key, required this.transactionId});
 
   final String transactionId;
 
@@ -121,8 +118,9 @@ class TransactionDetailScreen extends StatelessWidget {
 
     final Friend? friend = repo.friendById(transaction.friendId);
     final String friendName = friend?.name ?? '';
-    final List<FriendSettlement> settlements =
-        repo.settlementsOf(transaction.id);
+    final List<FriendSettlement> settlements = repo.settlementsOf(
+      transaction.id,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -203,7 +201,11 @@ class TransactionDetailScreen extends StatelessWidget {
     required List<FriendSettlement> settlements,
   }) {
     // Type icon properties
-    final (Color typeBg, Color typeFg, String typeGlyph) = switch (transaction.type) {
+    final (
+      Color typeBg,
+      Color typeFg,
+      String typeGlyph,
+    ) = switch (transaction.type) {
       FriendTxType.money => (AppColors.greenBg, AppColors.green, r'$'),
       FriendTxType.service => (AppColors.purpleBg, AppColors.purple, 'S'),
       FriendTxType.expense => (AppColors.orangeBg, AppColors.orange, 'C'),
@@ -215,16 +217,35 @@ class TransactionDetailScreen extends StatelessWidget {
         : AppColors.red;
 
     // Direction chip
-    final (Color dirBg, Color dirFg, String dirLabel) =
-        transaction.direction == FriendTxDirection.lent
-            ? (AppColors.greenBg, AppColors.green, transaction.direction.chipLabel)
-            : (AppColors.redBg, AppColors.red, transaction.direction.chipLabel);
+    final (
+      Color dirBg,
+      Color dirFg,
+      String dirLabel,
+    ) = transaction.direction == FriendTxDirection.lent
+        ? (AppColors.greenBg, AppColors.green, transaction.direction.chipLabel)
+        : (AppColors.redBg, AppColors.red, transaction.direction.chipLabel);
 
     // Status chip
-    final (Color statBg, Color statFg, String statLabel) = switch (transaction.status) {
-      FriendTxStatus.pending => (AppColors.pendingBg, AppColors.orange, transaction.status.label),
-      FriendTxStatus.partial => (AppColors.partialBg, AppColors.purple, transaction.status.label),
-      FriendTxStatus.settled => (AppColors.greenBg, AppColors.green, transaction.status.label),
+    final (
+      Color statBg,
+      Color statFg,
+      String statLabel,
+    ) = switch (transaction.status) {
+      FriendTxStatus.pending => (
+        AppColors.pendingBg,
+        AppColors.orange,
+        transaction.status.label,
+      ),
+      FriendTxStatus.partial => (
+        AppColors.partialBg,
+        AppColors.purple,
+        transaction.status.label,
+      ),
+      FriendTxStatus.settled => (
+        AppColors.greenBg,
+        AppColors.green,
+        transaction.status.label,
+      ),
     };
 
     // Progress bar calculation
@@ -285,9 +306,7 @@ class TransactionDetailScreen extends StatelessWidget {
                         friendName,
                         transaction.type,
                       ),
-                      style: AppText.caption.copyWith(
-                        color: AppColors.mute,
-                      ),
+                      style: AppText.caption.copyWith(color: AppColors.mute),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -313,7 +332,10 @@ class TransactionDetailScreen extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: dirBg,
                   borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -328,7 +350,10 @@ class TransactionDetailScreen extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: statBg,
                   borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -449,17 +474,11 @@ class TransactionDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRow({
-    required String label,
-    required Widget value,
-  }) {
+  Widget _buildRow({required String label, required Widget value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: AppText.bodyMedium.copyWith(color: AppColors.mute),
-        ),
+        Text(label, style: AppText.bodyMedium.copyWith(color: AppColors.mute)),
         value,
       ],
     );
@@ -478,15 +497,10 @@ class TransactionDetailScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.card,
         border: Border(
-          top: BorderSide(
-            color: AppColors.line,
-            width: AppSpacing.borderWidth,
-          ),
+          top: BorderSide(color: AppColors.line, width: AppSpacing.borderWidth),
         ),
       ),
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.viewInsetsOf(context).bottom,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: SafeArea(
         top: false,
         child: Padding(
@@ -539,10 +553,8 @@ class TransactionDetailScreen extends StatelessWidget {
                   flex: 2,
                   child: PrimaryButton(
                     label: TransactionDetailStrings.settlePayment,
-                    onPressed: () => showSettleSheet(
-                      context,
-                      transactionId: transaction.id,
-                    ),
+                    onPressed: () =>
+                        showSettleSheet(context, transactionId: transaction.id),
                   ),
                 ),
               ],

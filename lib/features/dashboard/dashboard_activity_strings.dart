@@ -23,7 +23,8 @@ abstract final class DashboardActivityStrings {
   static const String today = 'TODAY';
   static const String earlier = 'EARLIER';
   static const String allCaughtUp = 'You are all caught up';
-  static const String allCaughtUpSubtitle = 'Check back later for updates on your deadlines, debts, and payments.';
+  static const String allCaughtUpSubtitle =
+      'Check back later for updates on your deadlines, debts, and payments.';
   static const String justNow = 'just now';
 
   // Profit Screen (HM8)

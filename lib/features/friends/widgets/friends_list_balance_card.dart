@@ -10,11 +10,7 @@ import '../friends_list_strings.dart';
 /// Shows overall portfolio net balance, total owed to you, and total you owe
 /// without overflowing on small screen widths.
 class FriendsListBalanceCard extends StatelessWidget {
-  const FriendsListBalanceCard({
-    super.key,
-    required this.balance,
-    this.title,
-  });
+  const FriendsListBalanceCard({super.key, required this.balance, this.title});
 
   final OverallBalance balance;
   final String? title;

@@ -3,15 +3,19 @@ abstract final class SettingsSecurityStrings {
   // Security screen (ST8)
   static const String securityTitle = 'Security';
   static const String numericPinLock = 'Numeric PIN lock';
-  static const String numericPinSubtitle = 'Protect the app with a 4-digit code';
+  static const String numericPinSubtitle =
+      'Protect the app with a 4-digit code';
   static const String changePin = 'Change PIN';
   static const String fingerprintUnlock = 'Fingerprint unlock';
-  static const String fingerprintSubtitle = 'Use your phone fingerprint or face';
+  static const String fingerprintSubtitle =
+      'Use your phone fingerprint or face';
   static const String notAvailableInDemoToast = 'Not available in the demo';
   static const String activeSessions = 'Active sessions';
-  static const String activeSessionsSubtitle = 'Devices signed in to this workspace';
+  static const String activeSessionsSubtitle =
+      'Devices signed in to this workspace';
   static const String terminateOtherSessions = 'Terminate other sessions';
-  static const String loggedOutOtherSessionsToast = 'Logged out other sessions.';
+  static const String loggedOutOtherSessionsToast =
+      'Logged out other sessions.';
   static const String pinLockDisabledToast = 'PIN lock disabled';
 
   // PIN bottom sheet (ST9)
@@ -27,9 +31,11 @@ abstract final class SettingsSecurityStrings {
   static const String pushNotificationSubtitle = 'Allow Dfile to send alerts';
   static const String whatToNotifySection = 'WHAT TO NOTIFY';
   static const String projectDeadlines = 'Project deadlines';
-  static const String projectDeadlinesSubtitle = 'Warn when less than 3 days remain';
+  static const String projectDeadlinesSubtitle =
+      'Warn when less than 3 days remain';
   static const String paymentReminders = 'Payment reminders';
-  static const String paymentRemindersSubtitle = 'Unpaid balances past their due date';
+  static const String paymentRemindersSubtitle =
+      'Unpaid balances past their due date';
   static const String taskUpdates = 'Task updates';
   static const String taskUpdatesSubtitle = 'Comments and changes on tasks';
   static const String notificationPreferencesSavedToast =

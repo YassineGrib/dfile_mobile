@@ -10,10 +10,7 @@ import 'widgets/settings_header.dart';
 
 /// Screen displaying either Privacy Policy or Terms & Conditions per `docs/design/SPEC.md` (ST15).
 class PolicyScreen extends StatelessWidget {
-  const PolicyScreen({
-    super.key,
-    required this.kind,
-  });
+  const PolicyScreen({super.key, required this.kind});
 
   final PolicyKind kind;
 

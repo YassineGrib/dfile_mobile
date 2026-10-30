@@ -46,10 +46,8 @@ abstract final class FriendFormsStrings {
 
   static const String descriptionLabel = 'Description & details *';
   static const String descriptionError = 'Please enter a description';
-  static const String descriptionPlaceholderMoney =
-      'e.g. Cash via BaridiMob';
-  static const String descriptionPlaceholderService =
-      'e.g. Frontend UI design';
+  static const String descriptionPlaceholderMoney = 'e.g. Cash via BaridiMob';
+  static const String descriptionPlaceholderService = 'e.g. Frontend UI design';
   static const String descriptionPlaceholderSharedCost =
       'e.g. Paid his annual server hosting bill';
 

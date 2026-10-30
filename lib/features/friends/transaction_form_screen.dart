@@ -24,10 +24,7 @@ import 'widgets/friend_form_select_field.dart';
 
 /// Screen to record a new friend debt transaction per `docs/design/SPEC.md` (FD11, FD12).
 class TransactionFormScreen extends StatefulWidget {
-  const TransactionFormScreen({
-    super.key,
-    this.friendId,
-  });
+  const TransactionFormScreen({super.key, this.friendId});
 
   final String? friendId;
 
@@ -153,8 +150,7 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   bool get _showAmountError =>
       (_saveAttempted || _amountTouched) && !_isAmountValid;
 
-  bool get _isDescriptionValid =>
-      _descriptionController.text.trim().isNotEmpty;
+  bool get _isDescriptionValid => _descriptionController.text.trim().isNotEmpty;
 
   bool get _showDescriptionError =>
       (_saveAttempted || _descriptionTouched) && !_isDescriptionValid;
@@ -294,10 +290,7 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
             style: TextStyle(fontSize: 0, color: AppColors.transparent),
           ),
         ),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _close,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _close),
       ],
     );
   }
@@ -357,8 +350,9 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                 value: selectedFriend?.name,
                 placeholder: FriendFormsStrings.selectFriendPlaceholder,
                 hasError: _showFriendError,
-                errorText:
-                    _showFriendError ? FriendFormsStrings.selectFriendError : null,
+                errorText: _showFriendError
+                    ? FriendFormsStrings.selectFriendError
+                    : null,
                 onTap: () => _pickFriend(friendsRepo),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -395,16 +389,18 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                 ],
-                errorText:
-                    _showAmountError ? FriendFormsStrings.amountError : null,
+                errorText: _showAmountError
+                    ? FriendFormsStrings.amountError
+                    : null,
               ),
               const SizedBox(height: AppSpacing.lg),
 
               // 5. Description (required, dynamic placeholder)
               AppTextField(
                 label: FriendFormsStrings.descriptionLabel,
-                placeholder:
-                    FriendFormsStrings.descriptionPlaceholder(_selectedType),
+                placeholder: FriendFormsStrings.descriptionPlaceholder(
+                  _selectedType,
+                ),
                 controller: _descriptionController,
                 focusNode: _descriptionFocusNode,
                 errorText: _showDescriptionError

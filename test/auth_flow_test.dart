@@ -27,46 +27,47 @@ void main() {
     });
   }
 
-  testWidgets(
-    'welcome -> onboarding -> sign-up navigation',
-    (WidgetTester tester) async {
-      setTestSurface(tester);
-      final router = createAppRouter();
-      await tester.pumpWidget(DfileApp(router: router));
-      await tester.pumpAndSettle();
+  testWidgets('welcome -> onboarding -> sign-up navigation', (
+    WidgetTester tester,
+  ) async {
+    setTestSurface(tester);
+    final router = createAppRouter();
+    await tester.pumpWidget(DfileApp(router: router));
+    await tester.pumpAndSettle();
 
-      // Starts at WelcomeScreen
-      expect(find.byType(WelcomeScreen), findsOneWidget);
-      expect(find.text(AuthStrings.dfile), findsOneWidget);
+    // Starts at WelcomeScreen
+    expect(find.byType(WelcomeScreen), findsOneWidget);
+    expect(find.text(AuthStrings.dfile), findsOneWidget);
 
-      // Tap [Get started]
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.getStarted));
-      await tester.pumpAndSettle();
+    // Tap [Get started]
+    await tester.tap(
+      find.widgetWithText(PrimaryButton, AuthStrings.getStarted),
+    );
+    await tester.pumpAndSettle();
 
-      // Navigates to OnboardingScreen
-      expect(find.byType(OnboardingScreen), findsOneWidget);
+    // Navigates to OnboardingScreen
+    expect(find.byType(OnboardingScreen), findsOneWidget);
 
-      // Page 1 -> Page 2
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.next));
-      await tester.pumpAndSettle();
+    // Page 1 -> Page 2
+    await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.next));
+    await tester.pumpAndSettle();
 
-      // Page 2 -> Page 3
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.next));
-      await tester.pumpAndSettle();
+    // Page 2 -> Page 3
+    await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.next));
+    await tester.pumpAndSettle();
 
-      // Page 3 shows [Let's start]
-      expect(find.text(AuthStrings.letsStart), findsOneWidget);
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.letsStart));
-      await tester.pumpAndSettle();
+    // Page 3 shows [Let's start]
+    expect(find.text(AuthStrings.letsStart), findsOneWidget);
+    await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.letsStart));
+    await tester.pumpAndSettle();
 
-      // Navigates to SignUpScreen
-      expect(find.byType(SignUpScreen), findsOneWidget);
-      expect(
-        find.widgetWithText(PrimaryButton, AuthStrings.createAccount),
-        findsOneWidget,
-      );
-    },
-  );
+    // Navigates to SignUpScreen
+    expect(find.byType(SignUpScreen), findsOneWidget);
+    expect(
+      find.widgetWithText(PrimaryButton, AuthStrings.createAccount),
+      findsOneWidget,
+    );
+  });
 
   testWidgets(
     'onboarding Next advances the page and the last page shows "Let\'s start"',
@@ -133,79 +134,56 @@ void main() {
     },
   );
 
-  testWidgets(
-    'forgot -> OTP -> verify button enabled only after 6 digits',
-    (WidgetTester tester) async {
-      setTestSurface(tester);
-      final router =
-          createAppRouter(initialLocation: AppRoutes.forgotPasswordPath);
-      await tester.pumpWidget(DfileApp(router: router));
-      await tester.pumpAndSettle();
+  testWidgets('forgot -> reset link confirmation', (WidgetTester tester) async {
+    setTestSurface(tester);
+    final router = createAppRouter(
+      initialLocation: AppRoutes.forgotPasswordPath,
+    );
+    await tester.pumpWidget(DfileApp(router: router));
+    await tester.pumpAndSettle();
 
-      expect(find.byType(ForgotPasswordScreen), findsOneWidget);
+    expect(find.byType(ForgotPasswordScreen), findsOneWidget);
 
-      // Empty submission is blocked
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.sendCode));
-      await tester.pumpAndSettle();
-      expect(find.byType(ForgotPasswordScreen), findsOneWidget);
-      expect(find.text(AuthStrings.emailRequired), findsOneWidget);
+    // Empty submission is blocked
+    await tester.tap(
+      find.widgetWithText(PrimaryButton, AuthStrings.sendResetLink),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(ForgotPasswordScreen), findsOneWidget);
+    expect(find.text(AuthStrings.emailRequired), findsOneWidget);
 
-      // Enter valid email and send code
-      await tester.enterText(find.byType(TextField).first, 'test@example.com');
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.sendCode));
-      await tester.pumpAndSettle();
+    // Enter valid email and send code
+    await tester.enterText(find.byType(TextField).first, 'test@example.com');
+    await tester.tap(
+      find.widgetWithText(PrimaryButton, AuthStrings.sendResetLink),
+    );
+    await tester.pumpAndSettle();
 
-      // Navigates to VerifyCodeScreen
-      expect(find.byType(VerifyCodeScreen), findsOneWidget);
-      expect(find.textContaining('test@example.com'), findsOneWidget);
-
-      // Verify button is initially disabled
-      PrimaryButton verifyButton =
-          tester.widget<PrimaryButton>(find.widgetWithText(PrimaryButton, AuthStrings.verify));
-      expect(verifyButton.onPressed, isNull);
-
-      // Enter 5 digits
-      final otpFields = find.byType(TextField);
-      expect(otpFields, findsNWidgets(6));
-      for (int i = 0; i < 5; i++) {
-        await tester.enterText(otpFields.at(i), '$i');
-        await tester.pump();
-      }
-
-      // Still disabled with 5 digits
-      verifyButton =
-          tester.widget<PrimaryButton>(find.widgetWithText(PrimaryButton, AuthStrings.verify));
-      expect(verifyButton.onPressed, isNull);
-
-      // Enter 6th digit
-      await tester.enterText(otpFields.at(5), '9');
-      await tester.pump();
-
-      // Now enabled!
-      verifyButton =
-          tester.widget<PrimaryButton>(find.widgetWithText(PrimaryButton, AuthStrings.verify));
-      expect(verifyButton.onPressed, isNotNull);
-
-      // Tap verify -> navigates to SignInScreen
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.verify));
-      await tester.pumpAndSettle();
-      expect(find.byType(SignInScreen), findsOneWidget);
-    },
-  );
+    // Shows the confirmation and offers to go back to sign in
+    expect(
+      find.text(AuthStrings.resetLinkSent('test@example.com')),
+      findsOneWidget,
+    );
+    expect(
+      find.widgetWithText(PrimaryButton, AuthStrings.backToSignIn),
+      findsOneWidget,
+    );
+    expect(find.byType(VerifyCodeScreen), findsNothing);
+  });
 
   testWidgets(
     'OTP paste of 6 digits fills all boxes and enables verify button',
     (WidgetTester tester) async {
       setTestSurface(tester);
-      final router =
-          createAppRouter(initialLocation: AppRoutes.verifyCodePath);
+      final router = createAppRouter(initialLocation: AppRoutes.verifyCodePath);
       await tester.pumpWidget(DfileApp(router: router));
       await tester.pumpAndSettle();
 
       expect(find.byType(VerifyCodeScreen), findsOneWidget);
 
-      PrimaryButton verifyButton =
-          tester.widget<PrimaryButton>(find.widgetWithText(PrimaryButton, AuthStrings.verify));
+      PrimaryButton verifyButton = tester.widget<PrimaryButton>(
+        find.widgetWithText(PrimaryButton, AuthStrings.verify),
+      );
       expect(verifyButton.onPressed, isNull);
 
       // Paste 6 digits into first box
@@ -213,8 +191,9 @@ void main() {
       await tester.pump();
 
       // Verify button enabled
-      verifyButton =
-          tester.widget<PrimaryButton>(find.widgetWithText(PrimaryButton, AuthStrings.verify));
+      verifyButton = tester.widget<PrimaryButton>(
+        find.widgetWithText(PrimaryButton, AuthStrings.verify),
+      );
       expect(verifyButton.onPressed, isNotNull);
 
       // Verify all 6 text fields received their digit
@@ -231,8 +210,7 @@ void main() {
     'OTP countdown timer decrements and displays Resend code when hitting 0',
     (WidgetTester tester) async {
       setTestSurface(tester);
-      final router =
-          createAppRouter(initialLocation: AppRoutes.verifyCodePath);
+      final router = createAppRouter(initialLocation: AppRoutes.verifyCodePath);
       await tester.pumpWidget(DfileApp(router: router));
       await tester.pump();
 
@@ -253,109 +231,118 @@ void main() {
     },
   );
 
-  testWidgets(
-    'sign-up validation and Google continue flow to /home',
-    (WidgetTester tester) async {
-      setTestSurface(tester);
-      final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
-      await tester.pumpWidget(DfileApp(router: router));
-      await tester.pumpAndSettle();
+  testWidgets('sign-up validation and Google continue flow to /home', (
+    WidgetTester tester,
+  ) async {
+    setTestSurface(tester);
+    final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
+    await tester.pumpWidget(DfileApp(router: router));
+    await tester.pumpAndSettle();
 
-      expect(find.byType(SignUpScreen), findsOneWidget);
+    expect(find.byType(SignUpScreen), findsOneWidget);
 
-      // 1. Submit empty
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.createAccount));
-      await tester.pumpAndSettle();
+    // 1. Submit empty
+    await tester.tap(
+      find.widgetWithText(PrimaryButton, AuthStrings.createAccount),
+    );
+    await tester.pumpAndSettle();
 
-      expect(find.byType(SignUpScreen), findsOneWidget);
-      expect(find.text(AuthStrings.nameRequired), findsOneWidget);
-      expect(find.text(AuthStrings.emailRequired), findsOneWidget);
-      expect(find.text(AuthStrings.passwordRequired), findsOneWidget);
-      expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
+    expect(find.byType(SignUpScreen), findsOneWidget);
+    expect(find.text(AuthStrings.nameRequired), findsOneWidget);
+    expect(find.text(AuthStrings.emailRequired), findsOneWidget);
+    expect(find.text(AuthStrings.passwordRequired), findsOneWidget);
+    expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
 
-      // 2. Short password (< 8 chars)
-      final textFields = find.byType(TextField);
-      await tester.enterText(textFields.at(0), 'Jane Doe');
-      await tester.enterText(textFields.at(1), 'jane@example.com');
-      await tester.enterText(textFields.at(2), 'short');
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.createAccount));
-      await tester.pumpAndSettle();
+    // 2. Short password (< 8 chars)
+    final textFields = find.byType(TextField);
+    await tester.enterText(textFields.at(0), 'Jane Doe');
+    await tester.enterText(textFields.at(1), 'jane@example.com');
+    await tester.enterText(textFields.at(2), 'short');
+    await tester.tap(
+      find.widgetWithText(PrimaryButton, AuthStrings.createAccount),
+    );
+    await tester.pumpAndSettle();
 
-      expect(find.byType(SignUpScreen), findsOneWidget);
-      expect(find.text(AuthStrings.passwordMinLength), findsOneWidget);
+    expect(find.byType(SignUpScreen), findsOneWidget);
+    expect(find.text(AuthStrings.passwordMinLength), findsOneWidget);
 
-      // 3. Continue with Google requires consent first
-      await tester.tap(find.widgetWithText(SecondaryButton, AuthStrings.continueWithGoogle));
-      await tester.pumpAndSettle();
-      expect(find.byType(SignUpScreen), findsOneWidget);
-      expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
+    // 3. Continue with Google requires consent first
+    await tester.tap(
+      find.widgetWithText(SecondaryButton, AuthStrings.continueWithGoogle),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(SignUpScreen), findsOneWidget);
+    expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
 
-      // Tick the consent checkbox
-      await tester.tap(find.byKey(const Key('consent_checkbox')));
-      await tester.pumpAndSettle();
+    // Tick the consent checkbox
+    await tester.tap(find.byKey(const Key('consent_checkbox')));
+    await tester.pumpAndSettle();
 
-      // Continue with Google now navigates to /home
-      await tester.tap(find.widgetWithText(SecondaryButton, AuthStrings.continueWithGoogle));
-      await tester.pumpAndSettle();
+    // Continue with Google now navigates to /home
+    await tester.tap(
+      find.widgetWithText(SecondaryButton, AuthStrings.continueWithGoogle),
+    );
+    await tester.pumpAndSettle();
 
-      expect(find.byType(HomeScreen), findsOneWidget);
-    },
-  );
+    expect(find.byType(HomeScreen), findsOneWidget);
+  });
 
-  testWidgets(
-    'sign-up consent links navigate to Terms and Privacy routes',
-    (WidgetTester tester) async {
-      setTestSurface(tester);
-      final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
-      await tester.pumpWidget(DfileApp(router: router));
-      await tester.pumpAndSettle();
+  testWidgets('sign-up consent links navigate to Terms and Privacy routes', (
+    WidgetTester tester,
+  ) async {
+    setTestSurface(tester);
+    final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
+    await tester.pumpWidget(DfileApp(router: router));
+    await tester.pumpAndSettle();
 
-      // Tap Terms link
-      await tester.tap(find.text(AuthStrings.terms));
-      await tester.pumpAndSettle();
-      expect(router.state.uri.toString(), AppRoutes.settingsTermsPath);
+    // Tap Terms link
+    await tester.tap(find.text(AuthStrings.terms));
+    await tester.pumpAndSettle();
+    expect(router.state.uri.toString(), AppRoutes.settingsTermsPath);
 
-      // Go back to sign up
-      router.go(AppRoutes.signUpPath);
-      await tester.pumpAndSettle();
+    // Go back to sign up
+    router.go(AppRoutes.signUpPath);
+    await tester.pumpAndSettle();
 
-      // Tap Privacy Policy link
-      await tester.tap(find.text(AuthStrings.privacyPolicy));
-      await tester.pumpAndSettle();
-      expect(router.state.uri.toString(), AppRoutes.settingsPrivacyPath);
-    },
-  );
+    // Tap Privacy Policy link
+    await tester.tap(find.text(AuthStrings.privacyPolicy));
+    await tester.pumpAndSettle();
+    expect(router.state.uri.toString(), AppRoutes.settingsPrivacyPath);
+  });
 
-  testWidgets(
-    'sign-up full form submit with consent navigates to /home',
-    (WidgetTester tester) async {
-      setTestSurface(tester);
-      final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
-      await tester.pumpWidget(DfileApp(router: router));
-      await tester.pumpAndSettle();
+  testWidgets('sign-up full form submit with consent navigates to /home', (
+    WidgetTester tester,
+  ) async {
+    setTestSurface(tester);
+    final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
+    await tester.pumpWidget(DfileApp(router: router));
+    await tester.pumpAndSettle();
 
-      final textFields = find.byType(TextField);
-      await tester.enterText(textFields.at(0), 'Amine Test');
-      await tester.enterText(textFields.at(1), 'amine@test.dz');
-      await tester.enterText(textFields.at(2), 'password123');
+    final textFields = find.byType(TextField);
+    await tester.enterText(textFields.at(0), 'Amine Test');
+    await tester.enterText(textFields.at(1), 'amine@test.dz');
+    await tester.enterText(textFields.at(2), 'password123');
 
-      // Unchecked -> blocked
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.createAccount));
-      await tester.pumpAndSettle();
-      expect(find.byType(SignUpScreen), findsOneWidget);
-      expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
+    // Unchecked -> blocked
+    await tester.tap(
+      find.widgetWithText(PrimaryButton, AuthStrings.createAccount),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(SignUpScreen), findsOneWidget);
+    expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
 
-      // Check consent
-      await tester.tap(find.byKey(const Key('consent_checkbox')));
-      await tester.pumpAndSettle();
-      expect(find.text(AuthStrings.consentRequiredError), findsNothing);
+    // Check consent
+    await tester.tap(find.byKey(const Key('consent_checkbox')));
+    await tester.pumpAndSettle();
+    expect(find.text(AuthStrings.consentRequiredError), findsNothing);
 
-      // Submit
-      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.createAccount));
-      await tester.pumpAndSettle();
-      expect(find.byType(HomeScreen), findsOneWidget);
-    },
-  );
+    // Submit
+    await tester.tap(
+      find.widgetWithText(PrimaryButton, AuthStrings.createAccount),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(HomeScreen), findsOneWidget);
+  });
 
   testWidgets(
     'navigation links: welcome to sign in, onboarding skip to sign in, verify change email to forgot',

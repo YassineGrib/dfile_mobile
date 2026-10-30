@@ -27,12 +27,7 @@ class MascotPanel extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(AppRadius.panel),
       ),
-      child: Center(
-        child: Image.asset(
-          mascotAsset,
-          fit: BoxFit.contain,
-        ),
-      ),
+      child: Center(child: Image.asset(mascotAsset, fit: BoxFit.contain)),
     );
   }
 }

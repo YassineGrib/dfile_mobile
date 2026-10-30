@@ -21,54 +21,50 @@ import 'package:go_router/go_router.dart';
 
 void main() {
   group('Backup Builder Unit Tests', () {
-    test(
-      'buildWorkspaceBackupJson produces pretty-printed JSON with expected keys, client name, and payment amount',
-      () {
-        final ClientsRepository clientsRepo = ClientsRepository();
-        final ProjectsRepository projectsRepo = ProjectsRepository(
-          clientsRepository: clientsRepo,
-        );
-        final ExpensesRepository expensesRepo = ExpensesRepository();
-        final FriendsRepository friendsRepo = FriendsRepository();
-        final SettingsRepository settingsRepo = SettingsRepository();
+    test('buildWorkspaceBackupJson produces pretty-printed JSON with expected keys, client name, and payment amount', () {
+      final ClientsRepository clientsRepo = ClientsRepository();
+      final ProjectsRepository projectsRepo = ProjectsRepository(
+        clientsRepository: clientsRepo,
+      );
+      final ExpensesRepository expensesRepo = ExpensesRepository();
+      final FriendsRepository friendsRepo = FriendsRepository();
+      final SettingsRepository settingsRepo = SettingsRepository();
 
-        final String jsonString = buildWorkspaceBackupJson(
-          clientsRepository: clientsRepo,
-          projectsRepository: projectsRepo,
-          expensesRepository: expensesRepo,
-          friendsRepository: friendsRepo,
-          settingsRepository: settingsRepo,
-        );
+      final String jsonString = buildWorkspaceBackupJson(
+        clientsRepository: clientsRepo,
+        projectsRepository: projectsRepo,
+        expensesRepository: expensesRepo,
+        friendsRepository: friendsRepo,
+        settingsRepository: settingsRepo,
+      );
 
-        // Check it decodes properly
-        final dynamic decoded = jsonDecode(jsonString);
-        expect(decoded, isA<Map<String, dynamic>>());
-        final Map<String, dynamic> map = decoded as Map<String, dynamic>;
+      // Check it decodes properly
+      final dynamic decoded = jsonDecode(jsonString);
+      expect(decoded, isA<Map<String, dynamic>>());
+      final Map<String, dynamic> map = decoded as Map<String, dynamic>;
 
-        // Verify top-level keys
-        expect(map.containsKey('clients'), isTrue);
-        expect(map.containsKey('projects'), isTrue);
-        expect(map.containsKey('payments'), isTrue);
-        expect(map.containsKey('expenses'), isTrue);
-        expect(map.containsKey('friends'), isTrue);
-        expect(map.containsKey('settings'), isTrue);
+      // Verify top-level keys
+      expect(map.containsKey('clients'), isTrue);
+      expect(map.containsKey('projects'), isTrue);
+      expect(map.containsKey('payments'), isTrue);
+      expect(map.containsKey('expenses'), isTrue);
+      expect(map.containsKey('friends'), isTrue);
+      expect(map.containsKey('settings'), isTrue);
 
-        // Verify settings nested keys
-        final dynamic settingsMap = map['settings'];
-        expect(settingsMap, isA<Map<String, dynamic>>());
-        final Map<String, dynamic> settings =
-            settingsMap as Map<String, dynamic>;
-        expect(settings.containsKey('profile'), isTrue);
-        expect(settings.containsKey('categories'), isTrue);
-        expect(settings.containsKey('language'), isTrue);
+      // Verify settings nested keys
+      final dynamic settingsMap = map['settings'];
+      expect(settingsMap, isA<Map<String, dynamic>>());
+      final Map<String, dynamic> settings = settingsMap as Map<String, dynamic>;
+      expect(settings.containsKey('profile'), isTrue);
+      expect(settings.containsKey('categories'), isTrue);
+      expect(settings.containsKey('language'), isTrue);
 
-        // Verify client name appears (e.g. Sarah Benali)
-        expect(jsonString, contains('Sarah Benali'));
+      // Verify client name appears (e.g. Sarah Benali)
+      expect(jsonString, contains('Sarah Benali'));
 
-        // Verify payment amount appears (e.g. 60000)
-        expect(jsonString, contains('60000'));
-      },
-    );
+      // Verify payment amount appears (e.g. 60000)
+      expect(jsonString, contains('60000'));
+    });
   });
 
   group('Settings About & Integrations UI Tests', () {
@@ -126,10 +122,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(repo.googleConnected, isTrue);
-      expect(
-        find.text(SettingsAboutStrings.googleLinkedToast),
-        findsOneWidget,
-      );
+      expect(find.text(SettingsAboutStrings.googleLinkedToast), findsOneWidget);
       expect(find.text(SettingsAboutStrings.disconnect), findsOneWidget);
       expect(find.text(SettingsAboutStrings.connectAccount), findsNothing);
 
@@ -154,7 +147,9 @@ void main() {
           SystemChannels.platform,
           (MethodCall methodCall) async {
             if (methodCall.method == 'Clipboard.setData') {
-              clipboardText = (methodCall.arguments as Map<dynamic, dynamic>)['text'] as String?;
+              clipboardText =
+                  (methodCall.arguments as Map<dynamic, dynamic>)['text']
+                      as String?;
               return null;
             }
             if (methodCall.method == 'Clipboard.getData') {
@@ -170,9 +165,7 @@ void main() {
         );
 
         // Tap [Download workspace backup (JSON)]
-        await tester.tap(
-          find.text(SettingsAboutStrings.downloadBackupButton),
-        );
+        await tester.tap(find.text(SettingsAboutStrings.downloadBackupButton));
         await tester.pump();
 
         // Check toast
@@ -215,9 +208,7 @@ void main() {
         expect(find.text(SettingsAboutStrings.appTagline), findsOneWidget);
 
         // 1. Submit support ticket -> /settings/support
-        await tester.tap(
-          find.text(SettingsAboutStrings.supportTicketRowTitle),
-        );
+        await tester.tap(find.text(SettingsAboutStrings.supportTicketRowTitle));
         await tester.pumpAndSettle();
         expect(find.byType(SupportTicketScreen), findsOneWidget);
 
@@ -226,9 +217,7 @@ void main() {
         expect(find.byType(AboutScreen), findsOneWidget);
 
         // 2. Privacy policy -> /settings/privacy
-        await tester.tap(
-          find.text(SettingsAboutStrings.privacyPolicyRowTitle),
-        );
+        await tester.tap(find.text(SettingsAboutStrings.privacyPolicyRowTitle));
         await tester.pumpAndSettle();
         expect(find.byType(PolicyScreen), findsOneWidget);
         expect(
@@ -319,9 +308,7 @@ void main() {
         expect(repo.supportTickets, isEmpty);
 
         // Tap [Submit ticket] without filling fields
-        await tester.tap(
-          find.text(SettingsAboutStrings.submitTicketButton),
-        );
+        await tester.tap(find.text(SettingsAboutStrings.submitTicketButton));
         await tester.pumpAndSettle();
 
         // Inline errors appear
@@ -345,9 +332,7 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        await tester.tap(
-          find.text(SettingsAboutStrings.submitTicketButton),
-        );
+        await tester.tap(find.text(SettingsAboutStrings.submitTicketButton));
         await tester.pumpAndSettle();
 
         expect(
@@ -371,9 +356,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Submit valid ticket
-        await tester.tap(
-          find.text(SettingsAboutStrings.submitTicketButton),
-        );
+        await tester.tap(find.text(SettingsAboutStrings.submitTicketButton));
         await tester.pumpAndSettle();
 
         // Ticket is recorded in repository
@@ -386,10 +369,7 @@ void main() {
         );
 
         // Toast is shown
-        expect(
-          find.text(SettingsAboutStrings.ticketSentToast),
-          findsOneWidget,
-        );
+        expect(find.text(SettingsAboutStrings.ticketSentToast), findsOneWidget);
       },
     );
 
@@ -411,22 +391,10 @@ void main() {
         find.text(SettingsAboutStrings.privacyPolicyHeading),
         findsOneWidget,
       );
-      expect(
-        find.text(SettingsAboutStrings.privacyStoreTitle),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.privacyStoreBody),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.privacyNeverTitle),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.privacyNeverBody),
-        findsOneWidget,
-      );
+      expect(find.text(SettingsAboutStrings.privacyStoreTitle), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.privacyStoreBody), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.privacyNeverTitle), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.privacyNeverBody), findsOneWidget);
       expect(
         find.text(SettingsAboutStrings.privacyChoicesTitle),
         findsOneWidget,
@@ -437,10 +405,7 @@ void main() {
       );
       await tester.drag(find.byType(ListView), const Offset(0, -300));
       await tester.pumpAndSettle();
-      expect(
-        find.text(SettingsAboutStrings.policyLastUpdated),
-        findsOneWidget,
-      );
+      expect(find.text(SettingsAboutStrings.policyLastUpdated), findsOneWidget);
 
       // 2. Terms and conditions
       router.go(AppRoutes.settingsTermsPath);
@@ -455,36 +420,15 @@ void main() {
         find.text(SettingsAboutStrings.termsConditionsHeading),
         findsOneWidget,
       );
-      expect(
-        find.text(SettingsAboutStrings.termsLicenseTitle),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.termsLicenseBody),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.termsContentTitle),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.termsContentBody),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.termsUsageTitle),
-        findsOneWidget,
-      );
-      expect(
-        find.text(SettingsAboutStrings.termsUsageBody),
-        findsOneWidget,
-      );
+      expect(find.text(SettingsAboutStrings.termsLicenseTitle), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.termsLicenseBody), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.termsContentTitle), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.termsContentBody), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.termsUsageTitle), findsOneWidget);
+      expect(find.text(SettingsAboutStrings.termsUsageBody), findsOneWidget);
       await tester.drag(find.byType(ListView), const Offset(0, -300));
       await tester.pumpAndSettle();
-      expect(
-        find.text(SettingsAboutStrings.policyLastUpdated),
-        findsOneWidget,
-      );
+      expect(find.text(SettingsAboutStrings.policyLastUpdated), findsOneWidget);
     });
 
     testWidgets('360x800 surface renders all screens without overflow', (

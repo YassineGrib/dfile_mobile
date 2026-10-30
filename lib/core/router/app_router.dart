@@ -230,15 +230,21 @@ abstract final class AppRoutes {
   static const String deleteAccountName = 'delete-account';
   static const String deleteAccountPath = '/settings/delete-account';
 
-  static const String settingsDeleteAccountConfirmName = 'settings-delete-account-confirm';
-  static const String settingsDeleteAccountConfirmPath = '/settings/delete-account/confirm';
+  static const String settingsDeleteAccountConfirmName =
+      'settings-delete-account-confirm';
+  static const String settingsDeleteAccountConfirmPath =
+      '/settings/delete-account/confirm';
   static const String deleteAccountConfirmName = 'delete-account-confirm';
-  static const String deleteAccountConfirmPath = '/settings/delete-account/confirm';
+  static const String deleteAccountConfirmPath =
+      '/settings/delete-account/confirm';
 
-  static const String settingsDeleteAccountProgressName = 'settings-delete-account-progress';
-  static const String settingsDeleteAccountProgressPath = '/settings/delete-account/progress';
+  static const String settingsDeleteAccountProgressName =
+      'settings-delete-account-progress';
+  static const String settingsDeleteAccountProgressPath =
+      '/settings/delete-account/progress';
   static const String deleteAccountProgressName = 'delete-account-progress';
-  static const String deleteAccountProgressPath = '/settings/delete-account/progress';
+  static const String deleteAccountProgressPath =
+      '/settings/delete-account/progress';
 
   static const String accountDeletedName = 'account-deleted';
   static const String accountDeletedPath = '/account-deleted';
@@ -341,17 +347,13 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         path: AppRoutes.clientDetailPath,
         name: AppRoutes.clientDetailName,
         builder: (BuildContext context, GoRouterState state) =>
-            ClientDetailScreen(
-              clientId: state.pathParameters['id'] ?? '',
-            ),
+            ClientDetailScreen(clientId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.editClientPath,
         name: AppRoutes.editClientName,
         builder: (BuildContext context, GoRouterState state) =>
-            EditClientScreen(
-              clientId: state.pathParameters['id'] ?? '',
-            ),
+            EditClientScreen(clientId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.projectsPath,
@@ -369,17 +371,13 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         path: AppRoutes.projectDetailPath,
         name: AppRoutes.projectDetailName,
         builder: (BuildContext context, GoRouterState state) =>
-            ProjectDetailScreen(
-              projectId: state.pathParameters['id'] ?? '',
-            ),
+            ProjectDetailScreen(projectId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.editProjectPath,
         name: AppRoutes.editProjectName,
         builder: (BuildContext context, GoRouterState state) =>
-            EditProjectScreen(
-              projectId: state.pathParameters['id'] ?? '',
-            ),
+            EditProjectScreen(projectId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.paymentsPath,
@@ -399,9 +397,7 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         path: AppRoutes.paymentReceiptPath,
         name: AppRoutes.paymentReceiptName,
         builder: (BuildContext context, GoRouterState state) =>
-            PaymentReceiptScreen(
-              paymentId: state.pathParameters['id'] ?? '',
-            ),
+            PaymentReceiptScreen(paymentId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.expensesPath,
@@ -421,17 +417,13 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         path: AppRoutes.editExpensePath,
         name: AppRoutes.editExpenseName,
         builder: (BuildContext context, GoRouterState state) =>
-            ExpenseFormScreen(
-              expenseId: state.pathParameters['id'],
-            ),
+            ExpenseFormScreen(expenseId: state.pathParameters['id']),
       ),
       GoRoute(
         path: AppRoutes.expenseDetailPath,
         name: AppRoutes.expenseDetailName,
         builder: (BuildContext context, GoRouterState state) =>
-            ExpenseDetailScreen(
-              expenseId: state.pathParameters['id'] ?? '',
-            ),
+            ExpenseDetailScreen(expenseId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.friendsPath,
@@ -442,10 +434,11 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
           final FriendsTab initialTab = extra is FriendsTab
               ? extra
               : (tabQuery != null
-                  ? FriendsTab.fromString(tabQuery)
-                  : FriendsTab.friends);
+                    ? FriendsTab.fromString(tabQuery)
+                    : FriendsTab.friends);
           final String? initialQuery =
-              state.uri.queryParameters['q'] ?? state.uri.queryParameters['query'];
+              state.uri.queryParameters['q'] ??
+              state.uri.queryParameters['query'];
           return FriendsScreen(
             initialTab: initialTab,
             initialQuery: initialQuery,
@@ -478,18 +471,15 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         path: AppRoutes.friendStatementPath,
         name: AppRoutes.friendStatementName,
         builder: (BuildContext context, GoRouterState state) =>
-            FriendStatementScreen(
-              friendId: state.pathParameters['id'] ?? '',
-            ),
+            FriendStatementScreen(friendId: state.pathParameters['id'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.calendarPath,
         name: AppRoutes.calendarName,
-        builder: (BuildContext context, GoRouterState state) =>
-            CalendarScreen(
-              tab: state.uri.queryParameters['tab'],
-              date: state.uri.queryParameters['date'],
-            ),
+        builder: (BuildContext context, GoRouterState state) => CalendarScreen(
+          tab: state.uri.queryParameters['tab'],
+          date: state.uri.queryParameters['date'],
+        ),
       ),
       GoRoute(
         path: AppRoutes.calendarNewPath,
@@ -624,8 +614,9 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         path: AppRoutes.settingsDeleteAccountProgressPath,
         name: AppRoutes.settingsDeleteAccountProgressName,
         builder: (BuildContext context, GoRouterState state) {
-          final Duration? stepDuration =
-              state.extra is Duration ? (state.extra as Duration) : null;
+          final Duration? stepDuration = state.extra is Duration
+              ? (state.extra as Duration)
+              : null;
           return DeleteAccountProgressScreen(
             stepDuration: stepDuration ?? const Duration(milliseconds: 500),
           );

@@ -157,12 +157,7 @@ void main() {
     ) async {
       int taps = 0;
       await tester.pumpWidget(
-        _wrap(
-          RoundIconButton(
-            icon: Icons.arrow_back,
-            onPressed: () => taps++,
-          ),
-        ),
+        _wrap(RoundIconButton(icon: Icons.arrow_back, onPressed: () => taps++)),
       );
 
       final Size buttonSize = tester.getSize(find.byType(RoundIconButton));
@@ -238,12 +233,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        _wrap(
-          const MascotPanel(
-            color: AppColors.yellow,
-            height: 220,
-          ),
-        ),
+        _wrap(const MascotPanel(color: AppColors.yellow, height: 220)),
       );
 
       expect(find.byType(MascotPanel), findsOneWidget);
@@ -322,32 +312,33 @@ void main() {
       expect(find.byType(AppToast), findsNothing);
     });
 
-    testWidgets('AppTabBar renders 4 tabs with Clients active and fires onTap', (
-      WidgetTester tester,
-    ) async {
-      int? tappedTab;
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light,
-          home: Scaffold(
-            bottomNavigationBar: AppTabBar(
-              onTap: (int index) => tappedTab = index,
+    testWidgets(
+      'AppTabBar renders 4 tabs with Clients active and fires onTap',
+      (WidgetTester tester) async {
+        int? tappedTab;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            home: Scaffold(
+              bottomNavigationBar: AppTabBar(
+                onTap: (int index) => tappedTab = index,
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Home'), findsOneWidget);
-      expect(find.text('Projects'), findsOneWidget);
-      expect(find.text('Clients'), findsOneWidget);
-      expect(find.text('More'), findsOneWidget);
+        expect(find.text('Home'), findsOneWidget);
+        expect(find.text('Projects'), findsOneWidget);
+        expect(find.text('Clients'), findsOneWidget);
+        expect(find.text('More'), findsOneWidget);
 
-      final Text clientsLabel = tester.widget<Text>(find.text('Clients'));
-      expect(clientsLabel.style?.fontWeight, FontWeight.w700);
+        final Text clientsLabel = tester.widget<Text>(find.text('Clients'));
+        expect(clientsLabel.style?.fontWeight, FontWeight.w700);
 
-      await tester.tap(find.text('Projects'));
-      await tester.pump();
-      expect(tappedTab, 1);
-    });
+        await tester.tap(find.text('Projects'));
+        await tester.pump();
+        expect(tappedTab, 1);
+      },
+    );
   });
 }

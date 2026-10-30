@@ -60,11 +60,7 @@ class CalendarMonthGrid extends StatelessWidget {
               Row(
                 children: [
                   for (int d = 0; d < 7; d++) ...[
-                    _buildCell(
-                      context,
-                      grid.cells[w * 7 + d],
-                      cellWidth,
-                    ),
+                    _buildCell(context, grid.cells[w * 7 + d], cellWidth),
                   ],
                 ],
               ),
@@ -86,11 +82,13 @@ class CalendarMonthGrid extends StatelessWidget {
     MonthGridCell cell,
     double cellWidth,
   ) {
-    final bool isSelected = cell.date.year == selectedDay.year &&
+    final bool isSelected =
+        cell.date.year == selectedDay.year &&
         cell.date.month == selectedDay.month &&
         cell.date.day == selectedDay.day;
 
-    final bool isToday = cell.date.year == today.year &&
+    final bool isToday =
+        cell.date.year == today.year &&
         cell.date.month == today.month &&
         cell.date.day == today.day;
 
@@ -146,8 +144,9 @@ class CalendarMonthGrid extends StatelessWidget {
                         '${cell.date.day}',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.w500,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w500,
                           color: cell.inMonth
                               ? AppColors.ink
                               : AppColors.placeholder,
@@ -165,8 +164,9 @@ class CalendarMonthGrid extends StatelessWidget {
                               return Container(
                                 width: 4,
                                 height: 4,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 1),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 1,
+                                ),
                                 decoration: BoxDecoration(
                                   color: CalendarEventColors.of(kind).dot,
                                   shape: BoxShape.circle,
@@ -206,10 +206,7 @@ class CalendarMonthGrid extends StatelessWidget {
         Container(
           width: 6,
           height: 6,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 4),
         Text(

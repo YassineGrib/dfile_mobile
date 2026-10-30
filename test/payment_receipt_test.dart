@@ -47,47 +47,54 @@ void main() {
   }
 
   group('PaymentReceiptScreen Widget Tests', () {
-    testWidgets('renders values for a seeded payment (budget / paid / remaining)', (
-      WidgetTester tester,
-    ) async {
-      await pumpReceiptApp(tester, initialLocation: '/payments/pay1');
+    testWidgets(
+      'renders values for a seeded payment (budget / paid / remaining)',
+      (WidgetTester tester) async {
+        await pumpReceiptApp(tester, initialLocation: '/payments/pay1');
 
-      // Top bar
-      expect(find.text(PaymentReceiptStrings.title), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
-      expect(find.byIcon(Icons.more_horiz), findsOneWidget);
+        // Top bar
+        expect(find.text(PaymentReceiptStrings.title), findsOneWidget);
+        expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+        expect(find.byIcon(Icons.more_horiz), findsOneWidget);
 
-      // Receipt Card Header
-      expect(find.text(PaymentReceiptStrings.officialReceipt), findsOneWidget);
-      expect(find.text('2026-04-02'), findsNWidgets(2)); // Header date & Date row
-      expect(find.text('PAY-2041'), findsOneWidget);
+        // Receipt Card Header
+        expect(
+          find.text(PaymentReceiptStrings.officialReceipt),
+          findsOneWidget,
+        );
+        expect(
+          find.text('2026-04-02'),
+          findsNWidgets(2),
+        ); // Header date & Date row
+        expect(find.text('PAY-2041'), findsOneWidget);
 
-      // Amount & Type
-      expect(find.text('+100,000 DZ'), findsOneWidget);
-      expect(find.text('Advance payment'), findsOneWidget);
+        // Amount & Type
+        expect(find.text('+100,000 DZ'), findsOneWidget);
+        expect(find.text('Advance payment'), findsOneWidget);
 
-      // Metadata rows
-      expect(find.text('Client'), findsOneWidget);
-      expect(find.text('Mohamed Bachir'), findsOneWidget);
-      expect(find.text('Project'), findsOneWidget);
-      expect(find.text('Fintask Landing Page'), findsOneWidget);
-      expect(find.text('Method'), findsOneWidget);
-      expect(find.text('BaridiMob'), findsOneWidget);
-      expect(find.text('Reference'), findsOneWidget);
-      expect(find.text('TXN-928471'), findsOneWidget);
-      expect(find.text('Date'), findsOneWidget);
+        // Metadata rows
+        expect(find.text('Client'), findsOneWidget);
+        expect(find.text('Mohamed Bachir'), findsOneWidget);
+        expect(find.text('Project'), findsOneWidget);
+        expect(find.text('Fintask Landing Page'), findsOneWidget);
+        expect(find.text('Method'), findsOneWidget);
+        expect(find.text('BaridiMob'), findsOneWidget);
+        expect(find.text('Reference'), findsOneWidget);
+        expect(find.text('TXN-928471'), findsOneWidget);
+        expect(find.text('Date'), findsOneWidget);
 
-      // Project Financials
-      expect(find.text('Project budget'), findsOneWidget);
-      expect(find.text('450,000 DZ'), findsOneWidget);
-      expect(find.text('Paid to date'), findsOneWidget);
-      expect(find.text('245,000 DZ'), findsOneWidget);
-      expect(find.text('Remaining'), findsOneWidget);
-      expect(find.text('205,000 DZ'), findsOneWidget);
+        // Project Financials
+        expect(find.text('Project budget'), findsOneWidget);
+        expect(find.text('450,000 DZ'), findsOneWidget);
+        expect(find.text('Paid to date'), findsOneWidget);
+        expect(find.text('245,000 DZ'), findsOneWidget);
+        expect(find.text('Remaining'), findsOneWidget);
+        expect(find.text('205,000 DZ'), findsOneWidget);
 
-      // Bottom action bar
-      expect(find.text(PaymentReceiptStrings.shareReceipt), findsOneWidget);
-    });
+        // Bottom action bar
+        expect(find.text(PaymentReceiptStrings.shareReceipt), findsOneWidget);
+      },
+    );
 
     testWidgets('displays Cleared (green) when remaining balance is 0', (
       WidgetTester tester,
@@ -113,13 +120,14 @@ void main() {
       );
     });
 
-    testWidgets('notes hidden when payment notes are empty (pay2 has no notes)', (
-      WidgetTester tester,
-    ) async {
-      // pay2 has no notes
-      await pumpReceiptApp(tester, initialLocation: '/payments/pay2');
-      expect(find.text(PaymentReceiptStrings.notes), findsNothing);
-    });
+    testWidgets(
+      'notes hidden when payment notes are empty (pay2 has no notes)',
+      (WidgetTester tester) async {
+        // pay2 has no notes
+        await pumpReceiptApp(tester, initialLocation: '/payments/pay2');
+        expect(find.text(PaymentReceiptStrings.notes), findsNothing);
+      },
+    );
 
     testWidgets('copy reference copies to Clipboard and shows toast', (
       WidgetTester tester,
@@ -144,27 +152,31 @@ void main() {
       expect(find.byType(AppToast), findsNothing);
     });
 
-    testWidgets('copy reference on payment with empty reference shows no reference toast', (
-      WidgetTester tester,
-    ) async {
-      // pay6 has empty reference
-      await pumpReceiptApp(tester, initialLocation: '/payments/pay6');
-      expect(find.text(PaymentReceiptStrings.emptyReferenceDash), findsOneWidget);
+    testWidgets(
+      'copy reference on payment with empty reference shows no reference toast',
+      (WidgetTester tester) async {
+        // pay6 has empty reference
+        await pumpReceiptApp(tester, initialLocation: '/payments/pay6');
+        expect(
+          find.text(PaymentReceiptStrings.emptyReferenceDash),
+          findsOneWidget,
+        );
 
-      await tester.tap(find.byIcon(Icons.more_horiz));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.more_horiz));
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.text(PaymentReceiptStrings.copyReference));
-      await tester.pump();
+        await tester.tap(find.text(PaymentReceiptStrings.copyReference));
+        await tester.pump();
 
-      expect(
-        find.text(PaymentReceiptStrings.noReferenceToCopyToast),
-        findsOneWidget,
-      );
+        expect(
+          find.text(PaymentReceiptStrings.noReferenceToCopyToast),
+          findsOneWidget,
+        );
 
-      await tester.pump(const Duration(seconds: 4));
-      expect(find.byType(AppToast), findsNothing);
-    });
+        await tester.pump(const Duration(seconds: 4));
+        expect(find.byType(AppToast), findsNothing);
+      },
+    );
 
     testWidgets('share receipt triggers demo toast from bottom bar', (
       WidgetTester tester,
@@ -172,12 +184,11 @@ void main() {
       await pumpReceiptApp(tester, initialLocation: '/payments/pay1');
 
       // Tap bottom bar button
-      await tester.tap(find.widgetWithText(PrimaryButton, PaymentReceiptStrings.shareReceipt));
-      await tester.pump();
-      expect(
-        find.text(PaymentReceiptStrings.demoNotAvailable),
-        findsOneWidget,
+      await tester.tap(
+        find.widgetWithText(PrimaryButton, PaymentReceiptStrings.shareReceipt),
       );
+      await tester.pump();
+      expect(find.text(PaymentReceiptStrings.demoNotAvailable), findsOneWidget);
 
       await tester.pump(const Duration(seconds: 4));
       expect(find.byType(AppToast), findsNothing);
@@ -199,10 +210,7 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(
-        find.text(PaymentReceiptStrings.demoNotAvailable),
-        findsOneWidget,
-      );
+      expect(find.text(PaymentReceiptStrings.demoNotAvailable), findsOneWidget);
 
       await tester.pump(const Duration(seconds: 4));
       expect(find.byType(AppToast), findsNothing);
@@ -276,45 +284,50 @@ void main() {
       },
     );
 
-    testWidgets('unknown payment id renders friendly Payment not found screen', (
-      WidgetTester tester,
-    ) async {
-      await pumpReceiptApp(tester, initialLocation: '/payments/unknown_id');
+    testWidgets(
+      'unknown payment id renders friendly Payment not found screen',
+      (WidgetTester tester) async {
+        await pumpReceiptApp(tester, initialLocation: '/payments/unknown_id');
 
-      expect(find.text(PaymentReceiptStrings.paymentNotFound), findsOneWidget);
-      expect(find.text(PaymentReceiptStrings.backToPayments), findsOneWidget);
+        expect(
+          find.text(PaymentReceiptStrings.paymentNotFound),
+          findsOneWidget,
+        );
+        expect(find.text(PaymentReceiptStrings.backToPayments), findsOneWidget);
 
-      await tester.tap(find.text(PaymentReceiptStrings.backToPayments));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text(PaymentReceiptStrings.backToPayments));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(PaymentsListScreen), findsOneWidget);
-    });
+        expect(find.byType(PaymentsListScreen), findsOneWidget);
+      },
+    );
 
-    testWidgets('360x800 surface renders receipt, actions, and delete sheet with no overflow', (
-      WidgetTester tester,
-    ) async {
-      await pumpReceiptApp(
-        tester,
-        initialLocation: '/payments/pay1',
-        surfaceSize: const Size(360, 800),
-      );
+    testWidgets(
+      '360x800 surface renders receipt, actions, and delete sheet with no overflow',
+      (WidgetTester tester) async {
+        await pumpReceiptApp(
+          tester,
+          initialLocation: '/payments/pay1',
+          surfaceSize: const Size(360, 800),
+        );
 
-      expect(tester.takeException(), isNull);
+        expect(tester.takeException(), isNull);
 
-      // Open Actions sheet
-      await tester.tap(find.byIcon(Icons.more_horiz));
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
+        // Open Actions sheet
+        await tester.tap(find.byIcon(Icons.more_horiz));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
 
-      // Open Delete confirm sheet
-      await tester.tap(find.text(PaymentReceiptStrings.deletePayment));
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
+        // Open Delete confirm sheet
+        await tester.tap(find.text(PaymentReceiptStrings.deletePayment));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
 
-      // Cancel out
-      await tester.tap(find.text(PaymentReceiptStrings.cancel));
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-    });
+        // Cancel out
+        await tester.tap(find.text(PaymentReceiptStrings.cancel));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }

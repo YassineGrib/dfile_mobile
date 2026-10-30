@@ -12,10 +12,7 @@ import 'payment_receipt_strings.dart';
 
 /// Payment receipt detail screen matching screens PY5..PY8.
 class PaymentReceiptScreen extends StatelessWidget {
-  const PaymentReceiptScreen({
-    super.key,
-    required this.paymentId,
-  });
+  const PaymentReceiptScreen({super.key, required this.paymentId});
 
   final String paymentId;
 
@@ -186,9 +183,7 @@ class PaymentReceiptScreen extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           PaymentReceiptStrings.deletePaymentSubtitle,
-                          style: AppText.caption.copyWith(
-                            color: AppColors.red,
-                          ),
+                          style: AppText.caption.copyWith(color: AppColors.red),
                         ),
                       ],
                     ),
@@ -335,17 +330,11 @@ class PaymentReceiptScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow({
-    required String label,
-    required Widget value,
-  }) {
+  Widget _buildDetailRow({required String label, required Widget value}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          label,
-          style: AppText.bodyMedium.copyWith(color: AppColors.mute),
-        ),
+        Text(label, style: AppText.bodyMedium.copyWith(color: AppColors.mute)),
         const Spacer(),
         Flexible(child: value),
       ],
@@ -378,10 +367,7 @@ class PaymentReceiptScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AppColors.card,
         border: Border(
-          top: BorderSide(
-            color: AppColors.line,
-            width: AppSpacing.borderWidth,
-          ),
+          top: BorderSide(color: AppColors.line, width: AppSpacing.borderWidth),
         ),
       ),
       padding: EdgeInsets.only(bottom: bottomInset),
@@ -396,10 +382,8 @@ class PaymentReceiptScreen extends StatelessWidget {
           ),
           child: PrimaryButton(
             label: PaymentReceiptStrings.shareReceipt,
-            onPressed: () => showAppToast(
-              context,
-              PaymentReceiptStrings.demoNotAvailable,
-            ),
+            onPressed: () =>
+                showAppToast(context, PaymentReceiptStrings.demoNotAvailable),
           ),
         ),
       ),
@@ -470,7 +454,10 @@ class PaymentReceiptScreen extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.seg,
                   borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -653,10 +640,12 @@ class PaymentReceiptScreen extends StatelessWidget {
             : PaymentReceiptStrings.unknownProject);
 
     final double budget = project?.price ?? 0.0;
-    final double paidToDate =
-        project != null ? projectsRepo.paid(project) : payment.amount;
-    final double remaining =
-        project != null ? projectsRepo.remaining(project) : 0.0;
+    final double paidToDate = project != null
+        ? projectsRepo.paid(project)
+        : payment.amount;
+    final double remaining = project != null
+        ? projectsRepo.remaining(project)
+        : 0.0;
 
     return Scaffold(
       backgroundColor: AppColors.bg,

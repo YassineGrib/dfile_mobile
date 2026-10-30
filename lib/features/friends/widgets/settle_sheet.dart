@@ -23,10 +23,7 @@ Future<void> showSettleSheet(
   return showAppSheet<void>(
     context: context,
     builder: (BuildContext sheetContext) {
-      return SettleSheet(
-        transaction: transaction,
-        friendName: friendName,
-      );
+      return SettleSheet(transaction: transaction, friendName: friendName);
     },
   );
 }

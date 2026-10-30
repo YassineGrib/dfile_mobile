@@ -41,8 +41,9 @@ void main() {
     });
 
     final ClientsRepository clientsRepo = ClientsRepository();
-    final ProjectsRepository projectsRepo =
-        ProjectsRepository(clientsRepository: clientsRepo);
+    final ProjectsRepository projectsRepo = ProjectsRepository(
+      clientsRepository: clientsRepo,
+    );
     final ExpensesRepository expensesRepo = ExpensesRepository();
     final FriendsRepository friendsRepo = FriendsRepository();
     final SettingsRepository settingsRepo =
@@ -87,7 +88,10 @@ void main() {
       );
 
       expect(find.byType(EditProfileScreen), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.editProfileTitle), findsOneWidget);
+      expect(
+        find.text(SettingsAccountStrings.editProfileTitle),
+        findsOneWidget,
+      );
 
       // Avatar initial matches repository profile name initial 'Y'
       expect(find.widgetWithText(InitialAvatar, 'Y'), findsOneWidget);
@@ -105,9 +109,18 @@ void main() {
       expect(find.text(repo.profile.address), findsOneWidget);
 
       // Change password row and action buttons
-      expect(find.text(SettingsAccountStrings.changePasswordRow), findsOneWidget);
-      expect(find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel), findsOneWidget);
-      expect(find.widgetWithText(PrimaryButton, SettingsAccountStrings.saveDetails), findsOneWidget);
+      expect(
+        find.text(SettingsAccountStrings.changePasswordRow),
+        findsOneWidget,
+      );
+      expect(
+        find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel),
+        findsOneWidget,
+      );
+      expect(
+        find.widgetWithText(PrimaryButton, SettingsAccountStrings.saveDetails),
+        findsOneWidget,
+      );
     });
 
     testWidgets('live avatar initial updates when name field changes', (
@@ -120,7 +133,9 @@ void main() {
 
       expect(find.widgetWithText(InitialAvatar, 'Y'), findsOneWidget);
 
-      final Finder nameField = findFieldByLabel(SettingsAccountStrings.displayNameLabel);
+      final Finder nameField = findFieldByLabel(
+        SettingsAccountStrings.displayNameLabel,
+      );
       await tester.enterText(nameField, 'Karim Boualam');
       await tester.pumpAndSettle();
 
@@ -137,25 +152,40 @@ void main() {
 
       // Initially no errors
       expect(find.text(SettingsAccountStrings.nameRequiredError), findsNothing);
-      expect(find.text(SettingsAccountStrings.designationRequiredError), findsNothing);
+      expect(
+        find.text(SettingsAccountStrings.designationRequiredError),
+        findsNothing,
+      );
 
       // Clear display name
-      final Finder nameField = findFieldByLabel(SettingsAccountStrings.displayNameLabel);
+      final Finder nameField = findFieldByLabel(
+        SettingsAccountStrings.displayNameLabel,
+      );
       await tester.enterText(nameField, '');
       await tester.pumpAndSettle();
 
       // Clear designation
-      final Finder desigField = findFieldByLabel(SettingsAccountStrings.designationLabel);
+      final Finder desigField = findFieldByLabel(
+        SettingsAccountStrings.designationLabel,
+      );
       await tester.enterText(desigField, '');
       await tester.pumpAndSettle();
 
       // Attempt save
-      await tester.tap(find.widgetWithText(PrimaryButton, SettingsAccountStrings.saveDetails));
+      await tester.tap(
+        find.widgetWithText(PrimaryButton, SettingsAccountStrings.saveDetails),
+      );
       await tester.pumpAndSettle();
 
       // Inline red errors appear
-      expect(find.text(SettingsAccountStrings.nameRequiredError), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.designationRequiredError), findsOneWidget);
+      expect(
+        find.text(SettingsAccountStrings.nameRequiredError),
+        findsOneWidget,
+      );
+      expect(
+        find.text(SettingsAccountStrings.designationRequiredError),
+        findsOneWidget,
+      );
 
       // Repository profile has NOT been modified
       expect(repo.profile.name, isNotEmpty);
@@ -164,51 +194,77 @@ void main() {
       await tester.enterText(nameField, 'Amine T.');
       await tester.pumpAndSettle();
       expect(find.text(SettingsAccountStrings.nameRequiredError), findsNothing);
-      expect(find.text(SettingsAccountStrings.designationRequiredError), findsOneWidget);
+      expect(
+        find.text(SettingsAccountStrings.designationRequiredError),
+        findsOneWidget,
+      );
 
       // Entering valid designation clears designation error
       await tester.enterText(desigField, 'Senior Mobile Engineer');
       await tester.pumpAndSettle();
       expect(find.text(SettingsAccountStrings.nameRequiredError), findsNothing);
-      expect(find.text(SettingsAccountStrings.designationRequiredError), findsNothing);
-    });
-
-    testWidgets('save details updates repository and navigates to /settings with toast', (
-      WidgetTester tester,
-    ) async {
-      final (SettingsRepository repo, _) = await pumpAccountApp(
-        tester,
-        initialLocation: AppRoutes.settingsProfilePath,
+      expect(
+        find.text(SettingsAccountStrings.designationRequiredError),
+        findsNothing,
       );
-
-      final Finder nameField = findFieldByLabel(SettingsAccountStrings.displayNameLabel);
-      await tester.enterText(nameField, 'Sarah Benali');
-
-      final Finder desigField = findFieldByLabel(SettingsAccountStrings.designationLabel);
-      await tester.enterText(desigField, 'Lead Product Designer');
-
-      final Finder phoneField = findFieldByLabel(SettingsAccountStrings.phoneLabel);
-      await tester.enterText(phoneField, '+213 555 99 88 77');
-
-      final Finder addressField = findFieldByLabel(SettingsAccountStrings.addressLabel);
-      await tester.enterText(addressField, '45 Boulevard des Martyrs, Algiers');
-
-      await tester.tap(find.widgetWithText(PrimaryButton, SettingsAccountStrings.saveDetails));
-      await tester.pumpAndSettle();
-
-      // Verify repository updated
-      expect(repo.profile.name, 'Sarah Benali');
-      expect(repo.profile.designation, 'Lead Product Designer');
-      expect(repo.profile.phone, '+213 555 99 88 77');
-      expect(repo.profile.address, '45 Boulevard des Martyrs, Algiers');
-      expect(repo.profile.email, 'yassine@decabyte.dz'); // email preserved
-
-      // Lands on /settings
-      expect(find.byType(SettingsScreen), findsOneWidget);
-
-      // Toast appears
-      expect(find.text(SettingsAccountStrings.profileUpdatedToast), findsOneWidget);
     });
+
+    testWidgets(
+      'save details updates repository and navigates to /settings with toast',
+      (WidgetTester tester) async {
+        final (SettingsRepository repo, _) = await pumpAccountApp(
+          tester,
+          initialLocation: AppRoutes.settingsProfilePath,
+        );
+
+        final Finder nameField = findFieldByLabel(
+          SettingsAccountStrings.displayNameLabel,
+        );
+        await tester.enterText(nameField, 'Sarah Benali');
+
+        final Finder desigField = findFieldByLabel(
+          SettingsAccountStrings.designationLabel,
+        );
+        await tester.enterText(desigField, 'Lead Product Designer');
+
+        final Finder phoneField = findFieldByLabel(
+          SettingsAccountStrings.phoneLabel,
+        );
+        await tester.enterText(phoneField, '+213 555 99 88 77');
+
+        final Finder addressField = findFieldByLabel(
+          SettingsAccountStrings.addressLabel,
+        );
+        await tester.enterText(
+          addressField,
+          '45 Boulevard des Martyrs, Algiers',
+        );
+
+        await tester.tap(
+          find.widgetWithText(
+            PrimaryButton,
+            SettingsAccountStrings.saveDetails,
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Verify repository updated
+        expect(repo.profile.name, 'Sarah Benali');
+        expect(repo.profile.designation, 'Lead Product Designer');
+        expect(repo.profile.phone, '+213 555 99 88 77');
+        expect(repo.profile.address, '45 Boulevard des Martyrs, Algiers');
+        expect(repo.profile.email, 'yassine@decabyte.dz'); // email preserved
+
+        // Lands on /settings
+        expect(find.byType(SettingsScreen), findsOneWidget);
+
+        // Toast appears
+        expect(
+          find.text(SettingsAccountStrings.profileUpdatedToast),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets('cancel button and back arrow navigate back to /settings', (
       WidgetTester tester,
@@ -219,7 +275,9 @@ void main() {
         initialLocation: AppRoutes.settingsProfilePath,
       );
 
-      await tester.tap(find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel));
+      await tester.tap(
+        find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel),
+      );
       await tester.pumpAndSettle();
       expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -241,8 +299,10 @@ void main() {
         initialLocation: AppRoutes.settingsProfilePath,
       );
 
-      final Finder rowFinder =
-          find.widgetWithText(SettingsRow, SettingsAccountStrings.changePasswordRow);
+      final Finder rowFinder = find.widgetWithText(
+        SettingsRow,
+        SettingsAccountStrings.changePasswordRow,
+      );
       await tester.ensureVisible(rowFinder);
       await tester.pumpAndSettle();
 
@@ -252,60 +312,98 @@ void main() {
       expect(find.byType(ChangePasswordScreen), findsOneWidget);
     });
 
-    testWidgets('360x800 surface renders without overflow with keyboard up and down', (
-      WidgetTester tester,
-    ) async {
-      await pumpAccountApp(
-        tester,
-        initialLocation: AppRoutes.settingsProfilePath,
-        surfaceSize: const Size(360, 800),
-      );
+    testWidgets(
+      '360x800 surface renders without overflow with keyboard up and down',
+      (WidgetTester tester) async {
+        await pumpAccountApp(
+          tester,
+          initialLocation: AppRoutes.settingsProfilePath,
+          surfaceSize: const Size(360, 800),
+        );
 
-      expect(find.byType(EditProfileScreen), findsOneWidget);
-      expect(tester.takeException(), isNull);
+        expect(find.byType(EditProfileScreen), findsOneWidget);
+        expect(tester.takeException(), isNull);
 
-      // Simulate keyboard open
-      tester.view.viewInsets = const FakeViewPadding(bottom: 280);
-      await tester.pumpAndSettle();
+        // Simulate keyboard open
+        tester.view.viewInsets = const FakeViewPadding(bottom: 280);
+        await tester.pumpAndSettle();
 
-      expect(find.byType(AccountActionBar), findsOneWidget);
-      expect(tester.takeException(), isNull);
+        expect(find.byType(AccountActionBar), findsOneWidget);
+        expect(tester.takeException(), isNull);
 
-      // Scroll content
-      await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -200));
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-    });
+        // Scroll content
+        await tester.drag(
+          find.byType(SingleChildScrollView),
+          const Offset(0, -200),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 
   group('ChangePasswordScreen (ST3, ST4)', () {
-    testWidgets('mounts cleanly with header, subtitle, 3 obscured password fields and Show buttons', (
-      WidgetTester tester,
-    ) async {
-      await pumpAccountApp(
-        tester,
-        initialLocation: AppRoutes.settingsPasswordPath,
-      );
+    testWidgets(
+      'mounts cleanly with header, subtitle, 3 obscured password fields and Show buttons',
+      (WidgetTester tester) async {
+        await pumpAccountApp(
+          tester,
+          initialLocation: AppRoutes.settingsPasswordPath,
+        );
 
-      expect(find.byType(ChangePasswordScreen), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.changePasswordTitle), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.changePasswordSubtitle), findsOneWidget);
+        expect(find.byType(ChangePasswordScreen), findsOneWidget);
+        expect(
+          find.text(SettingsAccountStrings.changePasswordTitle),
+          findsOneWidget,
+        );
+        expect(
+          find.text(SettingsAccountStrings.changePasswordSubtitle),
+          findsOneWidget,
+        );
 
-      expect(find.text(SettingsAccountStrings.currentPasswordLabel), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.newPasswordLabel), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.confirmPasswordLabel), findsOneWidget);
+        expect(
+          find.text(SettingsAccountStrings.currentPasswordLabel),
+          findsOneWidget,
+        );
+        expect(
+          find.text(SettingsAccountStrings.newPasswordLabel),
+          findsOneWidget,
+        );
+        expect(
+          find.text(SettingsAccountStrings.confirmPasswordLabel),
+          findsOneWidget,
+        );
 
-      // 3 "Show" toggles visible initially
-      expect(find.text(SettingsAccountStrings.showToggle), findsNWidgets(3));
+        // 3 "Show" toggles visible initially
+        expect(find.text(SettingsAccountStrings.showToggle), findsNWidgets(3));
 
-      expect(find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel), findsOneWidget);
-      expect(find.widgetWithText(PrimaryButton, SettingsAccountStrings.updatePassword), findsOneWidget);
+        expect(
+          find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel),
+          findsOneWidget,
+        );
+        expect(
+          find.widgetWithText(
+            PrimaryButton,
+            SettingsAccountStrings.updatePassword,
+          ),
+          findsOneWidget,
+        );
 
-      // Initially no errors
-      expect(find.text(SettingsAccountStrings.currentPasswordIncorrectError), findsNothing);
-      expect(find.text(SettingsAccountStrings.passwordTooShortError), findsNothing);
-      expect(find.text(SettingsAccountStrings.passwordsDoNotMatchError), findsNothing);
-    });
+        // Initially no errors
+        expect(
+          find.text(SettingsAccountStrings.currentPasswordIncorrectError),
+          findsNothing,
+        );
+        expect(
+          find.text(SettingsAccountStrings.passwordTooShortError),
+          findsNothing,
+        );
+        expect(
+          find.text(SettingsAccountStrings.passwordsDoNotMatchError),
+          findsNothing,
+        );
+      },
+    );
 
     testWidgets('Show/Hide toggle un-obscures and obscures password fields', (
       WidgetTester tester,
@@ -316,7 +414,9 @@ void main() {
       );
 
       // Toggle first field
-      final Finder firstShow = find.text(SettingsAccountStrings.showToggle).first;
+      final Finder firstShow = find
+          .text(SettingsAccountStrings.showToggle)
+          .first;
       await tester.tap(firstShow);
       await tester.pumpAndSettle();
 
@@ -332,41 +432,82 @@ void main() {
       expect(find.text(SettingsAccountStrings.showToggle), findsNWidgets(3));
     });
 
-    testWidgets('validation displays every error on empty or invalid save attempt (ST4)', (
-      WidgetTester tester,
-    ) async {
-      await pumpAccountApp(
-        tester,
-        initialLocation: AppRoutes.settingsPasswordPath,
-      );
+    testWidgets(
+      'validation displays every error on empty or invalid save attempt (ST4)',
+      (WidgetTester tester) async {
+        await pumpAccountApp(
+          tester,
+          initialLocation: AppRoutes.settingsPasswordPath,
+        );
 
-      // Tap Update password on empty form
-      await tester.tap(find.widgetWithText(PrimaryButton, SettingsAccountStrings.updatePassword));
-      await tester.pumpAndSettle();
+        // Tap Update password on empty form
+        await tester.tap(
+          find.widgetWithText(
+            PrimaryButton,
+            SettingsAccountStrings.updatePassword,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      // All 3 errors should appear
-      expect(find.text(SettingsAccountStrings.currentPasswordIncorrectError), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.passwordTooShortError), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.passwordsDoNotMatchError), findsOneWidget);
+        // All 3 errors should appear
+        expect(
+          find.text(SettingsAccountStrings.currentPasswordIncorrectError),
+          findsOneWidget,
+        );
+        expect(
+          find.text(SettingsAccountStrings.passwordTooShortError),
+          findsOneWidget,
+        );
+        expect(
+          find.text(SettingsAccountStrings.passwordsDoNotMatchError),
+          findsOneWidget,
+        );
 
-      // Enter wrong current password
-      final Finder currentField = findPasswordFieldByLabel(SettingsAccountStrings.currentPasswordLabel);
-      await tester.enterText(currentField, 'wrong_pass');
-      await tester.pumpAndSettle();
-      expect(find.text(SettingsAccountStrings.currentPasswordIncorrectError), findsOneWidget);
+        // Enter a current password
+        final Finder currentField = findPasswordFieldByLabel(
+          SettingsAccountStrings.currentPasswordLabel,
+        );
+        await tester.enterText(currentField, 'wrong_pass');
+        await tester.pumpAndSettle();
 
-      // Enter short new password (less than 6 chars)
-      final Finder newField = findPasswordFieldByLabel(SettingsAccountStrings.newPasswordLabel);
-      await tester.enterText(newField, 'abc');
-      await tester.pumpAndSettle();
-      expect(find.text(SettingsAccountStrings.passwordTooShortError), findsOneWidget);
+        // Enter short new password (less than 6 chars)
+        final Finder newField = findPasswordFieldByLabel(
+          SettingsAccountStrings.newPasswordLabel,
+        );
+        await tester.enterText(newField, 'abc');
+        await tester.pumpAndSettle();
+        expect(
+          find.text(SettingsAccountStrings.passwordTooShortError),
+          findsOneWidget,
+        );
 
-      // Enter mismatching confirm password
-      final Finder confirmField = findPasswordFieldByLabel(SettingsAccountStrings.confirmPasswordLabel);
-      await tester.enterText(confirmField, 'xyz123');
-      await tester.pumpAndSettle();
-      expect(find.text(SettingsAccountStrings.passwordsDoNotMatchError), findsOneWidget);
-    });
+        // Enter mismatching confirm password
+        final Finder confirmField = findPasswordFieldByLabel(
+          SettingsAccountStrings.confirmPasswordLabel,
+        );
+        await tester.enterText(confirmField, 'xyz123');
+        await tester.pumpAndSettle();
+        expect(
+          find.text(SettingsAccountStrings.passwordsDoNotMatchError),
+          findsOneWidget,
+        );
+
+        // A wrong current password is rejected by the auth service on submit
+        await tester.enterText(newField, 'abcdef');
+        await tester.enterText(confirmField, 'abcdef');
+        await tester.tap(
+          find.widgetWithText(
+            PrimaryButton,
+            SettingsAccountStrings.updatePassword,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          find.text(SettingsAccountStrings.currentPasswordIncorrectError),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets('entering valid credentials clears errors', (
       WidgetTester tester,
@@ -377,150 +518,211 @@ void main() {
       );
 
       // Trigger errors first
-      await tester.tap(find.widgetWithText(PrimaryButton, SettingsAccountStrings.updatePassword));
+      await tester.tap(
+        find.widgetWithText(
+          PrimaryButton,
+          SettingsAccountStrings.updatePassword,
+        ),
+      );
       await tester.pumpAndSettle();
-      expect(find.text(SettingsAccountStrings.currentPasswordIncorrectError), findsOneWidget);
-
-      // Fix current password (mock password is 'demo123')
-      final Finder currentField = findPasswordFieldByLabel(SettingsAccountStrings.currentPasswordLabel);
-      await tester.enterText(currentField, 'demo123');
-      await tester.pumpAndSettle();
-      expect(find.text(SettingsAccountStrings.currentPasswordIncorrectError), findsNothing);
-
-      // Fix new password (>= 6 chars)
-      final Finder newField = findPasswordFieldByLabel(SettingsAccountStrings.newPasswordLabel);
-      await tester.enterText(newField, 'newSecretPassword');
-      await tester.pumpAndSettle();
-      expect(find.text(SettingsAccountStrings.passwordTooShortError), findsNothing);
-
-      // Fix confirm password to match new password
-      final Finder confirmField = findPasswordFieldByLabel(SettingsAccountStrings.confirmPasswordLabel);
-      await tester.enterText(confirmField, 'newSecretPassword');
-      await tester.pumpAndSettle();
-      expect(find.text(SettingsAccountStrings.passwordsDoNotMatchError), findsNothing);
-    });
-
-    testWidgets('successful password update updates repository and shows toast', (
-      WidgetTester tester,
-    ) async {
-      final (SettingsRepository repo, _) = await pumpAccountApp(
-        tester,
-        initialLocation: AppRoutes.settingsPasswordPath,
+      expect(
+        find.text(SettingsAccountStrings.currentPasswordIncorrectError),
+        findsOneWidget,
       );
 
-      expect(repo.checkPassword('demo123'), isTrue);
-
-      final Finder currentField = findPasswordFieldByLabel(SettingsAccountStrings.currentPasswordLabel);
+      // Fix current password (mock password is 'demo123')
+      final Finder currentField = findPasswordFieldByLabel(
+        SettingsAccountStrings.currentPasswordLabel,
+      );
       await tester.enterText(currentField, 'demo123');
-
-      final Finder newField = findPasswordFieldByLabel(SettingsAccountStrings.newPasswordLabel);
-      await tester.enterText(newField, 'brandNewPass2026');
-
-      final Finder confirmField = findPasswordFieldByLabel(SettingsAccountStrings.confirmPasswordLabel);
-      await tester.enterText(confirmField, 'brandNewPass2026');
-
-      await tester.tap(find.widgetWithText(PrimaryButton, SettingsAccountStrings.updatePassword));
       await tester.pumpAndSettle();
+      expect(
+        find.text(SettingsAccountStrings.currentPasswordIncorrectError),
+        findsNothing,
+      );
 
-      // Password is now updated in repository
-      expect(repo.checkPassword('brandNewPass2026'), isTrue);
-      expect(repo.checkPassword('demo123'), isFalse);
+      // Fix new password (>= 6 chars)
+      final Finder newField = findPasswordFieldByLabel(
+        SettingsAccountStrings.newPasswordLabel,
+      );
+      await tester.enterText(newField, 'newSecretPassword');
+      await tester.pumpAndSettle();
+      expect(
+        find.text(SettingsAccountStrings.passwordTooShortError),
+        findsNothing,
+      );
 
-      // Toast is displayed
-      expect(find.text(SettingsAccountStrings.passwordUpdatedToast), findsOneWidget);
+      // Fix confirm password to match new password
+      final Finder confirmField = findPasswordFieldByLabel(
+        SettingsAccountStrings.confirmPasswordLabel,
+      );
+      await tester.enterText(confirmField, 'newSecretPassword');
+      await tester.pumpAndSettle();
+      expect(
+        find.text(SettingsAccountStrings.passwordsDoNotMatchError),
+        findsNothing,
+      );
     });
 
-    testWidgets('cancel button pops back', (
-      WidgetTester tester,
-    ) async {
+    testWidgets(
+      'successful password update updates repository and shows toast',
+      (WidgetTester tester) async {
+        final (SettingsRepository repo, _) = await pumpAccountApp(
+          tester,
+          initialLocation: AppRoutes.settingsPasswordPath,
+        );
+
+        expect(repo.checkPassword('demo123'), isTrue);
+
+        final Finder currentField = findPasswordFieldByLabel(
+          SettingsAccountStrings.currentPasswordLabel,
+        );
+        await tester.enterText(currentField, 'demo123');
+
+        final Finder newField = findPasswordFieldByLabel(
+          SettingsAccountStrings.newPasswordLabel,
+        );
+        await tester.enterText(newField, 'brandNewPass2026');
+
+        final Finder confirmField = findPasswordFieldByLabel(
+          SettingsAccountStrings.confirmPasswordLabel,
+        );
+        await tester.enterText(confirmField, 'brandNewPass2026');
+
+        await tester.tap(
+          find.widgetWithText(
+            PrimaryButton,
+            SettingsAccountStrings.updatePassword,
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Password is now updated in repository
+        expect(repo.checkPassword('brandNewPass2026'), isTrue);
+        expect(repo.checkPassword('demo123'), isFalse);
+
+        // Toast is displayed
+        expect(
+          find.text(SettingsAccountStrings.passwordUpdatedToast),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets('cancel button pops back', (WidgetTester tester) async {
       await pumpAccountApp(
         tester,
         initialLocation: AppRoutes.settingsPasswordPath,
       );
 
-      await tester.tap(find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel));
+      await tester.tap(
+        find.widgetWithText(SecondaryButton, SettingsAccountStrings.cancel),
+      );
       await tester.pumpAndSettle();
 
       // Back to settings
       expect(find.byType(SettingsScreen), findsOneWidget);
     });
 
-    testWidgets('360x800 surface renders without overflow with keyboard up and down', (
-      WidgetTester tester,
-    ) async {
-      await pumpAccountApp(
-        tester,
-        initialLocation: AppRoutes.settingsPasswordPath,
-        surfaceSize: const Size(360, 800),
-      );
+    testWidgets(
+      '360x800 surface renders without overflow with keyboard up and down',
+      (WidgetTester tester) async {
+        await pumpAccountApp(
+          tester,
+          initialLocation: AppRoutes.settingsPasswordPath,
+          surfaceSize: const Size(360, 800),
+        );
 
-      expect(find.byType(ChangePasswordScreen), findsOneWidget);
-      expect(tester.takeException(), isNull);
+        expect(find.byType(ChangePasswordScreen), findsOneWidget);
+        expect(tester.takeException(), isNull);
 
-      // Simulate keyboard open
-      tester.view.viewInsets = const FakeViewPadding(bottom: 280);
-      await tester.pumpAndSettle();
+        // Simulate keyboard open
+        tester.view.viewInsets = const FakeViewPadding(bottom: 280);
+        await tester.pumpAndSettle();
 
-      expect(find.byType(AccountActionBar), findsOneWidget);
-      expect(tester.takeException(), isNull);
+        expect(find.byType(AccountActionBar), findsOneWidget);
+        expect(tester.takeException(), isNull);
 
-      // Scroll content
-      await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -200));
-      await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-    });
+        // Scroll content
+        await tester.drag(
+          find.byType(SingleChildScrollView),
+          const Offset(0, -200),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 
   group('Full Settings Account push & pop flow', () {
-    testWidgets('Navigate profile -> password -> change password successfully -> pop to profile -> save profile -> settings with toast', (
-      WidgetTester tester,
-    ) async {
-      final (SettingsRepository repo, _) = await pumpAccountApp(
-        tester,
-        initialLocation: AppRoutes.settingsProfilePath,
-      );
+    testWidgets(
+      'Navigate profile -> password -> change password successfully -> pop to profile -> save profile -> settings with toast',
+      (WidgetTester tester) async {
+        final (SettingsRepository repo, _) = await pumpAccountApp(
+          tester,
+          initialLocation: AppRoutes.settingsProfilePath,
+        );
 
-      expect(find.byType(EditProfileScreen), findsOneWidget);
+        expect(find.byType(EditProfileScreen), findsOneWidget);
 
-      // Push password screen via Change password row
-      final Finder rowFinder =
-          find.widgetWithText(SettingsRow, SettingsAccountStrings.changePasswordRow);
-      await tester.ensureVisible(rowFinder);
-      await tester.pumpAndSettle();
-      await tester.tap(rowFinder);
-      await tester.pumpAndSettle();
+        // Push password screen via Change password row
+        final Finder rowFinder = find.widgetWithText(
+          SettingsRow,
+          SettingsAccountStrings.changePasswordRow,
+        );
+        await tester.ensureVisible(rowFinder);
+        await tester.pumpAndSettle();
+        await tester.tap(rowFinder);
+        await tester.pumpAndSettle();
 
-      expect(find.byType(ChangePasswordScreen), findsOneWidget);
+        expect(find.byType(ChangePasswordScreen), findsOneWidget);
 
-      // Fill valid password update
-      await tester.enterText(
-        findPasswordFieldByLabel(SettingsAccountStrings.currentPasswordLabel),
-        'demo123',
-      );
-      await tester.enterText(
-        findPasswordFieldByLabel(SettingsAccountStrings.newPasswordLabel),
-        'securePass99',
-      );
-      await tester.enterText(
-        findPasswordFieldByLabel(SettingsAccountStrings.confirmPasswordLabel),
-        'securePass99',
-      );
+        // Fill valid password update
+        await tester.enterText(
+          findPasswordFieldByLabel(SettingsAccountStrings.currentPasswordLabel),
+          'demo123',
+        );
+        await tester.enterText(
+          findPasswordFieldByLabel(SettingsAccountStrings.newPasswordLabel),
+          'securePass99',
+        );
+        await tester.enterText(
+          findPasswordFieldByLabel(SettingsAccountStrings.confirmPasswordLabel),
+          'securePass99',
+        );
 
-      await tester.tap(find.widgetWithText(PrimaryButton, SettingsAccountStrings.updatePassword));
-      await tester.pumpAndSettle();
+        await tester.tap(
+          find.widgetWithText(
+            PrimaryButton,
+            SettingsAccountStrings.updatePassword,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      // Returned to EditProfileScreen with toast!
-      expect(find.byType(EditProfileScreen), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.passwordUpdatedToast), findsOneWidget);
-      expect(repo.checkPassword('securePass99'), isTrue);
+        // Returned to EditProfileScreen with toast!
+        expect(find.byType(EditProfileScreen), findsOneWidget);
+        expect(
+          find.text(SettingsAccountStrings.passwordUpdatedToast),
+          findsOneWidget,
+        );
+        expect(repo.checkPassword('securePass99'), isTrue);
 
-      // Now save profile
-      await tester.tap(find.widgetWithText(PrimaryButton, SettingsAccountStrings.saveDetails));
-      await tester.pumpAndSettle();
+        // Now save profile
+        await tester.tap(
+          find.widgetWithText(
+            PrimaryButton,
+            SettingsAccountStrings.saveDetails,
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      // Landed on SettingsScreen with profileUpdatedToast!
-      expect(find.byType(SettingsScreen), findsOneWidget);
-      expect(find.text(SettingsAccountStrings.profileUpdatedToast), findsOneWidget);
-    });
+        // Landed on SettingsScreen with profileUpdatedToast!
+        expect(find.byType(SettingsScreen), findsOneWidget);
+        expect(
+          find.text(SettingsAccountStrings.profileUpdatedToast),
+          findsOneWidget,
+        );
+      },
+    );
   });
 }

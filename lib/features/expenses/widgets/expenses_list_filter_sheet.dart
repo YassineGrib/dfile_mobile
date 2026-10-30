@@ -16,10 +16,12 @@ class ExpensesListFilterSheet extends StatefulWidget {
 
   final ExpenseCategory? initialCategory;
   final ExpenseLinkFilter initialLink;
-  final void Function(ExpenseCategory? category, ExpenseLinkFilter link) onApply;
+  final void Function(ExpenseCategory? category, ExpenseLinkFilter link)
+  onApply;
 
   @override
-  State<ExpensesListFilterSheet> createState() => _ExpensesListFilterSheetState();
+  State<ExpensesListFilterSheet> createState() =>
+      _ExpensesListFilterSheetState();
 }
 
 class _ExpensesListFilterSheetState extends State<ExpensesListFilterSheet> {
@@ -42,20 +44,23 @@ class _ExpensesListFilterSheetState extends State<ExpensesListFilterSheet> {
   Widget build(BuildContext context) {
     const List<(String, ExpenseCategory?)> categoryOptions =
         <(String, ExpenseCategory?)>[
-      (ExpensesListStrings.categoryAll, null),
-      (ExpensesListStrings.categorySoftware, ExpenseCategory.softwareTools),
-      (ExpensesListStrings.categoryHosting, ExpenseCategory.hostingServices),
-      (ExpensesListStrings.categoryMarketing, ExpenseCategory.marketing),
-      (ExpensesListStrings.categoryEquipment, ExpenseCategory.equipment),
-      (ExpensesListStrings.categoryOthers, ExpenseCategory.others),
-    ];
+          (ExpensesListStrings.categoryAll, null),
+          (ExpensesListStrings.categorySoftware, ExpenseCategory.softwareTools),
+          (
+            ExpensesListStrings.categoryHosting,
+            ExpenseCategory.hostingServices,
+          ),
+          (ExpensesListStrings.categoryMarketing, ExpenseCategory.marketing),
+          (ExpensesListStrings.categoryEquipment, ExpenseCategory.equipment),
+          (ExpensesListStrings.categoryOthers, ExpenseCategory.others),
+        ];
 
     const List<(String, ExpenseLinkFilter)> linkOptions =
         <(String, ExpenseLinkFilter)>[
-      (ExpensesListStrings.linkAll, ExpenseLinkFilter.all),
-      (ExpensesListStrings.linkProjectLinked, ExpenseLinkFilter.linked),
-      (ExpensesListStrings.linkGeneralCosts, ExpenseLinkFilter.general),
-    ];
+          (ExpensesListStrings.linkAll, ExpenseLinkFilter.all),
+          (ExpensesListStrings.linkProjectLinked, ExpenseLinkFilter.linked),
+          (ExpensesListStrings.linkGeneralCosts, ExpenseLinkFilter.general),
+        ];
 
     return SingleChildScrollView(
       child: Column(
@@ -103,7 +108,8 @@ class _ExpensesListFilterSheetState extends State<ExpensesListFilterSheet> {
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: [
-              for (final (String label, ExpenseCategory? cat) in categoryOptions)
+              for (final (String label, ExpenseCategory? cat)
+                  in categoryOptions)
                 AppPill(
                   label: label,
                   selected: _draftCategory == cat,

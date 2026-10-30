@@ -14,20 +14,14 @@ Future<bool?> showSecurityPinSheet(
 }) {
   return showAppSheet<bool>(
     context: context,
-    builder: (BuildContext sheetContext) => SecurityPinSheet(
-      isChanging: isChanging,
-      onSave: onSave,
-    ),
+    builder: (BuildContext sheetContext) =>
+        SecurityPinSheet(isChanging: isChanging, onSave: onSave),
   );
 }
 
 /// 4-digit PIN creation and modification sheet matching ST9.
 class SecurityPinSheet extends StatefulWidget {
-  const SecurityPinSheet({
-    super.key,
-    this.isChanging = false,
-    this.onSave,
-  });
+  const SecurityPinSheet({super.key, this.isChanging = false, this.onSave});
 
   final bool isChanging;
   final ValueChanged<String>? onSave;
@@ -90,7 +84,8 @@ class _SecurityPinSheetState extends State<SecurityPinSheet> {
       _handleDigit(character);
     } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
       _handleBackspace();
-    } else if (event.logicalKey == LogicalKeyboardKey.enter && _pin.length == 4) {
+    } else if (event.logicalKey == LogicalKeyboardKey.enter &&
+        _pin.length == 4) {
       _handleSave();
     }
   }
@@ -108,10 +103,7 @@ class _SecurityPinSheetState extends State<SecurityPinSheet> {
     );
   }
 
-  Widget _buildKeyButton({
-    required Widget child,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildKeyButton({required Widget child, required VoidCallback onTap}) {
     return Container(
       width: 64,
       height: 64,

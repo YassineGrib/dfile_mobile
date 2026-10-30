@@ -40,10 +40,7 @@ class WelcomeScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: AppSpacing.lg),
-                        const MascotPanel(
-                          color: AppColors.yellow,
-                          height: 330,
-                        ),
+                        const MascotPanel(color: AppColors.yellow, height: 330),
                         const SizedBox(height: AppSpacing.xxxl),
                         Text(
                           AuthStrings.dfile,

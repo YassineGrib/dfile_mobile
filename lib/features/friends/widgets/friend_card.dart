@@ -95,10 +95,7 @@ class FriendCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
 
                 // Hairline divider
-                Container(
-                  height: 1,
-                  color: AppColors.line,
-                ),
+                Container(height: 1, color: AppColors.line),
                 const SizedBox(height: AppSpacing.sm),
 
                 // Bottom metadata row: Active & Settled counts, Last activity
@@ -119,9 +116,7 @@ class FriendCard extends StatelessWidget {
                     Text(
                       lastActivityText,
                       maxLines: 1,
-                      style: AppText.captionSm.copyWith(
-                        color: AppColors.mute,
-                      ),
+                      style: AppText.captionSm.copyWith(color: AppColors.mute),
                     ),
                   ],
                 ),

@@ -61,9 +61,7 @@ class TransactionDetailDeleteConfirmSheet extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       TransactionDetailStrings.deleteTransactionSubtitle,
-                      style: AppText.caption.copyWith(
-                        color: AppColors.red,
-                      ),
+                      style: AppText.caption.copyWith(color: AppColors.red),
                     ),
                   ],
                 ),

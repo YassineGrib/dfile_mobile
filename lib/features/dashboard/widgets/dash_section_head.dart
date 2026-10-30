@@ -21,10 +21,7 @@ class DashSectionHead extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: AppText.cardTitle,
-        ),
+        Text(title, style: AppText.cardTitle),
         if (action != null && onAction != null)
           GestureDetector(
             onTap: onAction,

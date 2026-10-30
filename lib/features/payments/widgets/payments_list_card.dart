@@ -54,8 +54,9 @@ class PaymentsListCard extends StatelessWidget {
     final String clientName = client?.name ?? 'Unknown Client';
     final String projectName = project?.name ?? 'Unknown Project';
     final (Color methodTextColor, Color methodBgColor) = _methodColors;
-    final String referenceText =
-        payment.reference.trim().isNotEmpty ? payment.reference.trim() : '—';
+    final String referenceText = payment.reference.trim().isNotEmpty
+        ? payment.reference.trim()
+        : '—';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.lg),
@@ -73,7 +74,8 @@ class PaymentsListCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.card),
           child: InkWell(
             borderRadius: BorderRadius.circular(AppRadius.card),
-            onTap: () => context.push('${AppRoutes.paymentsPath}/${payment.id}'),
+            onTap: () =>
+                context.push('${AppRoutes.paymentsPath}/${payment.id}'),
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(

@@ -6,10 +6,7 @@ import '../data/data.dart';
 
 /// Method badge for settlement history rows.
 class SettleMethodBadge extends StatelessWidget {
-  const SettleMethodBadge({
-    super.key,
-    required this.method,
-  });
+  const SettleMethodBadge({super.key, required this.method});
 
   final FriendSettleMethod method;
 
@@ -50,10 +47,7 @@ class SettleMethodBadge extends StatelessWidget {
 
 /// A single settlement item row in the transaction detail card.
 class TransactionDetailSettlementRow extends StatelessWidget {
-  const TransactionDetailSettlementRow({
-    super.key,
-    required this.settlement,
-  });
+  const TransactionDetailSettlementRow({super.key, required this.settlement});
 
   final FriendSettlement settlement;
 
@@ -67,9 +61,7 @@ class TransactionDetailSettlementRow extends StatelessWidget {
           // Date
           Text(
             formatDate(settlement.date),
-            style: AppText.caption.copyWith(
-              color: AppColors.mute,
-            ),
+            style: AppText.caption.copyWith(color: AppColors.mute),
           ),
           const SizedBox(width: AppSpacing.sm),
 

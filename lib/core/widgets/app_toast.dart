@@ -6,10 +6,7 @@ import '../theme/theme.dart';
 
 /// Dark pill toast with a green check circle, matching screen C6.
 class AppToast extends StatelessWidget {
-  const AppToast({
-    super.key,
-    required this.message,
-  });
+  const AppToast({super.key, required this.message});
 
   final String message;
 
@@ -148,9 +145,7 @@ class _AutoDismissToastHostState extends State<_AutoDismissToastHost> {
       left: AppSpacing.pageGutter,
       right: AppSpacing.pageGutter,
       bottom: widget.bottomOffset,
-      child: IgnorePointer(
-        child: Center(child: widget.child),
-      ),
+      child: IgnorePointer(child: Center(child: widget.child)),
     );
   }
 }

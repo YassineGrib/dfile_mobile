@@ -1,9 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/router/app_router.dart';
 import 'core/theme/theme.dart';
+import 'features/auth/data/auth_service.dart';
+import 'features/auth/data/firebase_auth_service.dart';
 import 'features/calendar/data/data.dart';
 import 'features/clients/data/data.dart';
 import 'features/dashboard/data/data.dart';
@@ -17,7 +20,14 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
   ]);
-  runApp(const DfileApp());
+  await Firebase.initializeApp();
+  final AuthService auth = FirebaseAuthService();
+  final GoRouter router = createAppRouter(
+    initialLocation: auth.currentUser != null
+        ? AppRoutes.homePath
+        : AppRoutes.welcomePath,
+  );
+  runApp(DfileApp(authService: auth, router: router));
 }
 
 class DfileApp extends StatefulWidget {
@@ -31,6 +41,7 @@ class DfileApp extends StatefulWidget {
     this.settingsRepository,
     this.notificationsStore,
     this.calendarRepository,
+    this.authService,
   });
 
   final GoRouter? router;
@@ -41,6 +52,7 @@ class DfileApp extends StatefulWidget {
   final SettingsRepository? settingsRepository;
   final NotificationsStore? notificationsStore;
   final CalendarRepository? calendarRepository;
+  final AuthService? authService;
 
   @override
   State<DfileApp> createState() => _DfileAppState();
@@ -48,6 +60,7 @@ class DfileApp extends StatefulWidget {
 
 class _DfileAppState extends State<DfileApp> {
   ProjectsRepository? _fallbackProjectsRepository;
+  late final AuthService _fallbackAuth = FakeAuthService();
 
   @override
   void initState() {
@@ -94,25 +107,28 @@ class _DfileAppState extends State<DfileApp> {
     final CalendarRepository effectiveCalendarRepo =
         widget.calendarRepository ?? defaultCalendarRepository;
 
-    return ClientsScope(
-      repository: effectiveClientsRepo,
-      child: ProjectsScope(
-        repository: effectiveProjectsRepo,
-        child: ExpensesScope(
-          repository: effectiveExpensesRepo,
-          child: FriendsScope(
-            repository: effectiveFriendsRepo,
-            child: SettingsScope(
-              repository: effectiveSettingsRepo,
-              child: CalendarScope(
-                repository: effectiveCalendarRepo,
-                child: NotificationsScope(
-                  store: effectiveNotificationsStore,
-                  child: MaterialApp.router(
-                    title: 'Dfile',
-                    debugShowCheckedModeBanner: false,
-                    theme: AppTheme.light,
-                    routerConfig: widget.router ?? appRouter,
+    return AuthScope(
+      service: widget.authService ?? _fallbackAuth,
+      child: ClientsScope(
+        repository: effectiveClientsRepo,
+        child: ProjectsScope(
+          repository: effectiveProjectsRepo,
+          child: ExpensesScope(
+            repository: effectiveExpensesRepo,
+            child: FriendsScope(
+              repository: effectiveFriendsRepo,
+              child: SettingsScope(
+                repository: effectiveSettingsRepo,
+                child: CalendarScope(
+                  repository: effectiveCalendarRepo,
+                  child: NotificationsScope(
+                    store: effectiveNotificationsStore,
+                    child: MaterialApp.router(
+                      title: 'Dfile',
+                      debugShowCheckedModeBanner: false,
+                      theme: AppTheme.light,
+                      routerConfig: widget.router ?? appRouter,
+                    ),
                   ),
                 ),
               ),

@@ -22,10 +22,7 @@ import 'dash_icon_bubble.dart';
 /// - Tapping card -> `context.push('/friends')`
 /// - When there are no friends, shows "Track money you lend or borrow" and chips at 0.
 class FriendsSnapshotCard extends StatelessWidget {
-  const FriendsSnapshotCard({
-    super.key,
-    this.clock,
-  });
+  const FriendsSnapshotCard({super.key, this.clock});
 
   /// Optional clock provider for deterministic testing.
   final DateTime Function()? clock;
@@ -116,7 +113,8 @@ class FriendsSnapshotCard extends StatelessWidget {
               Expanded(
                 child: _DebtChip(
                   icon: AppIcons.arrowDownRight,
-                  label: '${DashboardActivityStrings.owedPrefix} ${formatMoney(owedToYou)}',
+                  label:
+                      '${DashboardActivityStrings.owedPrefix} ${formatMoney(owedToYou)}',
                   textColor: AppColors.green,
                   bgColor: AppColors.greenBg,
                   borderColor: AppColors.green.withValues(alpha: 0.2),
@@ -126,7 +124,8 @@ class FriendsSnapshotCard extends StatelessWidget {
               Expanded(
                 child: _DebtChip(
                   icon: AppIcons.arrowUpRight,
-                  label: '${DashboardActivityStrings.youOwePrefix} ${formatMoney(youOwe)}',
+                  label:
+                      '${DashboardActivityStrings.youOwePrefix} ${formatMoney(youOwe)}',
                   textColor: AppColors.red,
                   bgColor: AppColors.redBg,
                   borderColor: AppColors.red.withValues(alpha: 0.2),
@@ -168,11 +167,7 @@ class _DebtChip extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 14,
-            color: textColor,
-          ),
+          Icon(icon, size: 14, color: textColor),
           const SizedBox(width: 6),
           Flexible(
             child: FittedBox(

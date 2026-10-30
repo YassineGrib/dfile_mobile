@@ -127,21 +127,9 @@ class ClientsRepository extends ChangeNotifier {
           ),
         ],
         payments: const <Payment>[
-          Payment(
-            date: '2026-04-02',
-            reference: '#A102',
-            amount: 100000.0,
-          ),
-          Payment(
-            date: '2026-05-18',
-            reference: '#A117',
-            amount: 85000.0,
-          ),
-          Payment(
-            date: '2026-07-09',
-            reference: '#A131',
-            amount: 60000.0,
-          ),
+          Payment(date: '2026-04-02', reference: '#A102', amount: 100000.0),
+          Payment(date: '2026-05-18', reference: '#A117', amount: 85000.0),
+          Payment(date: '2026-07-09', reference: '#A131', amount: 60000.0),
         ],
       ),
       Client(
@@ -168,11 +156,7 @@ class ClientsRepository extends ChangeNotifier {
           ),
         ],
         payments: const <Payment>[
-          Payment(
-            date: '2026-05-10',
-            reference: '#A110',
-            amount: 120000.0,
-          ),
+          Payment(date: '2026-05-10', reference: '#A110', amount: 120000.0),
         ],
       ),
       Client(
@@ -217,11 +201,7 @@ class ClientsRepository extends ChangeNotifier {
           ),
         ],
         payments: const <Payment>[
-          Payment(
-            date: '2026-08-15',
-            reference: '#A142',
-            amount: 68500.0,
-          ),
+          Payment(date: '2026-08-15', reference: '#A142', amount: 68500.0),
         ],
       ),
     ];

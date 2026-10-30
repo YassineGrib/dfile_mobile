@@ -25,23 +25,18 @@ class FriendBalanceCard extends StatelessWidget {
     required OverallBalance balance,
     String? title,
   }) : this(
-          key: key,
-          overallBalance: balance,
-          title: title,
-          isStatement: false,
-        );
+         key: key,
+         overallBalance: balance,
+         title: title,
+         isStatement: false,
+       );
 
   /// Factory constructor for the statement net card matching FD3.
   const FriendBalanceCard.statement({
     Key? key,
     required FriendBalance balance,
     String? title,
-  }) : this(
-          key: key,
-          friendBalance: balance,
-          title: title,
-          isStatement: true,
-        );
+  }) : this(key: key, friendBalance: balance, title: title, isStatement: true);
 
   final OverallBalance? overallBalance;
   final FriendBalance? friendBalance;
@@ -52,22 +47,13 @@ class FriendBalanceCard extends StatelessWidget {
   final bool isStatement;
 
   double get _effectiveNet =>
-      net ??
-      friendBalance?.net ??
-      overallBalance?.net ??
-      0.0;
+      net ?? friendBalance?.net ?? overallBalance?.net ?? 0.0;
 
   double get _effectiveOwedToYou =>
-      owedToYou ??
-      friendBalance?.owedToYou ??
-      overallBalance?.owedToYou ??
-      0.0;
+      owedToYou ?? friendBalance?.owedToYou ?? overallBalance?.owedToYou ?? 0.0;
 
   double get _effectiveYouOwe =>
-      youOwe ??
-      friendBalance?.youOwe ??
-      overallBalance?.youOwe ??
-      0.0;
+      youOwe ?? friendBalance?.youOwe ?? overallBalance?.youOwe ?? 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -109,10 +95,7 @@ class FriendBalanceCard extends StatelessWidget {
                   fontSize: 14,
                 ),
               ),
-              FriendNetChip(
-                net: netVal,
-                label: label,
-              ),
+              FriendNetChip(net: netVal, label: label),
             ],
           ),
           const SizedBox(height: 6),

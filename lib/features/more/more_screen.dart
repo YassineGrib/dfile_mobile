@@ -6,6 +6,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import '../projects/data/data.dart';
+import '../auth/data/auth_service.dart';
 import 'more_strings.dart';
 
 /// Screen displaying the More menu per `docs/design/SPEC.md` (PY1).
@@ -176,8 +177,10 @@ class MoreScreen extends StatelessWidget {
 
             // Sign out button
             InkWell(
-              onTap: () {
-                GoRouter.maybeOf(context)?.go(AppRoutes.signInPath);
+              onTap: () async {
+                final GoRouter? router = GoRouter.maybeOf(context);
+                await AuthScope.of(context).signOut();
+                router?.go(AppRoutes.signInPath);
               },
               borderRadius: BorderRadius.circular(AppRadius.cardSmall),
               child: Container(

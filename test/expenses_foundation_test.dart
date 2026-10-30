@@ -52,49 +52,67 @@ void main() {
       expect(ExpenseCategory.others.fullLabel, 'Others');
       expect(ExpenseCategory.others.shortLabel, 'Others');
 
-      expect(ExpenseCategory.tryParse('Software/Tools'), ExpenseCategory.softwareTools);
-      expect(ExpenseCategory.tryParse('Hosting'), ExpenseCategory.hostingServices);
+      expect(
+        ExpenseCategory.tryParse('Software/Tools'),
+        ExpenseCategory.softwareTools,
+      );
+      expect(
+        ExpenseCategory.tryParse('Hosting'),
+        ExpenseCategory.hostingServices,
+      );
       expect(ExpenseCategory.tryParse('marketing'), ExpenseCategory.marketing);
       expect(ExpenseCategory.tryParse('unknown'), isNull);
-      expect(ExpenseCategory.fromStorageName('Equipment'), ExpenseCategory.equipment);
-      expect(ExpenseCategory.fromStorageName('nonexistent'), ExpenseCategory.others);
+      expect(
+        ExpenseCategory.fromStorageName('Equipment'),
+        ExpenseCategory.equipment,
+      );
+      expect(
+        ExpenseCategory.fromStorageName('nonexistent'),
+        ExpenseCategory.others,
+      );
     });
 
-    test('ExpenseStrings provides centralised labels and reuse of payment methods', () {
-      expect(ExpenseStrings.softwareTools, 'Software/Tools');
-      expect(ExpenseStrings.hostingServices, 'Hosting/Services');
-      expect(ExpenseStrings.marketing, 'Marketing');
-      expect(ExpenseStrings.equipment, 'Equipment');
-      expect(ExpenseStrings.others, 'Others');
+    test(
+      'ExpenseStrings provides centralised labels and reuse of payment methods',
+      () {
+        expect(ExpenseStrings.softwareTools, 'Software/Tools');
+        expect(ExpenseStrings.hostingServices, 'Hosting/Services');
+        expect(ExpenseStrings.marketing, 'Marketing');
+        expect(ExpenseStrings.equipment, 'Equipment');
+        expect(ExpenseStrings.others, 'Others');
 
-      expect(ExpenseStrings.softwareShort, 'Software');
-      expect(ExpenseStrings.hostingShort, 'Hosting');
-      expect(ExpenseStrings.marketingShort, 'Marketing');
-      expect(ExpenseStrings.equipmentShort, 'Equipment');
-      expect(ExpenseStrings.othersShort, 'Others');
+        expect(ExpenseStrings.softwareShort, 'Software');
+        expect(ExpenseStrings.hostingShort, 'Hosting');
+        expect(ExpenseStrings.marketingShort, 'Marketing');
+        expect(ExpenseStrings.equipmentShort, 'Equipment');
+        expect(ExpenseStrings.othersShort, 'Others');
 
-      expect(ExpenseStrings.baridimob, 'BaridiMob');
-      expect(ExpenseStrings.ccp, 'CCP');
-      expect(ExpenseStrings.bank, 'Bank wire');
-      expect(ExpenseStrings.cash, 'Cash');
+        expect(ExpenseStrings.baridimob, 'BaridiMob');
+        expect(ExpenseStrings.ccp, 'CCP');
+        expect(ExpenseStrings.bank, 'Bank wire');
+        expect(ExpenseStrings.cash, 'Cash');
 
-      expect(
-        ExpenseStrings.categoryFullLabel(ExpenseCategory.softwareTools),
-        'Software/Tools',
-      );
-      expect(
-        ExpenseStrings.categoryShortLabel(ExpenseCategory.softwareTools),
-        'Software',
-      );
-      expect(
-        ExpenseStrings.categoryLabel(ExpenseCategory.marketing),
-        'Marketing',
-      );
-      expect(ExpenseStrings.methodLabel(PaymentMethod.baridimob), 'BaridiMob');
-      expect(ExpenseStrings.methodLabel(PaymentMethod.ccp), 'CCP');
-      expect(ExpenseStrings.methodLabel(PaymentMethod.bank), 'Bank wire');
-      expect(ExpenseStrings.methodLabel(PaymentMethod.cash), 'Cash');
-    });
+        expect(
+          ExpenseStrings.categoryFullLabel(ExpenseCategory.softwareTools),
+          'Software/Tools',
+        );
+        expect(
+          ExpenseStrings.categoryShortLabel(ExpenseCategory.softwareTools),
+          'Software',
+        );
+        expect(
+          ExpenseStrings.categoryLabel(ExpenseCategory.marketing),
+          'Marketing',
+        );
+        expect(
+          ExpenseStrings.methodLabel(PaymentMethod.baridimob),
+          'BaridiMob',
+        );
+        expect(ExpenseStrings.methodLabel(PaymentMethod.ccp), 'CCP');
+        expect(ExpenseStrings.methodLabel(PaymentMethod.bank), 'Bank wire');
+        expect(ExpenseStrings.methodLabel(PaymentMethod.cash), 'Cash');
+      },
+    );
 
     test('ExpenseLinkFilter and ExpenseSort define user-facing labels', () {
       expect(ExpenseLinkFilter.all.label, 'All');
@@ -154,8 +172,10 @@ void main() {
     test('Loads exact 7-expense mock seed per SPEC.md', () {
       expect(repo.expenses.length, 7);
 
-      final double total =
-          repo.expenses.fold<double>(0.0, (sum, e) => sum + e.amount);
+      final double total = repo.expenses.fold<double>(
+        0.0,
+        (sum, e) => sum + e.amount,
+      );
       expect(total, 91200.0);
 
       // Unmodifiable check
@@ -214,7 +234,10 @@ void main() {
       repo.addListener(() => notifications++);
 
       final original = repo.byId('exp1')!;
-      final updated = original.copyWith(amount: 5000.0, notes: 'Price increased');
+      final updated = original.copyWith(
+        amount: 5000.0,
+        notes: 'Price increased',
+      );
 
       final bool success = repo.update(updated);
 
@@ -361,10 +384,12 @@ void main() {
 
       final general = filterExpenses(seed, link: ExpenseLinkFilter.general);
       expect(general.length, 4);
-      expect(
-        general.map((e) => e.id).toSet(),
-        <String>{'exp1', 'exp2', 'exp5', 'exp7'},
-      );
+      expect(general.map((e) => e.id).toSet(), <String>{
+        'exp1',
+        'exp2',
+        'exp5',
+        'exp7',
+      });
 
       final all = filterExpenses(seed, link: ExpenseLinkFilter.all);
       expect(all.length, 7);
@@ -392,29 +417,52 @@ void main() {
 
     test('Sorts newest first and oldest first', () {
       final newest = sortExpenses(seed, ExpenseSort.newest);
-      expect(
-        newest.map((e) => e.id).toList(),
-        <String>['exp1', 'exp2', 'exp3', 'exp4', 'exp5', 'exp6', 'exp7'],
-      );
+      expect(newest.map((e) => e.id).toList(), <String>[
+        'exp1',
+        'exp2',
+        'exp3',
+        'exp4',
+        'exp5',
+        'exp6',
+        'exp7',
+      ]);
 
       final oldest = sortExpenses(seed, ExpenseSort.oldest);
-      expect(
-        oldest.map((e) => e.id).toList(),
-        <String>['exp7', 'exp6', 'exp5', 'exp4', 'exp3', 'exp2', 'exp1'],
-      );
+      expect(oldest.map((e) => e.id).toList(), <String>[
+        'exp7',
+        'exp6',
+        'exp5',
+        'exp4',
+        'exp3',
+        'exp2',
+        'exp1',
+      ]);
     });
 
     test('Sorts highest amount and lowest amount', () {
       final highest = sortExpenses(seed, ExpenseSort.highestAmount);
-      expect(
-        highest.map((e) => e.amount).toList(),
-        <double>[38000.0, 18000.0, 12000.0, 9000.0, 6500.0, 4500.0, 3200.0],
-      );
+      expect(highest.map((e) => e.amount).toList(), <double>[
+        38000.0,
+        18000.0,
+        12000.0,
+        9000.0,
+        6500.0,
+        4500.0,
+        3200.0,
+      ]);
 
       final lowest = sortExpenses(seed, ExpenseSort.lowestAmount);
       expect(
         lowest.map((e) => e.amount).toList(),
-        <double>[3200.0, 4500.0, 6500.0, 9000.0, 12000.0, 18000.0, 3800.0 * 10], // 38000
+        <double>[
+          3200.0,
+          4500.0,
+          6500.0,
+          9000.0,
+          12000.0,
+          18000.0,
+          3800.0 * 10,
+        ], // 38000
       );
     });
 
@@ -426,8 +474,10 @@ void main() {
   });
 
   group('MoreScreen & Expenses Routes Navigation on 390x844 Surface', () {
-    Future<(ClientsRepository, ProjectsRepository, ExpensesRepository, GoRouter)>
-        pumpExpensesApp(
+    Future<
+      (ClientsRepository, ProjectsRepository, ExpensesRepository, GoRouter)
+    >
+    pumpExpensesApp(
       WidgetTester tester, {
       String initialLocation = AppRoutes.morePath,
     }) async {
@@ -455,50 +505,52 @@ void main() {
       return (clientsRepo, projectsRepo, expensesRepo, router);
     }
 
-    testWidgets('Tapping Expenses row in More menu navigates to /expenses placeholder and back', (
-      WidgetTester tester,
-    ) async {
-      await pumpExpensesApp(tester, initialLocation: AppRoutes.morePath);
+    testWidgets(
+      'Tapping Expenses row in More menu navigates to /expenses placeholder and back',
+      (WidgetTester tester) async {
+        await pumpExpensesApp(tester, initialLocation: AppRoutes.morePath);
 
-      // Tap Expenses row
-      await tester.tap(find.text(MoreStrings.expensesTitle));
-      await tester.pumpAndSettle();
+        // Tap Expenses row
+        await tester.tap(find.text(MoreStrings.expensesTitle));
+        await tester.pumpAndSettle();
 
-      // Verify on ExpensesListScreen placeholder
-      expect(find.byType(ExpensesListScreen), findsOneWidget);
-      expect(find.text('ExpensesListScreen'), findsOneWidget);
+        // Verify on ExpensesListScreen placeholder
+        expect(find.byType(ExpensesListScreen), findsOneWidget);
+        expect(find.text('ExpensesListScreen'), findsOneWidget);
 
-      // Tap back button
-      await tester.tap(find.byType(IconButton));
-      await tester.pumpAndSettle();
+        // Tap back button
+        await tester.tap(find.byType(IconButton));
+        await tester.pumpAndSettle();
 
-      // Back on MoreScreen
-      expect(find.byType(MoreScreen), findsOneWidget);
-    });
+        // Back on MoreScreen
+        expect(find.byType(MoreScreen), findsOneWidget);
+      },
+    );
 
-    testWidgets('Routes /expenses/new, /expenses/:id, and /expenses/:id/edit resolve to placeholders', (
-      WidgetTester tester,
-    ) async {
-      final (_, _, _, GoRouter router) = await pumpExpensesApp(
-        tester,
-        initialLocation: '${AppRoutes.newExpensePath}?projectId=p1',
-      );
+    testWidgets(
+      'Routes /expenses/new, /expenses/:id, and /expenses/:id/edit resolve to placeholders',
+      (WidgetTester tester) async {
+        final (_, _, _, GoRouter router) = await pumpExpensesApp(
+          tester,
+          initialLocation: '${AppRoutes.newExpensePath}?projectId=p1',
+        );
 
-      // /expenses/new with query param
-      expect(find.byType(ExpenseFormScreen), findsOneWidget);
-      expect(find.text('ExpenseFormScreen'), findsOneWidget);
+        // /expenses/new with query param
+        expect(find.byType(ExpenseFormScreen), findsOneWidget);
+        expect(find.text('ExpenseFormScreen'), findsOneWidget);
 
-      // /expenses/:id
-      router.go('/expenses/exp1');
-      await tester.pumpAndSettle();
-      expect(find.byType(ExpenseDetailScreen), findsOneWidget);
-      expect(find.text('ExpenseDetailScreen'), findsOneWidget);
+        // /expenses/:id
+        router.go('/expenses/exp1');
+        await tester.pumpAndSettle();
+        expect(find.byType(ExpenseDetailScreen), findsOneWidget);
+        expect(find.text('ExpenseDetailScreen'), findsOneWidget);
 
-      // /expenses/:id/edit
-      router.go('/expenses/exp1/edit');
-      await tester.pumpAndSettle();
-      expect(find.byType(ExpenseFormScreen), findsOneWidget);
-      expect(find.text('ExpenseFormScreen'), findsOneWidget);
-    });
+        // /expenses/:id/edit
+        router.go('/expenses/exp1/edit');
+        await tester.pumpAndSettle();
+        expect(find.byType(ExpenseFormScreen), findsOneWidget);
+        expect(find.text('ExpenseFormScreen'), findsOneWidget);
+      },
+    );
   });
 }

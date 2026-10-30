@@ -4,8 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
-import 'data/settings_repository.dart';
-import 'data/settings_scope.dart';
+import '../auth/data/auth_service.dart';
 import 'settings_privacy_strings.dart';
 import 'widgets/privacy_danger_button.dart';
 import 'widgets/privacy_reason_sheet.dart';
@@ -58,10 +57,7 @@ class _DeleteAccountConfirmScreenState
     }
   }
 
-  void _onSubmit() {
-    final SettingsRepository settingsRepo =
-        SettingsScope.of(context, listen: false);
-
+  Future<void> _onSubmit() async {
     bool isValid = true;
 
     if (_deleteTextController.text != 'DELETE') {
@@ -71,7 +67,7 @@ class _DeleteAccountConfirmScreenState
       _deleteTextError = null;
     }
 
-    if (!settingsRepo.checkPassword(_passwordController.text)) {
+    if (_passwordController.text.isEmpty) {
       _passwordError = SettingsPrivacyStrings.passwordError;
       isValid = false;
     } else {
@@ -81,6 +77,13 @@ class _DeleteAccountConfirmScreenState
     setState(() {});
 
     if (isValid && _understandChecked) {
+      final AuthResult result = await AuthScope.of(context)
+          .deleteAccount(password: _passwordController.text);
+      if (!mounted) return;
+      if (!result.isOk) {
+        setState(() => _passwordError = SettingsPrivacyStrings.passwordError);
+        return;
+      }
       context.go(AppRoutes.settingsDeleteAccountProgressPath);
     }
   }
@@ -133,8 +136,9 @@ class _DeleteAccountConfirmScreenState
                           ),
                           decoration: BoxDecoration(
                             color: AppColors.card,
-                            borderRadius:
-                                BorderRadius.circular(AppRadius.input),
+                            borderRadius: BorderRadius.circular(
+                              AppRadius.input,
+                            ),
                             border: Border.all(
                               color: AppColors.line,
                               width: AppSpacing.borderWidth,
@@ -277,10 +281,7 @@ class _DeleteAccountConfirmScreenState
               decoration: const BoxDecoration(
                 color: AppColors.bg,
                 border: Border(
-                  top: BorderSide(
-                    color: AppColors.line,
-                    width: 1,
-                  ),
+                  top: BorderSide(color: AppColors.line, width: 1),
                 ),
               ),
               child: Row(

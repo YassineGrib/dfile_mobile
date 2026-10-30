@@ -1,5 +1,2 @@
 /// Policy document type for [PolicyScreen].
-enum PolicyKind {
-  privacy,
-  terms,
-}
+enum PolicyKind { privacy, terms }

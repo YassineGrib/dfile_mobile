@@ -75,10 +75,7 @@ class HomeQuickActions extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          DashboardHomeStrings.quickActions,
-          style: AppText.cardTitle,
-        ),
+        Text(DashboardHomeStrings.quickActions, style: AppText.cardTitle),
         const SizedBox(height: AppSpacing.md),
         Row(
           children: [

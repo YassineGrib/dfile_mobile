@@ -38,10 +38,7 @@ void main() {
     final GoRouter router = createAppRouter(initialLocation: initialLocation);
 
     await tester.pumpWidget(
-      DfileApp(
-        router: router,
-        friendsRepository: effectiveFriendsRepo,
-      ),
+      DfileApp(router: router, friendsRepository: effectiveFriendsRepo),
     );
     if (initialExtra != null) {
       router.go(initialLocation, extra: initialExtra);
@@ -51,62 +48,60 @@ void main() {
   }
 
   group('FriendStatementScreen Widget Tests', () {
-    testWidgets(
-      'renders values for Karim (45,000 DZ net, 2 active)',
-      (WidgetTester tester) async {
-        await pumpFriendApp(tester, initialLocation: '/friends/fr1');
+    testWidgets('renders values for Karim (45,000 DZ net, 2 active)', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendApp(tester, initialLocation: '/friends/fr1');
 
-        // Top bar
-        expect(find.text(FriendStatementStrings.title), findsOneWidget);
-        expect(find.byIcon(Icons.arrow_back), findsOneWidget);
-        expect(find.byIcon(Icons.more_horiz), findsOneWidget);
+      // Top bar
+      expect(find.text(FriendStatementStrings.title), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+      expect(find.byIcon(Icons.more_horiz), findsOneWidget);
 
-        // Friend header
-        expect(find.text('Karim Boualam'), findsOneWidget);
-        expect(find.text('+213 550 12 34 56'), findsOneWidget);
+      // Friend header
+      expect(find.text('Karim Boualam'), findsOneWidget);
+      expect(find.text('+213 550 12 34 56'), findsOneWidget);
 
-        // Net balance card & chip
-        expect(find.text('Net balance'), findsOneWidget);
-        expect(find.text('Owed to you'), findsWidgets); // chip + stat tile
-        expect(find.text('45,000 DZ'), findsOneWidget);
+      // Net balance card & chip
+      expect(find.text('Net balance'), findsOneWidget);
+      expect(find.text('Owed to you'), findsWidgets); // chip + stat tile
+      expect(find.text('45,000 DZ'), findsOneWidget);
 
-        // 4 Stat tiles
-        expect(find.text(FriendStatementStrings.owedToYou), findsWidgets);
-        expect(find.text('45,000'), findsOneWidget);
+      // 4 Stat tiles
+      expect(find.text(FriendStatementStrings.owedToYou), findsWidgets);
+      expect(find.text('45,000'), findsOneWidget);
 
-        expect(find.text(FriendStatementStrings.youOwe), findsOneWidget);
-        expect(find.text('0'), findsNWidgets(2)); // youOwe: 0, settled: 0
+      expect(find.text(FriendStatementStrings.youOwe), findsOneWidget);
+      expect(find.text('0'), findsNWidgets(2)); // youOwe: 0, settled: 0
 
-        expect(find.text(FriendStatementStrings.active), findsOneWidget);
-        expect(find.text('2'), findsOneWidget);
+      expect(find.text(FriendStatementStrings.active), findsOneWidget);
+      expect(find.text('2'), findsOneWidget);
 
-        expect(find.text(FriendStatementStrings.settled), findsOneWidget);
-      },
-    );
+      expect(find.text(FriendStatementStrings.settled), findsOneWidget);
+    });
 
-    testWidgets(
-      'renders values for a settled friend (Lina Cherif)',
-      (WidgetTester tester) async {
-        await pumpFriendApp(tester, initialLocation: '/friends/fr4');
+    testWidgets('renders values for a settled friend (Lina Cherif)', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendApp(tester, initialLocation: '/friends/fr4');
 
-        // Friend header
-        expect(find.text('Lina Cherif'), findsOneWidget);
-        expect(find.text('+213 555 98 76 54'), findsOneWidget);
+      // Friend header
+      expect(find.text('Lina Cherif'), findsOneWidget);
+      expect(find.text('+213 555 98 76 54'), findsOneWidget);
 
-        // Net balance card & chip
-        expect(find.text('Settled'), findsWidgets); // chip + stat tile
-        expect(find.text('0 DZ'), findsOneWidget);
+      // Net balance card & chip
+      expect(find.text('Settled'), findsWidgets); // chip + stat tile
+      expect(find.text('0 DZ'), findsOneWidget);
 
-        // 4 Stat tiles
-        expect(find.text(FriendStatementStrings.owedToYou), findsWidgets);
-        expect(find.text(FriendStatementStrings.youOwe), findsOneWidget);
-        expect(find.text(FriendStatementStrings.active), findsOneWidget);
-        expect(find.text(FriendStatementStrings.settled), findsWidgets);
+      // 4 Stat tiles
+      expect(find.text(FriendStatementStrings.owedToYou), findsWidgets);
+      expect(find.text(FriendStatementStrings.youOwe), findsOneWidget);
+      expect(find.text(FriendStatementStrings.active), findsOneWidget);
+      expect(find.text(FriendStatementStrings.settled), findsWidgets);
 
-        // Lina has 0 owedToYou, 0 youOwe, 0 active, 1 settled
-        expect(find.text('1'), findsOneWidget);
-      },
-    );
+      // Lina has 0 owedToYou, 0 youOwe, 0 active, 1 settled
+      expect(find.text('1'), findsOneWidget);
+    });
 
     testWidgets(
       'transaction cards present and tapping card navigates to detail',
@@ -136,103 +131,93 @@ void main() {
       },
     );
 
-    testWidgets(
-      '+ Add navigates with friendId in query parameters',
-      (WidgetTester tester) async {
-        await pumpFriendApp(tester, initialLocation: '/friends/fr1');
+    testWidgets('+ Add navigates with friendId in query parameters', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendApp(tester, initialLocation: '/friends/fr1');
 
-        expect(
-          find.text(FriendStatementStrings.addTransactionShort),
-          findsOneWidget,
-        );
-        await tester.tap(find.text(FriendStatementStrings.addTransactionShort));
-        await tester.pumpAndSettle();
+      expect(
+        find.text(FriendStatementStrings.addTransactionShort),
+        findsOneWidget,
+      );
+      await tester.tap(find.text(FriendStatementStrings.addTransactionShort));
+      await tester.pumpAndSettle();
 
-        expect(find.byType(TransactionFormScreen), findsOneWidget);
-      },
-    );
+      expect(find.byType(TransactionFormScreen), findsOneWidget);
+    });
 
-    testWidgets(
-      'actions sheet Add transaction navigates with friendId',
-      (WidgetTester tester) async {
-        await pumpFriendApp(tester, initialLocation: '/friends/fr1');
+    testWidgets('actions sheet Add transaction navigates with friendId', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendApp(tester, initialLocation: '/friends/fr1');
 
-        await tester.tap(find.byIcon(Icons.more_horiz));
-        await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
 
-        expect(find.text(FriendStatementStrings.addTransaction), findsOneWidget);
-        await tester.tap(find.text(FriendStatementStrings.addTransaction));
-        await tester.pumpAndSettle();
+      expect(find.text(FriendStatementStrings.addTransaction), findsOneWidget);
+      await tester.tap(find.text(FriendStatementStrings.addTransaction));
+      await tester.pumpAndSettle();
 
-        expect(find.byType(TransactionFormScreen), findsOneWidget);
-      },
-    );
+      expect(find.byType(TransactionFormScreen), findsOneWidget);
+    });
 
-    testWidgets(
-      'copy phone with a phone copies to Clipboard and shows toast',
-      (WidgetTester tester) async {
-        await pumpFriendApp(tester, initialLocation: '/friends/fr1');
+    testWidgets('copy phone with a phone copies to Clipboard and shows toast', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendApp(tester, initialLocation: '/friends/fr1');
 
-        // Open actions sheet
-        await tester.tap(find.byIcon(Icons.more_horiz));
-        await tester.pumpAndSettle();
+      // Open actions sheet
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
 
-        expect(
-          find.text(FriendStatementStrings.copyPhoneNumber),
-          findsOneWidget,
-        );
-        await tester.tap(find.text(FriendStatementStrings.copyPhoneNumber));
-        await tester.pump();
+      expect(find.text(FriendStatementStrings.copyPhoneNumber), findsOneWidget);
+      await tester.tap(find.text(FriendStatementStrings.copyPhoneNumber));
+      await tester.pump();
 
-        expect(
-          find.text(FriendStatementStrings.copiedPhoneToast),
-          findsOneWidget,
-        );
+      expect(
+        find.text(FriendStatementStrings.copiedPhoneToast),
+        findsOneWidget,
+      );
 
-        await tester.pump(const Duration(seconds: 4));
-        expect(find.byType(AppToast), findsNothing);
-      },
-    );
+      await tester.pump(const Duration(seconds: 4));
+      expect(find.byType(AppToast), findsNothing);
+    });
 
-    testWidgets(
-      'copy phone without a phone shows No phone number toast',
-      (WidgetTester tester) async {
-        final FriendsRepository repo = FriendsRepository();
-        repo.addFriend(
-          Friend(
-            id: 'fr_no_phone',
-            name: 'Samir NoPhone',
-            phone: '',
-            createdAt: DateTime(2026, 8, 1),
-          ),
-        );
+    testWidgets('copy phone without a phone shows No phone number toast', (
+      WidgetTester tester,
+    ) async {
+      final FriendsRepository repo = FriendsRepository();
+      repo.addFriend(
+        Friend(
+          id: 'fr_no_phone',
+          name: 'Samir NoPhone',
+          phone: '',
+          createdAt: DateTime(2026, 8, 1),
+        ),
+      );
 
-        await pumpFriendApp(
-          tester,
-          initialLocation: '/friends/fr_no_phone',
-          friendsRepo: repo,
-        );
+      await pumpFriendApp(
+        tester,
+        initialLocation: '/friends/fr_no_phone',
+        friendsRepo: repo,
+      );
 
-        // Open actions sheet
-        await tester.tap(find.byIcon(Icons.more_horiz));
-        await tester.pumpAndSettle();
+      // Open actions sheet
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
 
-        expect(
-          find.text(FriendStatementStrings.copyPhoneNumber),
-          findsOneWidget,
-        );
-        await tester.tap(find.text(FriendStatementStrings.copyPhoneNumber));
-        await tester.pump();
+      expect(find.text(FriendStatementStrings.copyPhoneNumber), findsOneWidget);
+      await tester.tap(find.text(FriendStatementStrings.copyPhoneNumber));
+      await tester.pump();
 
-        expect(
-          find.text(FriendStatementStrings.noPhoneNumberToast),
-          findsOneWidget,
-        );
+      expect(
+        find.text(FriendStatementStrings.noPhoneNumberToast),
+        findsOneWidget,
+      );
 
-        await tester.pump(const Duration(seconds: 4));
-        expect(find.byType(AppToast), findsNothing);
-      },
-    );
+      await tester.pump(const Duration(seconds: 4));
+      expect(find.byType(AppToast), findsNothing);
+    });
 
     testWidgets(
       'Open transactions in actions sheet navigates to /friends with extra',
@@ -253,57 +238,56 @@ void main() {
       },
     );
 
-    testWidgets(
-      'delete flow removes the friend and ends on /friends',
-      (WidgetTester tester) async {
-        final (FriendsRepository repo, GoRouter router) = await pumpFriendApp(
-          tester,
-          initialLocation: '/friends/fr1',
-        );
+    testWidgets('delete flow removes the friend and ends on /friends', (
+      WidgetTester tester,
+    ) async {
+      final (FriendsRepository repo, GoRouter router) = await pumpFriendApp(
+        tester,
+        initialLocation: '/friends/fr1',
+      );
 
-        expect(repo.friendById('fr1'), isNotNull);
+      expect(repo.friendById('fr1'), isNotNull);
 
-        // Open actions sheet
-        await tester.tap(find.byIcon(Icons.more_horiz));
-        await tester.pumpAndSettle();
+      // Open actions sheet
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
 
-        // Tap Delete friend -> opens delete confirm sheet
-        expect(find.text(FriendStatementStrings.deleteFriend), findsOneWidget);
-        await tester.tap(find.text(FriendStatementStrings.deleteFriend));
-        await tester.pumpAndSettle();
+      // Tap Delete friend -> opens delete confirm sheet
+      expect(find.text(FriendStatementStrings.deleteFriend), findsOneWidget);
+      await tester.tap(find.text(FriendStatementStrings.deleteFriend));
+      await tester.pumpAndSettle();
 
-        // Confirm sheet elements
-        expect(
-          find.text(FriendStatementStrings.deleteFriendTitle),
-          findsOneWidget,
-        );
-        expect(
-          find.text(FriendStatementStrings.deleteFriendSubtitle),
-          findsOneWidget,
-        );
-        expect(
-          find.text(
-            FriendStatementStrings.deleteConfirmFriendName('Karim Boualam'),
-          ),
-          findsOneWidget,
-        );
-        expect(
-          find.text(FriendStatementStrings.deleteConfirmActiveWarning(2)),
-          findsOneWidget,
-        );
+      // Confirm sheet elements
+      expect(
+        find.text(FriendStatementStrings.deleteFriendTitle),
+        findsOneWidget,
+      );
+      expect(
+        find.text(FriendStatementStrings.deleteFriendSubtitle),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          FriendStatementStrings.deleteConfirmFriendName('Karim Boualam'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.text(FriendStatementStrings.deleteConfirmActiveWarning(2)),
+        findsOneWidget,
+      );
 
-        // Tap Confirm delete
-        await tester.tap(find.text(FriendStatementStrings.confirmDelete));
-        await tester.pumpAndSettle();
+      // Tap Confirm delete
+      await tester.tap(find.text(FriendStatementStrings.confirmDelete));
+      await tester.pumpAndSettle();
 
-        // Friend is deleted from repository
-        expect(repo.friendById('fr1'), isNull);
+      // Friend is deleted from repository
+      expect(repo.friendById('fr1'), isNull);
 
-        // Router ended on /friends
-        expect(find.byType(FriendsScreen), findsOneWidget);
-        expect(router.state.matchedLocation, AppRoutes.friendsPath);
-      },
-    );
+      // Router ended on /friends
+      expect(find.byType(FriendsScreen), findsOneWidget);
+      expect(router.state.matchedLocation, AppRoutes.friendsPath);
+    });
 
     testWidgets(
       'delete flow cancel button dismisses sheet without deleting friend',
@@ -329,21 +313,18 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Settle button opens the sheet',
-      (WidgetTester tester) async {
-        await pumpFriendApp(tester, initialLocation: '/friends/fr1');
+    testWidgets('Settle button opens the sheet', (WidgetTester tester) async {
+      await pumpFriendApp(tester, initialLocation: '/friends/fr1');
 
-        final Finder settleButtons = find.text('Settle');
-        expect(settleButtons, findsWidgets);
+      final Finder settleButtons = find.text('Settle');
+      expect(settleButtons, findsWidgets);
 
-        await tester.tap(settleButtons.first);
-        await tester.pumpAndSettle();
+      await tester.tap(settleButtons.first);
+      await tester.pumpAndSettle();
 
-        // Settle sheet is shown
-        expect(find.text('Record settlement'), findsOneWidget);
-      },
-    );
+      // Settle sheet is shown
+      expect(find.text('Record settlement'), findsOneWidget);
+    });
 
     testWidgets(
       'screen shows updated numbers when repository updates after settle',
@@ -372,7 +353,10 @@ void main() {
       (WidgetTester tester) async {
         await pumpFriendApp(tester, initialLocation: '/friends/unknown_friend');
 
-        expect(find.text(FriendStatementStrings.friendNotFound), findsOneWidget);
+        expect(
+          find.text(FriendStatementStrings.friendNotFound),
+          findsOneWidget,
+        );
         expect(find.text(FriendStatementStrings.backToFriends), findsOneWidget);
 
         await tester.tap(find.text(FriendStatementStrings.backToFriends));
@@ -409,20 +393,17 @@ void main() {
       },
     );
 
-    testWidgets(
-      'accepts toast via GoRouterState.extra and displays it',
-      (WidgetTester tester) async {
-        await pumpFriendApp(
-          tester,
-          initialLocation: '/friends/fr1',
-          initialExtra: <String, Object?>{
-            'toast': 'Settlement recorded',
-          },
-        );
+    testWidgets('accepts toast via GoRouterState.extra and displays it', (
+      WidgetTester tester,
+    ) async {
+      await pumpFriendApp(
+        tester,
+        initialLocation: '/friends/fr1',
+        initialExtra: <String, Object?>{'toast': 'Settlement recorded'},
+      );
 
-        expect(find.text('Settlement recorded'), findsOneWidget);
-      },
-    );
+      expect(find.text('Settlement recorded'), findsOneWidget);
+    });
 
     testWidgets(
       '360x800 surface renders statement, actions sheet, and delete confirm sheet without overflow',

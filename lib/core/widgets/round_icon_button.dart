@@ -42,9 +42,7 @@ class RoundIconButton extends StatelessWidget {
         child: InkWell(
           onTap: onPressed,
           customBorder: const CircleBorder(),
-          child: Center(
-            child: child ?? Icon(icon, size: 20, color: iconColor),
-          ),
+          child: Center(child: child ?? Icon(icon, size: 20, color: iconColor)),
         ),
       ),
     );

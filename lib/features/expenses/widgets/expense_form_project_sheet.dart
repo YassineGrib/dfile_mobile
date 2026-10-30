@@ -100,10 +100,7 @@ class _ExpenseFormProjectSheetContentState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: AppText.bodyBold,
-                    ),
+                    Text(title, style: AppText.bodyBold),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
@@ -137,10 +134,7 @@ class _ExpenseFormProjectSheetContentState
           const SizedBox(height: 4),
           Text(
             ExpenseFormStrings.linkProjectSheetSubtitle,
-            style: AppText.body.copyWith(
-              color: AppColors.mute,
-              fontSize: 14,
-            ),
+            style: AppText.body.copyWith(color: AppColors.mute, fontSize: 14),
           ),
           const SizedBox(height: AppSpacing.lg),
 
@@ -161,8 +155,7 @@ class _ExpenseFormProjectSheetContentState
             const SizedBox(height: 12),
             _buildOptionCard(
               title: project.name,
-              subtitle:
-                  widget.clientsRepo.byId(project.clientId)?.name ?? '',
+              subtitle: widget.clientsRepo.byId(project.clientId)?.name ?? '',
               isSelected: _selectedId == project.id,
               onTap: () {
                 setState(() {

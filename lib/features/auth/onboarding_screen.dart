@@ -124,10 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: Column(
                         children: [
                           const SizedBox(height: AppSpacing.xs),
-                          MascotPanel(
-                            color: page.color,
-                            height: 330,
-                          ),
+                          MascotPanel(color: page.color, height: 330),
                           const SizedBox(height: AppSpacing.xxxl),
                           Text(
                             page.title,

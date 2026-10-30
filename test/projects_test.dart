@@ -31,100 +31,94 @@ void main() {
       repo = ProjectsRepository(clientsRepository: clientsRepo);
     });
 
-    test(
-      'Initial repository loads 5 SPEC projects, Fintask tasks & payments, and derived metrics',
-      () {
-        expect(repo.projects.length, 5);
-        expect(repo.byId('p1')?.name, 'Fintask Landing Page');
-        expect(repo.byId('p2')?.name, 'Brand Identity');
-        expect(repo.byId('p3')?.name, 'Mobile App UI');
-        expect(repo.byId('p4')?.name, 'Logo Pack');
-        expect(repo.byId('p5')?.name, 'Dashboard Redesign');
-        expect(repo.byId('missing'), isNull);
+    test('Initial repository loads 5 SPEC projects, Fintask tasks & payments, and derived metrics', () {
+      expect(repo.projects.length, 5);
+      expect(repo.byId('p1')?.name, 'Fintask Landing Page');
+      expect(repo.byId('p2')?.name, 'Brand Identity');
+      expect(repo.byId('p3')?.name, 'Mobile App UI');
+      expect(repo.byId('p4')?.name, 'Logo Pack');
+      expect(repo.byId('p5')?.name, 'Dashboard Redesign');
+      expect(repo.byId('missing'), isNull);
 
-        // Portfolio derived values
-        // 450,000 + 180,000 + 320,000 + 40,000 + 95,000 = 1,085,000
-        expect(repo.portfolioValue, 1085000.0);
-        // (65 + 40 + 100 + 100 + 0) / 5 = 61
-        expect(repo.averageProgress, 61);
-        // In Progress (p1) + Waiting Client (p2) = 2
-        expect(repo.activeCount, 2);
+      // Portfolio derived values
+      // 450,000 + 180,000 + 320,000 + 40,000 + 95,000 = 1,085,000
+      expect(repo.portfolioValue, 1085000.0);
+      // (65 + 40 + 100 + 100 + 0) / 5 = 61
+      expect(repo.averageProgress, 61);
+      // In Progress (p1) + Waiting Client (p2) = 2
+      expect(repo.activeCount, 2);
 
-        // Fintask (p1) derived values, tasks (P6), and payments (P7)
-        final ProjectItem fintask = repo.byId('p1')!;
-        expect(repo.clientNameOf(fintask), 'Mohamed Bachir');
-        expect(repo.paid(fintask), 245000.0);
-        expect(repo.remaining(fintask), 205000.0);
-        expect(repo.paidFraction(fintask), closeTo(245000.0 / 450000.0, 1e-6));
+      // Fintask (p1) derived values, tasks (P6), and payments (P7)
+      final ProjectItem fintask = repo.byId('p1')!;
+      expect(repo.clientNameOf(fintask), 'Mohamed Bachir');
+      expect(repo.paid(fintask), 245000.0);
+      expect(repo.remaining(fintask), 205000.0);
+      expect(repo.paidFraction(fintask), closeTo(245000.0 / 450000.0, 1e-6));
 
-        final List<ProjectTask> fintaskTasks = repo.tasksOf('p1');
-        expect(fintaskTasks.length, 4);
-        expect(
-          fintaskTasks
-              .where((ProjectTask t) => t.status == TaskStatus.complete)
-              .length,
-          2,
-        );
+      final List<ProjectTask> fintaskTasks = repo.tasksOf('p1');
+      expect(fintaskTasks.length, 4);
+      expect(
+        fintaskTasks
+            .where((ProjectTask t) => t.status == TaskStatus.complete)
+            .length,
+        2,
+      );
 
-        final List<ProjectPayment> fintaskPayments = repo.paymentsOf('p1');
-        expect(fintaskPayments.length, 3);
-        expect(
-          fintaskPayments.map((ProjectPayment p) => p.reference).toList(),
-          <String>['TXN-928471', 'TXN-441872', 'CCP-5521'],
-        );
+      final List<ProjectPayment> fintaskPayments = repo.paymentsOf('p1');
+      expect(fintaskPayments.length, 3);
+      expect(
+        fintaskPayments.map((ProjectPayment p) => p.reference).toList(),
+        <String>['TXN-928471', 'TXN-441872', 'CCP-5521'],
+      );
 
-        // Paid amounts for remaining SPEC projects
-        expect(repo.paid(repo.byId('p2')!), 60000.0);
-        expect(repo.paid(repo.byId('p3')!), 320000.0);
-        expect(repo.remaining(repo.byId('p3')!), 0.0);
-        expect(repo.paidFraction(repo.byId('p3')!), 1.0);
-        expect(repo.paid(repo.byId('p4')!), 40000.0);
-        expect(repo.paid(repo.byId('p5')!), 0.0);
-        expect(repo.remaining(repo.byId('p5')!), 95000.0);
-      },
-    );
+      // Paid amounts for remaining SPEC projects
+      expect(repo.paid(repo.byId('p2')!), 60000.0);
+      expect(repo.paid(repo.byId('p3')!), 320000.0);
+      expect(repo.remaining(repo.byId('p3')!), 0.0);
+      expect(repo.paidFraction(repo.byId('p3')!), 1.0);
+      expect(repo.paid(repo.byId('p4')!), 40000.0);
+      expect(repo.paid(repo.byId('p5')!), 0.0);
+      expect(repo.remaining(repo.byId('p5')!), 95000.0);
+    });
 
-    test(
-      'add, update, and delete mutate projects/tasks, keep payments, and notify listeners',
-      () {
-        int notifications = 0;
-        repo.addListener(() => notifications++);
+    test('add, update, and delete mutate projects/tasks, keep payments, and notify listeners', () {
+      int notifications = 0;
+      repo.addListener(() => notifications++);
 
-        final ProjectItem added = ProjectItem(
-          id: 'p_new',
-          name: 'E-commerce Store',
-          description: 'Storefront and checkout.',
-          category: 'Development',
-          clientId: 'c3',
-          price: 200000.0,
-          status: ProjectStatus.inProgress,
-          progress: 25,
-          startDate: DateTime(2026, 9, 1),
-          endDate: DateTime(2026, 11, 15),
-          createdAt: DateTime(2026, 9, 1),
-        );
+      final ProjectItem added = ProjectItem(
+        id: 'p_new',
+        name: 'E-commerce Store',
+        description: 'Storefront and checkout.',
+        category: 'Development',
+        clientId: 'c3',
+        price: 200000.0,
+        status: ProjectStatus.inProgress,
+        progress: 25,
+        startDate: DateTime(2026, 9, 1),
+        endDate: DateTime(2026, 11, 15),
+        createdAt: DateTime(2026, 9, 1),
+      );
 
-        repo.add(added);
-        expect(repo.projects.length, 6);
-        expect(repo.byId('p_new')?.name, 'E-commerce Store');
-        expect(repo.activeCount, 3);
-        expect(notifications, 1);
+      repo.add(added);
+      expect(repo.projects.length, 6);
+      expect(repo.byId('p_new')?.name, 'E-commerce Store');
+      expect(repo.activeCount, 3);
+      expect(notifications, 1);
 
-        // Update project
-        repo.update(added.copyWith(name: 'E-commerce v2', progress: 50));
-        expect(repo.byId('p_new')?.name, 'E-commerce v2');
-        expect(repo.byId('p_new')?.progress, 50);
-        expect(notifications, 2);
+      // Update project
+      repo.update(added.copyWith(name: 'E-commerce v2', progress: 50));
+      expect(repo.byId('p_new')?.name, 'E-commerce v2');
+      expect(repo.byId('p_new')?.progress, 50);
+      expect(notifications, 2);
 
-        // Delete Fintask: removes project and its 4 tasks, keeps its 3 payments
-        repo.delete('p1');
-        expect(repo.byId('p1'), isNull);
-        expect(repo.projects.length, 5);
-        expect(repo.tasksOf('p1'), isEmpty);
-        expect(repo.paymentsOf('p1').length, 3);
-        expect(notifications, 3);
-      },
-    );
+      // Delete Fintask: removes project and its 4 tasks, keeps its 3 payments
+      repo.delete('p1');
+      expect(repo.byId('p1'), isNull);
+      expect(repo.projects.length, 5);
+      expect(repo.tasksOf('p1'), isEmpty);
+      expect(repo.paymentsOf('p1').length, 3);
+      expect(notifications, 3);
+    });
 
     test(
       'changeStatus forces progress to 100 for Completed and Delivered only',
@@ -166,96 +160,88 @@ void main() {
       expect(repo.tasksOf('p1').length, 5);
     });
 
-    test(
-      'Client sync keeps embedded client projects and payments consistent across mutations',
-      () {
-        // Add new project to Nova Studio (c3)
-        final ProjectItem newProj = ProjectItem(
-          id: 'p_nova_2',
-          name: 'Packaging Suite',
-          category: 'Branding',
-          clientId: 'c3',
-          price: 110000.0,
-          status: ProjectStatus.inProgress,
-          progress: 30,
-          startDate: DateTime(2026, 10, 1),
-          createdAt: DateTime(2026, 10, 1),
-        );
-        repo.add(newProj);
+    test('Client sync keeps embedded client projects and payments consistent across mutations', () {
+      // Add new project to Nova Studio (c3)
+      final ProjectItem newProj = ProjectItem(
+        id: 'p_nova_2',
+        name: 'Packaging Suite',
+        category: 'Branding',
+        clientId: 'c3',
+        price: 110000.0,
+        status: ProjectStatus.inProgress,
+        progress: 30,
+        startDate: DateTime(2026, 10, 1),
+        createdAt: DateTime(2026, 10, 1),
+      );
+      repo.add(newProj);
 
-        Client nova = clientsRepo.byId('c3')!;
-        expect(
-          nova.projects.map((Project p) => p.name).toList(),
-          containsAll(<String>['Logo Pack', 'Packaging Suite']),
-        );
-        expect(clientsRepo.isActive(nova), isTrue);
+      Client nova = clientsRepo.byId('c3')!;
+      expect(
+        nova.projects.map((Project p) => p.name).toList(),
+        containsAll(<String>['Logo Pack', 'Packaging Suite']),
+      );
+      expect(clientsRepo.isActive(nova), isTrue);
 
-        // Add payment to the new project -> syncs into Nova Studio's payments
-        repo.addPayment(
-          ProjectPayment(
-            id: 'pay_nova_new',
-            projectId: 'p_nova_2',
-            date: DateTime(2026, 10, 12),
-            reference: '#A199',
-            amount: 55000.0,
-          ),
-        );
-        nova = clientsRepo.byId('c3')!;
-        expect(
-          nova.payments.any(
-            (Payment p) =>
-                p.reference == '#A199' &&
-                p.amount == 55000.0 &&
-                p.projectId == 'p_nova_2',
-          ),
-          isTrue,
-        );
-        expect(repo.paid(repo.byId('p_nova_2')!), 55000.0);
+      // Add payment to the new project -> syncs into Nova Studio's payments
+      repo.addPayment(
+        ProjectPayment(
+          id: 'pay_nova_new',
+          projectId: 'p_nova_2',
+          date: DateTime(2026, 10, 12),
+          reference: '#A199',
+          amount: 55000.0,
+        ),
+      );
+      nova = clientsRepo.byId('c3')!;
+      expect(
+        nova.payments.any(
+          (Payment p) =>
+              p.reference == '#A199' &&
+              p.amount == 55000.0 &&
+              p.projectId == 'p_nova_2',
+        ),
+        isTrue,
+      );
+      expect(repo.paid(repo.byId('p_nova_2')!), 55000.0);
 
-        // Change status to Completed -> syncs embedded project status & progress
-        repo.changeStatus('p_nova_2', ProjectStatus.completed);
-        nova = clientsRepo.byId('c3')!;
-        final Project syncedNovaProj = nova.projects.firstWhere(
+      // Change status to Completed -> syncs embedded project status & progress
+      repo.changeStatus('p_nova_2', ProjectStatus.completed);
+      nova = clientsRepo.byId('c3')!;
+      final Project syncedNovaProj = nova.projects.firstWhere(
+        (Project p) => p.name == 'Packaging Suite',
+      );
+      expect(syncedNovaProj.status, 'Completed');
+      expect(syncedNovaProj.progress, 100);
+      expect(clientsRepo.isActive(nova), isFalse);
+
+      // Reassign Packaging Suite from c3 to c2 (Sarah Benali)
+      repo.update(repo.byId('p_nova_2')!.copyWith(clientId: 'c2'));
+      nova = clientsRepo.byId('c3')!;
+      final Client sarah = clientsRepo.byId('c2')!;
+      expect(
+        nova.projects.any((Project p) => p.name == 'Packaging Suite'),
+        isFalse,
+      );
+      expect(
+        sarah.projects.any((Project p) => p.name == 'Packaging Suite'),
+        isTrue,
+      );
+      expect(sarah.payments.any((Payment p) => p.reference == '#A199'), isTrue);
+
+      // Delete Packaging Suite -> removed from Sarah's projects, payment kept in ledger
+      repo.delete('p_nova_2');
+      final Client sarahAfterDelete = clientsRepo.byId('c2')!;
+      expect(
+        sarahAfterDelete.projects.any(
           (Project p) => p.name == 'Packaging Suite',
-        );
-        expect(syncedNovaProj.status, 'Completed');
-        expect(syncedNovaProj.progress, 100);
-        expect(clientsRepo.isActive(nova), isFalse);
-
-        // Reassign Packaging Suite from c3 to c2 (Sarah Benali)
-        repo.update(
-          repo.byId('p_nova_2')!.copyWith(clientId: 'c2'),
-        );
-        nova = clientsRepo.byId('c3')!;
-        final Client sarah = clientsRepo.byId('c2')!;
-        expect(
-          nova.projects.any((Project p) => p.name == 'Packaging Suite'),
-          isFalse,
-        );
-        expect(
-          sarah.projects.any((Project p) => p.name == 'Packaging Suite'),
-          isTrue,
-        );
-        expect(
-          sarah.payments.any((Payment p) => p.reference == '#A199'),
-          isTrue,
-        );
-
-        // Delete Packaging Suite -> removed from Sarah's projects, payment kept in ledger
-        repo.delete('p_nova_2');
-        final Client sarahAfterDelete = clientsRepo.byId('c2')!;
-        expect(
-          sarahAfterDelete.projects.any(
-            (Project p) => p.name == 'Packaging Suite',
-          ),
-          isFalse,
-        );
-        expect(
-          sarahAfterDelete.payments.any((Payment p) => p.reference == '#A199'),
-          isTrue,
-        );
-      },
-    );
+        ),
+        isFalse,
+      );
+      expect(
+        sarahAfterDelete.payments.any((Payment p) => p.reference == '#A199'),
+        isTrue,
+      );
+    });
   });
 
   group('Projects UI flows on 390x844 test surface', () {
@@ -600,77 +586,73 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Bottom AppTabBar navigates between Projects and Clients',
-      (WidgetTester tester) async {
-        await pumpProjectsApp(
-          tester,
-          initialLocation: AppRoutes.clientsPath,
-        );
+    testWidgets('Bottom AppTabBar navigates between Projects and Clients', (
+      WidgetTester tester,
+    ) async {
+      await pumpProjectsApp(tester, initialLocation: AppRoutes.clientsPath);
 
-        expect(find.byType(ClientsListScreen), findsOneWidget);
+      expect(find.byType(ClientsListScreen), findsOneWidget);
 
-        // Tap Projects tab -> /projects
-        await tester.tap(
-          find.descendant(
-            of: find.byType(AppTabBar),
-            matching: find.text('Projects'),
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(find.byType(ProjectsListScreen), findsOneWidget);
+      // Tap Projects tab -> /projects
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppTabBar),
+          matching: find.text('Projects'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(ProjectsListScreen), findsOneWidget);
 
-        // Tap Home -> navigates to /home (HomeScreen)
-        await tester.tap(
-          find.descendant(
-            of: find.byType(AppTabBar),
-            matching: find.text('Home'),
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(find.byType(HomeScreen), findsOneWidget);
+      // Tap Home -> navigates to /home (HomeScreen)
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppTabBar),
+          matching: find.text('Home'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(HomeScreen), findsOneWidget);
 
-        // Tap Projects tab -> returns to /projects
-        await tester.tap(
-          find.descendant(
-            of: find.byType(AppTabBar),
-            matching: find.text('Projects'),
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(find.byType(ProjectsListScreen), findsOneWidget);
+      // Tap Projects tab -> returns to /projects
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppTabBar),
+          matching: find.text('Projects'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(ProjectsListScreen), findsOneWidget);
 
-        // Tap More -> navigates to /more (MoreScreen)
-        await tester.tap(
-          find.descendant(
-            of: find.byType(AppTabBar),
-            matching: find.text('More'),
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(find.byType(MoreScreen), findsOneWidget);
+      // Tap More -> navigates to /more (MoreScreen)
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppTabBar),
+          matching: find.text('More'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(MoreScreen), findsOneWidget);
 
-        // Tap Projects tab -> returns to /projects
-        await tester.tap(
-          find.descendant(
-            of: find.byType(AppTabBar),
-            matching: find.text('Projects'),
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(find.byType(ProjectsListScreen), findsOneWidget);
+      // Tap Projects tab -> returns to /projects
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppTabBar),
+          matching: find.text('Projects'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(ProjectsListScreen), findsOneWidget);
 
-        // Tap Clients tab -> /clients
-        await tester.tap(
-          find.descendant(
-            of: find.byType(AppTabBar),
-            matching: find.text('Clients'),
-          ),
-        );
-        await tester.pumpAndSettle();
-        expect(find.byType(ClientsListScreen), findsOneWidget);
-      },
-    );
+      // Tap Clients tab -> /clients
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AppTabBar),
+          matching: find.text('Clients'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(ClientsListScreen), findsOneWidget);
+    });
 
     testWidgets(
       '360x800 phone surface renders Projects list, sheets, and Project detail tabs without overflow',

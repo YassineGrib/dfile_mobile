@@ -11,10 +11,10 @@ class CalendarRepository extends ChangeNotifier {
     bool syncDeadlines = true,
     bool syncMilestones = true,
     bool syncDebts = false,
-  })  : _milestones = List<Milestone>.of(
-          initialMilestones ?? _createInitialMilestones(),
-        ),
-        _lastSynced = initialLastSynced {
+  }) : _milestones = List<Milestone>.of(
+         initialMilestones ?? _createInitialMilestones(),
+       ),
+       _lastSynced = initialLastSynced {
     _syncDeadlines = syncDeadlines;
     _syncMilestones = syncMilestones;
     _syncDebts = syncDebts;

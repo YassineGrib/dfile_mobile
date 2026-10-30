@@ -26,9 +26,7 @@ class ExpenseFormBottomBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.card,
-        border: Border(
-          top: BorderSide(color: AppColors.line, width: 1),
-        ),
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
       ),
       padding: EdgeInsets.only(bottom: bottomInset),
       child: SafeArea(

@@ -131,8 +131,10 @@ class HomeHeroProfitCard extends StatelessWidget {
                                   final double val = i < last6MonthFlows.length
                                       ? last6MonthFlows[i].net.abs()
                                       : 0.0;
-                                  final double ratio =
-                                      (val / maxAbsNet).clamp(0.15, 1.0);
+                                  final double ratio = (val / maxAbsNet).clamp(
+                                    0.15,
+                                    1.0,
+                                  );
                                   final double barHeight = 8.0 + (ratio * 30.0);
                                   final bool isLast = i == 5;
                                   return Container(
@@ -169,7 +171,9 @@ class HomeHeroProfitCard extends StatelessWidget {
               HomePill(
                 label: deltaText,
                 icon: isPositive ? AppIcons.trendingUp : AppIcons.trendingDown,
-                backgroundColor: isPositive ? AppColors.greenBg : AppColors.redBg,
+                backgroundColor: isPositive
+                    ? AppColors.greenBg
+                    : AppColors.redBg,
                 textColor: isPositive ? AppColors.green : AppColors.red,
                 iconColor: isPositive ? AppColors.green : AppColors.red,
                 height: 24,

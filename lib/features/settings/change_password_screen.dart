@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/app_toast.dart';
+import '../auth/data/auth_service.dart';
 import 'data/data.dart';
 import 'settings_account_strings.dart';
 import 'widgets/account_action_bar.dart';
@@ -45,6 +46,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void _onCurrentChanged() {
+    _serverRejected = false;
     if (!_currentTouched && _currentController.text.isNotEmpty) {
       _currentTouched = true;
     }
@@ -106,9 +108,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     super.dispose();
   }
 
+  bool _serverRejected = false;
+
   bool _isCurrentValid(SettingsRepository repo) =>
-      _currentController.text.isNotEmpty &&
-      repo.checkPassword(_currentController.text);
+      _currentController.text.isNotEmpty && !_serverRejected;
 
   bool get _isNewValid => _newController.text.length >= 6;
 
@@ -132,7 +135,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
   }
 
-  void _onUpdate(SettingsRepository repo) {
+  Future<void> _onUpdate(SettingsRepository repo) async {
     setState(() {
       _saveAttempted = true;
     });
@@ -142,6 +145,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
 
     final String newPassword = _newController.text;
+    final AuthResult result = await AuthScope.of(context)
+        .changePassword(_currentController.text, newPassword);
+    if (!mounted) return;
+    if (!result.isOk) {
+      setState(() => _serverRejected = true);
+      return;
+    }
     repo.changePassword(newPassword);
 
     if (context.canPop()) {

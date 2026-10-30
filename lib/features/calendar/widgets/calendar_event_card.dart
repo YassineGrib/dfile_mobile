@@ -12,11 +12,7 @@ import 'calendar_event_colors.dart';
 /// - Subtitle 12
 /// - Right status pill or chevron-right
 class CalendarEventCard extends StatelessWidget {
-  const CalendarEventCard({
-    super.key,
-    required this.event,
-    this.onTap,
-  });
+  const CalendarEventCard({super.key, required this.event, this.onTap});
 
   final CalendarEvent event;
   final VoidCallback? onTap;
@@ -76,11 +72,7 @@ class CalendarEventCard extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Icon(
-                      colors.icon,
-                      size: 20,
-                      color: colors.fg,
-                    ),
+                    child: Icon(colors.icon, size: 20, color: colors.fg),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -121,8 +113,10 @@ class CalendarEventCard extends StatelessWidget {
                 if (event.pillText != null && event.pillText!.isNotEmpty) ...[
                   Builder(
                     builder: (BuildContext context) {
-                      final (Color pillBg, Color pillFg) =
-                          _resolvePillColors(event.kind, event.pillText!);
+                      final (Color pillBg, Color pillFg) = _resolvePillColors(
+                        event.kind,
+                        event.pillText!,
+                      );
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,

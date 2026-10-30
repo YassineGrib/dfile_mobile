@@ -27,10 +27,7 @@ Color _clientAvatarColor(int index) {
 
 /// Screen for recording a client payment (PY9..PY12).
 class RecordPaymentScreen extends StatefulWidget {
-  const RecordPaymentScreen({
-    super.key,
-    this.projectId,
-  });
+  const RecordPaymentScreen({super.key, this.projectId});
 
   final String? projectId;
 
@@ -67,8 +64,10 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
     super.didChangeDependencies();
     if (!_initialized) {
       if (widget.projectId != null && widget.projectId!.isNotEmpty) {
-        final ProjectsRepository projectsRepo =
-            ProjectsScope.of(context, listen: false);
+        final ProjectsRepository projectsRepo = ProjectsScope.of(
+          context,
+          listen: false,
+        );
         final ProjectItem? project = projectsRepo.byId(widget.projectId!);
         if (project != null) {
           _selectedProjectId = project.id;
@@ -220,10 +219,7 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
     setState(() {});
   }
 
-  void _onSave(
-    ClientsRepository clientsRepo,
-    ProjectsRepository projectsRepo,
-  ) {
+  void _onSave(ClientsRepository clientsRepo, ProjectsRepository projectsRepo) {
     setState(() {
       _saveAttempted = true;
     });
@@ -269,10 +265,7 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                RecordPaymentStrings.title,
-                style: AppText.title,
-              ),
+              Text(RecordPaymentStrings.title, style: AppText.title),
               const SizedBox(height: 4),
               Text(
                 RecordPaymentStrings.subtitle,
@@ -290,10 +283,7 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
             style: TextStyle(fontSize: 0, color: AppColors.transparent),
           ),
         ),
-        RoundIconButton(
-          icon: Icons.close_rounded,
-          onPressed: _close,
-        ),
+        RoundIconButton(icon: Icons.close_rounded, onPressed: _close),
       ],
     );
   }
@@ -354,7 +344,8 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
 
     final bool hasClientError =
         _saveAttempted && (_selectedClientId == null || selectedClient == null);
-    final bool hasProjectError = _saveAttempted &&
+    final bool hasProjectError =
+        _saveAttempted &&
         (_selectedProjectId == null || selectedProject == null);
 
     return Scaffold(
@@ -405,22 +396,22 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
                 label: RecordPaymentStrings.linkedProjectLabel,
                 trailingLabel: selectedProject != null
                     ? (projectRemaining > 0
-                        ? Text(
-                            RecordPaymentStrings.due(
-                              formatMoney(projectRemaining),
-                            ),
-                            style: AppText.captionSm.copyWith(
-                              color: AppColors.orange,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
-                        : Text(
-                            RecordPaymentStrings.cleared,
-                            style: AppText.captionSm.copyWith(
-                              color: AppColors.green,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ))
+                          ? Text(
+                              RecordPaymentStrings.due(
+                                formatMoney(projectRemaining),
+                              ),
+                              style: AppText.captionSm.copyWith(
+                                color: AppColors.orange,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          : Text(
+                              RecordPaymentStrings.cleared,
+                              style: AppText.captionSm.copyWith(
+                                color: AppColors.green,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ))
                     : null,
                 value: selectedProject?.name,
                 placeholder: RecordPaymentStrings.selectProjectPlaceholder,
@@ -463,8 +454,9 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
                     ),
                   ),
                 ),
-                errorText:
-                    _showAmountError ? RecordPaymentStrings.amountError : null,
+                errorText: _showAmountError
+                    ? RecordPaymentStrings.amountError
+                    : null,
               ),
               const SizedBox(height: AppSpacing.lg),
 

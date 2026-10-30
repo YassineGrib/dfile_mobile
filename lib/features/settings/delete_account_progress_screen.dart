@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -127,10 +128,7 @@ class _DeleteAccountProgressScreenState
       leading = const SizedBox(
         width: 18,
         height: 18,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: AppColors.ink,
-        ),
+        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.ink),
       );
     } else {
       leading = Container(
@@ -138,10 +136,7 @@ class _DeleteAccountProgressScreenState
         height: 18,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(
-            color: AppColors.line,
-            width: 2,
-          ),
+          border: Border.all(color: AppColors.line, width: 2),
         ),
       );
     }

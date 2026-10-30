@@ -6,11 +6,7 @@ import '../friend_strings.dart';
 
 /// Coloured stadium chip displaying a friend's net debt status per `docs/design/SPEC.md`.
 class FriendNetChip extends StatelessWidget {
-  const FriendNetChip({
-    super.key,
-    required this.net,
-    this.label,
-  });
+  const FriendNetChip({super.key, required this.net, this.label});
 
   /// Net balance in DZD (positive: owed to me, negative: you owe, zero: settled).
   final double net;
@@ -36,11 +32,7 @@ class FriendNetChip extends StatelessWidget {
         label ?? FriendStrings.youOweAmount(formatMoney(net.abs())),
       );
     }
-    return (
-      AppColors.seg,
-      AppColors.mute,
-      label ?? FriendStrings.settledChip,
-    );
+    return (AppColors.seg, AppColors.mute, label ?? FriendStrings.settledChip);
   }
 
   @override

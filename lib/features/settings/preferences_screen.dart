@@ -34,9 +34,7 @@ class PreferencesScreen extends StatelessWidget {
             AppSpacing.xxl,
           ),
           children: [
-            SettingsHeader(
-              title: SettingsPrefsStrings.preferencesTitle,
-            ),
+            SettingsHeader(title: SettingsPrefsStrings.preferencesTitle),
             const SizedBox(height: AppSpacing.xl),
 
             // Language section
@@ -131,8 +129,7 @@ class PreferencesScreen extends StatelessWidget {
                   iconBgColor: AppColors.waitingClientBg,
                   iconTextColor: AppColors.purple,
                   title: SettingsPrefsStrings.projectCategoriesTitle,
-                  subtitle:
-                      SettingsPrefsStrings.categoriesCount(categoryCount),
+                  subtitle: SettingsPrefsStrings.categoriesCount(categoryCount),
                   onTap: () {
                     context.push(AppRoutes.settingsCategoriesPath);
                   },

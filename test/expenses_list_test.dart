@@ -24,8 +24,10 @@ void main() {
   });
 
   group('ExpensesListScreen tests on 390x844 surface', () {
-    Future<(ClientsRepository, ProjectsRepository, ExpensesRepository, GoRouter)>
-        pumpExpensesApp(
+    Future<
+      (ClientsRepository, ProjectsRepository, ExpensesRepository, GoRouter)
+    >
+    pumpExpensesApp(
       WidgetTester tester, {
       String initialLocation = AppRoutes.expensesPath,
       Size surfaceSize = const Size(390, 844),
@@ -59,64 +61,62 @@ void main() {
       return (clientsRepo, projectsRepo, expensesRepo, router);
     }
 
-    testWidgets(
-      'KPI tiles, header, and count match repository expenseStats',
-      (WidgetTester tester) async {
-        final (_, _, expensesRepo, _) = await pumpExpensesApp(tester);
-        final ExpenseStats stats = expensesRepo.expenseStats();
+    testWidgets('KPI tiles, header, and count match repository expenseStats', (
+      WidgetTester tester,
+    ) async {
+      final (_, _, expensesRepo, _) = await pumpExpensesApp(tester);
+      final ExpenseStats stats = expensesRepo.expenseStats();
 
-        // Header
-        expect(find.text(ExpensesListStrings.title), findsOneWidget);
-        expect(
-          find.text(
-            ExpensesListStrings.expensesLogged(expensesRepo.expenses.length),
-          ),
-          findsOneWidget,
-        );
+      // Header
+      expect(find.text(ExpensesListStrings.title), findsOneWidget);
+      expect(
+        find.text(
+          ExpensesListStrings.expensesLogged(expensesRepo.expenses.length),
+        ),
+        findsOneWidget,
+      );
 
-        // 4 KPI tiles
-        expect(find.byType(ExpensesListKpis), findsOneWidget);
-        expect(find.text(ExpensesListStrings.totalOutlays), findsOneWidget);
-        expect(find.text('-91,200 DZ'), findsOneWidget);
-        expect(find.text(ExpensesListStrings.projectLinked), findsOneWidget);
-        expect(find.text('-36,500 DZ'), findsOneWidget);
-        expect(find.text(ExpensesListStrings.thisMonth), findsOneWidget);
-        expect(
-          find.text(ExpensesListKpis.formatKpiAmount(stats.thisMonth)),
-          findsOneWidget,
-        );
-        expect(find.text(ExpensesListStrings.averageOutlay), findsOneWidget);
-        expect(find.text('-13,029 DZ'), findsOneWidget);
+      // 4 KPI tiles
+      expect(find.byType(ExpensesListKpis), findsOneWidget);
+      expect(find.text(ExpensesListStrings.totalOutlays), findsOneWidget);
+      expect(find.text('-91,200 DZ'), findsOneWidget);
+      expect(find.text(ExpensesListStrings.projectLinked), findsOneWidget);
+      expect(find.text('-36,500 DZ'), findsOneWidget);
+      expect(find.text(ExpensesListStrings.thisMonth), findsOneWidget);
+      expect(
+        find.text(ExpensesListKpis.formatKpiAmount(stats.thisMonth)),
+        findsOneWidget,
+      );
+      expect(find.text(ExpensesListStrings.averageOutlay), findsOneWidget);
+      expect(find.text('-13,029 DZ'), findsOneWidget);
 
-        // Count row
-        expect(
-          find.text(
-            ExpensesListStrings.expensesCount(expensesRepo.expenses.length),
-          ),
-          findsOneWidget,
-        );
-        expect(find.text(ExpensesListStrings.filter), findsOneWidget);
-        expect(find.text('Sort: Newest ▾'), findsOneWidget);
+      // Count row
+      expect(
+        find.text(
+          ExpensesListStrings.expensesCount(expensesRepo.expenses.length),
+        ),
+        findsOneWidget,
+      );
+      expect(find.text(ExpensesListStrings.filter), findsOneWidget);
+      expect(find.text('Sort: Newest ▾'), findsOneWidget);
 
-        // Expense cards rendered
-        expect(find.byType(ExpensesListCard), findsWidgets);
-        expect(find.text('Figma Pro plan'), findsOneWidget);
-        expect(find.text('-4,500 DZ'), findsOneWidget);
-        expect(find.text('General cost'), findsWidgets);
+      // Expense cards rendered
+      expect(find.byType(ExpensesListCard), findsWidgets);
+      expect(find.text('Figma Pro plan'), findsOneWidget);
+      expect(find.text('-4,500 DZ'), findsOneWidget);
+      expect(find.text('General cost'), findsWidgets);
 
-        // Scroll down to verify subsequent cards
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-        expect(find.text('Coworking pass'), findsOneWidget);
+      // Scroll down to verify subsequent cards
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      expect(find.text('Coworking pass'), findsOneWidget);
 
-        // Bottom tab bar has More active
-        final AppTabBar tabBar =
-            tester.widget<AppTabBar>(find.byType(AppTabBar));
-        expect(tabBar.currentIndex, AppTabBar.moreTabIndex);
-      },
-    );
+      // Bottom tab bar has More active
+      final AppTabBar tabBar = tester.widget<AppTabBar>(find.byType(AppTabBar));
+      expect(tabBar.currentIndex, AppTabBar.moreTabIndex);
+    });
 
     testWidgets(
       'Search filters expenses by description, category label, project name, reference, and notes (case-insensitive)',
@@ -171,13 +171,16 @@ void main() {
       (WidgetTester tester) async {
         await pumpExpensesApp(tester);
 
-        final Finder pillsScrollView =
-            find.byKey(const Key('expense-category-pills'));
+        final Finder pillsScrollView = find.byKey(
+          const Key('expense-category-pills'),
+        );
         expect(pillsScrollView, findsOneWidget);
 
         // Software pill -> 1 expense
-        final Finder softwarePill =
-            find.widgetWithText(AppPill, ExpensesListStrings.categorySoftware);
+        final Finder softwarePill = find.widgetWithText(
+          AppPill,
+          ExpensesListStrings.categorySoftware,
+        );
         await tester.ensureVisible(softwarePill);
         await tester.pumpAndSettle();
         await tester.tap(softwarePill);
@@ -186,8 +189,10 @@ void main() {
         expect(find.text('Figma Pro plan'), findsOneWidget);
 
         // Hosting pill -> 2 expenses (Domain renewal & VPS hosting)
-        final Finder hostingPill =
-            find.widgetWithText(AppPill, ExpensesListStrings.categoryHosting);
+        final Finder hostingPill = find.widgetWithText(
+          AppPill,
+          ExpensesListStrings.categoryHosting,
+        );
         await tester.ensureVisible(hostingPill);
         await tester.pumpAndSettle();
         await tester.tap(hostingPill);
@@ -196,8 +201,10 @@ void main() {
         expect(find.text('Domain renewal'), findsOneWidget);
 
         // Marketing pill -> 2 expenses (Instagram ads & Stock photos pack)
-        final Finder marketingPill =
-            find.widgetWithText(AppPill, ExpensesListStrings.categoryMarketing);
+        final Finder marketingPill = find.widgetWithText(
+          AppPill,
+          ExpensesListStrings.categoryMarketing,
+        );
         await tester.ensureVisible(marketingPill);
         await tester.pumpAndSettle();
         await tester.tap(marketingPill);
@@ -207,8 +214,10 @@ void main() {
         expect(find.text('Stock photos pack'), findsOneWidget);
 
         // Equipment pill -> 1 expense (Monitor 27 inch)
-        final Finder equipmentPill =
-            find.widgetWithText(AppPill, ExpensesListStrings.categoryEquipment);
+        final Finder equipmentPill = find.widgetWithText(
+          AppPill,
+          ExpensesListStrings.categoryEquipment,
+        );
         await tester.ensureVisible(equipmentPill);
         await tester.pumpAndSettle();
         await tester.tap(equipmentPill);
@@ -217,8 +226,10 @@ void main() {
         expect(find.text('Monitor 27 inch'), findsOneWidget);
 
         // Others pill -> 1 expense (Coworking pass)
-        final Finder othersPill =
-            find.widgetWithText(AppPill, ExpensesListStrings.categoryOthers);
+        final Finder othersPill = find.widgetWithText(
+          AppPill,
+          ExpensesListStrings.categoryOthers,
+        );
         await tester.ensureVisible(othersPill);
         await tester.pumpAndSettle();
         await tester.tap(othersPill);
@@ -227,8 +238,10 @@ void main() {
         expect(find.text('Coworking pass'), findsOneWidget);
 
         // All pill -> restores 7 expenses
-        final Finder allPill =
-            find.widgetWithText(AppPill, ExpensesListStrings.categoryAll);
+        final Finder allPill = find.widgetWithText(
+          AppPill,
+          ExpensesListStrings.categoryAll,
+        );
         await tester.ensureVisible(allPill);
         await tester.pumpAndSettle();
         await tester.tap(allPill);
@@ -500,8 +513,10 @@ void main() {
         await pumpExpensesApp(tester);
 
         // The "+" round icon button is in the header
-        final Finder addButton =
-            find.widgetWithIcon(RoundIconButton, Icons.add);
+        final Finder addButton = find.widgetWithIcon(
+          RoundIconButton,
+          Icons.add,
+        );
         expect(addButton, findsOneWidget);
 
         await tester.tap(addButton);
@@ -574,32 +589,28 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Renders on 360x800 surface without any layout overflow',
-      (WidgetTester tester) async {
-        // Populated list on 360x800
-        await pumpExpensesApp(
-          tester,
-          surfaceSize: const Size(360, 800),
-        );
+    testWidgets('Renders on 360x800 surface without any layout overflow', (
+      WidgetTester tester,
+    ) async {
+      // Populated list on 360x800
+      await pumpExpensesApp(tester, surfaceSize: const Size(360, 800));
 
-        expect(find.byType(ExpensesListScreen), findsOneWidget);
-        expect(tester.takeException(), isNull);
+      expect(find.byType(ExpensesListScreen), findsOneWidget);
+      expect(tester.takeException(), isNull);
 
-        // Scroll down to ensure all cards render without overflow
-        await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
-        await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
+      // Scroll down to ensure all cards render without overflow
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
 
-        // Also test empty state on 360x800
-        await pumpExpensesApp(
-          tester,
-          surfaceSize: const Size(360, 800),
-          initialExpenses: <Expense>[],
-        );
-        expect(find.text(ExpensesListStrings.emptyTitle), findsOneWidget);
-        expect(tester.takeException(), isNull);
-      },
-    );
+      // Also test empty state on 360x800
+      await pumpExpensesApp(
+        tester,
+        surfaceSize: const Size(360, 800),
+        initialExpenses: <Expense>[],
+      );
+      expect(find.text(ExpensesListStrings.emptyTitle), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
   });
 }

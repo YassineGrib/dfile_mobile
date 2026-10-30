@@ -37,18 +37,34 @@ class FriendTxCard extends StatelessWidget {
   (Color bg, Color fg, String label) get _directionProps {
     switch (transaction.direction) {
       case FriendTxDirection.lent:
-        return (AppColors.greenBg, AppColors.green, transaction.direction.chipLabel);
+        return (
+          AppColors.greenBg,
+          AppColors.green,
+          transaction.direction.chipLabel,
+        );
       case FriendTxDirection.borrowed:
-        return (AppColors.redBg, AppColors.red, transaction.direction.chipLabel);
+        return (
+          AppColors.redBg,
+          AppColors.red,
+          transaction.direction.chipLabel,
+        );
     }
   }
 
   (Color bg, Color fg, String label) get _statusProps {
     switch (transaction.status) {
       case FriendTxStatus.pending:
-        return (AppColors.pendingBg, AppColors.orange, transaction.status.label);
+        return (
+          AppColors.pendingBg,
+          AppColors.orange,
+          transaction.status.label,
+        );
       case FriendTxStatus.partial:
-        return (AppColors.partialBg, AppColors.purple, transaction.status.label);
+        return (
+          AppColors.partialBg,
+          AppColors.purple,
+          transaction.status.label,
+        );
       case FriendTxStatus.settled:
         return (AppColors.greenBg, AppColors.green, transaction.status.label);
     }
@@ -60,7 +76,8 @@ class FriendTxCard extends StatelessWidget {
     final (Color dirBg, Color dirFg, String dirLabel) = _directionProps;
     final (Color statBg, Color statFg, String statLabel) = _statusProps;
 
-    final String subtitleText = (showFriend && friendName != null && friendName!.isNotEmpty)
+    final String subtitleText =
+        (showFriend && friendName != null && friendName!.isNotEmpty)
         ? '$friendName • ${transaction.type.label} • ${formatDate(transaction.date)}'
         : '${transaction.type.label} • ${formatDate(transaction.date)}';
 
@@ -259,9 +276,7 @@ class FriendTxCard extends StatelessWidget {
                     child: FractionallySizedBox(
                       alignment: Alignment.centerLeft,
                       widthFactor: progress,
-                      child: Container(
-                        color: AppColors.green,
-                      ),
+                      child: Container(color: AppColors.green),
                     ),
                   ),
                 ),

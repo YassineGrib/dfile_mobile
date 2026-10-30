@@ -32,10 +32,7 @@ class _AccountPasswordFieldState extends State<AccountPasswordField> {
   OutlineInputBorder _border(Color color) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppRadius.input),
-      borderSide: BorderSide(
-        color: color,
-        width: AppSpacing.borderWidth,
-      ),
+      borderSide: BorderSide(color: color, width: AppSpacing.borderWidth),
     );
   }
 
