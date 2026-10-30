@@ -53,4 +53,10 @@ abstract final class AppColors {
   static const Color googleRed = Color(0xFFEA4335);
   static const Color googleYellow = Color(0xFFFBBC05);
   static const Color googleGreen = Color(0xFF34A853);
+
+  /// Dashboard chart & status donut tokens per SPEC.md.
+  static const Color chartGreenMuted = Color(0xFF7DBE98);
+  static const Color chartCoralMuted = Color(0xFFF2A8A0);
+  static const Color statusCompleted = Color(0xFF7DBE98);
+  static const Color statusPlanned = Color(0xFFC9C3B6);
 }
