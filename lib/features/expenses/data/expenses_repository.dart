@@ -183,6 +183,12 @@ class ExpensesRepository extends ChangeNotifier {
       ),
     ];
   }
+
+  /// Clears all recorded expenses and notifies listeners.
+  void clearAll() {
+    _expenses.clear();
+    notifyListeners();
+  }
 }
 
 /// Pure filtering function for expenses per `docs/design/SPEC.md`.

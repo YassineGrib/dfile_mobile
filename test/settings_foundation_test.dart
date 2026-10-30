@@ -20,6 +20,8 @@ import 'package:dfile_mobile/features/settings/legal_clauses_screen.dart';
 import 'package:dfile_mobile/features/settings/notifications_screen.dart';
 import 'package:dfile_mobile/features/settings/policy_screen.dart';
 import 'package:dfile_mobile/features/settings/preferences_screen.dart';
+import 'package:dfile_mobile/features/settings/privacy_data_screen.dart';
+import 'package:dfile_mobile/features/settings/settings_privacy_strings.dart';
 import 'package:dfile_mobile/features/settings/security_screen.dart';
 import 'package:dfile_mobile/features/settings/settings_screen.dart';
 import 'package:dfile_mobile/features/settings/settings_strings.dart';
@@ -520,7 +522,7 @@ void main() {
       return (settingsRepo, router);
     }
 
-    testWidgets('SettingsScreen renders ST1 hub title, profile card, 6 rows, footer, and AppTabBar', (
+    testWidgets('SettingsScreen renders ST1 hub title, profile card, 7 rows, footer, and AppTabBar', (
       WidgetTester tester,
     ) async {
       await pumpSettingsApp(tester);
@@ -534,7 +536,7 @@ void main() {
       expect(find.text('Independent designer'), findsOneWidget);
       expect(find.text('yassine@decabyte.dz'), findsOneWidget);
 
-      // 6 Settings rows
+      // 7 Settings rows
       expect(find.text(SettingsStrings.accountTitle), findsOneWidget);
       expect(find.text(SettingsStrings.accountSubtitle), findsOneWidget);
 
@@ -550,6 +552,9 @@ void main() {
       expect(find.text(SettingsStrings.notificationsTitle), findsOneWidget);
       expect(find.text(SettingsStrings.notificationsSubtitle), findsOneWidget);
 
+      expect(find.text(SettingsPrivacyStrings.privacyDataTitle), findsOneWidget);
+      expect(find.text(SettingsPrivacyStrings.privacyDataSubtitle), findsOneWidget);
+
       expect(find.text(SettingsStrings.aboutTitle), findsOneWidget);
       expect(find.text(SettingsStrings.aboutSubtitle), findsOneWidget);
 
@@ -558,7 +563,7 @@ void main() {
       expect(find.text(SettingsStrings.footer), findsOneWidget);
     });
 
-    testWidgets('Tapping profile card and 6 rows navigate to their respective placeholder routes', (
+    testWidgets('Tapping profile card and 7 rows navigate to their respective placeholder routes', (
       WidgetTester tester,
     ) async {
       await pumpSettingsApp(tester);
@@ -611,6 +616,18 @@ void main() {
       await tester.tap(find.text(SettingsStrings.notificationsTitle));
       await tester.pumpAndSettle();
       expect(find.byType(NotificationsScreen), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.arrow_back));
+      await tester.pumpAndSettle();
+      expect(find.byType(SettingsScreen), findsOneWidget);
+
+      // Scroll again if needed after coming back
+      await tester.drag(find.byType(ListView), const Offset(0, -150));
+      await tester.pumpAndSettle();
+
+      // Privacy and data row -> PrivacyDataScreen
+      await tester.tap(find.text(SettingsPrivacyStrings.privacyDataTitle));
+      await tester.pumpAndSettle();
+      expect(find.byType(PrivacyDataScreen), findsOneWidget);
       await tester.tap(find.byIcon(Icons.arrow_back));
       await tester.pumpAndSettle();
       expect(find.byType(SettingsScreen), findsOneWidget);

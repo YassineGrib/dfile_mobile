@@ -29,6 +29,12 @@ import '../../features/projects/edit_project_screen.dart';
 import '../../features/projects/project_detail_screen.dart';
 import '../../features/projects/projects_list_screen.dart';
 import '../../features/settings/about_screen.dart';
+import '../../features/settings/account_deleted_screen.dart';
+import '../../features/settings/data_usage_screen.dart';
+import '../../features/settings/delete_account_confirm_screen.dart';
+import '../../features/settings/delete_account_progress_screen.dart';
+import '../../features/settings/delete_account_screen.dart';
+import '../../features/settings/privacy_data_screen.dart';
 import '../../features/settings/categories_screen.dart';
 import '../../features/settings/change_password_screen.dart';
 import '../../features/settings/data/policy_kind.dart';
@@ -189,6 +195,34 @@ abstract final class AppRoutes {
   static const String settingsTermsPath = '/settings/terms';
   static const String termsName = 'terms';
   static const String termsPath = '/settings/terms';
+
+  static const String settingsPrivacyDataName = 'settings-privacy-data';
+  static const String settingsPrivacyDataPath = '/settings/privacy-data';
+  static const String privacyDataName = 'privacy-data';
+  static const String privacyDataPath = '/settings/privacy-data';
+
+  static const String settingsDataUsageName = 'settings-data-usage';
+  static const String settingsDataUsagePath = '/settings/data-usage';
+  static const String dataUsageName = 'data-usage';
+  static const String dataUsagePath = '/settings/data-usage';
+
+  static const String settingsDeleteAccountName = 'settings-delete-account';
+  static const String settingsDeleteAccountPath = '/settings/delete-account';
+  static const String deleteAccountName = 'delete-account';
+  static const String deleteAccountPath = '/settings/delete-account';
+
+  static const String settingsDeleteAccountConfirmName = 'settings-delete-account-confirm';
+  static const String settingsDeleteAccountConfirmPath = '/settings/delete-account/confirm';
+  static const String deleteAccountConfirmName = 'delete-account-confirm';
+  static const String deleteAccountConfirmPath = '/settings/delete-account/confirm';
+
+  static const String settingsDeleteAccountProgressName = 'settings-delete-account-progress';
+  static const String settingsDeleteAccountProgressPath = '/settings/delete-account/progress';
+  static const String deleteAccountProgressName = 'delete-account-progress';
+  static const String deleteAccountProgressPath = '/settings/delete-account/progress';
+
+  static const String accountDeletedName = 'account-deleted';
+  static const String accountDeletedPath = '/account-deleted';
 }
 
 /// Builds a fresh [GoRouter] configured with all application routes.
@@ -472,6 +506,47 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         name: AppRoutes.settingsTermsName,
         builder: (BuildContext context, GoRouterState state) =>
             const PolicyScreen(kind: PolicyKind.terms),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsPrivacyDataPath,
+        name: AppRoutes.settingsPrivacyDataName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const PrivacyDataScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsDataUsagePath,
+        name: AppRoutes.settingsDataUsageName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const DataUsageScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsDeleteAccountPath,
+        name: AppRoutes.settingsDeleteAccountName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const DeleteAccountScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsDeleteAccountConfirmPath,
+        name: AppRoutes.settingsDeleteAccountConfirmName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const DeleteAccountConfirmScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsDeleteAccountProgressPath,
+        name: AppRoutes.settingsDeleteAccountProgressName,
+        builder: (BuildContext context, GoRouterState state) {
+          final Duration? stepDuration =
+              state.extra is Duration ? (state.extra as Duration) : null;
+          return DeleteAccountProgressScreen(
+            stepDuration: stepDuration ?? const Duration(milliseconds: 500),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.accountDeletedPath,
+        name: AppRoutes.accountDeletedName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const AccountDeletedScreen(),
       ),
     ],
   );

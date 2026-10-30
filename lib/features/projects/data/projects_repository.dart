@@ -683,4 +683,13 @@ class ProjectsRepository extends ChangeNotifier {
       ),
     ];
   }
+
+  /// Clears all projects, tasks, and payments from the repository and notifies listeners.
+  void clearAll() {
+    _projects.clear();
+    _tasks.clear();
+    _payments.clear();
+    _projectClientHistory.clear();
+    notifyListeners();
+  }
 }

@@ -226,4 +226,10 @@ class ClientsRepository extends ChangeNotifier {
       ),
     ];
   }
+
+  /// Clears all clients from the repository and notifies listeners.
+  void clearAll() {
+    _clients.clear();
+    notifyListeners();
+  }
 }

@@ -240,4 +240,26 @@ class SettingsRepository extends ChangeNotifier {
     _password = newPassword;
     notifyListeners();
   }
+
+  /// Resets all settings to default values and clears sessions and PIN.
+  void clearAll() {
+    _profile = defaultProfile;
+    _language = AppLanguage.en;
+    _themeMode = AppThemeMode.light;
+    _categories.clear();
+    _categories.addAll(defaultCategories);
+    _legalClauses = defaultLegalClauses;
+    _pinEnabled = false;
+    _pin = null;
+    _biometricsEnabled = false;
+    _sessions.clear();
+    _googleConnected = false;
+    _notifications = defaultNotificationPrefs;
+    _supportTickets.clear();
+    _password = 'demo123';
+    notifyListeners();
+  }
+
+  /// Alias for [clearAll].
+  void reset() => clearAll();
 }
