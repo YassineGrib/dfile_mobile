@@ -725,13 +725,6 @@ void main() {
         // Navigated to FriendsScreen
         expect(find.byType(FriendsScreen), findsOneWidget);
         expect(find.text('FriendsScreen'), findsOneWidget);
-
-        // Tap back button
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-
-        // Back on MoreScreen
-        expect(find.byType(MoreScreen), findsOneWidget);
       },
     );
 
@@ -742,11 +735,6 @@ void main() {
       await pumpApp(tester, initialLocation: AppRoutes.addFriendPath);
       expect(find.byType(AddFriendScreen), findsOneWidget);
       expect(find.text('AddFriendScreen'), findsOneWidget);
-
-      // Back navigation
-      await tester.tap(find.byIcon(Icons.arrow_back));
-      await tester.pumpAndSettle();
-      expect(find.byType(MoreScreen), findsOneWidget);
 
       // 2. /friends/transactions/new
       await pumpApp(

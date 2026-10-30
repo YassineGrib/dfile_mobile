@@ -222,14 +222,6 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
     );
   }
 
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.morePath);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final ExpensesRepository repo = ExpensesScope.of(context);
@@ -276,13 +268,6 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Back button supporting BackButton finder
-                    RoundIconButton(
-                      onPressed: () => _handleBack(context),
-                      child: BackButton(
-                        color: AppColors.ink,
-                        onPressed: () => _handleBack(context),
-                      ),
-                    ),
                     const SizedBox.shrink(child: Text('ExpensesListScreen')),
                     const SizedBox(height: AppSpacing.md),
 

@@ -251,14 +251,6 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
     );
   }
 
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.morePath);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final ProjectsRepository repo = ProjectsScope.of(context);
@@ -299,13 +291,6 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Back button supporting BackButton finder
-                    RoundIconButton(
-                      onPressed: () => _handleBack(context),
-                      child: BackButton(
-                        color: AppColors.ink,
-                        onPressed: () => _handleBack(context),
-                      ),
-                    ),
                     const SizedBox.shrink(child: Text('PaymentsListScreen')),
                     const SizedBox(height: AppSpacing.md),
 

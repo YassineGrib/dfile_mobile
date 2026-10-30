@@ -58,14 +58,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.morePath);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final SettingsRepository settingsRepo = SettingsScope.of(context);
@@ -88,16 +80,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             AppSpacing.xxl,
           ),
           children: [
-            // Top back button
-            Align(
-              alignment: Alignment.centerLeft,
-              child: RoundIconButton(
-                icon: Icons.arrow_back,
-                onPressed: () => _handleBack(context),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-
             // Title
             Text(SettingsStrings.title, style: AppText.title),
             const SizedBox(height: AppSpacing.xl),
@@ -115,7 +97,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               clipBehavior: Clip.antiAlias,
               child: InkWell(
                 onTap: () {
-                  context.go(AppRoutes.settingsProfilePath);
+                  context.push(AppRoutes.settingsProfilePath);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(AppSpacing.lg),
@@ -200,7 +182,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: SettingsStrings.accountTitle,
                   subtitle: SettingsStrings.accountSubtitle,
                   onTap: () {
-                    context.go(AppRoutes.settingsProfilePath);
+                    context.push(AppRoutes.settingsProfilePath);
                   },
                 ),
                 SettingsRow(
@@ -210,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: SettingsStrings.preferencesTitle,
                   subtitle: SettingsStrings.preferencesSubtitle,
                   onTap: () {
-                    context.go(AppRoutes.settingsPreferencesPath);
+                    context.push(AppRoutes.settingsPreferencesPath);
                   },
                 ),
                 SettingsRow(
@@ -220,7 +202,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: SettingsStrings.securityTitle,
                   subtitle: SettingsStrings.securitySubtitle,
                   onTap: () {
-                    context.go(AppRoutes.settingsSecurityPath);
+                    context.push(AppRoutes.settingsSecurityPath);
                   },
                 ),
                 SettingsRow(
@@ -230,7 +212,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: SettingsStrings.integrationsTitle,
                   subtitle: SettingsStrings.integrationsSubtitle,
                   onTap: () {
-                    context.go(AppRoutes.settingsIntegrationsPath);
+                    context.push(AppRoutes.settingsIntegrationsPath);
                   },
                 ),
                 SettingsRow(
@@ -240,7 +222,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: SettingsStrings.notificationsTitle,
                   subtitle: SettingsStrings.notificationsSubtitle,
                   onTap: () {
-                    context.go(AppRoutes.settingsNotificationsPath);
+                    context.push(AppRoutes.settingsNotificationsPath);
                   },
                 ),
                 SettingsRow(
@@ -250,7 +232,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: SettingsPrivacyStrings.privacyDataTitle,
                   subtitle: SettingsPrivacyStrings.privacyDataSubtitle,
                   onTap: () {
-                    context.go(AppRoutes.settingsPrivacyDataPath);
+                    context.push(AppRoutes.settingsPrivacyDataPath);
                   },
                 ),
                 SettingsRow(
@@ -261,7 +243,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: SettingsStrings.aboutSubtitle,
                   last: true,
                   onTap: () {
-                    context.go(AppRoutes.settingsAboutPath);
+                    context.push(AppRoutes.settingsAboutPath);
                   },
                 ),
               ],

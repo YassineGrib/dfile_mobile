@@ -480,7 +480,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
-        expect(find.byIcon(AppIcons.arrowLeft), findsOneWidget);
+        expect(find.byIcon(Icons.arrow_back), findsNothing);
         expect(find.text(DashboardChartsStrings.lastSixMonths), findsOneWidget);
         expect(find.text(DashboardChartsStrings.thisYear), findsOneWidget);
         expect(find.text(DashboardChartsStrings.monthByMonth), findsOneWidget);

@@ -148,14 +148,6 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
     context.go(AppRoutes.signInPath);
   }
 
-  void _onBack() {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.forgotPasswordPath);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final String targetEmail =
@@ -180,11 +172,6 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: AppSpacing.sm),
-                        RoundIconButton(
-                          icon: Icons.arrow_back,
-                          onPressed: _onBack,
-                        ),
-                        const SizedBox(height: AppSpacing.lg),
                         const MascotPanel(color: AppColors.purple, height: 210),
                         const SizedBox(height: AppSpacing.xxl),
                         Text(AuthStrings.checkYourEmail, style: AppText.title),

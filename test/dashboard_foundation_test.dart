@@ -625,20 +625,11 @@ void main() {
         expect(find.byType(CashflowScreen), findsOneWidget);
         expect(find.text(DashboardChartsStrings.cashflow), findsOneWidget);
 
-        // Back button navigates back to /home
-        await tester.tap(find.byIcon(AppIcons.arrowLeft));
-        await tester.pumpAndSettle();
-        expect(router.state.uri.toString(), AppRoutes.homePath);
-
         // /home/profit
         router.go(AppRoutes.profitPath);
         await tester.pumpAndSettle();
         expect(find.byType(ProfitScreen), findsOneWidget);
         expect(find.text(DashboardActivityStrings.profit), findsOneWidget);
-
-        await tester.tap(find.byIcon(AppIcons.arrowLeft));
-        await tester.pumpAndSettle();
-        expect(router.state.uri.toString(), AppRoutes.homePath);
 
         // /home/notifications
         router.go(AppRoutes.homeNotificationsPath);
@@ -648,10 +639,6 @@ void main() {
           find.text(DashboardActivityStrings.notifications),
           findsOneWidget,
         );
-
-        await tester.tap(find.byIcon(AppIcons.arrowLeft));
-        await tester.pumpAndSettle();
-        expect(router.state.uri.toString(), AppRoutes.homePath);
       },
     );
 

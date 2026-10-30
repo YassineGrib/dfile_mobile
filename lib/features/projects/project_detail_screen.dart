@@ -384,7 +384,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   }) {
     return Row(
       children: [
-        RoundIconButton(icon: Icons.arrow_back, onPressed: onBack),
+        const SizedBox(width: AppSpacing.iconButtonSize),
         Expanded(
           child: Center(
             child: Text(
@@ -996,10 +996,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RoundIconButton(
-                  icon: Icons.arrow_back,
-                  onPressed: () => context.go(AppRoutes.projectsPath),
-                ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

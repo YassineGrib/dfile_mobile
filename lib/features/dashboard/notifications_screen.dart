@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/app_icons.dart';
-import '../../core/widgets/round_icon_button.dart';
 import '../friends/data/friends_repository.dart';
 import '../friends/data/friends_scope.dart';
 import '../projects/data/projects_repository.dart';
@@ -38,14 +36,6 @@ class NotificationsScreen extends StatelessWidget {
   final DateTime Function()? clock;
 
   DateTime get _now => clock?.call() ?? DateTime.now();
-
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.homePath);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +94,6 @@ class NotificationsScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  RoundIconButton(
-                    icon: AppIcons.arrowLeft,
-                    onPressed: () => _handleBack(context),
-                  ),
-                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       DashboardActivityStrings.notifications,

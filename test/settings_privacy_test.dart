@@ -23,6 +23,8 @@ import 'package:dfile_mobile/features/settings/settings_privacy_strings.dart';
 import 'package:dfile_mobile/features/settings/widgets/privacy_danger_button.dart';
 import 'package:dfile_mobile/main.dart';
 
+import 'support/system_back.dart';
+
 void main() {
   setUpAll(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -175,7 +177,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(PolicyScreen), findsOneWidget);
       expect(router.state.uri.toString(), AppRoutes.settingsPrivacyPath);
-      await tester.tap(find.byIcon(Icons.arrow_back));
+      await systemBack(tester);
       await tester.pumpAndSettle();
       expect(find.byType(PrivacyDataScreen), findsOneWidget);
 
@@ -184,7 +186,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(PolicyScreen), findsOneWidget);
       expect(router.state.uri.toString(), AppRoutes.settingsTermsPath);
-      await tester.tap(find.byIcon(Icons.arrow_back));
+      await systemBack(tester);
       await tester.pumpAndSettle();
       expect(find.byType(PrivacyDataScreen), findsOneWidget);
 
@@ -193,7 +195,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(DataUsageScreen), findsOneWidget);
       expect(router.state.uri.toString(), AppRoutes.settingsDataUsagePath);
-      await tester.tap(find.byIcon(Icons.arrow_back));
+      await systemBack(tester);
       await tester.pumpAndSettle();
       expect(find.byType(PrivacyDataScreen), findsOneWidget);
 

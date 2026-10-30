@@ -123,14 +123,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }
   }
 
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go('/more');
-    }
-  }
-
   void _setShownMonth(DateTime month) {
     final DateTime now = _now;
     final DateTime newMonth = DateTime(month.year, month.month, 1);
@@ -271,11 +263,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
               const SizedBox.shrink(child: Text('CalendarScreen')),
 
               // Back button
-              RoundIconButton(
-                icon: AppIcons.arrowLeft,
-                onPressed: () => _handleBack(context),
-              ),
-              const SizedBox(height: AppSpacing.md),
 
               // Title Row: "Calendar" + [Today] pill (if not current month) + Gauge + "+"
               Row(

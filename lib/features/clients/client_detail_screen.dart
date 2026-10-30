@@ -264,7 +264,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
   }) {
     return Row(
       children: [
-        RoundIconButton(icon: Icons.arrow_back, onPressed: onBack),
+        const SizedBox(width: AppSpacing.iconButtonSize),
         Expanded(
           child: Center(
             child: Text(

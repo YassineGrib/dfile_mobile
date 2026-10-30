@@ -234,10 +234,6 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RoundIconButton(
-                icon: Icons.arrow_back,
-                onPressed: () => context.go(AppRoutes.projectsPath),
-              ),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

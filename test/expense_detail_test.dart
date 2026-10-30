@@ -69,7 +69,7 @@ void main() {
 
       // Top bar
       expect(find.text(ExpenseDetailStrings.title), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_back), findsNothing);
       expect(find.byIcon(Icons.more_horiz), findsOneWidget);
 
       // Card Header
@@ -107,7 +107,7 @@ void main() {
 
       // Top bar
       expect(find.text(ExpenseDetailStrings.title), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_back), findsNothing);
       expect(find.byIcon(Icons.more_horiz), findsOneWidget);
 
       // Card Header

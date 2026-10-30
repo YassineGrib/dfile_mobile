@@ -71,11 +71,6 @@ class TransactionDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RoundIconButton(
-                  icon: Icons.arrow_back,
-                  tooltip: TransactionDetailStrings.back,
-                  onPressed: () => _popOrGoFriends(context),
-                ),
                 const Spacer(),
                 Center(
                   child: Column(
@@ -138,11 +133,7 @@ class TransactionDetailScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  RoundIconButton(
-                    icon: Icons.arrow_back,
-                    tooltip: TransactionDetailStrings.back,
-                    onPressed: () => _popOrGoFriends(context),
-                  ),
+                  const SizedBox(width: AppSpacing.iconButtonSize),
                   Expanded(
                     child: Center(
                       child: Text(

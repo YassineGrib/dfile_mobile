@@ -289,10 +289,6 @@ void main() {
       router.go(AppRoutes.settingsProfilePath);
       await tester.pumpAndSettle();
       expect(find.byType(EditProfileScreen), findsOneWidget);
-
-      await tester.tap(find.byIcon(Icons.arrow_back));
-      await tester.pumpAndSettle();
-      expect(find.byType(SettingsScreen), findsOneWidget);
     });
 
     testWidgets('tapping Change password row pushes /settings/password', (

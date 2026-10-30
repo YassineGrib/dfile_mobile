@@ -12,7 +12,6 @@ import 'package:dfile_mobile/features/clients/data/data.dart';
 import 'package:dfile_mobile/features/more/more_strings.dart';
 import 'package:dfile_mobile/features/payments/payment_receipt_screen.dart';
 import 'package:dfile_mobile/features/payments/payment_strings.dart';
-import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/payments/payments_list_screen.dart';
 import 'package:dfile_mobile/features/payments/record_payment_screen.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
@@ -352,13 +351,6 @@ void main() {
         // Placeholder screen is displayed
         expect(find.byType(PaymentsListScreen), findsOneWidget);
         expect(find.text('PaymentsListScreen'), findsOneWidget);
-
-        // Tap back button
-        await tester.tap(find.byType(BackButton));
-        await tester.pumpAndSettle();
-
-        // Back on MoreScreen
-        expect(find.byType(MoreScreen), findsOneWidget);
       },
     );
 

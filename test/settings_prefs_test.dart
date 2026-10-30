@@ -18,6 +18,8 @@ import 'package:dfile_mobile/features/settings/preferences_screen.dart';
 import 'package:dfile_mobile/features/settings/settings_prefs_strings.dart';
 import 'package:dfile_mobile/main.dart';
 
+import 'support/system_back.dart';
+
 void main() {
   setUpAll(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -150,7 +152,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(CategoriesScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(PreferencesScreen), findsOneWidget);
 
@@ -165,7 +167,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(LegalClausesScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(PreferencesScreen), findsOneWidget);
       },

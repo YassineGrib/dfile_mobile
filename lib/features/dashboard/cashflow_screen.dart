@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../core/format.dart';
 import '../../core/theme/theme.dart';
-import '../../core/widgets/app_icons.dart';
 import '../../core/widgets/segmented_toggle.dart';
 import '../expenses/data/expense.dart';
 import '../expenses/data/expenses_repository.dart';
@@ -68,14 +66,6 @@ class CashflowScreen extends StatefulWidget {
 class _CashflowScreenState extends State<CashflowScreen> {
   int _rangeIndex = 0; // 0: Last 6 months, 1: This year
 
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go('/home');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final DateTime now = (widget.clock ?? DateTime.now)();
@@ -115,10 +105,7 @@ class _CashflowScreenState extends State<CashflowScreen> {
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(DashboardChartsStrings.cashflow, style: AppText.cardTitle),
-        leading: IconButton(
-          icon: const Icon(AppIcons.arrowLeft, color: AppColors.ink),
-          onPressed: () => _handleBack(context),
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

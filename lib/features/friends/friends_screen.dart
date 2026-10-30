@@ -140,14 +140,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
     }
   }
 
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.morePath);
-    }
-  }
-
   void _clearFriendsFilters() {
     setState(() {
       _friendsSearchController.clear();
@@ -302,13 +294,6 @@ class _FriendsScreenState extends State<FriendsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Back button
-                    RoundIconButton(
-                      onPressed: () => _handleBack(context),
-                      child: BackButton(
-                        color: AppColors.ink,
-                        onPressed: () => _handleBack(context),
-                      ),
-                    ),
                     const SizedBox.shrink(child: Text('FriendsScreen')),
                     const SizedBox(height: AppSpacing.md),
 

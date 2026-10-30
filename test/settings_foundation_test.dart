@@ -30,6 +30,8 @@ import 'package:dfile_mobile/features/settings/support_ticket_screen.dart';
 import 'package:dfile_mobile/features/settings/widgets/widgets.dart';
 import 'package:dfile_mobile/main.dart';
 
+import 'support/system_back.dart';
+
 void main() {
   setUpAll(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -446,31 +448,24 @@ void main() {
       },
     );
 
-    testWidgets(
-      'SettingsHeader renders title, back button, and optional right action',
-      (WidgetTester tester) async {
-        bool backTapped = false;
-
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SettingsHeader(
-                title: 'Test Header',
-                onBack: () => backTapped = true,
-                rightAction: const Text('Action'),
-              ),
+    testWidgets('SettingsHeader renders title and optional right action', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SettingsHeader(
+              title: 'Test Header',
+              rightAction: const Text('Action'),
             ),
           ),
-        );
+        ),
+      );
 
-        expect(find.text('Test Header'), findsOneWidget);
-        expect(find.text('Action'), findsOneWidget);
-        expect(find.byIcon(Icons.arrow_back), findsOneWidget);
-
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        expect(backTapped, isTrue);
-      },
-    );
+      expect(find.text('Test Header'), findsOneWidget);
+      expect(find.text('Action'), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_back), findsNothing);
+    });
 
     testWidgets('SettingsGroupCard and SettingsSectionLabel render content', (
       WidgetTester tester,
@@ -596,7 +591,7 @@ void main() {
         await tester.tap(find.text('Yassine G.'));
         await tester.pumpAndSettle();
         expect(find.byType(EditProfileScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -604,7 +599,7 @@ void main() {
         await tester.tap(find.text(SettingsStrings.accountTitle));
         await tester.pumpAndSettle();
         expect(find.byType(EditProfileScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -612,7 +607,7 @@ void main() {
         await tester.tap(find.text(SettingsStrings.preferencesTitle));
         await tester.pumpAndSettle();
         expect(find.byType(PreferencesScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -620,7 +615,7 @@ void main() {
         await tester.tap(find.text(SettingsStrings.securityTitle));
         await tester.pumpAndSettle();
         expect(find.byType(SecurityScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -628,7 +623,7 @@ void main() {
         await tester.tap(find.text(SettingsStrings.integrationsTitle));
         await tester.pumpAndSettle();
         expect(find.byType(IntegrationsScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -640,7 +635,7 @@ void main() {
         await tester.tap(find.text(SettingsStrings.notificationsTitle));
         await tester.pumpAndSettle();
         expect(find.byType(NotificationsScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -652,7 +647,7 @@ void main() {
         await tester.tap(find.text(SettingsPrivacyStrings.privacyDataTitle));
         await tester.pumpAndSettle();
         expect(find.byType(PrivacyDataScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
 
@@ -664,7 +659,7 @@ void main() {
         await tester.tap(find.text(SettingsStrings.aboutTitle));
         await tester.pumpAndSettle();
         expect(find.byType(AboutScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(SettingsScreen), findsOneWidget);
       },
@@ -679,64 +674,35 @@ void main() {
         router.go(AppRoutes.settingsPasswordPath);
         await tester.pumpAndSettle();
         expect(find.byType(ChangePasswordScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-        expect(find.byType(SettingsScreen), findsOneWidget);
 
         // Categories
         router.go(AppRoutes.settingsCategoriesPath);
         await tester.pumpAndSettle();
         expect(find.byType(CategoriesScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-        expect(find.byType(SettingsScreen), findsOneWidget);
 
         // Legal
         router.go(AppRoutes.settingsLegalPath);
         await tester.pumpAndSettle();
         expect(find.byType(LegalClausesScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-        expect(find.byType(SettingsScreen), findsOneWidget);
 
         // Support
         router.go(AppRoutes.settingsSupportPath);
         await tester.pumpAndSettle();
         expect(find.byType(SupportTicketScreen), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-        expect(find.byType(SettingsScreen), findsOneWidget);
 
         // Privacy policy
         router.go(AppRoutes.settingsPrivacyPath);
         await tester.pumpAndSettle();
         expect(find.byType(PolicyScreen), findsOneWidget);
         expect(find.text('Privacy Policy'), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-        expect(find.byType(SettingsScreen), findsOneWidget);
 
         // Terms policy
         router.go(AppRoutes.settingsTermsPath);
         await tester.pumpAndSettle();
         expect(find.byType(PolicyScreen), findsOneWidget);
         expect(find.text('Terms and Conditions'), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-        expect(find.byType(SettingsScreen), findsOneWidget);
       },
     );
-
-    testWidgets('Back button on SettingsScreen falls back to /more', (
-      WidgetTester tester,
-    ) async {
-      await pumpSettingsApp(tester, initialLocation: AppRoutes.settingsPath);
-
-      expect(find.byType(SettingsScreen), findsOneWidget);
-      await tester.tap(find.byIcon(Icons.arrow_back));
-      await tester.pumpAndSettle();
-      expect(find.byType(MoreScreen), findsOneWidget);
-    });
 
     testWidgets(
       'Toast via extra (Map with toast and plain string) displays toast on SettingsScreen',
@@ -817,11 +783,6 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(SettingsScreen), findsOneWidget);
-
-        // Back returns to MoreScreen
-        await tester.tap(find.byIcon(Icons.arrow_back));
-        await tester.pumpAndSettle();
-        expect(find.byType(MoreScreen), findsOneWidget);
       },
     );
   });

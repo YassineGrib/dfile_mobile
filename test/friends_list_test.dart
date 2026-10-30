@@ -16,7 +16,6 @@ import 'package:dfile_mobile/features/friends/widgets/friend_card.dart';
 import 'package:dfile_mobile/features/friends/widgets/friend_tx_card.dart';
 import 'package:dfile_mobile/features/friends/widgets/friends_list_balance_card.dart';
 import 'package:dfile_mobile/features/friends/widgets/friends_list_filter_sheet.dart';
-import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
 import 'package:dfile_mobile/main.dart';
 
@@ -500,21 +499,6 @@ void main() {
         await tester.pump();
         await tester.pumpAndSettle();
         expect(find.byType(FriendTxCard), findsWidgets);
-      },
-    );
-
-    testWidgets(
-      'Back button pops or navigates to /more fallback when stack cannot pop',
-      (WidgetTester tester) async {
-        await pumpFriendsApp(tester);
-
-        final Finder backButton = find.byType(BackButton);
-        expect(backButton, findsOneWidget);
-
-        await tester.tap(backButton);
-        await tester.pumpAndSettle();
-
-        expect(find.byType(MoreScreen), findsOneWidget);
       },
     );
 

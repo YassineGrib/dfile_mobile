@@ -306,11 +306,7 @@ class PaymentReceiptScreen extends StatelessWidget {
   }) {
     return Row(
       children: [
-        RoundIconButton(
-          icon: Icons.arrow_back,
-          tooltip: PaymentReceiptStrings.back,
-          onPressed: onBack,
-        ),
+        const SizedBox(width: AppSpacing.iconButtonSize),
         Expanded(
           child: Center(
             child: Text(
@@ -595,11 +591,6 @@ class PaymentReceiptScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RoundIconButton(
-                  icon: Icons.arrow_back,
-                  tooltip: PaymentReceiptStrings.back,
-                  onPressed: () => context.go(AppRoutes.paymentsPath),
-                ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

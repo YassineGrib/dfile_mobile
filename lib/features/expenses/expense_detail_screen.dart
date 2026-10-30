@@ -298,11 +298,7 @@ class ExpenseDetailScreen extends StatelessWidget {
   }) {
     return Row(
       children: [
-        RoundIconButton(
-          icon: Icons.arrow_back,
-          tooltip: ExpenseDetailStrings.back,
-          onPressed: onBack,
-        ),
+        const SizedBox(width: AppSpacing.iconButtonSize),
         Expanded(
           child: Center(
             child: Text(
@@ -508,11 +504,6 @@ class ExpenseDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RoundIconButton(
-                  icon: Icons.arrow_back,
-                  tooltip: ExpenseDetailStrings.back,
-                  onPressed: () => _popOrGoExpenses(context),
-                ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

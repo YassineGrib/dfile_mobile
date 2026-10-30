@@ -418,11 +418,6 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RoundIconButton(
-                icon: Icons.arrow_back,
-                tooltip: ExpenseFormStrings.back,
-                onPressed: _close,
-              ),
               Expanded(
                 child: Center(
                   child: Column(

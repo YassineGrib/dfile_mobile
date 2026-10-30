@@ -55,7 +55,7 @@ void main() {
 
       // Top bar
       expect(find.text(FriendStatementStrings.title), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_back), findsNothing);
       expect(find.byIcon(Icons.more_horiz), findsOneWidget);
 
       // Friend header

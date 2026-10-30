@@ -11,6 +11,8 @@ import 'package:dfile_mobile/features/clients/clients_list_screen.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
 import 'package:dfile_mobile/main.dart';
 
+import 'support/system_back.dart';
+
 void main() {
   setUpAll(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -392,7 +394,7 @@ void main() {
         expect(find.text('+60,000 DZ'), findsOneWidget);
 
         // Back button from Payments returns to Overview
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
 
         expect(find.text(ClientStrings.clientDetailTitle), findsOneWidget);

@@ -343,11 +343,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
   }) {
     return Row(
       children: [
-        RoundIconButton(
-          icon: Icons.arrow_back,
-          tooltip: FriendStatementStrings.back,
-          onPressed: onBack,
-        ),
+        const SizedBox(width: AppSpacing.iconButtonSize),
         Expanded(
           child: Center(
             child: Text(
@@ -533,11 +529,6 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RoundIconButton(
-                  icon: Icons.arrow_back,
-                  tooltip: FriendStatementStrings.back,
-                  onPressed: () => _popOrGoFriends(context),
-                ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

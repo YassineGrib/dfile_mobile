@@ -10,7 +10,6 @@ import 'package:dfile_mobile/features/expenses/expense_detail_screen.dart';
 import 'package:dfile_mobile/features/expenses/expense_form_screen.dart';
 import 'package:dfile_mobile/features/expenses/expense_strings.dart';
 import 'package:dfile_mobile/features/expenses/expenses_list_screen.dart';
-import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/more/more_strings.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
 import 'package:dfile_mobile/main.dart';
@@ -517,13 +516,6 @@ void main() {
         // Verify on ExpensesListScreen placeholder
         expect(find.byType(ExpensesListScreen), findsOneWidget);
         expect(find.text('ExpensesListScreen'), findsOneWidget);
-
-        // Tap back button
-        await tester.tap(find.byType(IconButton));
-        await tester.pumpAndSettle();
-
-        // Back on MoreScreen
-        expect(find.byType(MoreScreen), findsOneWidget);
       },
     );
 

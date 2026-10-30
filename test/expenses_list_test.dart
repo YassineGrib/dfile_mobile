@@ -14,7 +14,6 @@ import 'package:dfile_mobile/features/expenses/expenses_list_strings.dart';
 import 'package:dfile_mobile/features/expenses/widgets/expenses_list_card.dart';
 import 'package:dfile_mobile/features/expenses/widgets/expenses_list_filter_sheet.dart';
 import 'package:dfile_mobile/features/expenses/widgets/expenses_list_kpis.dart';
-import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
 import 'package:dfile_mobile/main.dart';
 
@@ -524,22 +523,6 @@ void main() {
 
         expect(find.byType(ExpenseFormScreen), findsOneWidget);
         expect(find.text('ExpenseFormScreen'), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'Back button pops or navigates to /more fallback when stack cannot pop',
-      (WidgetTester tester) async {
-        await pumpExpensesApp(tester);
-
-        // Back button is the BackButton inside RoundIconButton
-        final Finder backButton = find.byType(BackButton);
-        expect(backButton, findsOneWidget);
-
-        await tester.tap(backButton);
-        await tester.pumpAndSettle();
-
-        expect(find.byType(MoreScreen), findsOneWidget);
       },
     );
 

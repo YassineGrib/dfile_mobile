@@ -355,17 +355,7 @@ class CapacityScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,
-        leadingWidth: 44 + AppSpacing.pageGutter,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: AppSpacing.pageGutter),
-          child: Center(
-            child: RoundIconButton(
-              icon: AppIcons.arrowLeft,
-              onPressed: () =>
-                  context.canPop() ? context.pop() : context.go('/calendar'),
-            ),
-          ),
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           CalendarFormsStrings.capacityTitle,
           style: AppText.cardTitle.copyWith(

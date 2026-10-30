@@ -85,11 +85,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: AppSpacing.sm),
-                        RoundIconButton(
-                          icon: Icons.arrow_back,
-                          onPressed: _onBack,
-                        ),
-                        const SizedBox(height: AppSpacing.lg),
                         const MascotPanel(color: AppColors.orange, height: 210),
                         const SizedBox(height: AppSpacing.xxl),
                         Text(

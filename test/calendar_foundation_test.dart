@@ -22,6 +22,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
 void main() {
   setUpAll(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -704,11 +705,6 @@ void main() {
       expect(find.text(CalendarStrings.tabAgenda), findsOneWidget);
       expect(find.text(CalendarStrings.tabTimeline), findsOneWidget);
 
-      // Back button pops or goes to /more
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
-      await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.morePath);
-
       // 2. /calendar/new
       router.go(AppRoutes.calendarNewPath);
       await pumpBounded(tester);
@@ -725,19 +721,11 @@ void main() {
       expect(find.byType(CapacityScreen), findsOneWidget);
       expect(find.text(CalendarFormsStrings.capacityTitle), findsWidgets);
 
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
-      await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.calendarPath);
-
       // 4. /calendar/sync
       router.go(AppRoutes.calendarSyncPath);
       await pumpBounded(tester);
       expect(find.byType(CalendarSyncScreen), findsOneWidget);
       expect(find.text(CalendarFormsStrings.calendarSyncTitle), findsWidgets);
-
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
-      await pumpBounded(tester);
-      expect(router.state.uri.toString(), AppRoutes.calendarPath);
     });
 
     testWidgets('Tapping Calendar row in MoreScreen navigates to /calendar', (

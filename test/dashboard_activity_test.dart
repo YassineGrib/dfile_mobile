@@ -19,6 +19,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'support/system_back.dart';
+
 void main() {
   setUpAll(() {
     GoogleFonts.config.allowRuntimeFetching = false;
@@ -700,7 +702,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(ProfitScreen), findsOneWidget);
 
-      await tester.tap(find.byIcon(AppIcons.arrowLeft));
+      await systemBack(tester);
       await tester.pumpAndSettle();
       expect(find.text('HomeScreenTarget'), findsOneWidget);
     });

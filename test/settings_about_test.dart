@@ -19,6 +19,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
+import 'support/system_back.dart';
+
 void main() {
   group('Backup Builder Unit Tests', () {
     test('buildWorkspaceBackupJson produces pretty-printed JSON with expected keys, client name, and payment amount', () {
@@ -212,7 +214,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(SupportTicketScreen), findsOneWidget);
 
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(AboutScreen), findsOneWidget);
 
@@ -225,7 +227,7 @@ void main() {
           findsOneWidget,
         );
 
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(AboutScreen), findsOneWidget);
 
@@ -240,7 +242,7 @@ void main() {
           findsOneWidget,
         );
 
-        await tester.tap(find.byIcon(Icons.arrow_back));
+        await systemBack(tester);
         await tester.pumpAndSettle();
         expect(find.byType(AboutScreen), findsOneWidget);
       },

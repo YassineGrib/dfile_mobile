@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../core/format.dart';
-import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
-import '../../core/widgets/app_icons.dart';
-import '../../core/widgets/round_icon_button.dart';
 import '../expenses/data/expense.dart';
 import '../expenses/data/expenses_repository.dart';
 import '../expenses/data/expenses_scope.dart';
@@ -32,14 +28,6 @@ class ProfitScreen extends StatelessWidget {
 
   /// Optional clock provider for deterministic testing.
   final DateTime Function()? clock;
-
-  void _handleBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.homePath);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +72,6 @@ class ProfitScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  RoundIconButton(
-                    icon: AppIcons.arrowLeft,
-                    onPressed: () => _handleBack(context),
-                  ),
-                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       DashboardActivityStrings.profit,

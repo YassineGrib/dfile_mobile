@@ -7,7 +7,6 @@ import 'package:dfile_mobile/core/format.dart';
 import 'package:dfile_mobile/core/router/app_router.dart';
 import 'package:dfile_mobile/core/widgets/widgets.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
-import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/payments/payment_receipt_screen.dart';
 import 'package:dfile_mobile/features/payments/payments_list_screen.dart';
 import 'package:dfile_mobile/features/payments/payments_list_strings.dart';
@@ -366,25 +365,6 @@ void main() {
 
         expect(find.byType(RecordPaymentScreen), findsOneWidget);
         expect(find.text('RecordPaymentScreen'), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'Back button pops or navigates to /more fallback when stack cannot pop',
-      (WidgetTester tester) async {
-        await pumpPaymentsApp(tester);
-
-        // Back button is the arrow_back RoundIconButton
-        final Finder backButton = find.widgetWithIcon(
-          RoundIconButton,
-          Icons.arrow_back,
-        );
-        expect(backButton, findsOneWidget);
-
-        await tester.tap(backButton);
-        await tester.pumpAndSettle();
-
-        expect(find.byType(MoreScreen), findsOneWidget);
       },
     );
 
