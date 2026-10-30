@@ -453,7 +453,9 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
             ),
 
             // Content: Empty state (zero in repo), Filter empty state, or List of expense cards
-            if (allExpenses.isEmpty)
+            if (repo.isLoading && allExpenses.isEmpty)
+              const SliverToBoxAdapter(child: SkeletonList())
+            else if (allExpenses.isEmpty)
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.pageGutter,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/format.dart';
+import '../../../core/privacy.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_icons.dart';
 import '../dashboard_home_strings.dart';
@@ -113,7 +114,10 @@ class HomeKpiRow extends StatelessWidget {
             iconBg: AppColors.coralBg,
             iconColor: AppColors.coral,
             label: DashboardHomeStrings.monthlyExpenses,
-            value: formatMoney(monthlyExpensesAmount),
+            value: PrivacyScope.shown(
+              context,
+              formatMoney(monthlyExpensesAmount),
+            ),
           ),
           const SizedBox(width: AppSpacing.md),
           _buildKpiCard(
@@ -121,7 +125,10 @@ class HomeKpiRow extends StatelessWidget {
             iconBg: AppColors.yellowBg,
             iconColor: AppColors.orange,
             label: DashboardHomeStrings.pendingInvoices,
-            value: formatMoney(pendingInvoicesAmount),
+            value: PrivacyScope.shown(
+              context,
+              formatMoney(pendingInvoicesAmount),
+            ),
           ),
           const SizedBox(width: AppSpacing.md),
           _buildKpiCard(
@@ -129,7 +136,7 @@ class HomeKpiRow extends StatelessWidget {
             iconBg: friendsPositive ? AppColors.greenBg : AppColors.redBg,
             iconColor: friendsPositive ? AppColors.green : AppColors.red,
             label: DashboardHomeStrings.friendsOweYou,
-            value: formatMoney(friendsNetBalance),
+            value: PrivacyScope.shown(context, formatMoney(friendsNetBalance)),
             valueColor: friendsPositive ? AppColors.green : AppColors.red,
           ),
         ],

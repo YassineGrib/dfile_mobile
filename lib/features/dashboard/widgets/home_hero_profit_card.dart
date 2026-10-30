@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/format.dart';
+import '../../../core/haptics.dart';
 import '../../../core/motion.dart';
+import '../../../core/privacy.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_icons.dart';
 import '../data/dashboard_stats.dart';
@@ -89,6 +91,30 @@ class HomeHeroProfitCard extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
+                  Semantics(
+                    button: true,
+                    label: PrivacyScope.of(context).hidden
+                        ? 'Show amounts'
+                        : 'Hide amounts',
+                    child: InkResponse(
+                      radius: 24,
+                      onTap: () {
+                        AppHaptics.selection();
+                        PrivacyScope.of(context).toggle();
+                      },
+                      child: SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: Icon(
+                          PrivacyScope.of(context).hidden
+                              ? AppIcons.eyeOff
+                              : AppIcons.eye,
+                          color: const Color(0xFF8A8A93),
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
                   const Icon(
                     AppIcons.chevronRight,
                     color: Color(0xFF8A8A93),
@@ -111,7 +137,7 @@ class HomeHeroProfitCard extends StatelessWidget {
                       curve: AppMotion.enterCurve,
                       builder: (BuildContext context, double value, Widget? _) {
                         return Text(
-                          formatMoney(value),
+                          PrivacyScope.shown(context, formatMoney(value)),
                           style: AppText.title.copyWith(
                             color: AppColors.white,
                             fontSize: 32,

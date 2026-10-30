@@ -455,7 +455,9 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
             ),
 
             // Content: Empty state (zero in repo), Filter empty state, or List of payment cards
-            if (allPayments.isEmpty)
+            if (repo.isLoading && allPayments.isEmpty)
+              const SliverToBoxAdapter(child: SkeletonList())
+            else if (allPayments.isEmpty)
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.pageGutter,

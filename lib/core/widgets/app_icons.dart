@@ -42,6 +42,10 @@ abstract final class AppIcons {
   static const IconData check = LucideIcons.check;
   static const IconData x = LucideIcons.x;
   static const IconData wifiOff = LucideIcons.wifiOff;
+  static const IconData eye = LucideIcons.eye;
+  static const IconData eyeOff = LucideIcons.eyeOff;
+  static const IconData messageCircle = LucideIcons.messageCircle;
+  static const IconData bellRing = LucideIcons.bellRing;
   static const IconData user = LucideIcons.user;
   static const IconData slidersHorizontal = LucideIcons.slidersHorizontal;
   static const IconData shieldCheck = LucideIcons.shieldCheck;
@@ -51,7 +55,6 @@ abstract final class AppIcons {
   static const IconData lifeBuoy = LucideIcons.lifeBuoy;
   static const IconData shield = LucideIcons.shield;
   static const IconData fileText = LucideIcons.fileText;
-  static const IconData eye = LucideIcons.eye;
   static const IconData download = LucideIcons.download;
   static const IconData tags = LucideIcons.tags;
   static const IconData scale = LucideIcons.scale;

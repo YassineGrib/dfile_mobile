@@ -518,7 +518,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
 
             // Friends tab content
             if (isFriendsTab) ...[
-              if (allFriends.isEmpty)
+              if (repo.isLoading && allFriends.isEmpty)
+                const SliverToBoxAdapter(child: SkeletonList())
+              else if (allFriends.isEmpty)
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.pageGutter,
@@ -706,7 +708,9 @@ class _FriendsScreenState extends State<FriendsScreen> {
 
             // Transactions tab content
             if (!isFriendsTab) ...[
-              if (allTransactions.isEmpty)
+              if (repo.isLoading && allTransactions.isEmpty)
+                const SliverToBoxAdapter(child: SkeletonList())
+              else if (allTransactions.isEmpty)
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.pageGutter,

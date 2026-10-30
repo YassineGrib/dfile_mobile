@@ -23,6 +23,14 @@ abstract final class DashboardHomeStrings {
   static const String friendsDebts = "Friends' debts";
   static const String settings = 'Settings';
 
+  // Follow up
+  static const String followUp = 'Follow up';
+  static const String followUpOutstanding = 'outstanding';
+  static const String followUpRemind = 'Remind';
+  static const String followUpNoPhone =
+      'Add a phone number to this client first';
+  static const String followUpCouldNotOpen = 'Could not open WhatsApp';
+
   // Upcoming deadlines
   static const String upcomingDeadlines = 'Upcoming deadlines';
   static const String seeAll = 'See all';

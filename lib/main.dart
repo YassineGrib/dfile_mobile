@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import 'core/privacy.dart';
 import 'core/router/app_router.dart';
 import 'core/sync_status.dart';
 import 'core/theme/theme.dart';
@@ -56,7 +57,15 @@ Future<void> main() async {
         defaultCalendarRepository.syncError ??
         defaultSettingsRepository.syncError,
   )..start();
-  runApp(DfileApp(authService: auth, router: router, syncStatus: syncStatus));
+  final PrivacyMode privacy = await PrivacyMode.load();
+  runApp(
+    DfileApp(
+      authService: auth,
+      router: router,
+      syncStatus: syncStatus,
+      privacyMode: privacy,
+    ),
+  );
 }
 
 class DfileApp extends StatefulWidget {
@@ -72,6 +81,7 @@ class DfileApp extends StatefulWidget {
     this.calendarRepository,
     this.authService,
     this.syncStatus,
+    this.privacyMode,
   });
 
   final GoRouter? router;
@@ -84,6 +94,7 @@ class DfileApp extends StatefulWidget {
   final CalendarRepository? calendarRepository;
   final AuthService? authService;
   final SyncStatus? syncStatus;
+  final PrivacyMode? privacyMode;
 
   @override
   State<DfileApp> createState() => _DfileAppState();
@@ -92,6 +103,7 @@ class DfileApp extends StatefulWidget {
 class _DfileAppState extends State<DfileApp> {
   ProjectsRepository? _fallbackProjectsRepository;
   late final AuthService _fallbackAuth = FakeAuthService();
+  late final PrivacyMode _fallbackPrivacy = PrivacyMode();
 
   @override
   void initState() {
@@ -138,34 +150,37 @@ class _DfileAppState extends State<DfileApp> {
     final CalendarRepository effectiveCalendarRepo =
         widget.calendarRepository ?? defaultCalendarRepository;
 
-    return AuthScope(
-      service: widget.authService ?? _fallbackAuth,
-      child: ClientsScope(
-        repository: effectiveClientsRepo,
-        child: ProjectsScope(
-          repository: effectiveProjectsRepo,
-          child: ExpensesScope(
-            repository: effectiveExpensesRepo,
-            child: FriendsScope(
-              repository: effectiveFriendsRepo,
-              child: SettingsScope(
-                repository: effectiveSettingsRepo,
-                child: CalendarScope(
-                  repository: effectiveCalendarRepo,
-                  child: NotificationsScope(
-                    store: effectiveNotificationsStore,
-                    child: MaterialApp.router(
-                      title: 'Dfile',
-                      debugShowCheckedModeBanner: false,
-                      theme: AppTheme.light,
-                      routerConfig: widget.router ?? appRouter,
-                      builder: (BuildContext context, Widget? child) {
-                        final SyncStatus? status = widget.syncStatus;
-                        final Widget page = child ?? const SizedBox.shrink();
-                        return status == null
-                            ? page
-                            : SyncBanner(status: status, child: page);
-                      },
+    return PrivacyScope(
+      mode: widget.privacyMode ?? _fallbackPrivacy,
+      child: AuthScope(
+        service: widget.authService ?? _fallbackAuth,
+        child: ClientsScope(
+          repository: effectiveClientsRepo,
+          child: ProjectsScope(
+            repository: effectiveProjectsRepo,
+            child: ExpensesScope(
+              repository: effectiveExpensesRepo,
+              child: FriendsScope(
+                repository: effectiveFriendsRepo,
+                child: SettingsScope(
+                  repository: effectiveSettingsRepo,
+                  child: CalendarScope(
+                    repository: effectiveCalendarRepo,
+                    child: NotificationsScope(
+                      store: effectiveNotificationsStore,
+                      child: MaterialApp.router(
+                        title: 'Dfile',
+                        debugShowCheckedModeBanner: false,
+                        theme: AppTheme.light,
+                        routerConfig: widget.router ?? appRouter,
+                        builder: (BuildContext context, Widget? child) {
+                          final SyncStatus? status = widget.syncStatus;
+                          final Widget page = child ?? const SizedBox.shrink();
+                          return status == null
+                              ? page
+                              : SyncBanner(status: status, child: page);
+                        },
+                      ),
                     ),
                   ),
                 ),

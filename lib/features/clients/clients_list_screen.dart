@@ -393,7 +393,9 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
             ),
 
             // Content: Empty state or Cards list
-            if (displayedClients.isEmpty)
+            if (repo.isLoading && displayedClients.isEmpty)
+              const SliverToBoxAdapter(child: SkeletonList())
+            else if (displayedClients.isEmpty)
               SliverPadding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.pageGutter,

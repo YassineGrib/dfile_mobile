@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/haptics.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_icons.dart';
 import '../../../core/widgets/motion_widgets.dart';
@@ -146,7 +147,10 @@ class _QuickActionCard extends StatelessWidget {
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () => context.push(action.route),
+            onTap: () {
+              AppHaptics.selection();
+              context.push(action.route);
+            },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 14, 10, 10),
               child: Column(

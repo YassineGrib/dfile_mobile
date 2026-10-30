@@ -3,9 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
+/// Equal-width digits: amounts line up in columns and do not jitter while counting.
+const List<FontFeature> _tabular = <FontFeature>[FontFeature.tabularFigures()];
+
 /// Inter typography scale from `docs/design/SPEC.md`.
 abstract final class AppText {
   static TextStyle get title => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 32,
     fontWeight: FontWeight.w700,
     color: AppColors.ink,
@@ -14,6 +18,7 @@ abstract final class AppText {
   );
 
   static TextStyle get sectionTitleLg => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 28,
     fontWeight: FontWeight.w700,
     color: AppColors.ink,
@@ -22,6 +27,7 @@ abstract final class AppText {
   );
 
   static TextStyle get sectionTitle => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 22,
     fontWeight: FontWeight.w700,
     color: AppColors.ink,
@@ -30,6 +36,7 @@ abstract final class AppText {
   );
 
   static TextStyle get cardTitle => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 18,
     fontWeight: FontWeight.w700,
     color: AppColors.ink,
@@ -37,6 +44,7 @@ abstract final class AppText {
   );
 
   static TextStyle get button => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 17,
     fontWeight: FontWeight.w700,
     color: AppColors.white,
@@ -44,6 +52,7 @@ abstract final class AppText {
   );
 
   static TextStyle get bodyLg => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 17,
     fontWeight: FontWeight.w400,
     color: AppColors.ink,
@@ -51,6 +60,7 @@ abstract final class AppText {
   );
 
   static TextStyle get body => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.ink,
@@ -58,6 +68,7 @@ abstract final class AppText {
   );
 
   static TextStyle get bodyMedium => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 15,
     fontWeight: FontWeight.w500,
     color: AppColors.ink,
@@ -65,6 +76,7 @@ abstract final class AppText {
   );
 
   static TextStyle get bodyBold => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 15,
     fontWeight: FontWeight.w700,
     color: AppColors.ink,
@@ -72,6 +84,7 @@ abstract final class AppText {
   );
 
   static TextStyle get label => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 13,
     fontWeight: FontWeight.w500,
     color: AppColors.mute,
@@ -79,6 +92,7 @@ abstract final class AppText {
   );
 
   static TextStyle get caption => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.mute,
@@ -86,6 +100,7 @@ abstract final class AppText {
   );
 
   static TextStyle get captionSm => GoogleFonts.inter(
+    fontFeatures: _tabular,
     fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.mute,

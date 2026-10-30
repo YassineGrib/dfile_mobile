@@ -15,3 +15,4 @@ export 'blobatar.dart';
 export 'user_avatar.dart';
 export 'sync_banner.dart';
 export 'motion_widgets.dart';
+export 'skeleton.dart';

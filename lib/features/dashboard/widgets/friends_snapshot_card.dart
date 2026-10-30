@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/format.dart';
+import '../../../core/privacy.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_icons.dart';
@@ -42,9 +43,12 @@ class FriendsSnapshotCard extends StatelessWidget {
         ? AppColors.green
         : (netVal < 0 ? AppColors.red : AppColors.ink);
 
-    final String netText = netVal > 0
-        ? '+${formatMoney(netVal)}'
-        : (netVal < 0 ? '-${formatMoney(netVal.abs())}' : formatMoney(0));
+    final String netText = PrivacyScope.shown(
+      context,
+      netVal > 0
+          ? '+${formatMoney(netVal)}'
+          : (netVal < 0 ? '-${formatMoney(netVal.abs())}' : formatMoney(0)),
+    );
 
     return DashCard(
       onTap: () => context.push(AppRoutes.friendsPath),
@@ -114,7 +118,7 @@ class FriendsSnapshotCard extends StatelessWidget {
                 child: _DebtChip(
                   icon: AppIcons.arrowDownRight,
                   label:
-                      '${DashboardActivityStrings.owedPrefix} ${formatMoney(owedToYou)}',
+                      '${DashboardActivityStrings.owedPrefix} ${PrivacyScope.shown(context, formatMoney(owedToYou))}',
                   textColor: AppColors.green,
                   bgColor: AppColors.greenBg,
                   borderColor: AppColors.green.withValues(alpha: 0.2),
@@ -125,7 +129,7 @@ class FriendsSnapshotCard extends StatelessWidget {
                 child: _DebtChip(
                   icon: AppIcons.arrowUpRight,
                   label:
-                      '${DashboardActivityStrings.youOwePrefix} ${formatMoney(youOwe)}',
+                      '${DashboardActivityStrings.youOwePrefix} ${PrivacyScope.shown(context, formatMoney(youOwe))}',
                   textColor: AppColors.red,
                   bgColor: AppColors.redBg,
                   borderColor: AppColors.red.withValues(alpha: 0.2),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/haptics.dart';
 import '../../../core/theme/theme.dart';
 
 /// 48x28 green toggle switch matching ST8 and ST11 per `docs/design/SPEC.md`.
@@ -22,6 +23,7 @@ class SettingsSwitch extends StatelessWidget {
 
   void _handleTap() {
     if (!enabled || onChanged == null) return;
+    AppHaptics.selection();
     onChanged!(!value);
   }
 

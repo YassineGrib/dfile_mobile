@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../haptics.dart';
 import '../motion.dart';
 import '../theme/theme.dart';
 import 'app_icons.dart';
@@ -77,7 +78,10 @@ class AppTabBar extends StatelessWidget {
                 child: PressScale(
                   scale: 0.92,
                   child: InkWell(
-                    onTap: () => _handleTap(context, index),
+                    onTap: () {
+                      if (index != currentIndex) AppHaptics.selection();
+                      _handleTap(context, index);
+                    },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

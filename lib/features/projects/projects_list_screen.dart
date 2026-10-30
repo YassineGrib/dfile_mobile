@@ -901,7 +901,9 @@ class _ProjectsListScreenState extends State<ProjectsListScreen> {
             ),
 
             // Empty state or Project cards
-            if (displayedProjects.isEmpty)
+            if (repo.isLoading && displayedProjects.isEmpty)
+              const SliverToBoxAdapter(child: SkeletonList())
+            else if (displayedProjects.isEmpty)
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.pageGutter,

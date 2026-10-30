@@ -386,11 +386,22 @@ void main() {
       );
       await pumpBounded(tester);
 
+      // The card sits below the Follow up section; scroll it into view.
+      await tester.scrollUntilVisible(
+        find.byType(HomeUpcomingDeadlines),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await pumpBounded(tester);
       expect(find.byType(HomeUpcomingDeadlines), findsOneWidget);
 
       // Check upcoming deadline card for "Fintask Landing Page"
-      expect(find.text('Fintask Landing Page'), findsOneWidget);
-      expect(find.text('Mohamed Bachir'), findsOneWidget);
+      Finder inDeadlines(String text) => find.descendant(
+        of: find.byType(HomeUpcomingDeadlines),
+        matching: find.text(text),
+      );
+      expect(inDeadlines('Fintask Landing Page'), findsOneWidget);
+      expect(inDeadlines('Mohamed Bachir'), findsOneWidget);
 
       // Tap "See all" -> /projects
       await tester.tap(find.text(DashboardHomeStrings.seeAll));

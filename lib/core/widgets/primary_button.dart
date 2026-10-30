@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/theme.dart';
+import '../haptics.dart';
 import 'motion_widgets.dart';
 
 /// Full-rounded ink primary action button (height 56, radius 28).
@@ -53,7 +54,12 @@ class PrimaryButton extends StatelessWidget {
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: onPressed,
+            onTap: onPressed == null
+                ? null
+                : () {
+                    AppHaptics.light();
+                    onPressed!();
+                  },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
               child: content,

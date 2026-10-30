@@ -14,6 +14,7 @@ import 'widgets/activity_card.dart';
 import 'widgets/cashflow_card.dart';
 import 'widgets/friends_snapshot_card.dart';
 import 'widgets/home_empty_view.dart';
+import 'widgets/home_follow_up.dart';
 import 'widgets/home_hero_profit_card.dart';
 import 'widgets/home_kpi_row.dart';
 import 'widgets/home_quick_actions.dart';
@@ -258,8 +259,9 @@ class HomeScreen extends StatelessWidget {
               FadeSlideIn(index: 2, child: const HomeQuickActions()),
               const SizedBox(height: AppSpacing.xxl),
 
+              const FadeSlideIn(index: 3, child: HomeFollowUp()),
               FadeSlideIn(
-                index: 3,
+                index: 4,
                 child: HomeUpcomingDeadlines(
                   deadlines: deadlines,
                   clientNameLookup: (String id) =>
@@ -268,16 +270,16 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.xxl),
 
-              FadeSlideIn(index: 4, child: const CashflowCard()),
+              FadeSlideIn(index: 5, child: const CashflowCard()),
               const SizedBox(height: AppSpacing.lg),
 
-              FadeSlideIn(index: 5, child: const StatusDonutCard()),
+              FadeSlideIn(index: 6, child: const StatusDonutCard()),
               const SizedBox(height: AppSpacing.lg),
 
-              FadeSlideIn(index: 6, child: const ActivityCard()),
+              FadeSlideIn(index: 7, child: const ActivityCard()),
               const SizedBox(height: AppSpacing.lg),
 
-              FadeSlideIn(index: 7, child: const FriendsSnapshotCard()),
+              FadeSlideIn(index: 8, child: const FriendsSnapshotCard()),
             ],
             const SizedBox(height: AppSpacing.xxl),
           ],
