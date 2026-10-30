@@ -271,6 +271,7 @@ void main() {
       expect(find.text(AuthStrings.nameRequired), findsOneWidget);
       expect(find.text(AuthStrings.emailRequired), findsOneWidget);
       expect(find.text(AuthStrings.passwordRequired), findsOneWidget);
+      expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
 
       // 2. Short password (< 8 chars)
       final textFields = find.byType(TextField);
@@ -283,10 +284,75 @@ void main() {
       expect(find.byType(SignUpScreen), findsOneWidget);
       expect(find.text(AuthStrings.passwordMinLength), findsOneWidget);
 
-      // 3. Continue with Google navigates to /clients
+      // 3. Continue with Google requires consent first
+      await tester.tap(find.widgetWithText(SecondaryButton, AuthStrings.continueWithGoogle));
+      await tester.pumpAndSettle();
+      expect(find.byType(SignUpScreen), findsOneWidget);
+      expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
+
+      // Tick the consent checkbox
+      await tester.tap(find.byKey(const Key('consent_checkbox')));
+      await tester.pumpAndSettle();
+
+      // Continue with Google now navigates to /clients
       await tester.tap(find.widgetWithText(SecondaryButton, AuthStrings.continueWithGoogle));
       await tester.pumpAndSettle();
 
+      expect(find.byType(ClientsListScreen), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'sign-up consent links navigate to Terms and Privacy routes',
+    (WidgetTester tester) async {
+      setTestSurface(tester);
+      final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
+      await tester.pumpWidget(DfileApp(router: router));
+      await tester.pumpAndSettle();
+
+      // Tap Terms link
+      await tester.tap(find.text(AuthStrings.terms));
+      await tester.pumpAndSettle();
+      expect(router.state.uri.toString(), AppRoutes.settingsTermsPath);
+
+      // Go back to sign up
+      router.go(AppRoutes.signUpPath);
+      await tester.pumpAndSettle();
+
+      // Tap Privacy Policy link
+      await tester.tap(find.text(AuthStrings.privacyPolicy));
+      await tester.pumpAndSettle();
+      expect(router.state.uri.toString(), AppRoutes.settingsPrivacyPath);
+    },
+  );
+
+  testWidgets(
+    'sign-up full form submit with consent navigates to /clients',
+    (WidgetTester tester) async {
+      setTestSurface(tester);
+      final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
+      await tester.pumpWidget(DfileApp(router: router));
+      await tester.pumpAndSettle();
+
+      final textFields = find.byType(TextField);
+      await tester.enterText(textFields.at(0), 'Amine Test');
+      await tester.enterText(textFields.at(1), 'amine@test.dz');
+      await tester.enterText(textFields.at(2), 'password123');
+
+      // Unchecked -> blocked
+      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.createAccount));
+      await tester.pumpAndSettle();
+      expect(find.byType(SignUpScreen), findsOneWidget);
+      expect(find.text(AuthStrings.consentRequiredError), findsOneWidget);
+
+      // Check consent
+      await tester.tap(find.byKey(const Key('consent_checkbox')));
+      await tester.pumpAndSettle();
+      expect(find.text(AuthStrings.consentRequiredError), findsNothing);
+
+      // Submit
+      await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.createAccount));
+      await tester.pumpAndSettle();
       expect(find.byType(ClientsListScreen), findsOneWidget);
     },
   );

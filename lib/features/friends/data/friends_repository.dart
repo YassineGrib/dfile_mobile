@@ -547,4 +547,12 @@ class FriendsRepository extends ChangeNotifier {
       ),
     ];
   }
+
+  /// Clears all friends, transactions, and settlements from the repository.
+  void clearAll() {
+    _friends.clear();
+    _transactions.clear();
+    _settlements.clear();
+    notifyListeners();
+  }
 }

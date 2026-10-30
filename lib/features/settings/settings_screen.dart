@@ -5,6 +5,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import 'data/data.dart';
+import 'settings_privacy_strings.dart';
 import 'settings_strings.dart';
 import 'widgets/widgets.dart';
 
@@ -245,6 +246,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: SettingsStrings.notificationsSubtitle,
                   onTap: () {
                     context.go(AppRoutes.settingsNotificationsPath);
+                  },
+                ),
+                SettingsRow(
+                  iconLetter: 'D',
+                  iconBgColor: AppColors.greenBg,
+                  iconTextColor: AppColors.green,
+                  title: SettingsPrivacyStrings.privacyDataTitle,
+                  subtitle: SettingsPrivacyStrings.privacyDataSubtitle,
+                  onTap: () {
+                    context.go(AppRoutes.settingsPrivacyDataPath);
                   },
                 ),
                 SettingsRow(

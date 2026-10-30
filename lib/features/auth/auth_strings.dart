@@ -77,4 +77,12 @@ abstract final class AuthStrings {
   static const String passwordRequired = 'Please enter your password';
   static const String passwordMinLength =
       'Password must be at least 8 characters';
+
+  // Sign up consent
+  static const String consentAgreePrefix = 'I agree to the ';
+  static const String terms = 'Terms';
+  static const String and = ' and ';
+  static const String privacyPolicy = 'Privacy Policy';
+  static const String consentRequiredError =
+      'Please accept the Terms and Privacy Policy to continue';
 }

@@ -27,6 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _nameError;
   String? _emailError;
   String? _passwordError;
+  bool _consentAccepted = false;
+  String? _consentError;
 
   @override
   void dispose() {
@@ -70,11 +72,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _passwordError = null;
     }
 
+    if (!_consentAccepted) {
+      _consentError = AuthStrings.consentRequiredError;
+      isValid = false;
+    } else {
+      _consentError = null;
+    }
+
     setState(() {});
 
     if (isValid) {
       context.go(AppRoutes.clientsPath);
     }
+  }
+
+  void _onContinueWithGoogle() {
+    if (!_consentAccepted) {
+      setState(() {
+        _consentError = AuthStrings.consentRequiredError;
+      });
+      return;
+    }
+    context.go(AppRoutes.clientsPath);
   }
 
   @override
@@ -140,6 +159,100 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             }
                           },
                         ),
+                        const SizedBox(height: AppSpacing.lg),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              key: const Key('consent_checkbox'),
+                              onTap: () {
+                                setState(() {
+                                  _consentAccepted = !_consentAccepted;
+                                  if (_consentAccepted) {
+                                    _consentError = null;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                width: 22,
+                                height: 22,
+                                margin: const EdgeInsets.only(top: 2, right: 10),
+                                decoration: BoxDecoration(
+                                  color: _consentAccepted ? AppColors.ink : AppColors.card,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: _consentError != null
+                                        ? AppColors.red
+                                        : (_consentAccepted ? AppColors.ink : AppColors.line),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: _consentAccepted
+                                    ? const Icon(
+                                        Icons.check_rounded,
+                                        size: 16,
+                                        color: AppColors.white,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text.rich(
+                                TextSpan(
+                                  text: AuthStrings.consentAgreePrefix,
+                                  style: AppText.body.copyWith(
+                                    color: AppColors.mute,
+                                    fontSize: 14,
+                                  ),
+                                  children: [
+                                    WidgetSpan(
+                                      alignment: PlaceholderAlignment.baseline,
+                                      baseline: TextBaseline.alphabetic,
+                                      child: GestureDetector(
+                                        onTap: () => context.push(AppRoutes.settingsTermsPath),
+                                        child: Text(
+                                          AuthStrings.terms,
+                                          style: AppText.bodyMedium.copyWith(
+                                            color: AppColors.ink,
+                                            fontWeight: FontWeight.w700,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const TextSpan(text: AuthStrings.and),
+                                    WidgetSpan(
+                                      alignment: PlaceholderAlignment.baseline,
+                                      baseline: TextBaseline.alphabetic,
+                                      child: GestureDetector(
+                                        onTap: () => context.push(AppRoutes.settingsPrivacyPath),
+                                        child: Text(
+                                          AuthStrings.privacyPolicy,
+                                          style: AppText.bodyMedium.copyWith(
+                                            color: AppColors.ink,
+                                            fontWeight: FontWeight.w700,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (_consentError != null) ...[
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            _consentError!,
+                            style: AppText.caption.copyWith(
+                              color: AppColors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                         const SizedBox(height: AppSpacing.xxl),
                         PrimaryButton(
                           label: AuthStrings.createAccount,
@@ -162,7 +275,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             width: 22,
                             height: 22,
                           ),
-                          onPressed: () => context.go(AppRoutes.clientsPath),
+                          onPressed: _onContinueWithGoogle,
                         ),
                         const Spacer(),
                         const SizedBox(height: AppSpacing.xxl),
