@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dfile_mobile/features/auth/data/auth_service.dart';
 import 'package:dfile_mobile/features/auth/data/user_data_sync.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
+import 'package:dfile_mobile/features/projects/data/data.dart';
 
 Client sample(String id, {String name = 'Acme'}) => Client(
   id: id,
@@ -106,6 +107,7 @@ void main() {
     final UserDataSync sync = UserDataSync(
       auth: auth,
       clients: repo,
+      projects: ProjectsRepository(clientsRepository: repo),
       clientsStore: (String uid) {
         uids.add(uid);
         return FakeClientsStore(<Client>[sample('mine')]);

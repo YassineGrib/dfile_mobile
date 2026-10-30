@@ -23,7 +23,11 @@ Future<void> main() async {
   ]);
   await Firebase.initializeApp();
   final AuthService auth = FirebaseAuthService();
-  UserDataSync(auth: auth, clients: defaultClientsRepository).start();
+  UserDataSync(
+    auth: auth,
+    clients: defaultClientsRepository,
+    projects: defaultProjectsRepository,
+  ).start();
   final GoRouter router = createAppRouter(
     initialLocation: auth.currentUser != null
         ? AppRoutes.homePath

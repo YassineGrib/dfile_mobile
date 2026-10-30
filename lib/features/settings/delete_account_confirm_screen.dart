@@ -6,6 +6,7 @@ import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import '../auth/data/auth_service.dart';
 import '../clients/data/data.dart';
+import '../projects/data/data.dart';
 import 'settings_privacy_strings.dart';
 import 'widgets/privacy_danger_button.dart';
 import 'widgets/privacy_reason_sheet.dart';
@@ -78,9 +79,20 @@ class _DeleteAccountConfirmScreenState
     setState(() {});
 
     if (isValid && _understandChecked) {
+      final ProjectsRepository projectsRepo = ProjectsScope.of(
+        context,
+        listen: false,
+      );
+      final ClientsRepository clientsRepo = ClientsScope.of(
+        context,
+        listen: false,
+      );
       final AuthResult result = await AuthScope.of(context).deleteAccount(
         password: _passwordController.text,
-        beforeDelete: ClientsScope.of(context, listen: false).deleteRemoteData,
+        beforeDelete: () async {
+          await projectsRepo.deleteRemoteData();
+          await clientsRepo.deleteRemoteData();
+        },
       );
       if (!mounted) return;
       if (!result.isOk) {

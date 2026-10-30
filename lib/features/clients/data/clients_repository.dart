@@ -80,6 +80,20 @@ class ClientsRepository extends ChangeNotifier {
   /// Deletes this user's clients from the store (before the account goes).
   Future<void> deleteRemoteData() async => _store?.deleteAll();
 
+  /// True when a field that is stored in Firestore differs. Embedded projects
+  /// and payments are derived locally and must not cause a write.
+  static bool _persistedChanged(Client a, Client b) =>
+      a.name != b.name ||
+      a.email != b.email ||
+      a.phone != b.phone ||
+      a.address != b.address ||
+      a.notes != b.notes ||
+      a.linkedin != b.linkedin ||
+      a.twitter != b.twitter ||
+      a.github != b.github ||
+      a.website != b.website ||
+      a.createdAt != b.createdAt;
+
   void _write(Future<void> Function(ClientsStore store) op) {
     final ClientsStore? store = _store;
     if (store == null) return;
@@ -117,9 +131,12 @@ class ClientsRepository extends ChangeNotifier {
   void update(Client client) {
     final int index = _clients.indexWhere((Client c) => c.id == client.id);
     if (index != -1) {
+      final Client previous = _clients[index];
       _clients[index] = client;
       notifyListeners();
-      _write((ClientsStore s) => s.save(client));
+      if (_persistedChanged(previous, client)) {
+        _write((ClientsStore s) => s.save(client));
+      }
     }
   }
 

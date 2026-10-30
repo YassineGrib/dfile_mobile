@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/format.dart';
 import '../../clients/data/data.dart';
 import '../project_strings.dart';
+import 'projects_store.dart';
 import 'project.dart';
 
 /// In-memory repository managing portfolio projects, tasks, payments, and client sync.
@@ -42,6 +44,122 @@ class ProjectsRepository extends ChangeNotifier {
   final List<ProjectPayment> _payments;
   final Map<String, String> _projectClientHistory = <String, String>{};
   int _idCounter = 100;
+
+  ProjectsStore? _store;
+  StreamSubscription<List<ProjectItem>>? _projectsSub;
+  StreamSubscription<List<ProjectTask>>? _tasksSub;
+  bool _projectsLoaded = false;
+  bool _tasksLoaded = false;
+  bool _inSync = false;
+  Object? _syncError;
+
+  /// True until the first snapshots of an attached store arrive.
+  bool get isLoading => _store != null && !(_projectsLoaded && _tasksLoaded);
+
+  /// Last store error (read or write), if any.
+  Object? get syncError => _syncError;
+
+  bool get isAttached => _store != null;
+
+  /// Switches to [store] as the source of truth: demo data is dropped and the
+  /// lists follow the snapshots. Payments are not synced yet, so they start
+  /// empty while attached.
+  void attachStore(ProjectsStore store) {
+    _detach();
+    _store = store;
+    _projects.clear();
+    _tasks.clear();
+    _payments.clear();
+    _projectClientHistory.clear();
+    _projectsLoaded = false;
+    _tasksLoaded = false;
+    _syncError = null;
+    clientsRepository.addListener(_onClientsChanged);
+    notifyListeners();
+    _projectsSub = store.watchProjects().listen((List<ProjectItem> remote) {
+      _projects
+        ..clear()
+        ..addAll(remote);
+      for (final ProjectItem p in remote) {
+        _projectClientHistory[p.id] = p.clientId;
+      }
+      _projectsLoaded = true;
+      _syncAllClients();
+      notifyListeners();
+    }, onError: _onStoreError);
+    _tasksSub = store.watchTasks().listen((List<ProjectTask> remote) {
+      _tasks
+        ..clear()
+        ..addAll(remote);
+      _tasksLoaded = true;
+      notifyListeners();
+    }, onError: _onStoreError);
+  }
+
+  /// Stops following the store and empties the lists (sign-out).
+  void detachStore() {
+    _detach();
+    _projects.clear();
+    _tasks.clear();
+    _payments.clear();
+    _projectClientHistory.clear();
+    notifyListeners();
+  }
+
+  void _detach() {
+    _projectsSub?.cancel();
+    _tasksSub?.cancel();
+    _projectsSub = null;
+    _tasksSub = null;
+    if (_store != null) {
+      clientsRepository.removeListener(_onClientsChanged);
+    }
+    _store = null;
+    _projectsLoaded = false;
+    _tasksLoaded = false;
+  }
+
+  void _onStoreError(Object error) {
+    _syncError = error;
+    _projectsLoaded = true;
+    _tasksLoaded = true;
+    notifyListeners();
+  }
+
+  void _write(Future<void> Function(ProjectsStore store) op) {
+    final ProjectsStore? store = _store;
+    if (store == null) return;
+    op(store).catchError((Object error) {
+      _syncError = error;
+      notifyListeners();
+    });
+  }
+
+  /// Deletes this user's projects and tasks from the store (before the account goes).
+  Future<void> deleteRemoteData() async => _store?.deleteAll();
+
+  void _onClientsChanged() {
+    if (_store != null && !_inSync) _syncAllClients();
+  }
+
+  /// Rebuilds every client's embedded project list from the current projects.
+  void _syncAllClients() {
+    if (_inSync) return;
+    _inSync = true;
+    try {
+      for (final Client c in clientsRepository.clients) {
+        _syncClient(c.id);
+      }
+    } finally {
+      _inSync = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _detach();
+    super.dispose();
+  }
 
   List<ProjectItem> get projects => List<ProjectItem>.unmodifiable(_projects);
 
@@ -129,6 +247,12 @@ class ProjectsRepository extends ChangeNotifier {
     }
     _syncClient(normalized.clientId);
     notifyListeners();
+    _write((ProjectsStore st) async {
+      await st.saveProject(normalized);
+      for (final ProjectTask t in tasks) {
+        await st.saveTask(t, create: true);
+      }
+    });
   }
 
   /// Updates an existing project and syncs affected client(s).
@@ -149,6 +273,7 @@ class ProjectsRepository extends ChangeNotifier {
     }
     _syncClient(normalized.clientId);
     notifyListeners();
+    _write((ProjectsStore st) => st.saveProject(normalized));
   }
 
   /// Deletes a project and its tasks while retaining recorded ledger payments.
@@ -160,9 +285,18 @@ class ProjectsRepository extends ChangeNotifier {
     final String clientId = _projects[index].clientId;
     _projectClientHistory[id] = clientId;
     _projects.removeAt(index);
+    final List<ProjectTask> removedTasks = _tasks
+        .where((ProjectTask t) => t.projectId == id)
+        .toList();
     _tasks.removeWhere((ProjectTask t) => t.projectId == id);
     _syncClient(clientId);
     notifyListeners();
+    _write((ProjectsStore st) async {
+      await st.deleteProject(id);
+      for (final ProjectTask t in removedTasks) {
+        await st.deleteTask(t.id);
+      }
+    });
   }
 
   /// Toggles a task between [TaskStatus.complete] and [TaskStatus.nextUp].
@@ -175,8 +309,10 @@ class ProjectsRepository extends ChangeNotifier {
     final TaskStatus nextStatus = current.status.isComplete
         ? TaskStatus.nextUp
         : TaskStatus.complete;
-    _tasks[index] = current.copyWith(status: nextStatus);
+    final ProjectTask toggled = current.copyWith(status: nextStatus);
+    _tasks[index] = toggled;
     notifyListeners();
+    _write((ProjectsStore st) => st.saveTask(toggled));
   }
 
   /// Appends a new task to [projectId] and notifies listeners.
@@ -188,7 +324,9 @@ class ProjectsRepository extends ChangeNotifier {
   }) {
     _idCounter++;
     final ProjectTask task = ProjectTask(
-      id: 't_$_idCounter',
+      id: _store != null
+          ? 'tsk_${DateTime.now().microsecondsSinceEpoch}'
+          : 't_$_idCounter',
       projectId: projectId,
       name: name.trim(),
       due: due,
@@ -196,6 +334,7 @@ class ProjectsRepository extends ChangeNotifier {
     );
     _tasks.add(task);
     notifyListeners();
+    _write((ProjectsStore st) => st.saveTask(task, create: true));
     return task;
   }
 
@@ -216,6 +355,7 @@ class ProjectsRepository extends ChangeNotifier {
     _projects[index] = updated;
     _syncClient(updated.clientId);
     notifyListeners();
+    _write((ProjectsStore st) => st.saveProject(updated));
   }
 
   /// Records a new [payment] and syncs the owning client's embedded payments list.
