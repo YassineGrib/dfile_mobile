@@ -5,6 +5,7 @@ import '../../clients/data/data.dart';
 import '../../expenses/data/data.dart';
 import '../../friends/data/data.dart';
 import '../../projects/data/data.dart';
+import '../../settings/data/data.dart';
 import 'auth_service.dart';
 
 /// Connects the repositories to the signed-in user: on sign-in each one
@@ -18,16 +19,19 @@ class UserDataSync {
     required this.expenses,
     required this.friends,
     required this.calendar,
+    required this.settings,
     ClientsStore Function(String uid)? clientsStore,
     ProjectsStore Function(String uid)? projectsStore,
     ExpensesStore Function(String uid)? expensesStore,
     FriendsStore Function(String uid)? friendsStore,
     CalendarStore Function(String uid)? calendarStore,
+    SettingsStore Function(AuthUser user)? settingsStore,
   }) : _clientsStore = clientsStore ?? FirestoreClientsStore.new,
        _projectsStore = projectsStore ?? FirestoreProjectsStore.new,
        _expensesStore = expensesStore ?? FirestoreExpensesStore.new,
        _friendsStore = friendsStore ?? FirestoreFriendsStore.new,
-       _calendarStore = calendarStore ?? FirestoreCalendarStore.new;
+       _calendarStore = calendarStore ?? FirestoreCalendarStore.new,
+       _settingsStore = settingsStore ?? _firestoreSettings;
 
   final AuthService auth;
   final ClientsRepository clients;
@@ -35,11 +39,24 @@ class UserDataSync {
   final ExpensesRepository expenses;
   final FriendsRepository friends;
   final CalendarRepository calendar;
+  final SettingsRepository settings;
   final ClientsStore Function(String uid) _clientsStore;
   final ProjectsStore Function(String uid) _projectsStore;
   final ExpensesStore Function(String uid) _expensesStore;
   final FriendsStore Function(String uid) _friendsStore;
   final CalendarStore Function(String uid) _calendarStore;
+  final SettingsStore Function(AuthUser user) _settingsStore;
+
+  static UserProfile _seedProfile(AuthUser user) => UserProfile(
+    name: user.displayName ?? '',
+    designation: '',
+    email: user.email,
+    phone: '',
+    address: '',
+  );
+
+  static SettingsStore _firestoreSettings(AuthUser user) =>
+      FirestoreSettingsStore(user.uid, profileFallback: _seedProfile(user));
 
   StreamSubscription<AuthUser?>? _subscription;
   String? _uid;
@@ -53,6 +70,7 @@ class UserDataSync {
     if (user?.uid == _uid) return;
     _uid = user?.uid;
     if (user == null) {
+      settings.detachStore();
       calendar.detachStore();
       friends.detachStore();
       expenses.detachStore();
@@ -64,6 +82,10 @@ class UserDataSync {
       expenses.attachStore(_expensesStore(user.uid));
       friends.attachStore(_friendsStore(user.uid));
       calendar.attachStore(_calendarStore(user.uid));
+      settings.attachStore(
+        _settingsStore(user),
+        seedProfile: _seedProfile(user),
+      );
     }
   }
 

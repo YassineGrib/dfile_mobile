@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import 'app_language.dart';
 import 'app_theme_mode.dart';
 import 'device_session.dart';
 import 'notification_prefs.dart';
+import 'settings_store.dart';
 import 'support_ticket.dart';
 import 'user_profile.dart';
 
@@ -100,6 +103,85 @@ class SettingsRepository extends ChangeNotifier {
   final List<SupportTicket> _supportTickets;
   String _password;
 
+  SettingsStore? _store;
+  StreamSubscription<SettingsSnapshot>? _subscription;
+  bool _loading = false;
+  Object? _syncError;
+
+  /// True until the first snapshot of an attached store arrives.
+  bool get isLoading => _loading;
+
+  /// Last store error (read or write), if any.
+  Object? get syncError => _syncError;
+
+  bool get isAttached => _store != null;
+
+  /// Switches to [store] for the settings shared with the web app (profile,
+  /// categories, contract clauses, notification switches). [seedProfile] is
+  /// shown until the document has a profile. PIN, biometrics, theme and
+  /// language stay on this device.
+  void attachStore(SettingsStore store, {UserProfile? seedProfile}) {
+    _subscription?.cancel();
+    _store = store;
+    _loading = true;
+    _syncError = null;
+    if (seedProfile != null) _profile = seedProfile;
+    _categories
+      ..clear()
+      ..addAll(defaultCategories);
+    _legalClauses = defaultLegalClauses;
+    _notifications = defaultNotificationPrefs;
+    notifyListeners();
+    _subscription = store.watch().listen(
+      (SettingsSnapshot snap) {
+        if (snap.profile != null) _profile = snap.profile!;
+        if (snap.categories != null) {
+          _categories
+            ..clear()
+            ..addAll(snap.categories!);
+        }
+        if (snap.legalClauses != null) _legalClauses = snap.legalClauses!;
+        if (snap.notifications != null) _notifications = snap.notifications!;
+        _loading = false;
+        _syncError = null;
+        notifyListeners();
+      },
+      onError: (Object error) {
+        _loading = false;
+        _syncError = error;
+        notifyListeners();
+      },
+    );
+  }
+
+  /// Stops following the store and resets to the defaults (sign-out).
+  void detachStore() {
+    _subscription?.cancel();
+    _subscription = null;
+    _store = null;
+    _loading = false;
+    _syncError = null;
+    clearAll();
+  }
+
+  /// Deletes this user's settings document (before the account goes).
+  Future<void> deleteRemoteData() async => _store?.deleteAll();
+
+  void _write(Future<void> Function(SettingsStore store) op) {
+    final SettingsStore? store = _store;
+    if (store == null) return;
+    op(store).catchError((Object error) {
+      _syncError = error;
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
   // --- Getters ---
 
   UserProfile get profile => _profile;
@@ -123,6 +205,7 @@ class SettingsRepository extends ChangeNotifier {
   void updateProfile(UserProfile newProfile) {
     _profile = newProfile;
     notifyListeners();
+    _write((SettingsStore st) => st.saveProfile(newProfile));
   }
 
   void setLanguage(AppLanguage language) {
@@ -153,6 +236,8 @@ class SettingsRepository extends ChangeNotifier {
     }
     _categories.add(trimmed);
     notifyListeners();
+    final List<String> added = List<String>.of(_categories);
+    _write((SettingsStore st) => st.saveCategories(added));
     return true;
   }
 
@@ -167,6 +252,8 @@ class SettingsRepository extends ChangeNotifier {
     if (index != -1) {
       _categories.removeAt(index);
       notifyListeners();
+      final List<String> remaining = List<String>.of(_categories);
+      _write((SettingsStore st) => st.saveCategories(remaining));
       return true;
     }
     return false;
@@ -175,6 +262,7 @@ class SettingsRepository extends ChangeNotifier {
   void setLegalClauses(String clauses) {
     _legalClauses = clauses;
     notifyListeners();
+    _write((SettingsStore st) => st.saveLegalClauses(clauses));
   }
 
   /// Sets or clears the 4-digit PIN.
@@ -226,6 +314,7 @@ class SettingsRepository extends ChangeNotifier {
   void updateNotifications(NotificationPrefs prefs) {
     _notifications = prefs;
     notifyListeners();
+    _write((SettingsStore st) => st.saveNotifications(prefs));
   }
 
   void addSupportTicket(SupportTicket ticket) {

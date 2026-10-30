@@ -7,3 +7,4 @@ export 'settings_repository.dart';
 export 'settings_scope.dart';
 export 'support_ticket.dart';
 export 'user_profile.dart';
+export 'settings_store.dart';

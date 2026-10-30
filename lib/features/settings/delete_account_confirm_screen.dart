@@ -7,6 +7,8 @@ import '../../core/widgets/widgets.dart';
 import '../auth/data/auth_service.dart';
 import '../clients/data/data.dart';
 import '../calendar/data/data.dart';
+import 'data/settings_repository.dart';
+import 'data/settings_scope.dart';
 import '../expenses/data/data.dart';
 import '../friends/data/data.dart';
 import '../projects/data/data.dart';
@@ -82,6 +84,10 @@ class _DeleteAccountConfirmScreenState
     setState(() {});
 
     if (isValid && _understandChecked) {
+      final SettingsRepository settingsRepo = SettingsScope.of(
+        context,
+        listen: false,
+      );
       final CalendarRepository calendarRepo = CalendarScope.of(
         context,
         listen: false,
@@ -105,6 +111,7 @@ class _DeleteAccountConfirmScreenState
       final AuthResult result = await AuthScope.of(context).deleteAccount(
         password: _passwordController.text,
         beforeDelete: () async {
+          await settingsRepo.deleteRemoteData();
           await calendarRepo.deleteRemoteData();
           await friendsRepo.deleteRemoteData();
           await expensesRepo.deleteRemoteData();

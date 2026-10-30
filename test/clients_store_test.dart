@@ -7,6 +7,7 @@ import 'package:dfile_mobile/features/calendar/data/data.dart';
 import 'package:dfile_mobile/features/expenses/data/data.dart';
 import 'package:dfile_mobile/features/friends/data/data.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
+import 'package:dfile_mobile/features/settings/data/data.dart';
 
 Client sample(String id, {String name = 'Acme'}) => Client(
   id: id,
@@ -114,6 +115,8 @@ void main() {
       expenses: ExpensesRepository(),
       friends: FriendsRepository(),
       calendar: CalendarRepository(),
+      settings: SettingsRepository(),
+      settingsStore: (AuthUser user) => FakeSettingsStore(),
       friendsStore: (String uid) => FakeFriendsStore(),
       calendarStore: (String uid) => FakeCalendarStore(),
       expensesStore: (String uid) => FakeExpensesStore(),

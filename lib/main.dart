@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/router/app_router.dart';
+import 'core/sync_status.dart';
 import 'core/theme/theme.dart';
+import 'core/widgets/sync_banner.dart';
 import 'features/auth/data/auth_service.dart';
 import 'features/auth/data/firebase_auth_service.dart';
 import 'features/auth/data/user_data_sync.dart';
@@ -30,13 +32,31 @@ Future<void> main() async {
     expenses: defaultExpensesRepository,
     friends: defaultFriendsRepository,
     calendar: defaultCalendarRepository,
+    settings: defaultSettingsRepository,
   ).start();
   final GoRouter router = createAppRouter(
     initialLocation: auth.currentUser != null
         ? AppRoutes.homePath
         : AppRoutes.welcomePath,
   );
-  runApp(DfileApp(authService: auth, router: router));
+  final SyncStatus syncStatus = SyncStatus(
+    sources: <Listenable>[
+      defaultClientsRepository,
+      defaultProjectsRepository,
+      defaultExpensesRepository,
+      defaultFriendsRepository,
+      defaultCalendarRepository,
+      defaultSettingsRepository,
+    ],
+    errorOf: () =>
+        defaultClientsRepository.syncError ??
+        defaultProjectsRepository.syncError ??
+        defaultExpensesRepository.syncError ??
+        defaultFriendsRepository.syncError ??
+        defaultCalendarRepository.syncError ??
+        defaultSettingsRepository.syncError,
+  )..start();
+  runApp(DfileApp(authService: auth, router: router, syncStatus: syncStatus));
 }
 
 class DfileApp extends StatefulWidget {
@@ -51,6 +71,7 @@ class DfileApp extends StatefulWidget {
     this.notificationsStore,
     this.calendarRepository,
     this.authService,
+    this.syncStatus,
   });
 
   final GoRouter? router;
@@ -62,6 +83,7 @@ class DfileApp extends StatefulWidget {
   final NotificationsStore? notificationsStore;
   final CalendarRepository? calendarRepository;
   final AuthService? authService;
+  final SyncStatus? syncStatus;
 
   @override
   State<DfileApp> createState() => _DfileAppState();
@@ -137,6 +159,13 @@ class _DfileAppState extends State<DfileApp> {
                       debugShowCheckedModeBanner: false,
                       theme: AppTheme.light,
                       routerConfig: widget.router ?? appRouter,
+                      builder: (BuildContext context, Widget? child) {
+                        final SyncStatus? status = widget.syncStatus;
+                        final Widget page = child ?? const SizedBox.shrink();
+                        return status == null
+                            ? page
+                            : SyncBanner(status: status, child: page);
+                      },
                     ),
                   ),
                 ),

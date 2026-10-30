@@ -13,3 +13,4 @@ export 'segmented_toggle.dart';
 export 'status_pill.dart';
 export 'blobatar.dart';
 export 'user_avatar.dart';
+export 'sync_banner.dart';

@@ -41,6 +41,7 @@ abstract final class AppIcons {
   static const IconData gauge = LucideIcons.gauge;
   static const IconData check = LucideIcons.check;
   static const IconData x = LucideIcons.x;
+  static const IconData wifiOff = LucideIcons.wifiOff;
   static const IconData user = LucideIcons.user;
   static const IconData slidersHorizontal = LucideIcons.slidersHorizontal;
   static const IconData shieldCheck = LucideIcons.shieldCheck;
