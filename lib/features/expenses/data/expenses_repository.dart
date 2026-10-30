@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../../projects/data/project.dart';
 import 'expense.dart';
+import 'expenses_store.dart';
 
 /// In-memory repository managing business expenses and statistics per `docs/design/SPEC.md`.
 class ExpensesRepository extends ChangeNotifier {
@@ -9,6 +12,73 @@ class ExpensesRepository extends ChangeNotifier {
     : _expenses = List<Expense>.of(initialExpenses ?? _createInitialExpenses());
 
   final List<Expense> _expenses;
+  ExpensesStore? _store;
+  StreamSubscription<List<Expense>>? _subscription;
+  bool _loading = false;
+  Object? _syncError;
+
+  /// True until the first snapshot of an attached store arrives.
+  bool get isLoading => _loading;
+
+  /// Last store error (read or write), if any.
+  Object? get syncError => _syncError;
+
+  bool get isAttached => _store != null;
+
+  /// Switches to [store] as the source of truth: demo data is dropped and the
+  /// list follows the snapshots.
+  void attachStore(ExpensesStore store) {
+    _subscription?.cancel();
+    _store = store;
+    _expenses.clear();
+    _loading = true;
+    _syncError = null;
+    notifyListeners();
+    _subscription = store.watch().listen(
+      (List<Expense> remote) {
+        _expenses
+          ..clear()
+          ..addAll(remote);
+        _loading = false;
+        _syncError = null;
+        notifyListeners();
+      },
+      onError: (Object error) {
+        _loading = false;
+        _syncError = error;
+        notifyListeners();
+      },
+    );
+  }
+
+  /// Stops following the store and empties the list (sign-out).
+  void detachStore() {
+    _subscription?.cancel();
+    _subscription = null;
+    _store = null;
+    _loading = false;
+    _syncError = null;
+    _expenses.clear();
+    notifyListeners();
+  }
+
+  /// Deletes this user's expenses from the store (before the account goes).
+  Future<void> deleteRemoteData() async => _store?.deleteAll();
+
+  void _write(Future<void> Function(ExpensesStore store) op) {
+    final ExpensesStore? store = _store;
+    if (store == null) return;
+    op(store).catchError((Object error) {
+      _syncError = error;
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 
   /// Unmodifiable view of all recorded expenses.
   List<Expense> get expenses => List<Expense>.unmodifiable(_expenses);
@@ -34,6 +104,7 @@ class ExpensesRepository extends ChangeNotifier {
   void add(Expense expense) {
     _expenses.add(expense);
     notifyListeners();
+    _write((ExpensesStore s) => s.save(expense));
   }
 
   /// Updates an existing expense matching [expense.id] and notifies listeners.
@@ -44,6 +115,7 @@ class ExpensesRepository extends ChangeNotifier {
     if (index != -1) {
       _expenses[index] = expense;
       notifyListeners();
+      _write((ExpensesStore s) => s.save(expense));
       return true;
     }
     return false;
@@ -57,6 +129,7 @@ class ExpensesRepository extends ChangeNotifier {
     if (index != -1) {
       _expenses.removeAt(index);
       notifyListeners();
+      _write((ExpensesStore s) => s.delete(id));
       return true;
     }
     return false;

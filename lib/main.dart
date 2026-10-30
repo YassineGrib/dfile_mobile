@@ -27,6 +27,7 @@ Future<void> main() async {
     auth: auth,
     clients: defaultClientsRepository,
     projects: defaultProjectsRepository,
+    expenses: defaultExpensesRepository,
   ).start();
   final GoRouter router = createAppRouter(
     initialLocation: auth.currentUser != null

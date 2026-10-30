@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dfile_mobile/features/auth/data/auth_service.dart';
 import 'package:dfile_mobile/features/auth/data/user_data_sync.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
+import 'package:dfile_mobile/features/expenses/data/data.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
 
 Client sample(String id, {String name = 'Acme'}) => Client(
@@ -108,6 +109,8 @@ void main() {
       auth: auth,
       clients: repo,
       projects: ProjectsRepository(clientsRepository: repo),
+      expenses: ExpensesRepository(),
+      expensesStore: (String uid) => FakeExpensesStore(),
       projectsStore: (String uid) => FakeProjectsStore(),
       clientsStore: (String uid) {
         uids.add(uid);
