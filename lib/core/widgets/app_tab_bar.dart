@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../theme/theme.dart';
+import 'app_icons.dart';
 
-/// Four-tab bottom bar (Home, Projects, Clients, More) with Clients active by default.
+/// Four-tab bottom bar (Home, Projects, Clients, More) with real Lucide icons.
 class AppTabBar extends StatelessWidget {
   const AppTabBar({
     super.key,
@@ -22,6 +23,13 @@ class AppTabBar extends StatelessWidget {
     'More',
   ];
 
+  static const List<IconData> tabIcons = <IconData>[
+    AppIcons.house,
+    AppIcons.folderKanban,
+    AppIcons.users,
+    AppIcons.ellipsis,
+  ];
+
   final int currentIndex;
   final ValueChanged<int>? onTap;
 
@@ -33,7 +41,9 @@ class AppTabBar extends StatelessWidget {
     if (index == currentIndex) {
       return;
     }
-    if (index == projectsTabIndex) {
+    if (index == homeTabIndex) {
+      GoRouter.maybeOf(context)?.go('/home');
+    } else if (index == projectsTabIndex) {
       GoRouter.maybeOf(context)?.go('/projects');
     } else if (index == clientsTabIndex) {
       GoRouter.maybeOf(context)?.go('/clients');
@@ -58,26 +68,27 @@ class AppTabBar extends StatelessWidget {
           child: Row(
             children: List<Widget>.generate(labels.length, (int index) {
               final bool isActive = index == currentIndex;
-              final bool isInteractive =
-                  onTap != null ||
-                  index == projectsTabIndex ||
-                  index == clientsTabIndex ||
-                  index == moreTabIndex;
               return Expanded(
                 child: InkWell(
-                  onTap: isInteractive ? () => _handleTap(context, index) : null,
+                  onTap: () => _handleTap(context, index),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        width: 28,
-                        height: 28,
+                        width: 52,
+                        height: 32,
                         decoration: BoxDecoration(
-                          color: isActive ? AppColors.ink : AppColors.seg,
-                          borderRadius: BorderRadius.circular(9),
+                          color: isActive ? AppColors.seg : Colors.transparent,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          tabIcons[index],
+                          size: 22,
+                          color: isActive ? AppColors.ink : AppColors.mute,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
                         labels[index],
                         style: AppText.captionSm.copyWith(

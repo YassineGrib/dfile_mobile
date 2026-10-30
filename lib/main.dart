@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/theme.dart';
 import 'features/clients/data/data.dart';
+import 'features/dashboard/data/data.dart';
 import 'features/expenses/data/data.dart';
 import 'features/friends/data/data.dart';
 import 'features/projects/data/data.dart';
@@ -27,6 +28,7 @@ class DfileApp extends StatefulWidget {
     this.expensesRepository,
     this.friendsRepository,
     this.settingsRepository,
+    this.notificationsStore,
   });
 
   final GoRouter? router;
@@ -35,6 +37,7 @@ class DfileApp extends StatefulWidget {
   final ExpensesRepository? expensesRepository;
   final FriendsRepository? friendsRepository;
   final SettingsRepository? settingsRepository;
+  final NotificationsStore? notificationsStore;
 
   @override
   State<DfileApp> createState() => _DfileAppState();
@@ -83,6 +86,8 @@ class _DfileAppState extends State<DfileApp> {
         widget.friendsRepository ?? defaultFriendsRepository;
     final SettingsRepository effectiveSettingsRepo =
         widget.settingsRepository ?? defaultSettingsRepository;
+    final NotificationsStore effectiveNotificationsStore =
+        widget.notificationsStore ?? defaultNotificationsStore;
 
     return ClientsScope(
       repository: effectiveClientsRepo,
@@ -94,11 +99,14 @@ class _DfileAppState extends State<DfileApp> {
             repository: effectiveFriendsRepo,
             child: SettingsScope(
               repository: effectiveSettingsRepo,
-              child: MaterialApp.router(
-                title: 'Dfile',
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.light,
-                routerConfig: widget.router ?? appRouter,
+              child: NotificationsScope(
+                store: effectiveNotificationsStore,
+                child: MaterialApp.router(
+                  title: 'Dfile',
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.light,
+                  routerConfig: widget.router ?? appRouter,
+                ),
               ),
             ),
           ),
@@ -115,3 +123,4 @@ final ProjectsRepository defaultProjectsRepository = ProjectsRepository(
 final ExpensesRepository defaultExpensesRepository = ExpensesRepository();
 final FriendsRepository defaultFriendsRepository = FriendsRepository();
 final SettingsRepository defaultSettingsRepository = SettingsRepository();
+final NotificationsStore defaultNotificationsStore = NotificationsStore();

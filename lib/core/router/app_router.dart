@@ -11,6 +11,10 @@ import '../../features/clients/add_client_screen.dart';
 import '../../features/clients/client_detail_screen.dart';
 import '../../features/clients/clients_list_screen.dart';
 import '../../features/clients/edit_client_screen.dart';
+import '../../features/dashboard/cashflow_screen.dart';
+import '../../features/dashboard/home_screen.dart';
+import '../../features/dashboard/notifications_screen.dart' as dashboard;
+import '../../features/dashboard/profit_screen.dart';
 import '../../features/expenses/expense_detail_screen.dart';
 import '../../features/expenses/expense_form_screen.dart';
 import '../../features/expenses/expenses_list_screen.dart';
@@ -41,7 +45,7 @@ import '../../features/settings/data/policy_kind.dart';
 import '../../features/settings/edit_profile_screen.dart';
 import '../../features/settings/integrations_screen.dart';
 import '../../features/settings/legal_clauses_screen.dart';
-import '../../features/settings/notifications_screen.dart';
+import '../../features/settings/notifications_screen.dart' as settings;
 import '../../features/settings/policy_screen.dart';
 import '../../features/settings/preferences_screen.dart';
 import '../../features/settings/security_screen.dart';
@@ -50,6 +54,17 @@ import '../../features/settings/support_ticket_screen.dart';
 
 /// Named route identifiers and paths for every screen in `docs/design/SPEC.md`.
 abstract final class AppRoutes {
+  static const String homeName = 'home';
+  static const String homePath = '/home';
+
+  static const String cashflowName = 'cashflow';
+  static const String cashflowPath = '/home/cashflow';
+
+  static const String profitName = 'profit';
+  static const String profitPath = '/home/profit';
+
+  static const String homeNotificationsName = 'home-notifications';
+  static const String homeNotificationsPath = '/home/notifications';
   static const String welcomeName = 'welcome';
   static const String welcomePath = '/welcome';
 
@@ -173,8 +188,8 @@ abstract final class AppRoutes {
 
   static const String settingsNotificationsName = 'settings-notifications';
   static const String settingsNotificationsPath = '/settings/notifications';
-  static const String notificationsName = 'notifications';
-  static const String notificationsPath = '/settings/notifications';
+  static const String notificationsName = 'home-notifications';
+  static const String notificationsPath = '/home/notifications';
 
   static const String settingsAboutName = 'settings-about';
   static const String settingsAboutPath = '/settings/about';
@@ -230,6 +245,30 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
   return GoRouter(
     initialLocation: initialLocation,
     routes: <RouteBase>[
+      GoRoute(
+        path: AppRoutes.homePath,
+        name: AppRoutes.homeName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const HomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.cashflowPath,
+        name: AppRoutes.cashflowName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const CashflowScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.profitPath,
+        name: AppRoutes.profitName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const ProfitScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.homeNotificationsPath,
+        name: AppRoutes.homeNotificationsName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const dashboard.NotificationsScreen(),
+      ),
       GoRoute(
         path: AppRoutes.welcomePath,
         name: AppRoutes.welcomeName,
@@ -481,7 +520,7 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.welcomePath}) {
         path: AppRoutes.settingsNotificationsPath,
         name: AppRoutes.settingsNotificationsName,
         builder: (BuildContext context, GoRouterState state) =>
-            const NotificationsScreen(),
+            const settings.NotificationsScreen(),
       ),
       GoRoute(
         path: AppRoutes.settingsAboutPath,

@@ -27,6 +27,8 @@ abstract final class AppColors {
   static const Color greenBg = Color(0xFFE4F6E9);
   static const Color red = Color(0xFFD32F2F);
   static const Color redBg = Color(0xFFFFF0F0);
+  static const Color coralBg = Color(0xFFFFE9E6);
+  static const Color yellowBg = Color(0xFFFFF3CC);
 
   /// 50% ink scrim used behind modal bottom sheets.
   static const Color scrim = Color(0x801B1B1F);

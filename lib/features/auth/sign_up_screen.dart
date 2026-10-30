@@ -82,7 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {});
 
     if (isValid) {
-      context.go(AppRoutes.clientsPath);
+      context.go(AppRoutes.homePath);
     }
   }
 
@@ -93,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       return;
     }
-    context.go(AppRoutes.clientsPath);
+    context.go(AppRoutes.homePath);
   }
 
   @override

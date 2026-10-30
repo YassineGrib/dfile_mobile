@@ -59,7 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
     setState(() {});
 
     if (isValid) {
-      context.go(AppRoutes.clientsPath);
+      context.go(AppRoutes.homePath);
     }
   }
 
@@ -157,7 +157,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             width: 22,
                             height: 22,
                           ),
-                          onPressed: () => context.go(AppRoutes.clientsPath),
+                          onPressed: () => context.go(AppRoutes.homePath),
                         ),
                         const Spacer(),
                         const SizedBox(height: AppSpacing.xxl),

@@ -1,4 +1,5 @@
 export 'app_bottom_sheet.dart';
+export 'app_icons.dart';
 export 'app_pill.dart';
 export 'app_tab_bar.dart';
 export 'app_text_field.dart';

@@ -8,6 +8,7 @@ import 'package:dfile_mobile/core/widgets/widgets.dart';
 import 'package:dfile_mobile/features/clients/clients_list_screen.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
 import 'package:dfile_mobile/features/more/more_screen.dart';
+import 'package:dfile_mobile/features/dashboard/home_screen.dart';
 import 'package:dfile_mobile/features/projects/add_project_screen.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
 import 'package:dfile_mobile/features/projects/edit_project_screen.dart';
@@ -619,11 +620,21 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(ProjectsListScreen), findsOneWidget);
 
-        // Tap Home -> stays on /projects
+        // Tap Home -> navigates to /home (HomeScreen)
         await tester.tap(
           find.descendant(
             of: find.byType(AppTabBar),
             matching: find.text('Home'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.byType(HomeScreen), findsOneWidget);
+
+        // Tap Projects tab -> returns to /projects
+        await tester.tap(
+          find.descendant(
+            of: find.byType(AppTabBar),
+            matching: find.text('Projects'),
           ),
         );
         await tester.pumpAndSettle();

@@ -7,7 +7,7 @@ import 'package:dfile_mobile/features/auth/sign_in_screen.dart';
 import 'package:dfile_mobile/features/auth/sign_up_screen.dart';
 import 'package:dfile_mobile/features/auth/verify_code_screen.dart';
 import 'package:dfile_mobile/features/auth/welcome_screen.dart';
-import 'package:dfile_mobile/features/clients/clients_list_screen.dart';
+import 'package:dfile_mobile/features/dashboard/home_screen.dart';
 import 'package:dfile_mobile/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -95,7 +95,7 @@ void main() {
   );
 
   testWidgets(
-    'sign-in validation blocks empty input and succeeds with valid input (ends on /clients)',
+    'sign-in validation blocks empty input and succeeds with valid input (ends on /home)',
     (WidgetTester tester) async {
       setTestSurface(tester);
       final router = createAppRouter(initialLocation: AppRoutes.signInPath);
@@ -128,8 +128,8 @@ void main() {
       await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.signIn));
       await tester.pumpAndSettle();
 
-      // Navigates to /clients
-      expect(find.byType(ClientsListScreen), findsOneWidget);
+      // Navigates to /home
+      expect(find.byType(HomeScreen), findsOneWidget);
     },
   );
 
@@ -254,7 +254,7 @@ void main() {
   );
 
   testWidgets(
-    'sign-up validation and Google continue flow to /clients',
+    'sign-up validation and Google continue flow to /home',
     (WidgetTester tester) async {
       setTestSurface(tester);
       final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
@@ -294,11 +294,11 @@ void main() {
       await tester.tap(find.byKey(const Key('consent_checkbox')));
       await tester.pumpAndSettle();
 
-      // Continue with Google now navigates to /clients
+      // Continue with Google now navigates to /home
       await tester.tap(find.widgetWithText(SecondaryButton, AuthStrings.continueWithGoogle));
       await tester.pumpAndSettle();
 
-      expect(find.byType(ClientsListScreen), findsOneWidget);
+      expect(find.byType(HomeScreen), findsOneWidget);
     },
   );
 
@@ -327,7 +327,7 @@ void main() {
   );
 
   testWidgets(
-    'sign-up full form submit with consent navigates to /clients',
+    'sign-up full form submit with consent navigates to /home',
     (WidgetTester tester) async {
       setTestSurface(tester);
       final router = createAppRouter(initialLocation: AppRoutes.signUpPath);
@@ -353,7 +353,7 @@ void main() {
       // Submit
       await tester.tap(find.widgetWithText(PrimaryButton, AuthStrings.createAccount));
       await tester.pumpAndSettle();
-      expect(find.byType(ClientsListScreen), findsOneWidget);
+      expect(find.byType(HomeScreen), findsOneWidget);
     },
   );
 
