@@ -295,3 +295,52 @@ Source file: `docs/design/dfile-mobile-v10-compliance.figcraft` (do not edit). G
 - Sign-up consent (PS8/PS9, lib/features/auth/sign_up_screen.dart): checkbox row "I agree to the Terms and Privacy Policy" between the password field and [Create account]; "Terms" and "Privacy Policy" are
   tappable links (push /settings/terms and /settings/privacy). [Create account] AND [Continue with Google] require it: otherwise the checkbox gets a red border and the red text "Please accept the Terms and
   Privacy Policy to continue" appears and nothing navigates. Existing sign-up tests must be adapted (tick the box), the sign-in screen is unchanged.
+
+## Dashboard / Home (files `HM1`..`HM8` in `docs/design/screens/`)
+
+Source file: `docs/design/dfile-mobile-v11-dashboard.figcraft` (do not edit). The dashboard is the HOME TAB: route /home, tab bar index 0 (Home active), and
+after Sign in / Sign up / Google the app goes to /home (not /clients). ICONS: use the Lucide icon library (Flutter package `lucide_icons_flutter`), NEVER emojis or
+letter glyphs for the dashboard; the shared AppTabBar must also switch to real icons (Home = house, Projects = folder-kanban, Clients = users, More = ellipsis) with the active
+tab drawn as an icon in ink on a 52x32 seg pill. Icon names used in the designs (Lucide): house, folder-kanban, users, ellipsis, bell, plus, banknote, receipt, folder-plus,
+user-plus, wallet, clock, hand-coins, trending-up, trending-down, arrow-up-right, arrow-down-right, chevron-right, calendar-clock, circle-check, triangle-alert, arrow-left,
+arrow-right-left, sparkles, message-square.
+
+Data comes from the existing repositories (no new mock data except the notification read-state): ClientsRepository, ProjectsRepository (projects, payments, paymentStats),
+ExpensesRepository (expenseStats), FriendsRepository (overallBalance), SettingsRepository (profile first name). All calculations are PURE functions taking a `now` DateTime
+so tests are deterministic (lib/features/dashboard/data/dashboard_stats.dart).
+
+- Greeting: "Good morning" before 12:00, "Good afternoon" before 18:00, else "Good evening", plus the first word of the profile name. A brand new account (no clients, no
+  projects, no payments, no expenses, no friends) shows the empty home HM7: "Welcome", a yellow "Set up your ledger" card with a progress bar "N of 3" (steps: has a
+  client / has a project / has a payment; each step row has an icon, title, subtitle and a ring that becomes a green check when done and opens the matching create route:
+  /clients/new, /projects/new, /payments/new), and a "Your numbers" strip (Net profit 0 DZ, Pending 0 DZ). Once all 3 steps are done the normal home is shown.
+- HM1 top bar: avatar initial (orange), greeting + name, bell button (red dot when there is any unread notification) -> /home/notifications, "+" ink button -> quick-add
+  sheet HM6. Hero card (ink, radius 32): wallet icon, "Net profit" + "All time", net = all-time payments collected minus all-time expenses (value like "573,800 DZ", white
+  34 bold; negative shows a minus), delta chip "52,300 this month" (this month inflow minus this month outflow; green with trending-up, red with trending-down when
+  negative), a 6-bar mini chart (last 6 months net, last bar yellow) and "Last 6 months"; tap -> /home/profit. KPI row (horizontal scroll, cards 150x100): Active projects
+  (count), Monthly expenses (this month outflow), Pending invoices (paymentStats outstanding), Friends owe you (overallBalance.net, green or red). Quick actions: 4 tiles
+  (Record payment banknote -> /payments/new, Add expense receipt -> /expenses/new, New project folder-plus -> /projects/new, Add client user-plus -> /clients/new).
+  Upcoming deadlines: up to 3 projects that are not Completed / Delivered / Cancelled and have an end date, ascending; each card shows triangle-alert on red with the pill
+  "Overdue Nd" when past, calendar-clock on orange with "Nd left" when within 7 days, neutral grey "Nd left" otherwise, "Today" when 0; tap -> /projects/:id; "See all" ->
+  /projects. Section order on the scrolling home: header, hero, KPI row, Quick actions, Upcoming deadlines, Cashflow card, Projects by status card, Recent activity, Friends
+  debts card (HM1, HM2, HM3 are three scroll positions of ONE screen).
+- HM2 Cashflow card: "Cashflow", range toggle 6 mo / Year, three legend totals (Inflow green, Outflow coral, Net ink) for the range, grouped bar chart (inflow green, outflow
+  coral, one group per month, the best inflow month highlighted with a dark value bubble like "+320,000"), hint "Tap to see every month" -> /home/cashflow. 6 mo = the 6 calendar
+  months ending with the current month; Year = January to December of the current year (12 groups, narrower bars). Projects by status card: donut (Delivered green, Completed light
+  green, In progress purple, Waiting client orange, Planned grey; Cancelled not shown) with the total in the centre and a legend with counts.
+- HM3 Recent activity (card, up to 4 rows, newest first) built from real records: payments ("Payment received", client - project, +amount green, date), expenses ("Expense
+  added", description, -amount red), friend settlements ("Settlement received" / "Settlement paid", friend, +/- amount), projects whose status is In Progress ("Project started");
+  icons circle-check / receipt / arrow-right-left / folder-kanban in the tinted bubbles of the design; "See all" -> /home/notifications. Friends debts card: net balance on the
+  right, chips "Owed 70,000" (green, arrow-down-right) and "You owe 12,000" (red, arrow-up-right), tap -> /friends.
+- HM4 Cashflow detail (/home/cashflow): back, "Cashflow", segmented toggle "Last 6 months" / "This year", chart card with legend totals and the chart, "MONTH BY MONTH" card with a
+  row per month (newest first): month, +inflow, -outflow, net (green / red / ink), values in thousands like "+320k".
+- HM5 Notifications (/home/notifications): back, "Notifications", "Mark all read"; groups TODAY and EARLIER; items derived from data: deadline warnings (project due within 3 days
+  or overdue: calendar-clock orange / triangle-alert red), overdue friend debts (a lent transaction with a past due date and remaining > 0: wallet red, "Payment overdue",
+  "<friend> owes you N DZ"), recent payments (circle-check green). Each shows a title, subtitle, relative time ("2h ago" / "Oct 12") and a coral dot when unread; tapping
+  marks it read and opens its target (project / friend statement / payment receipt). The read state lives in an in-memory NotificationsStore (ChangeNotifier) provided like the
+  other scopes. Respect the Settings notification switches: when push is off or a category (deadlines / payments) is off, hide those items.
+- HM6 quick add sheet: title "Create new", 4 rows (Record payment, Add expense, New project, Add client) each with a tinted icon bubble, title, subtitle and a chevron-right;
+  opened by the "+" button; choosing a row closes the sheet and navigates.
+- HM8 Profit (/home/profit): back, "Profit", ink card with the all-time net, a margin bar (net / revenue as a percentage, "Profit margin 86%"), "Revenue" and "Expenses";
+  "TOP EARNING PROJECTS" (top 3 projects by amount paid, bar relative to the best) and "WHERE THE MONEY GOES" (top 3 expense categories by amount, bar relative to the largest).
+- UX rules: numbers use the money formatter; every card is tappable only where noted; lists handle empty data with a friendly line instead of an empty card; the home must not
+  overflow on 360x800; chart bars may animate in once (300 ms) but tests must never hang (no infinite animations).
