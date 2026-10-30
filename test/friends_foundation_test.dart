@@ -13,6 +13,7 @@ import 'package:dfile_mobile/features/friends/friend_strings.dart';
 import 'package:dfile_mobile/features/friends/friends_screen.dart';
 import 'package:dfile_mobile/features/friends/transaction_detail_screen.dart';
 import 'package:dfile_mobile/features/friends/transaction_form_screen.dart';
+import 'package:dfile_mobile/core/widgets/user_avatar.dart';
 import 'package:dfile_mobile/features/friends/widgets/widgets.dart';
 import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/more/more_strings.dart';
@@ -499,7 +500,7 @@ void main() {
 
         expect(find.text('Karim Boualam'), findsOneWidget);
         expect(find.text('+213 550 12 34 56'), findsOneWidget);
-        expect(find.text('K'), findsOneWidget); // avatar initial
+        expect(find.byType(UserAvatar), findsOneWidget); // generated avatar
         expect(find.text('Owed 45,000 DZ'), findsOneWidget);
         expect(find.text('2 active • 0 settled'), findsOneWidget);
         expect(find.text('Last: 2026-10-05'), findsOneWidget);

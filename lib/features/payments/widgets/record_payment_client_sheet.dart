@@ -5,16 +5,6 @@ import '../../../core/widgets/widgets.dart';
 import '../../clients/data/data.dart';
 import '../record_payment_strings.dart';
 
-Color _clientAvatarColor(int index) {
-  const List<Color> palette = <Color>[
-    AppColors.orange,
-    AppColors.purple,
-    AppColors.yellow,
-    AppColors.coral,
-  ];
-  return palette[index % palette.length];
-}
-
 /// Opens a bottom sheet picker listing clients from [ClientsRepository].
 Future<String?> showRecordPaymentClientSheet({
   required BuildContext context,
@@ -83,11 +73,7 @@ class _ClientOptionRow extends StatelessWidget {
           ),
           child: Row(
             children: [
-              InitialAvatar(
-                initial: client.name,
-                color: _clientAvatarColor(client.avatarColorIndex),
-                size: 34,
-              ),
+              UserAvatar(name: client.name, size: 34),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Text(

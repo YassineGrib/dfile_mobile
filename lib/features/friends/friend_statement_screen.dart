@@ -84,11 +84,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
             children: [
               Row(
                 children: [
-                  InitialAvatar(
-                    initial: friend.name,
-                    color: friendAvatarColor(friend.avatarColorIndex),
-                    size: 48,
-                  ),
+                  UserAvatar(name: friend.name, size: 48),
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: Column(
@@ -374,11 +370,7 @@ class _FriendStatementScreenState extends State<FriendStatementScreen> {
   Widget _buildFriendHeader(Friend friend) {
     return Row(
       children: [
-        InitialAvatar(
-          initial: friend.name,
-          color: friendAvatarColor(friend.avatarColorIndex),
-          size: 56,
-        ),
+        UserAvatar(name: friend.name, size: 56),
         const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(

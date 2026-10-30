@@ -24,17 +24,6 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
   DetailViewMode _viewMode = DetailViewMode.overview;
   int _selectedTab = 0; // 0: Projects, 1: Payments
 
-  static const List<Color> _avatarColors = <Color>[
-    AppColors.orange,
-    AppColors.purple,
-    AppColors.yellow,
-    AppColors.coral,
-  ];
-
-  Color _avatarColor(int index) {
-    return _avatarColors[index % _avatarColors.length];
-  }
-
   void _popOrGoClients() {
     if (context.canPop()) {
       context.pop();
@@ -58,11 +47,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
             // Header with avatar and name
             Row(
               children: [
-                InitialAvatar(
-                  initial: client.name,
-                  color: _avatarColor(client.avatarColorIndex),
-                  size: 48,
-                ),
+                UserAvatar(name: client.name, size: 48),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
@@ -452,11 +437,7 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
     return Column(
       children: [
         // Avatar, Name, Joined, Status
-        InitialAvatar(
-          initial: client.name,
-          color: _avatarColor(client.avatarColorIndex),
-          size: 80,
-        ),
+        UserAvatar(name: client.name, size: 80),
         const SizedBox(height: AppSpacing.md),
         Text(client.name, style: AppText.sectionTitleLg),
         const SizedBox(height: 4),

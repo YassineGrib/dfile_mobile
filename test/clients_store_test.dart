@@ -68,11 +68,18 @@ void main() {
       await settle();
 
       repo.update(
-        repo.byId('s1')!.copyWith(
-          projects: const <Project>[
-            Project(name: 'P', status: 'In Progress', price: 1, progress: 1),
-          ],
-        ),
+        repo
+            .byId('s1')!
+            .copyWith(
+              projects: const <Project>[
+                Project(
+                  name: 'P',
+                  status: 'In Progress',
+                  price: 1,
+                  progress: 1,
+                ),
+              ],
+            ),
       );
       await settle();
       expect(repo.byId('s1')!.projects, hasLength(1));

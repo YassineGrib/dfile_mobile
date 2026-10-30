@@ -11,3 +11,5 @@ export 'round_icon_button.dart';
 export 'secondary_button.dart';
 export 'segmented_toggle.dart';
 export 'status_pill.dart';
+export 'blobatar.dart';
+export 'user_avatar.dart';

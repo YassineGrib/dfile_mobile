@@ -5,7 +5,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/app_toast.dart';
-import '../../core/widgets/initial_avatar.dart';
+import '../../core/widgets/user_avatar.dart';
 import 'data/data.dart';
 import 'settings_account_strings.dart';
 import 'widgets/account_action_bar.dart';
@@ -230,9 +230,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final SettingsRepository repo = SettingsScope.of(context);
-    final String initial = _nameController.text.trim().isNotEmpty
-        ? _nameController.text.trim()[0].toUpperCase()
-        : '?';
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -261,13 +258,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const SizedBox(height: AppSpacing.lg),
 
               // Centred avatar initial
-              Center(
-                child: InitialAvatar(
-                  initial: initial,
-                  color: AppColors.orange,
-                  size: 72,
-                ),
-              ),
+              Center(child: UserAvatar(name: _nameController.text, size: 72)),
               const SizedBox(height: AppSpacing.xl),
 
               // Display name * (required)

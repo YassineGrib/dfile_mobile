@@ -78,8 +78,7 @@ class _DeleteAccountConfirmScreenState
     setState(() {});
 
     if (isValid && _understandChecked) {
-      final AuthResult result = await AuthScope.of(context)
-          .deleteAccount(
+      final AuthResult result = await AuthScope.of(context).deleteAccount(
         password: _passwordController.text,
         beforeDelete: ClientsScope.of(context, listen: false).deleteRemoteData,
       );

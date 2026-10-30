@@ -30,17 +30,6 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
     super.dispose();
   }
 
-  static const List<Color> _avatarColors = <Color>[
-    AppColors.orange,
-    AppColors.purple,
-    AppColors.yellow,
-    AppColors.coral,
-  ];
-
-  Color _avatarColor(int index) {
-    return _avatarColors[index % _avatarColors.length];
-  }
-
   String get _sortLabel {
     switch (_sort) {
       case ClientSort.nameAZ:
@@ -524,13 +513,7 @@ class _ClientsListScreenState extends State<ClientsListScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      InitialAvatar(
-                                        initial: client.name,
-                                        color: _avatarColor(
-                                          client.avatarColorIndex,
-                                        ),
-                                        size: 48,
-                                      ),
+                                      UserAvatar(name: client.name, size: 48),
                                       const SizedBox(width: AppSpacing.md),
                                       Expanded(
                                         child: Column(

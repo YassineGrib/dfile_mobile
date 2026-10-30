@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/format.dart';
 import '../../../core/theme/theme.dart';
-import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/user_avatar.dart';
 import '../data/friend.dart';
 import 'friend_net_chip.dart';
 
@@ -60,11 +60,7 @@ class FriendCard extends StatelessWidget {
                 // Top row: Avatar, Name & Phone, Net chip
                 Row(
                   children: [
-                    InitialAvatar(
-                      initial: friend.name,
-                      color: friendAvatarColor(friend.avatarColorIndex),
-                      size: 48,
-                    ),
+                    UserAvatar(name: friend.name, size: 48),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Column(

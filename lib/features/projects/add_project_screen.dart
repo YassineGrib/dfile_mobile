@@ -478,13 +478,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
             value: selectedClient?.name,
             placeholder: ProjectStrings.selectClientPlaceholder,
             leading: selectedClient != null
-                ? InitialAvatar(
-                    initial: selectedClient.name,
-                    color: projectClientAvatarColor(
-                      selectedClient.avatarColorIndex,
-                    ),
-                    size: 34,
-                  )
+                ? UserAvatar(name: selectedClient.name, size: 34)
                 : null,
             onTap: () => _pickClient(clientsRepo),
           ),

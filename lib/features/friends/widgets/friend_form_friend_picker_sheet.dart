@@ -4,11 +4,10 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/app_bottom_sheet.dart';
-import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/user_avatar.dart';
 import '../data/friend.dart';
 import '../data/friends_repository.dart';
 import '../friend_forms_strings.dart';
-import 'friend_card.dart';
 
 /// Opens the friend picker modal bottom sheet returning the chosen [Friend] or null if cancelled.
 Future<Friend?> showFriendPickerSheet({
@@ -113,11 +112,7 @@ class _FriendPickerSheetContent extends StatelessWidget {
                       horizontal: AppSpacing.sm,
                       vertical: 4,
                     ),
-                    leading: InitialAvatar(
-                      initial: friend.name,
-                      color: friendAvatarColor(friend.avatarColorIndex),
-                      size: 38,
-                    ),
+                    leading: UserAvatar(name: friend.name, size: 38),
                     title: Text(
                       friend.name,
                       style: AppText.body.copyWith(

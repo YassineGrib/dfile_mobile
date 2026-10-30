@@ -22,20 +22,6 @@ class PaymentsListCard extends StatelessWidget {
   final Client? client;
   final ProjectItem? project;
 
-  static const List<Color> _avatarColors = <Color>[
-    AppColors.orange,
-    AppColors.purple,
-    AppColors.yellow,
-    AppColors.coral,
-  ];
-
-  Color get _avatarColor {
-    if (client != null) {
-      return _avatarColors[client!.avatarColorIndex % _avatarColors.length];
-    }
-    return _avatarColors[0];
-  }
-
   (Color textColor, Color bgColor) get _methodColors {
     switch (payment.method) {
       case PaymentMethod.baridimob:
@@ -85,11 +71,7 @@ class PaymentsListCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InitialAvatar(
-                        initial: clientName,
-                        color: _avatarColor,
-                        size: 36,
-                      ),
+                      UserAvatar(name: clientName, size: 36),
                       const SizedBox(width: AppSpacing.md),
                       Expanded(
                         child: Column(

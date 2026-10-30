@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:dfile_mobile/core/router/app_router.dart';
 import 'package:dfile_mobile/core/widgets/app_text_field.dart';
-import 'package:dfile_mobile/core/widgets/initial_avatar.dart';
+import 'package:dfile_mobile/core/widgets/user_avatar.dart';
 import 'package:dfile_mobile/core/widgets/primary_button.dart';
 import 'package:dfile_mobile/core/widgets/secondary_button.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
@@ -94,7 +94,7 @@ void main() {
       );
 
       // Avatar initial matches repository profile name initial 'Y'
-      expect(find.widgetWithText(InitialAvatar, 'Y'), findsOneWidget);
+      expect(find.byType(UserAvatar), findsOneWidget);
 
       // Name & designation
       expect(find.text(repo.profile.name), findsOneWidget);
@@ -131,7 +131,7 @@ void main() {
         initialLocation: AppRoutes.settingsProfilePath,
       );
 
-      expect(find.widgetWithText(InitialAvatar, 'Y'), findsOneWidget);
+      expect(find.byType(UserAvatar), findsOneWidget);
 
       final Finder nameField = findFieldByLabel(
         SettingsAccountStrings.displayNameLabel,
@@ -139,7 +139,11 @@ void main() {
       await tester.enterText(nameField, 'Karim Boualam');
       await tester.pumpAndSettle();
 
-      expect(find.widgetWithText(InitialAvatar, 'K'), findsOneWidget);
+      expect(find.byType(UserAvatar), findsOneWidget);
+      expect(
+        tester.widget<UserAvatar>(find.byType(UserAvatar)).name,
+        'Karim Boualam',
+      );
     });
 
     testWidgets('required validation errors on empty name and designation', (

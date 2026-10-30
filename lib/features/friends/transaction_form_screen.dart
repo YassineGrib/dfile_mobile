@@ -7,7 +7,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/app_toast.dart';
-import '../../core/widgets/initial_avatar.dart';
+import '../../core/widgets/user_avatar.dart';
 import '../../core/widgets/round_icon_button.dart';
 import 'data/friend.dart';
 import 'data/friend_transaction.dart';
@@ -15,7 +15,6 @@ import 'data/friend_tx_type.dart';
 import 'data/friends_repository.dart';
 import 'data/friends_scope.dart';
 import 'friend_forms_strings.dart';
-import 'widgets/friend_card.dart';
 import 'widgets/friend_form_bottom_bar.dart';
 import 'widgets/friend_form_direction_tiles.dart';
 import 'widgets/friend_form_friend_picker_sheet.dart';
@@ -339,13 +338,7 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                   ),
                 ),
                 leading: selectedFriend != null
-                    ? InitialAvatar(
-                        initial: selectedFriend.name,
-                        color: friendAvatarColor(
-                          selectedFriend.avatarColorIndex,
-                        ),
-                        size: 32,
-                      )
+                    ? UserAvatar(name: selectedFriend.name, size: 32)
                     : null,
                 value: selectedFriend?.name,
                 placeholder: FriendFormsStrings.selectFriendPlaceholder,

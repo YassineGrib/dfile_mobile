@@ -24,21 +24,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   final TextEditingController _newTaskController = TextEditingController();
   int _selectedTab = 0; // 0: Overview, 1: Tasks, 2: Payments
 
-  static const List<Color> _avatarColors = <Color>[
-    AppColors.orange,
-    AppColors.purple,
-    AppColors.yellow,
-    AppColors.coral,
-  ];
-
   @override
   void dispose() {
     _newTaskController.dispose();
     super.dispose();
-  }
-
-  Color _avatarColor(int index) {
-    return _avatarColors[index % _avatarColors.length];
   }
 
   void _popOrGoProjects() {
@@ -1036,7 +1025,6 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
     final Client? client = clientsRepo.byId(project.clientId);
     final String clientName = client?.name ?? ProjectStrings.unknownClient;
-    final Color clientColor = _avatarColor(client?.avatarColorIndex ?? 0);
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -1064,11 +1052,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
               Row(
                 children: [
-                  InitialAvatar(
-                    initial: clientName,
-                    color: clientColor,
-                    size: 28,
-                  ),
+                  UserAvatar(name: clientName, size: 28),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(

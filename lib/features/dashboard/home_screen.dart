@@ -87,11 +87,6 @@ class HomeScreen extends StatelessWidget {
       nameWord = '';
     }
 
-    // Avatar initial
-    final String initial = profile.name.trim().isNotEmpty
-        ? profile.name.trim()[0].toUpperCase()
-        : 'Y';
-
     // Unread notifications check for the bell dot
     final List<AppNotification> notifs = deriveNotifications(
       now: now,
@@ -165,11 +160,7 @@ class HomeScreen extends StatelessWidget {
             // Header: Avatar, Greeting, Bell button (with dot), "+" ink button
             Row(
               children: [
-                InitialAvatar(
-                  initial: initial,
-                  color: AppColors.orange,
-                  size: 44,
-                ),
+                UserAvatar(name: profile.name, size: 44),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(

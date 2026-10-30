@@ -15,16 +15,6 @@ import 'widgets/record_payment_fields.dart';
 import 'widgets/record_payment_project_sheet.dart';
 import 'widgets/record_payment_type_sheet.dart';
 
-Color _clientAvatarColor(int index) {
-  const List<Color> palette = <Color>[
-    AppColors.orange,
-    AppColors.purple,
-    AppColors.yellow,
-    AppColors.coral,
-  ];
-  return palette[index % palette.length];
-}
-
 /// Screen for recording a client payment (PY9..PY12).
 class RecordPaymentScreen extends StatefulWidget {
   const RecordPaymentScreen({super.key, this.projectId});
@@ -377,13 +367,7 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
                 value: selectedClient?.name,
                 placeholder: RecordPaymentStrings.selectClientPlaceholder,
                 leading: selectedClient != null
-                    ? InitialAvatar(
-                        initial: selectedClient.name,
-                        color: _clientAvatarColor(
-                          selectedClient.avatarColorIndex,
-                        ),
-                        size: 34,
-                      )
+                    ? UserAvatar(name: selectedClient.name, size: 34)
                     : null,
                 hasError: hasClientError,
                 errorText: RecordPaymentStrings.clientRequiredError,

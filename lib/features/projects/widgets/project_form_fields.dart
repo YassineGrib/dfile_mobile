@@ -395,13 +395,7 @@ Future<String?> showClientPickerSheet({
                 isSelected: clients[i].id == selectedClientId,
                 child: Row(
                   children: [
-                    InitialAvatar(
-                      initial: clients[i].name,
-                      color: projectClientAvatarColor(
-                        clients[i].avatarColorIndex,
-                      ),
-                      size: 34,
-                    ),
+                    UserAvatar(name: clients[i].name, size: 34),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Text(
