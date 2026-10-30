@@ -61,7 +61,7 @@ void main() {
       final PaymentStats stats = repo.paymentStats();
 
       // Header
-      expect(find.text(PaymentsListStrings.title), findsOneWidget);
+      expect(find.text(PaymentsListStrings.title), findsWidgets);
       expect(
         find.text(
           PaymentsListStrings.paymentsRecorded(repo.allPayments.length),
@@ -99,7 +99,7 @@ void main() {
 
       // Bottom tab bar has More active
       final AppTabBar tabBar = tester.widget<AppTabBar>(find.byType(AppTabBar));
-      expect(tabBar.currentIndex, AppTabBar.moreTabIndex);
+      expect(tabBar.currentIndex, AppTabBar.paymentsTabIndex);
     });
 
     testWidgets(

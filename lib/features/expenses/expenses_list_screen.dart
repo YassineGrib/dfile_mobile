@@ -257,7 +257,7 @@ class _ExpensesListScreenState extends State<ExpensesListScreen> {
     return Scaffold(
       backgroundColor: AppColors.bg,
       bottomNavigationBar: const AppTabBar(
-        currentIndex: AppTabBar.moreTabIndex,
+        currentIndex: AppTabBar.expensesTabIndex,
       ),
       body: SafeArea(
         bottom: false,

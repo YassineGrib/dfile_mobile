@@ -68,7 +68,7 @@ void main() {
       final ExpenseStats stats = expensesRepo.expenseStats();
 
       // Header
-      expect(find.text(ExpensesListStrings.title), findsOneWidget);
+      expect(find.text(ExpensesListStrings.title), findsWidgets);
       expect(
         find.text(
           ExpensesListStrings.expensesLogged(expensesRepo.expenses.length),
@@ -115,7 +115,7 @@ void main() {
 
       // Bottom tab bar has More active
       final AppTabBar tabBar = tester.widget<AppTabBar>(find.byType(AppTabBar));
-      expect(tabBar.currentIndex, AppTabBar.moreTabIndex);
+      expect(tabBar.currentIndex, AppTabBar.expensesTabIndex);
     });
 
     testWidgets(

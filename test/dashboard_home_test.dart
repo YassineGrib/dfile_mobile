@@ -276,13 +276,14 @@ void main() {
       router.go(AppRoutes.homePath);
       await pumpBounded(tester);
 
-      // Add client -> /clients/new
-      await tester.tap(
-        find.descendant(
-          of: find.byType(HomeQuickActions),
-          matching: find.text(DashboardHomeStrings.addClient),
-        ),
+      // Add client -> /clients/new (its card sits beyond the first swipe)
+      final Finder addClient = find.descendant(
+        of: find.byType(HomeQuickActions),
+        matching: find.text(DashboardHomeStrings.addClient),
       );
+      await tester.ensureVisible(addClient);
+      await pumpBounded(tester);
+      await tester.tap(addClient);
       await pumpBounded(tester);
       expect(router.state.uri.toString(), AppRoutes.addClientPath);
     });

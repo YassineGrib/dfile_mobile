@@ -4,26 +4,33 @@ import 'package:go_router/go_router.dart';
 import '../theme/theme.dart';
 import 'app_icons.dart';
 
-/// Four-tab bottom bar (Home, Projects, Clients, More) with real Lucide icons.
+/// Five-tab bottom bar (Home, Projects, Clients, Payments, Expenses) with
+/// real Lucide icons. Other sections live in the Home quick actions.
 class AppTabBar extends StatelessWidget {
   const AppTabBar({super.key, this.currentIndex = clientsTabIndex, this.onTap});
 
   static const int homeTabIndex = 0;
   static const int projectsTabIndex = 1;
   static const int clientsTabIndex = 2;
-  static const int moreTabIndex = 3;
+  static const int paymentsTabIndex = 3;
+  static const int expensesTabIndex = 4;
+
+  /// For screens reached from Home that belong to no tab (no tab highlighted).
+  static const int noTabIndex = -1;
   static const List<String> labels = <String>[
     'Home',
     'Projects',
     'Clients',
-    'More',
+    'Payments',
+    'Expenses',
   ];
 
   static const List<IconData> tabIcons = <IconData>[
     AppIcons.house,
     AppIcons.folderKanban,
     AppIcons.users,
-    AppIcons.ellipsis,
+    AppIcons.banknote,
+    AppIcons.receipt,
   ];
 
   final int currentIndex;
@@ -43,8 +50,10 @@ class AppTabBar extends StatelessWidget {
       GoRouter.maybeOf(context)?.go('/projects');
     } else if (index == clientsTabIndex) {
       GoRouter.maybeOf(context)?.go('/clients');
-    } else if (index == moreTabIndex) {
-      GoRouter.maybeOf(context)?.go('/more');
+    } else if (index == paymentsTabIndex) {
+      GoRouter.maybeOf(context)?.go('/payments');
+    } else if (index == expensesTabIndex) {
+      GoRouter.maybeOf(context)?.go('/expenses');
     }
   }
 

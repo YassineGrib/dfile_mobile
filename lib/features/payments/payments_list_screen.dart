@@ -280,7 +280,7 @@ class _PaymentsListScreenState extends State<PaymentsListScreen> {
     return Scaffold(
       backgroundColor: AppColors.bg,
       bottomNavigationBar: const AppTabBar(
-        currentIndex: AppTabBar.moreTabIndex,
+        currentIndex: AppTabBar.paymentsTabIndex,
       ),
       body: SafeArea(
         bottom: false,

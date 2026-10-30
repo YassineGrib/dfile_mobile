@@ -9,10 +9,10 @@ import 'package:dfile_mobile/core/widgets/widgets.dart';
 import 'package:dfile_mobile/features/auth/sign_in_screen.dart';
 import 'package:dfile_mobile/features/clients/clients_list_screen.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
-import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/more/more_strings.dart';
 import 'package:dfile_mobile/features/payments/payment_receipt_screen.dart';
 import 'package:dfile_mobile/features/payments/payment_strings.dart';
+import 'package:dfile_mobile/features/more/more_screen.dart';
 import 'package:dfile_mobile/features/payments/payments_list_screen.dart';
 import 'package:dfile_mobile/features/payments/record_payment_screen.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
@@ -317,13 +317,13 @@ void main() {
         expect(find.text(MoreStrings.workspaceSubtitle), findsOneWidget);
 
         // Payments row shows exact "<collected> DZ collected"
-        expect(find.text(MoreStrings.paymentsTitle), findsOneWidget);
+        expect(find.text(MoreStrings.paymentsTitle), findsWidgets);
         expect(find.text('665,000 DZ collected'), findsOneWidget);
 
         // Other menu rows
         expect(find.text(MoreStrings.calendarTitle), findsOneWidget);
         expect(find.text(MoreStrings.calendarSubtitle), findsOneWidget);
-        expect(find.text(MoreStrings.expensesTitle), findsOneWidget);
+        expect(find.text(MoreStrings.expensesTitle), findsWidgets);
         expect(find.text(MoreStrings.expensesSubtitle), findsOneWidget);
         expect(find.text(MoreStrings.invoicesTitle), findsOneWidget);
         expect(find.text(MoreStrings.invoicesSubtitle), findsOneWidget);
@@ -346,7 +346,7 @@ void main() {
         await pumpPaymentsApp(tester, initialLocation: AppRoutes.morePath);
 
         // Tap Payments row
-        await tester.tap(find.text(MoreStrings.paymentsTitle));
+        await tester.tap(find.text(MoreStrings.paymentsTitle).first);
         await tester.pumpAndSettle();
 
         // Placeholder screen is displayed
@@ -390,22 +390,22 @@ void main() {
     });
 
     testWidgets(
-      'AppTabBar More tab navigates to /more from clients and projects screens',
+      'AppTabBar Payments tab navigates to /payments from the clients screen',
       (WidgetTester tester) async {
         await pumpPaymentsApp(tester, initialLocation: AppRoutes.clientsPath);
 
         expect(find.byType(ClientsListScreen), findsOneWidget);
 
-        // Tap More in AppTabBar
+        // Tap Payments in AppTabBar
         await tester.tap(
           find.descendant(
             of: find.byType(AppTabBar),
-            matching: find.text('More'),
+            matching: find.text('Payments'),
           ),
         );
         await tester.pumpAndSettle();
 
-        expect(find.byType(MoreScreen), findsOneWidget);
+        expect(find.byType(PaymentsListScreen), findsOneWidget);
 
         // Switch to Clients tab
         await tester.tap(

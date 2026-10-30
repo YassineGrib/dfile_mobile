@@ -511,7 +511,7 @@ void main() {
         await pumpExpensesApp(tester, initialLocation: AppRoutes.morePath);
 
         // Tap Expenses row
-        await tester.tap(find.text(MoreStrings.expensesTitle));
+        await tester.tap(find.text(MoreStrings.expensesTitle).first);
         await tester.pumpAndSettle();
 
         // Verify on ExpensesListScreen placeholder

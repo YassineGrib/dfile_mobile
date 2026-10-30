@@ -18,6 +18,10 @@ abstract final class DashboardHomeStrings {
   static const String addExpense = 'Add expense';
   static const String newProject = 'New project';
   static const String addClient = 'Add client';
+  static const String newMilestone = 'New milestone';
+  static const String calendar = 'Calendar';
+  static const String friendsDebts = "Friends' debts";
+  static const String settings = 'Settings';
 
   // Upcoming deadlines
   static const String upcomingDeadlines = 'Upcoming deadlines';

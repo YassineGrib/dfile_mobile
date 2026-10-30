@@ -77,9 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
-      bottomNavigationBar: const AppTabBar(
-        currentIndex: AppTabBar.moreTabIndex,
-      ),
+      bottomNavigationBar: const AppTabBar(currentIndex: AppTabBar.noTabIndex),
       body: SafeArea(
         bottom: false,
         child: ListView(

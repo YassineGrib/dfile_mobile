@@ -492,19 +492,20 @@ void main() {
         ),
       );
 
-      // All 4 real Lucide icons must be present
+      // All 5 real Lucide icons must be present
       expect(find.byIcon(AppIcons.house), findsOneWidget);
       expect(find.byIcon(AppIcons.folderKanban), findsOneWidget);
       expect(find.byIcon(AppIcons.users), findsOneWidget);
-      expect(find.byIcon(AppIcons.ellipsis), findsOneWidget);
+      expect(find.byIcon(AppIcons.banknote), findsOneWidget);
+      expect(find.byIcon(AppIcons.receipt), findsOneWidget);
 
       // Home active tab has ink text style and seg background container
       final Text homeText = tester.widget<Text>(find.text('Home'));
       expect(homeText.style?.color, AppColors.ink);
       expect(homeText.style?.fontWeight, FontWeight.w700);
 
-      // More tab inactive has mute color
-      final Text moreText = tester.widget<Text>(find.text('More'));
+      // Payments tab inactive has mute color
+      final Text moreText = tester.widget<Text>(find.text('Payments'));
       expect(moreText.style?.color, AppColors.mute);
     });
 

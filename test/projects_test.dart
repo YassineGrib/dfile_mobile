@@ -7,7 +7,7 @@ import 'package:dfile_mobile/core/router/app_router.dart';
 import 'package:dfile_mobile/core/widgets/widgets.dart';
 import 'package:dfile_mobile/features/clients/clients_list_screen.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
-import 'package:dfile_mobile/features/more/more_screen.dart';
+import 'package:dfile_mobile/features/payments/payments_list_screen.dart';
 import 'package:dfile_mobile/features/dashboard/home_screen.dart';
 import 'package:dfile_mobile/features/projects/add_project_screen.dart';
 import 'package:dfile_mobile/features/projects/data/data.dart';
@@ -623,15 +623,15 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(ProjectsListScreen), findsOneWidget);
 
-      // Tap More -> navigates to /more (MoreScreen)
+      // Tap Payments -> navigates to /payments
       await tester.tap(
         find.descendant(
           of: find.byType(AppTabBar),
-          matching: find.text('More'),
+          matching: find.text('Payments'),
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.byType(MoreScreen), findsOneWidget);
+      expect(find.byType(PaymentsListScreen), findsOneWidget);
 
       // Tap Projects tab -> returns to /projects
       await tester.tap(

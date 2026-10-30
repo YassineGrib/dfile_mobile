@@ -284,9 +284,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
-      bottomNavigationBar: const AppTabBar(
-        currentIndex: AppTabBar.moreTabIndex,
-      ),
+      bottomNavigationBar: const AppTabBar(currentIndex: AppTabBar.noTabIndex),
       body: SafeArea(
         bottom: false,
         child: CustomScrollView(

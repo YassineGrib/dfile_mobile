@@ -160,7 +160,10 @@ class HomeScreen extends StatelessWidget {
             // Header: Avatar, Greeting, Bell button (with dot), "+" ink button
             Row(
               children: [
-                UserAvatar(name: profile.name, size: 44),
+                GestureDetector(
+                  onTap: () => context.push('/settings'),
+                  child: UserAvatar(name: profile.name, size: 44),
+                ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(

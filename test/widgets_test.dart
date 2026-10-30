@@ -313,7 +313,7 @@ void main() {
     });
 
     testWidgets(
-      'AppTabBar renders 4 tabs with Clients active and fires onTap',
+      'AppTabBar renders 5 tabs with Clients active and fires onTap',
       (WidgetTester tester) async {
         int? tappedTab;
         await tester.pumpWidget(
@@ -330,7 +330,8 @@ void main() {
         expect(find.text('Home'), findsOneWidget);
         expect(find.text('Projects'), findsOneWidget);
         expect(find.text('Clients'), findsOneWidget);
-        expect(find.text('More'), findsOneWidget);
+        expect(find.text('Payments'), findsOneWidget);
+        expect(find.text('Expenses'), findsOneWidget);
 
         final Text clientsLabel = tester.widget<Text>(find.text('Clients'));
         expect(clientsLabel.style?.fontWeight, FontWeight.w700);
