@@ -11,6 +11,8 @@ abstract class ProjectsStore {
 
   Stream<List<ProjectTask>> watchTasks();
 
+  Stream<List<ProjectPayment>> watchPayments();
+
   Future<void> saveProject(ProjectItem project);
 
   Future<void> deleteProject(String id);
@@ -20,7 +22,11 @@ abstract class ProjectsStore {
 
   Future<void> deleteTask(String id);
 
-  /// Removes every project and task (account deletion).
+  Future<void> savePayment(ProjectPayment payment);
+
+  Future<void> deletePayment(String id);
+
+  /// Removes every project, task and payment (account deletion).
   Future<void> deleteAll();
 }
 
@@ -107,6 +113,68 @@ ProjectTask taskFromMap(String docId, Map<String, Object?> data) {
   );
 }
 
+/// Web payment type strings: advance, milestone, final, tip, full, partial.
+String paymentTypeToWeb(PaymentType t) => switch (t) {
+  PaymentType.advance => 'advance',
+  PaymentType.milestone => 'milestone',
+  PaymentType.final_ => 'final',
+  PaymentType.tip => 'tip',
+};
+
+PaymentType paymentTypeFromWeb(Object? v) => switch (v) {
+  'advance' => PaymentType.advance,
+  'final' || 'full' => PaymentType.final_,
+  'tip' => PaymentType.tip,
+  _ => PaymentType.milestone,
+};
+
+/// Web method strings: baridimob, ccp, bank_transfer, cash, other.
+String paymentMethodToWeb(PaymentMethod m) => switch (m) {
+  PaymentMethod.baridimob => 'baridimob',
+  PaymentMethod.ccp => 'ccp',
+  PaymentMethod.bank => 'bank_transfer',
+  PaymentMethod.cash => 'cash',
+};
+
+PaymentMethod paymentMethodFromWeb(Object? v) => switch (v) {
+  'baridimob' => PaymentMethod.baridimob,
+  'ccp' => PaymentMethod.ccp,
+  'bank_transfer' => PaymentMethod.bank,
+  _ => PaymentMethod.cash,
+};
+
+/// Maps a payment to the web document shape (`users/{uid}/payments/{id}`).
+Map<String, Object?> paymentToMap(ProjectPayment p) => <String, Object?>{
+  'id': p.id,
+  'project_id': p.projectId,
+  'client_id': p.clientId,
+  'amount': p.amount,
+  'payment_type': paymentTypeToWeb(p.type),
+  'payment_method': paymentMethodToWeb(p.method),
+  'reference_number': p.reference.isEmpty ? FieldValue.delete() : p.reference,
+  'notes': p.notes.isEmpty ? FieldValue.delete() : p.notes,
+  'payment_date': _dateOnly(p.date),
+  'created_at': p.createdAt.toIso8601String(),
+};
+
+ProjectPayment paymentFromMap(String docId, Map<String, Object?> data) {
+  final String id = _text(data['id']).isEmpty ? docId : _text(data['id']);
+  final Object? amount = data['amount'];
+  final DateTime created = _parseDate(data['created_at']) ?? DateTime.now();
+  return ProjectPayment(
+    id: id,
+    projectId: _text(data['project_id']),
+    clientId: _text(data['client_id']),
+    date: _parseDate(data['payment_date']) ?? created,
+    reference: _text(data['reference_number']),
+    amount: amount is num ? amount.toDouble() : 0,
+    type: paymentTypeFromWeb(data['payment_type']),
+    method: paymentMethodFromWeb(data['payment_method']),
+    notes: _text(data['notes']),
+    createdAt: created,
+  );
+}
+
 /// Firestore-backed store for one signed-in user. Writes merge, so fields only
 /// the web app knows (task labels, assignees, comments) are never wiped.
 class FirestoreProjectsStore implements ProjectsStore {
@@ -140,6 +208,26 @@ class FirestoreProjectsStore implements ProjectsStore {
   );
 
   @override
+  Stream<List<ProjectPayment>> watchPayments() =>
+      _col('payments').snapshots().map(
+        (QuerySnapshot<Map<String, dynamic>> snap) => snap.docs
+            .map(
+              (QueryDocumentSnapshot<Map<String, dynamic>> d) =>
+                  paymentFromMap(d.id, Map<String, Object?>.from(d.data())),
+            )
+            .toList(),
+      );
+
+  @override
+  Future<void> savePayment(ProjectPayment payment) =>
+      _col('payments')
+          .doc(payment.id)
+          .set(paymentToMap(payment), SetOptions(merge: true));
+
+  @override
+  Future<void> deletePayment(String id) => _col('payments').doc(id).delete();
+
+  @override
   Future<void> saveProject(ProjectItem project) =>
       _col('projects')
           .doc(project.id)
@@ -159,7 +247,7 @@ class FirestoreProjectsStore implements ProjectsStore {
 
   @override
   Future<void> deleteAll() async {
-    for (final String name in <String>['projects', 'tasks']) {
+    for (final String name in <String>['projects', 'tasks', 'payments']) {
       final QuerySnapshot<Map<String, dynamic>> snap = await _col(name).get();
       final WriteBatch batch = _db.batch();
       for (final QueryDocumentSnapshot<Map<String, dynamic>> d in snap.docs) {
@@ -175,11 +263,16 @@ class FakeProjectsStore implements ProjectsStore {
   FakeProjectsStore({
     List<ProjectItem> projects = const <ProjectItem>[],
     List<ProjectTask> tasks = const <ProjectTask>[],
+    List<ProjectPayment> payments = const <ProjectPayment>[],
   }) : _projects = List<ProjectItem>.of(projects),
-       _tasks = List<ProjectTask>.of(tasks);
+       _tasks = List<ProjectTask>.of(tasks),
+       _payments = List<ProjectPayment>.of(payments);
 
   final List<ProjectItem> _projects;
   final List<ProjectTask> _tasks;
+  final List<ProjectPayment> _payments;
+  final StreamController<List<ProjectPayment>> _yc =
+      StreamController<List<ProjectPayment>>.broadcast();
   final StreamController<List<ProjectItem>> _pc =
       StreamController<List<ProjectItem>>.broadcast();
   final StreamController<List<ProjectTask>> _tc =
@@ -196,6 +289,33 @@ class FakeProjectsStore implements ProjectsStore {
   Stream<List<ProjectTask>> watchTasks() async* {
     yield List<ProjectTask>.of(_tasks);
     yield* _tc.stream;
+  }
+
+  @override
+  Stream<List<ProjectPayment>> watchPayments() async* {
+    yield List<ProjectPayment>.of(_payments);
+    yield* _yc.stream;
+  }
+
+  @override
+  Future<void> savePayment(ProjectPayment payment) async {
+    log.add('savePayment:${payment.id}');
+    final int i = _payments.indexWhere(
+      (ProjectPayment p) => p.id == payment.id,
+    );
+    if (i == -1) {
+      _payments.add(payment);
+    } else {
+      _payments[i] = payment;
+    }
+    _yc.add(List<ProjectPayment>.of(_payments));
+  }
+
+  @override
+  Future<void> deletePayment(String id) async {
+    log.add('deletePayment:$id');
+    _payments.removeWhere((ProjectPayment p) => p.id == id);
+    _yc.add(List<ProjectPayment>.of(_payments));
   }
 
   @override
@@ -241,6 +361,8 @@ class FakeProjectsStore implements ProjectsStore {
     log.add('deleteAll');
     _projects.clear();
     _tasks.clear();
+    _payments.clear();
+    _yc.add(const <ProjectPayment>[]);
     _pc.add(const <ProjectItem>[]);
     _tc.add(const <ProjectTask>[]);
   }

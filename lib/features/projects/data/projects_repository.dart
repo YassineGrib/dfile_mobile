@@ -48,13 +48,16 @@ class ProjectsRepository extends ChangeNotifier {
   ProjectsStore? _store;
   StreamSubscription<List<ProjectItem>>? _projectsSub;
   StreamSubscription<List<ProjectTask>>? _tasksSub;
+  StreamSubscription<List<ProjectPayment>>? _paymentsSub;
+  bool _paymentsLoaded = false;
   bool _projectsLoaded = false;
   bool _tasksLoaded = false;
   bool _inSync = false;
   Object? _syncError;
 
   /// True until the first snapshots of an attached store arrive.
-  bool get isLoading => _store != null && !(_projectsLoaded && _tasksLoaded);
+  bool get isLoading =>
+      _store != null && !(_projectsLoaded && _tasksLoaded && _paymentsLoaded);
 
   /// Last store error (read or write), if any.
   Object? get syncError => _syncError;
@@ -62,8 +65,7 @@ class ProjectsRepository extends ChangeNotifier {
   bool get isAttached => _store != null;
 
   /// Switches to [store] as the source of truth: demo data is dropped and the
-  /// lists follow the snapshots. Payments are not synced yet, so they start
-  /// empty while attached.
+  /// project, task and payment lists follow the snapshots.
   void attachStore(ProjectsStore store) {
     _detach();
     _store = store;
@@ -73,6 +75,7 @@ class ProjectsRepository extends ChangeNotifier {
     _projectClientHistory.clear();
     _projectsLoaded = false;
     _tasksLoaded = false;
+    _paymentsLoaded = false;
     _syncError = null;
     clientsRepository.addListener(_onClientsChanged);
     notifyListeners();
@@ -94,6 +97,20 @@ class ProjectsRepository extends ChangeNotifier {
       _tasksLoaded = true;
       notifyListeners();
     }, onError: _onStoreError);
+    _paymentsSub = store.watchPayments().listen((List<ProjectPayment> remote) {
+      _payments
+        ..clear()
+        ..addAll(
+          remote.map((ProjectPayment p) {
+            if (p.clientId.isNotEmpty) return p;
+            final String? owner = _ownerClientForProjectId(p.projectId);
+            return owner == null ? p : p.copyWith(clientId: owner);
+          }),
+        );
+      _paymentsLoaded = true;
+      _syncAllClients();
+      notifyListeners();
+    }, onError: _onStoreError);
   }
 
   /// Stops following the store and empties the lists (sign-out).
@@ -109,20 +126,24 @@ class ProjectsRepository extends ChangeNotifier {
   void _detach() {
     _projectsSub?.cancel();
     _tasksSub?.cancel();
+    _paymentsSub?.cancel();
     _projectsSub = null;
     _tasksSub = null;
+    _paymentsSub = null;
     if (_store != null) {
       clientsRepository.removeListener(_onClientsChanged);
     }
     _store = null;
     _projectsLoaded = false;
     _tasksLoaded = false;
+    _paymentsLoaded = false;
   }
 
   void _onStoreError(Object error) {
     _syncError = error;
     _projectsLoaded = true;
     _tasksLoaded = true;
+    _paymentsLoaded = true;
     notifyListeners();
   }
 
@@ -135,7 +156,7 @@ class ProjectsRepository extends ChangeNotifier {
     });
   }
 
-  /// Deletes this user's projects and tasks from the store (before the account goes).
+  /// Deletes this user's projects, tasks and payments from the store (before the account goes).
   Future<void> deleteRemoteData() async => _store?.deleteAll();
 
   void _onClientsChanged() {
@@ -196,6 +217,7 @@ class ProjectsRepository extends ChangeNotifier {
       _syncClient(resolvedClientId);
     }
     notifyListeners();
+    _write((ProjectsStore st) => st.deletePayment(id));
     return true;
   }
 
@@ -382,6 +404,7 @@ class ProjectsRepository extends ChangeNotifier {
       _syncClient(resolvedClientId);
     }
     notifyListeners();
+    _write((ProjectsStore st) => st.savePayment(normalized));
     return normalized;
   }
 
