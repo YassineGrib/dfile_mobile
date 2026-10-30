@@ -7,6 +7,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import '../clients/data/data.dart';
+import '../settings/data/data.dart';
 import 'data/data.dart';
 import 'project_strings.dart';
 import 'widgets/project_form_fields.dart';
@@ -27,6 +28,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   String _category = ProjectStrings.categoryDevelopment;
+  bool _categoryInitialized = false;
 
   // Step 2: Client & Cost
   String? _selectedClientId;
@@ -55,6 +57,23 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     _nameController.addListener(_onFieldChanged);
     _budgetController.addListener(_onFieldChanged);
     _quickClientNameController.addListener(_onFieldChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_categoryInitialized) {
+      _categoryInitialized = true;
+      try {
+        final List<String> categories =
+            SettingsScope.of(context, listen: false).categories;
+        if (categories.isNotEmpty) {
+          _category = categories.first;
+        }
+      } catch (_) {
+        // Fallback to default
+      }
+    }
   }
 
   void _onFieldChanged() {
@@ -136,9 +155,16 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   }
 
   Future<void> _pickCategory() async {
+    List<String>? categories;
+    try {
+      categories = SettingsScope.of(context, listen: false).categories;
+    } catch (_) {
+      // Fallback
+    }
     final String? picked = await showCategoryPickerSheet(
       context: context,
       selectedCategory: _category,
+      categories: categories,
     );
     if (picked != null && mounted) {
       setState(() => _category = picked);

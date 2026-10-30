@@ -7,6 +7,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
 import '../../core/widgets/widgets.dart';
 import '../clients/data/data.dart';
+import '../settings/data/data.dart';
 import 'data/data.dart';
 import 'project_strings.dart';
 import 'widgets/project_form_fields.dart';
@@ -146,9 +147,16 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
   }
 
   Future<void> _pickCategory() async {
+    List<String>? categories;
+    try {
+      categories = SettingsScope.of(context, listen: false).categories;
+    } catch (_) {
+      // Fallback
+    }
     final String? picked = await showCategoryPickerSheet(
       context: context,
       selectedCategory: _category,
+      categories: categories,
     );
     if (picked != null && mounted) {
       setState(() => _category = picked);
