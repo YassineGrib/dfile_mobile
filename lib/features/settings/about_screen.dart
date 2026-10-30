@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/router/app_router.dart';
 import '../../core/theme/theme.dart';
+import '../../core/widgets/app_icons.dart';
 import '../../core/widgets/app_toast.dart';
 import 'settings_about_strings.dart';
 import 'widgets/about_sign_out_sheet.dart';
@@ -150,7 +151,7 @@ class _AboutScreenState extends State<AboutScreen> {
             SettingsGroupCard(
               children: [
                 SettingsRow(
-                  iconLetter: '?',
+                  iconData: AppIcons.lifeBuoy,
                   iconBgColor: AppColors.seg,
                   iconTextColor: AppColors.ink,
                   title: SettingsAboutStrings.supportTicketRowTitle,
@@ -158,7 +159,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   onTap: () => context.push(AppRoutes.settingsSupportPath),
                 ),
                 SettingsRow(
-                  iconLetter: '\u00A7',
+                  iconData: AppIcons.shield,
                   iconBgColor: AppColors.seg,
                   iconTextColor: AppColors.ink,
                   title: SettingsAboutStrings.privacyPolicyRowTitle,
@@ -166,7 +167,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   onTap: () => context.push(AppRoutes.settingsPrivacyPath),
                 ),
                 SettingsRow(
-                  iconLetter: '\u00A7',
+                  iconData: AppIcons.fileText,
                   iconBgColor: AppColors.seg,
                   iconTextColor: AppColors.ink,
                   title: SettingsAboutStrings.termsConditionsRowTitle,

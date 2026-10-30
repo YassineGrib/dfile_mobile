@@ -114,7 +114,7 @@ class PreferencesScreen extends StatelessWidget {
             SettingsGroupCard(
               children: [
                 SettingsRow(
-                  iconLetter: 'T',
+                  iconData: AppIcons.typeIcon,
                   iconBgColor: AppColors.seg,
                   iconTextColor: AppColors.ink,
                   title: SettingsPrefsStrings.fontStyleTitle,
@@ -127,7 +127,7 @@ class PreferencesScreen extends StatelessWidget {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: '#',
+                  iconData: AppIcons.tags,
                   iconBgColor: AppColors.waitingClientBg,
                   iconTextColor: AppColors.purple,
                   title: SettingsPrefsStrings.projectCategoriesTitle,
@@ -138,7 +138,7 @@ class PreferencesScreen extends StatelessWidget {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: '§',
+                  iconData: AppIcons.scale,
                   iconBgColor: AppColors.orangeBg,
                   iconTextColor: AppColors.orange,
                   title: SettingsPrefsStrings.legalClausesTemplateTitle,

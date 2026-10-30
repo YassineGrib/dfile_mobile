@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/app_icons.dart';
 
 /// Interactive or informational row inside a [SettingsGroupCard].
 class SettingsRow extends StatelessWidget {
   const SettingsRow({
     super.key,
-    this.iconLetter,
+    this.iconData,
     this.iconBgColor,
     this.iconTextColor,
     this.icon,
@@ -17,7 +18,7 @@ class SettingsRow extends StatelessWidget {
     this.last = false,
   });
 
-  final String? iconLetter;
+  final IconData? iconData;
   final Color? iconBgColor;
   final Color? iconTextColor;
   final Widget? icon;
@@ -32,7 +33,7 @@ class SettingsRow extends StatelessWidget {
     Widget? leading;
     if (icon != null) {
       leading = icon;
-    } else if (iconLetter != null) {
+    } else if (iconData != null) {
       leading = Container(
         width: 40,
         height: 40,
@@ -41,14 +42,7 @@ class SettingsRow extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         alignment: Alignment.center,
-        child: Text(
-          iconLetter!,
-          style: AppText.bodyMedium.copyWith(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: iconTextColor ?? AppColors.ink,
-          ),
-        ),
+        child: Icon(iconData, size: 20, color: iconTextColor ?? AppColors.ink),
       );
     }
 
@@ -102,7 +96,7 @@ class SettingsRow extends StatelessWidget {
           if (onTap != null) ...[
             const SizedBox(width: AppSpacing.xs),
             const Icon(
-              Icons.chevron_right_rounded,
+              AppIcons.chevronRight,
               color: AppColors.placeholder,
               size: 22,
             ),
@@ -115,13 +109,7 @@ class SettingsRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (onTap != null)
-          InkWell(
-            onTap: onTap,
-            child: content,
-          )
-        else
-          content,
+        if (onTap != null) InkWell(onTap: onTap, child: content) else content,
         if (!last)
           Padding(
             padding: EdgeInsets.only(

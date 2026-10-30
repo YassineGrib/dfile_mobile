@@ -199,7 +199,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SettingsGroupCard(
               children: [
                 SettingsRow(
-                  iconLetter: 'A',
+                  iconData: AppIcons.user,
                   iconBgColor: AppColors.greenBg,
                   iconTextColor: AppColors.green,
                   title: SettingsStrings.accountTitle,
@@ -209,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: 'P',
+                  iconData: AppIcons.slidersHorizontal,
                   iconBgColor: AppColors.waitingClientBg,
                   iconTextColor: AppColors.purple,
                   title: SettingsStrings.preferencesTitle,
@@ -219,7 +219,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: 'S',
+                  iconData: AppIcons.shieldCheck,
                   iconBgColor: AppColors.inProgressBg,
                   iconTextColor: AppColors.orange,
                   title: SettingsStrings.securityTitle,
@@ -229,7 +229,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: 'I',
+                  iconData: AppIcons.plug,
                   iconBgColor: AppColors.ccpBg,
                   iconTextColor: AppColors.ink,
                   title: SettingsStrings.integrationsTitle,
@@ -239,7 +239,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: 'N',
+                  iconData: AppIcons.bell,
                   iconBgColor: AppColors.seg,
                   iconTextColor: AppColors.ink,
                   title: SettingsStrings.notificationsTitle,
@@ -249,7 +249,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: 'D',
+                  iconData: AppIcons.database,
                   iconBgColor: AppColors.greenBg,
                   iconTextColor: AppColors.green,
                   title: SettingsPrivacyStrings.privacyDataTitle,
@@ -259,7 +259,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsRow(
-                  iconLetter: '?',
+                  iconData: AppIcons.info,
                   iconBgColor: AppColors.redBg,
                   iconTextColor: AppColors.red,
                   title: SettingsStrings.aboutTitle,

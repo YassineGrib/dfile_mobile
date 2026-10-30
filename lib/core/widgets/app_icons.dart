@@ -41,4 +41,22 @@ abstract final class AppIcons {
   static const IconData gauge = LucideIcons.gauge;
   static const IconData check = LucideIcons.check;
   static const IconData x = LucideIcons.x;
+  static const IconData user = LucideIcons.user;
+  static const IconData slidersHorizontal = LucideIcons.slidersHorizontal;
+  static const IconData shieldCheck = LucideIcons.shieldCheck;
+  static const IconData plug = LucideIcons.plug;
+  static const IconData database = LucideIcons.database;
+  static const IconData info = LucideIcons.info;
+  static const IconData lifeBuoy = LucideIcons.lifeBuoy;
+  static const IconData shield = LucideIcons.shield;
+  static const IconData fileText = LucideIcons.fileText;
+  static const IconData eye = LucideIcons.eye;
+  static const IconData download = LucideIcons.download;
+  static const IconData tags = LucideIcons.tags;
+  static const IconData scale = LucideIcons.scale;
+  static const IconData circleDollarSign = LucideIcons.circleDollarSign;
+  static const IconData receiptText = LucideIcons.receiptText;
+  static const IconData arrowLeftRight = LucideIcons.arrowLeftRight;
+  static const IconData settings = LucideIcons.settings;
+  static const IconData typeIcon = LucideIcons.type;
 }

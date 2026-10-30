@@ -33,10 +33,7 @@ class MoreScreen extends StatelessWidget {
           ),
           children: [
             // Title & Subtitle
-            Text(
-              MoreStrings.title,
-              style: AppText.title,
-            ),
+            Text(MoreStrings.title, style: AppText.title),
             const SizedBox(height: 4),
             Text(
               MoreStrings.subtitle,
@@ -109,7 +106,7 @@ class MoreScreen extends StatelessWidget {
 
             // 5 Menu rows
             _MoreMenuRow(
-              iconText: r'$',
+              iconData: AppIcons.circleDollarSign,
               iconBgColor: AppColors.greenBg,
               iconTextColor: AppColors.green,
               title: MoreStrings.paymentsTitle,
@@ -133,7 +130,7 @@ class MoreScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             _MoreMenuRow(
-              iconText: '−',
+              iconData: AppIcons.receiptText,
               iconBgColor: AppColors.seg,
               iconTextColor: AppColors.ink,
               title: MoreStrings.expensesTitle,
@@ -144,7 +141,7 @@ class MoreScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             _MoreMenuRow(
-              iconText: '#',
+              iconData: AppIcons.fileText,
               iconBgColor: AppColors.seg,
               iconTextColor: AppColors.ink,
               title: MoreStrings.invoicesTitle,
@@ -155,7 +152,7 @@ class MoreScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             _MoreMenuRow(
-              iconText: '↔',
+              iconData: AppIcons.arrowLeftRight,
               iconBgColor: AppColors.seg,
               iconTextColor: AppColors.ink,
               title: MoreStrings.friendsDebtsTitle,
@@ -166,7 +163,7 @@ class MoreScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             _MoreMenuRow(
-              iconText: '⚙',
+              iconData: AppIcons.settings,
               iconBgColor: AppColors.seg,
               iconTextColor: AppColors.ink,
               title: MoreStrings.settingsTitle,
@@ -214,8 +211,7 @@ class MoreScreen extends StatelessWidget {
 
 class _MoreMenuRow extends StatelessWidget {
   const _MoreMenuRow({
-    this.iconText,
-    this.iconData,
+    required this.iconData,
     required this.iconBgColor,
     required this.iconTextColor,
     required this.title,
@@ -223,8 +219,7 @@ class _MoreMenuRow extends StatelessWidget {
     required this.onTap,
   });
 
-  final String? iconText;
-  final IconData? iconData;
+  final IconData iconData;
   final Color iconBgColor;
   final Color iconTextColor;
   final String title;
@@ -260,20 +255,7 @@ class _MoreMenuRow extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: iconData != null
-                    ? Icon(
-                        iconData,
-                        size: 20,
-                        color: iconTextColor,
-                      )
-                    : Text(
-                        iconText ?? '',
-                        style: TextStyle(
-                          color: iconTextColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                child: Icon(iconData, size: 20, color: iconTextColor),
               ),
             ),
             const SizedBox(width: AppSpacing.md),
@@ -292,15 +274,13 @@ class _MoreMenuRow extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: AppText.caption.copyWith(
-                      color: AppColors.mute,
-                    ),
+                    style: AppText.caption.copyWith(color: AppColors.mute),
                   ),
                 ],
               ),
             ),
             const Icon(
-              Icons.chevron_right_rounded,
+              AppIcons.chevronRight,
               color: AppColors.placeholder,
               size: 22,
             ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:dfile_mobile/core/router/app_router.dart';
+import 'package:dfile_mobile/core/widgets/app_icons.dart';
 import 'package:dfile_mobile/features/clients/data/data.dart';
 import 'package:dfile_mobile/features/expenses/data/data.dart';
 import 'package:dfile_mobile/features/friends/data/data.dart';
@@ -374,7 +375,7 @@ void main() {
       expect(switchValue, isFalse);
     });
 
-    testWidgets('SettingsRow renders icon letter, title, subtitle, value and taps', (
+    testWidgets('SettingsRow renders icon, title, subtitle, value and taps', (
       WidgetTester tester,
     ) async {
       bool tapped = false;
@@ -383,7 +384,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: SettingsRow(
-              iconLetter: 'A',
+              iconData: AppIcons.user,
               title: 'Account Row',
               subtitle: 'Sub text',
               value: 'Active',
@@ -393,11 +394,11 @@ void main() {
         ),
       );
 
-      expect(find.text('A'), findsOneWidget);
+      expect(find.byIcon(AppIcons.user), findsOneWidget);
       expect(find.text('Account Row'), findsOneWidget);
       expect(find.text('Sub text'), findsOneWidget);
       expect(find.text('Active'), findsOneWidget);
-      expect(find.byIcon(Icons.chevron_right_rounded), findsOneWidget);
+      expect(find.byIcon(AppIcons.chevronRight), findsOneWidget);
 
       await tester.tap(find.text('Account Row'));
       expect(tapped, isTrue);

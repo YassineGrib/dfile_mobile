@@ -82,7 +82,7 @@ class PrivacyDataScreen extends StatelessWidget {
             SettingsGroupCard(
               children: [
                 SettingsRow(
-                  iconLetter: 'P',
+                  iconData: AppIcons.shield,
                   iconBgColor: AppColors.waitingClientBg,
                   iconTextColor: AppColors.purple,
                   title: SettingsPrivacyStrings.privacyPolicyTitle,
@@ -90,7 +90,7 @@ class PrivacyDataScreen extends StatelessWidget {
                   onTap: () => context.push(AppRoutes.settingsPrivacyPath),
                 ),
                 SettingsRow(
-                  iconLetter: 'T',
+                  iconData: AppIcons.fileText,
                   iconBgColor: AppColors.seg,
                   iconTextColor: AppColors.ink,
                   title: SettingsPrivacyStrings.termsTitle,
@@ -98,7 +98,7 @@ class PrivacyDataScreen extends StatelessWidget {
                   onTap: () => context.push(AppRoutes.settingsTermsPath),
                 ),
                 SettingsRow(
-                  iconLetter: '?',
+                  iconData: AppIcons.eye,
                   iconBgColor: AppColors.inProgressBg,
                   iconTextColor: AppColors.orange,
                   title: SettingsPrivacyStrings.howWeUseDataTitle,
@@ -106,7 +106,7 @@ class PrivacyDataScreen extends StatelessWidget {
                   onTap: () => context.push(AppRoutes.settingsDataUsagePath),
                 ),
                 SettingsRow(
-                  iconLetter: 'E',
+                  iconData: AppIcons.download,
                   iconBgColor: AppColors.greenBg,
                   iconTextColor: AppColors.green,
                   title: SettingsPrivacyStrings.exportDataTitle,
@@ -140,7 +140,7 @@ class PrivacyDataScreen extends StatelessWidget {
               ),
               clipBehavior: Clip.antiAlias,
               child: SettingsRow(
-                iconLetter: '!',
+                iconData: AppIcons.trash2,
                 iconBgColor: AppColors.redBg,
                 iconTextColor: AppColors.red,
                 title: SettingsPrivacyStrings.deleteAccountTitle,
