@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account &amp; Data Deletion — Ledgo: Freelance Ledger</title>
+  <meta name="description" content="Instructions and web request form to permanently delete your Ledgo: Freelance Ledger (com.dfile.dfile_mobile) account and associated data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <div class="ambient-layer" aria-hidden="true"></div>
+  <div class="ambient-orb" aria-hidden="true"></div>
+
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="../">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M3.5 2.5H12.5V13.5L10.25 12L8 13.5L5.75 12L3.5 13.5V2.5Z" stroke="#111111" stroke-width="2" stroke-linejoin="miter"/>
+              <path d="M6 6H10M6 8.8H9" stroke="#111111" stroke-width="2" stroke-linecap="square"/>
+            </svg>
+          </span>
+          <span>Ledgo</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="../">Overview</a>
+          <a href="../privacy-policy/">Privacy Policy</a>
+          <a href="./" aria-current="page">Delete Account</a>
+          <a href="../terms/">Terms</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="section-hero reveal" style="--index: 0">
+        <span class="badge badge-red">Account &amp; Data Deletion</span>
+        <h1 class="display-title">Permanent account and workspace erasure.</h1>
+        <p class="lead">
+          Users of <strong>Ledgo: Freelance Ledger</strong> (<span class="code-pill">com.dfile.dfile_mobile</span>), published by <strong>Yassine Grib</strong>, can permanently erase their account and all synced cloud records either directly inside the Android app or from the web on this page.
+        </p>
+        <div class="meta-line">
+          <span>Application: Ledgo: Freelance Ledger</span>
+          <span>Developer: Yassine Grib</span>
+          <span>Retention After Erasure: 0 Days</span>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="bento-grid">
+          <article class="bento-card span-6 reveal" style="--index: 0">
+            <span class="badge badge-green">Method A &middot; Instant</span>
+            <h2 class="card-heading" style="margin-top: 14px; font-size: 20px;">Delete directly inside the Ledgo app</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
+              Recommended if you still have Ledgo installed on your phone. Erasure runs immediately against Firebase Authentication and Cloud Firestore:
+            </p>
+            <ol style="padding-left: 18px; margin: 0; font-size: 14px; color: var(--text-body);">
+              <li style="margin-bottom: 10px;">Open <strong>Ledgo</strong> and sign in to your workspace.</li>
+              <li style="margin-bottom: 10px;">Open <kbd>Settings</kbd> and tap <kbd>Privacy and data</kbd>.</li>
+              <li style="margin-bottom: 10px;">Optional: tap <kbd>Export my data</kbd> to save a JSON backup first.</li>
+              <li style="margin-bottom: 10px;">Under Danger Zone, tap <kbd>Delete account</kbd>, type <kbd>DELETE</kbd>, confirm your credentials, and tap <kbd>Delete my account</kbd>.</li>
+            </ol>
+          </article>
+
+          <article class="bento-card span-6 reveal" style="--index: 1">
+            <span class="badge badge-blue">Method B &middot; Web Request</span>
+            <h2 class="card-heading" style="margin-top: 14px; font-size: 20px;">Request deletion without the app</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
+              If you already uninstalled Ledgo, submit a request from the email address registered to your account. Requests are completed within <strong>7 calendar days</strong>.
+            </p>
+            <form id="deletion-request-form">
+              <div class="form-field">
+                <label for="req-email">Registered Account Email</label>
+                <input id="req-email" type="email" required placeholder="name@domain.com" />
+              </div>
+              <div class="form-field">
+                <label for="req-scope">Erasure Scope</label>
+                <select id="req-scope">
+                  <option value="Full Account &amp; All Cloud Data">Delete my entire account and all cloud data</option>
+                  <option value="Workspace Ledger Data Only (Keep Login)">Clear workspace ledger data only (keep login active)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="req-notes">Optional Verification Note</label>
+                <textarea id="req-notes" rows="2" placeholder="Optional details (for example, sign-in method: Email or Google)"></textarea>
+              </div>
+              <button class="btn-primary" type="submit" style="width: 100%; justify-content: center;">
+                <span>Compose Verified Deletion Email</span>
+              </button>
+              <p id="req-status" hidden style="margin: 12px 0 0; font-size: 13px; color: var(--pastel-green-fg);">
+                Your email client has been opened with a pre-addressed request to gribyassine@gmail.com. Send the email from your registered address to finalize verification.
+              </p>
+            </form>
+          </article>
+        </div>
+
+        <div class="prose-grid reveal" style="--index: 2; margin-top: 40px;">
+          <div class="prose-label">What Is Deleted</div>
+          <div class="prose-content">
+            <p>Both deletion methods permanently purge every record linked to your user UID:</p>
+            <ul>
+              <li><strong>Profile &amp; Authentication:</strong> Your Firebase Authentication record (email/password or Google Sign-In link), name, phone number, and business address.</li>
+              <li><strong>Clients &amp; Projects:</strong> All client profiles, project budgets, deadlines, calendar milestones, and task checklists.</li>
+              <li><strong>Financial Ledger:</strong> All payment records, receipts, expense entries, and friends' debt statements.</li>
+              <li><strong>Settings &amp; Support Logs:</strong> Workspace preferences and any open support tickets tied to your UID.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="prose-grid reveal" style="--index: 3">
+          <div class="prose-label">Retention Policy</div>
+          <div class="prose-content">
+            <p>
+              <strong>No copies are retained after deletion.</strong> In-app deletion erases your Firestore documents and authentication account immediately during the confirmation session. Web email requests sent to <a href="mailto:gribyassine@gmail.com" style="color: var(--text-primary);">gribyassine@gmail.com</a> are verified against the sender address and permanently erased within 7 days, followed by a written confirmation reply.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>Ledgo: Freelance Ledger &middot; Published by Yassine Grib</span>
+        <div class="footer-links">
+          <a href="../">Overview</a>
+          <a href="../privacy-policy/">Privacy Policy</a>
+          <a href="./">Delete Account</a>
+          <a href="../terms/">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../site.js"></script>
+</body>
+</html>
+

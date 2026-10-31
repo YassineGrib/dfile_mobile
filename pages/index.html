@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ledgo — Freelance Ledger</title>
+  <meta name="description" content="Projects, clients, payments, expenses, and friends' debts for independent freelancers in one pocket ledger." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient-layer" aria-hidden="true"></div>
+  <div class="ambient-orb" aria-hidden="true"></div>
+
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="./">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M3.5 2.5H12.5V13.5L10.25 12L8 13.5L5.75 12L3.5 13.5V2.5Z" stroke="#111111" stroke-width="2" stroke-linejoin="miter"/>
+              <path d="M6 6H10M6 8.8H9" stroke="#111111" stroke-width="2" stroke-linecap="square"/>
+            </svg>
+          </span>
+          <span>Ledgo</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+          <a href="./" aria-current="page">Overview</a>
+          <a href="./privacy-policy/">Privacy Policy</a>
+          <a href="./delete-account/">Delete Account</a>
+          <a href="./terms/">Terms</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="section-hero reveal" style="--index: 0">
+        <span class="badge badge-green">Android Release 1.0</span>
+        <h1 class="display-title">A quiet, structured ledger for independent work.</h1>
+        <p class="lead">
+          Ledgo keeps your client roster, project milestones, BaridiMob and CCP payments, work expenses, and personal IOUs organized in one private workspace.
+        </p>
+        <div class="btn-row">
+          <a class="btn-primary" href="./privacy-policy/">
+            <span>Read Privacy Policy</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8H13M9 4L13 8L9 12" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"/>
+            </svg>
+          </a>
+          <a class="btn-secondary" href="./delete-account/">Account &amp; Data Deletion</a>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="reveal" style="--index: 0">
+          <span class="badge badge-blue">Ledger Architecture</span>
+          <h2 class="section-title" style="margin-top: 14px;">Built around actual freelance cashflow.</h2>
+        </div>
+
+        <div class="bento-grid">
+          <article class="bento-card span-7 reveal" style="--index: 1">
+            <div class="icon-chip" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="2.5" y="2.5" width="11" height="11" stroke="#111111" stroke-width="2"/>
+                <path d="M2.5 6.5H13.5M6.5 6.5V13.5" stroke="#111111" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="card-heading">Projects, tasks, and net profit</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px;">
+              Assign budgets, start and delivery dates, and task checklists to every client engagement. Link direct project expenses so you see true net earnings rather than gross revenue alone.
+            </p>
+          </article>
+
+          <article class="bento-card span-5 reveal" style="--index: 2">
+            <div class="icon-chip" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2 4.5H14V12.5H2V4.5Z" stroke="#111111" stroke-width="2"/>
+                <path d="M2 7.5H14" stroke="#111111" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="card-heading">Algerian Dinar native</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px;">
+              Record advances, milestone settlements, and final balances across BaridiMob, CCP, bank transfer, or cash with instant collection-rate tracking.
+            </p>
+          </article>
+
+          <article class="bento-card span-5 reveal" style="--index: 3">
+            <div class="icon-chip" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4.5 7V5C4.5 3.067 6.067 1.5 8 1.5C9.933 1.5 11.5 3.067 11.5 5V7" stroke="#111111" stroke-width="2"/>
+                <rect x="3" y="7" width="10" height="7.5" stroke="#111111" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="card-heading">Zero ads. Zero data resale.</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px;">
+              Your financial records belong solely to you. Export a complete JSON archive or permanently erase your account at any moment.
+            </p>
+          </article>
+
+          <article class="bento-card span-7 reveal" style="--index: 4">
+            <div class="icon-chip" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2.5 3.5H13.5V11H6L2.5 13.5V3.5Z" stroke="#111111" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 class="card-heading">Polite follow-ups &amp; schedule clarity</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px;">
+              Review overdue client balances from the home screen, open pre-filled WhatsApp payment reminders in one tap, and inspect upcoming deadlines across month, agenda, and timeline views.
+            </p>
+          </article>
+        </div>
+
+        <div class="window-frame reveal" style="--index: 5">
+          <div class="window-bar">
+            <div class="window-dots" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="meta-line">com.dfile.dfile_mobile</span>
+          </div>
+          <div class="window-body">
+            <div class="meta-line" style="justify-content: space-between;">
+              <span>Developer: Yassine Grib (Algiers, Algeria)</span>
+              <span>Support: <a href="mailto:gribyassine@gmail.com" style="color: var(--text-primary);">gribyassine@gmail.com</a></span>
+            </div>
+            <p style="margin: 14px 0 0; font-size: 14px; color: var(--text-muted);">
+              Quick path inside the mobile app for data export and account erasure:
+              <kbd>Settings</kbd> &rarr; <kbd>Privacy and data</kbd> &rarr; <kbd>Delete account</kbd>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block reveal" style="--index: 0">
+        <span class="badge badge-yellow">Documentation &amp; Compliance</span>
+        <h2 class="section-title" style="margin-top: 14px;">Public compliance documents</h2>
+        <div class="accordion-list">
+          <div class="accordion-item" data-open="true">
+            <button class="accordion-trigger" type="button" aria-expanded="true">
+              <span>Where can I read how Ledgo stores and protects my data?</span>
+              <span class="accordion-icon">-</span>
+            </button>
+            <div class="accordion-panel">
+              Visit our <a href="./privacy-policy/" style="color: var(--text-primary);">Privacy Policy</a> for a complete breakdown of profile fields, ledger collections, Google Firebase encryption in transit, and your data portability rights.
+            </div>
+          </div>
+          <div class="accordion-item" data-open="false">
+            <button class="accordion-trigger" type="button" aria-expanded="false">
+              <span>How do I permanently delete my Ledgo account if I already uninstalled the app?</span>
+              <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-panel">
+              Open the <a href="./delete-account/" style="color: var(--text-primary);">Account &amp; Data Deletion</a> page to submit a verified erasure request from the web without reinstalling the Android app, or delete directly inside the app with immediate effect.
+            </div>
+          </div>
+          <div class="accordion-item" data-open="false">
+            <button class="accordion-trigger" type="button" aria-expanded="false">
+              <span>Does Ledgo connect to bank accounts or move funds?</span>
+              <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-panel">
+              No. Ledgo is strictly a manual bookkeeping and project ledger. Payment methods such as BaridiMob, CCP, bank transfer, and cash are descriptive labels you select when logging receipts.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>Ledgo: Freelance Ledger &middot; Published by Yassine Grib</span>
+        <div class="footer-links">
+          <a href="./privacy-policy/">Privacy Policy</a>
+          <a href="./delete-account/">Delete Account</a>
+          <a href="./terms/">Terms of Service</a>
+          <a href="mailto:gribyassine@gmail.com">gribyassine@gmail.com</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="./site.js"></script>
+</body>
+</html>
+

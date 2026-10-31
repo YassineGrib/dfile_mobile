@@ -59,8 +59,8 @@ abstract final class SettingsPrivacyStrings {
   static const String deleteAnytimeTitle = 'Delete your data any time';
   static const String deleteAnytimeInApp =
       'In app: Settings > Privacy and data > Delete account';
-  static const String deleteAnytimeWeb = 'On web: decabyte.dz/delete-account';
-  static const String deleteAnytimeWebUrl = 'decabyte.dz/delete-account';
+  static const String deleteAnytimeWeb = 'On web: yassinegrib.github.io/ledgo/delete-account';
+  static const String deleteAnytimeWebUrl = 'https://yassinegrib.github.io/ledgo/delete-account/';
 
   // PS3 Delete account - step 1
   static const String permanentWarningTitle = 'This is permanent';
