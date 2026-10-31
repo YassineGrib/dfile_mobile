@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "animations": {
+      "source": "verygoodopensource/vgv-ai-flutter-plugin",
+      "sourceType": "github",
+      "skillPath": "skills/animations/SKILL.md",
+      "computedHash": "96c18e80b51d37ad4d3c8580ce88f66c85180f1fa4a84a030e93444fe2b56669"
+    }
+  }
+}

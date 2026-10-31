@@ -1,0 +1,33 @@
+Ledgo is a simple ledger for freelancers. Keep your projects, clients, payments and expenses in one place, and always know where your money stands.
+
+YOUR BUSINESS AT A GLANCE
+The home screen shows your net profit, this month's result, active projects, monthly expenses and your upcoming deadlines. A hide-amounts switch keeps your balances private when someone is looking over your shoulder.
+
+PROJECTS
+Create projects with a client, a price, a category, start and end dates and a status. Track progress with a checklist of tasks, see what has been paid and what is left, and change a project's status in one tap.
+
+CLIENTS
+Save contact details and see every client's projects, payments and outstanding balance. Every client gets their own colourful avatar.
+
+PAYMENTS
+Record payments by type (advance, milestone, final, tip) and by method (BaridiMob, CCP, bank transfer or cash). See what you collected, what is still outstanding and your collection rate, and open a receipt for any payment.
+
+FOLLOW UP ON UNPAID BALANCES
+Clients who still owe you are listed on the home screen. One tap opens WhatsApp with a friendly reminder already written, with the client's name, the amount and the project.
+
+EXPENSES
+Log what your work costs, group it by category and link each cost to a project, so you can see what a project really earned.
+
+CALENDAR
+See deadlines and milestones in a month view, an agenda or a timeline. Add milestones to any project and check your workload before you take on more.
+
+FRIENDS' DEBTS
+Keep track of money you lent or borrowed. Record part payments, settle up and see a clear statement for each friend.
+
+YOUR DATA, ON ALL YOUR DEVICES
+Sign in with email or Google. Your data syncs with the Ledgo web app on the same account. The app tells you when you are offline.
+
+PRIVACY
+Your data belongs to you. You can export your data and delete your account and everything in it from the Privacy and data screen inside the app.
+
+Ledgo uses Algerian dinar (DZ) amounts and supports BaridiMob and CCP out of the box.
